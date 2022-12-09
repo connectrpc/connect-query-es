@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "noEmit": true // this is a tooling-only tsconfig that should never accidentally build anything
+  },
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "**/*.ts",
+    "**/*.test.ts",
+    "**/*.tsx",
+    "**/*.test.tsx",
+    ".eslintrc.js",
+    "jest-preset.js"
+  ]
+}

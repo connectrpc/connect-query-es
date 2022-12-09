@@ -1,0 +1,21 @@
+{
+  "words": [
+    "Weizenbaum's",
+    "bufbuild",
+    "connectquery",
+    "connectweb",
+    "descriptorset",
+    "idempotency",
+    "inferencing",
+    "lcov",
+    "nocheck",
+    "pregenerate",
+    "proto",
+    "protobuf",
+    "protoc",
+    "protoplugin",
+    "tanstack",
+    "tsdoc"
+  ],
+  "ignorePaths": ["**/*.svg", "**/*.ai"]
+}
