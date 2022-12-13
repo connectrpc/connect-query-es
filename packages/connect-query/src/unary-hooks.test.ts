@@ -49,7 +49,7 @@ import type {
   SayRequest,
   CountRequest as CountRequest,
 } from './jest/mock-data/eliza/eliza_pb';
-import type { InfiniteData, QueryFunctionContext } from '@tanstack/react-query';
+import type { QueryFunctionContext } from '@tanstack/react-query';
 import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import type {
   ConnectPartialQueryKey,
@@ -537,9 +537,47 @@ describe('unaryHooks', () => {
           count,
         };
       });
+
+      consoleErrorSpy.mockReset();
     });
 
     it('makes a mutation call', async () => {
+      const onError = jest.fn();
+
+      const { queryClient, ...rest } = wrapper({ defaultOptions });
+
+      const { result, rerender } = renderHook(
+        () =>
+          useMutation({
+            ...useMutationCq({ onError }),
+            mutationFn: async () => Promise.reject('error'),
+            mutationKey: getQueryKey(),
+          }),
+        rest,
+      );
+
+      rerender();
+
+      expect(result.current.error).toStrictEqual(null);
+      expect(result.current.isError).toStrictEqual(false);
+      expect(onError).toHaveBeenCalledTimes(0);
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      type typeError = Expect<
+        Equal<typeof result.current.error, ConnectError | null>
+      >;
+
+      result.current.mutate();
+
+      await sleep(10);
+
+      expect(result.current.error).toStrictEqual('error');
+      expect(result.current.isError).toStrictEqual(true);
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('error');
+    });
+
+    it('handles errors', async () => {
       /** this input will add one to the total count */
       const input = { add: 1n };
 

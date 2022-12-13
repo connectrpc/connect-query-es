@@ -101,11 +101,12 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   /**
    * This function is intended to be used with TanStack Query's `useMutation` API.
    */
-  useMutation: () => {
+  useMutation: (options?: { onError?: (error: ConnectError) => void }) => {
     mutationFn: (
       input?: PartialMessage<I>,
       context?: QueryFunctionContext<ConnectQueryKey<I>>,
     ) => Promise<O>;
+    onError?: (error: ConnectError) => void;
   };
 
   /**
@@ -199,7 +200,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       };
     },
 
-    useMutation: () => {
+    useMutation: (options) => {
       const transport = useTransport();
 
       return {
@@ -211,6 +212,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             transport,
             typeName,
           }),
+        ...(options?.onError ? { onError: options.onError } : {}),
       };
     },
 
