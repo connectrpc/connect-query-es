@@ -17,11 +17,11 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from '@bufbuild/connect-query';
-import { MethodKind } from '@bufbuild/protobuf';
-import { SayRequest, SayResponse } from './eliza_pb.js';
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind } from "@bufbuild/protobuf";
+import { SayRequest, SayResponse } from "./eliza_pb.js";
 
-export const typeName = 'buf.connect.demo.eliza.v1.ElizaService';
+export const typeName = "buf.connect.demo.eliza.v1.ElizaService";
 
 /**
  * Say is a unary request demo. This method should allow for a one sentence
@@ -33,13 +33,13 @@ export const say = createQueryService({
   service: {
     methods: {
       say: {
-        name: 'Say',
+        name: "Say",
         kind: MethodKind.Unary,
         I: SayRequest,
         O: SayResponse,
       },
     },
-    typeName: 'buf.connect.demo.eliza.v1.ElizaService',
+    typeName: "buf.connect.demo.eliza.v1.ElizaService",
   },
 }).say;
 
@@ -53,12 +53,12 @@ export const sayAgain = createQueryService({
   service: {
     methods: {
       sayAgain: {
-        name: 'SayAgain',
+        name: "SayAgain",
         kind: MethodKind.Unary,
         I: SayRequest,
         O: SayResponse,
       },
     },
-    typeName: 'buf.connect.demo.eliza.v1.ElizaService',
+    typeName: "buf.connect.demo.eliza.v1.ElizaService",
   },
 }).sayAgain;

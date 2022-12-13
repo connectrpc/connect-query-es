@@ -17,11 +17,11 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from '@bufbuild/connect-query';
-import { MethodKind } from '@bufbuild/protobuf';
-import { Nothing } from './eliza_pb.js';
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind } from "@bufbuild/protobuf";
+import { Nothing } from "./eliza_pb.js";
 
-export const typeName = 'buf.connect.demo.eliza.v1.Slouch';
+export const typeName = "buf.connect.demo.eliza.v1.Slouch";
 
 /**
  * @generated from rpc buf.connect.demo.eliza.v1.Slouch.Work
@@ -30,12 +30,12 @@ export const work = createQueryService({
   service: {
     methods: {
       work: {
-        name: 'Work',
+        name: "Work",
         kind: MethodKind.Unary,
         I: Nothing,
         O: Nothing,
       },
     },
-    typeName: 'buf.connect.demo.eliza.v1.Slouch',
+    typeName: "buf.connect.demo.eliza.v1.Slouch",
   },
 }).work;

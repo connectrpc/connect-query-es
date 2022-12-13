@@ -17,18 +17,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {
-  ConverseRequest,
-  ConverseResponse,
-  CountRequest,
-  CountResponse,
-  IntroduceRequest,
-  IntroduceResponse,
-  Nothing,
-  SayRequest,
-  SayResponse,
-} from './eliza_pb.js';
-import { MethodKind } from '@bufbuild/protobuf';
+import { ConverseRequest, ConverseResponse, CountRequest, CountResponse, IntroduceRequest, IntroduceResponse, Nothing, SayRequest, SayResponse } from "./eliza_pb.js";
+import { MethodKind } from "@bufbuild/protobuf";
 
 /**
  * ElizaService provides a way to talk to the ELIZA, which is a port of
@@ -41,7 +31,7 @@ import { MethodKind } from '@bufbuild/protobuf';
  * @generated from service buf.connect.demo.eliza.v1.ElizaService
  */
 export const ElizaService = {
-  typeName: 'buf.connect.demo.eliza.v1.ElizaService',
+  typeName: "buf.connect.demo.eliza.v1.ElizaService",
   methods: {
     /**
      * Say is a unary request demo. This method should allow for a one sentence
@@ -50,7 +40,7 @@ export const ElizaService = {
      * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.Say
      */
     say: {
-      name: 'Say',
+      name: "Say",
       I: SayRequest,
       O: SayResponse,
       kind: MethodKind.Unary,
@@ -62,7 +52,7 @@ export const ElizaService = {
      * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.SayAgain
      */
     sayAgain: {
-      name: 'SayAgain',
+      name: "SayAgain",
       I: SayRequest,
       O: SayResponse,
       kind: MethodKind.Unary,
@@ -74,7 +64,7 @@ export const ElizaService = {
      * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.Converse
      */
     converse: {
-      name: 'Converse',
+      name: "Converse",
       I: ConverseRequest,
       O: ConverseResponse,
       kind: MethodKind.BiDiStreaming,
@@ -86,12 +76,12 @@ export const ElizaService = {
      * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.Introduce
      */
     introduce: {
-      name: 'Introduce',
+      name: "Introduce",
       I: IntroduceRequest,
       O: IntroduceResponse,
       kind: MethodKind.ServerStreaming,
     },
-  },
+  }
 } as const;
 
 /**
@@ -100,7 +90,7 @@ export const ElizaService = {
  * @generated from service buf.connect.demo.eliza.v1.SecondService
  */
 export const SecondService = {
-  typeName: 'buf.connect.demo.eliza.v1.SecondService',
+  typeName: "buf.connect.demo.eliza.v1.SecondService",
   methods: {
     /**
      * Say is a unary request demo. This method should allow for a one sentence
@@ -109,7 +99,7 @@ export const SecondService = {
      * @generated from rpc buf.connect.demo.eliza.v1.SecondService.Say
      */
     say: {
-      name: 'Say',
+      name: "Say",
       I: SayRequest,
       O: SayResponse,
       kind: MethodKind.Unary,
@@ -121,7 +111,7 @@ export const SecondService = {
      * @generated from rpc buf.connect.demo.eliza.v1.SecondService.Converse
      */
     converse: {
-      name: 'Converse',
+      name: "Converse",
       I: ConverseRequest,
       O: ConverseResponse,
       kind: MethodKind.BiDiStreaming,
@@ -133,64 +123,65 @@ export const SecondService = {
      * @generated from rpc buf.connect.demo.eliza.v1.SecondService.Introduce
      */
     introduce: {
-      name: 'Introduce',
+      name: "Introduce",
       I: IntroduceRequest,
       O: IntroduceResponse,
       kind: MethodKind.ServerStreaming,
     },
-  },
+  }
 } as const;
 
 /**
  * @generated from service buf.connect.demo.eliza.v1.Haberdasher
  */
 export const Haberdasher = {
-  typeName: 'buf.connect.demo.eliza.v1.Haberdasher',
+  typeName: "buf.connect.demo.eliza.v1.Haberdasher",
   methods: {
     /**
      * @generated from rpc buf.connect.demo.eliza.v1.Haberdasher.Work
      */
     work: {
-      name: 'Work',
+      name: "Work",
       I: Nothing,
       O: Nothing,
       kind: MethodKind.Unary,
     },
-  },
+  }
 } as const;
 
 /**
  * @generated from service buf.connect.demo.eliza.v1.Slouch
  */
 export const Slouch = {
-  typeName: 'buf.connect.demo.eliza.v1.Slouch',
+  typeName: "buf.connect.demo.eliza.v1.Slouch",
   methods: {
     /**
      * @generated from rpc buf.connect.demo.eliza.v1.Slouch.Work
      */
     work: {
-      name: 'Work',
+      name: "Work",
       I: Nothing,
       O: Nothing,
       kind: MethodKind.Unary,
     },
-  },
+  }
 } as const;
 
 /**
  * @generated from service buf.connect.demo.eliza.v1.BigIntService
  */
 export const BigIntService = {
-  typeName: 'buf.connect.demo.eliza.v1.BigIntService',
+  typeName: "buf.connect.demo.eliza.v1.BigIntService",
   methods: {
     /**
      * @generated from rpc buf.connect.demo.eliza.v1.BigIntService.Count
      */
     count: {
-      name: 'Count',
+      name: "Count",
       I: CountRequest,
       O: CountResponse,
       kind: MethodKind.Unary,
     },
-  },
+  }
 } as const;
+

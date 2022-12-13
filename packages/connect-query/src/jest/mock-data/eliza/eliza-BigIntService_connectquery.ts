@@ -17,11 +17,11 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from '@bufbuild/connect-query';
-import { MethodKind } from '@bufbuild/protobuf';
-import { CountRequest, CountResponse } from './eliza_pb.js';
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind } from "@bufbuild/protobuf";
+import { CountRequest, CountResponse } from "./eliza_pb.js";
 
-export const typeName = 'buf.connect.demo.eliza.v1.BigIntService';
+export const typeName = "buf.connect.demo.eliza.v1.BigIntService";
 
 /**
  * @generated from rpc buf.connect.demo.eliza.v1.BigIntService.Count
@@ -30,12 +30,12 @@ export const count = createQueryService({
   service: {
     methods: {
       count: {
-        name: 'Count',
+        name: "Count",
         kind: MethodKind.Unary,
         I: CountRequest,
         O: CountResponse,
       },
     },
-    typeName: 'buf.connect.demo.eliza.v1.BigIntService',
+    typeName: "buf.connect.demo.eliza.v1.BigIntService",
   },
 }).count;
