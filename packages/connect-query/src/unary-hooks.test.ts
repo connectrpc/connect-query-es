@@ -49,7 +49,7 @@ import type {
   SayRequest,
   CountRequest as CountRequest,
 } from './jest/mock-data/eliza/eliza_pb';
-import type { QueryFunctionContext } from '@tanstack/react-query';
+import type { QueryFunctionContext, UseMutationResult } from '@tanstack/react-query';
 import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import type {
   ConnectPartialQueryKey,
@@ -541,7 +541,7 @@ describe('unaryHooks', () => {
       consoleErrorSpy.mockReset();
     });
 
-    it('makes a mutation call', async () => {
+    it('handles a custom onError', async () => {
       const onError = jest.fn();
 
       const { queryClient, ...rest } = wrapper({ defaultOptions });
@@ -577,7 +577,7 @@ describe('unaryHooks', () => {
       expect(consoleErrorSpy).toHaveBeenCalledWith('error');
     });
 
-    it('handles errors', async () => {
+    it('makes a mutation', async () => {
       /** this input will add one to the total count */
       const input = { add: 1n };
 
@@ -602,6 +602,11 @@ describe('unaryHooks', () => {
         }),
         rest,
       );
+
+      type typeMutationFn = Expect<Equal<
+        typeof result.current.mut,
+        UseMutationResult<CountResponse, ConnectError, PartialMessage<CountRequest>>
+      >>;
 
       await waitFor(() => {
         expect(result.current.mut.isIdle).toBeTruthy();

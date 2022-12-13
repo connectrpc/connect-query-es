@@ -103,7 +103,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
    */
   useMutation: (options?: { onError?: (error: ConnectError) => void }) => {
     mutationFn: (
-      input?: PartialMessage<I>,
+      input: PartialMessage<I>,
       context?: QueryFunctionContext<ConnectQueryKey<I>>,
     ) => Promise<O>;
     onError?: (error: ConnectError) => void;
