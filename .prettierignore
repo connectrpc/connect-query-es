@@ -1,4 +1,5 @@
 **/*.md
+pnpm-lock.yaml
 
 /examples/react/*/dist
 /examples/react/*/src/eliza

@@ -34,6 +34,7 @@ const config = {
     'plugin:@typescript-eslint/all',
     'plugin:eslint-comments/recommended',
     'plugin:jest/recommended',
+    'plugin:react-hooks/recommended',
     'prettier',
   ],
   settings: {
