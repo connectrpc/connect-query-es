@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from "@bufbuild/connect-web";
-import { createConnectTransport } from "@bufbuild/connect-web";
-import type { FC, PropsWithChildren } from "react";
-import { createContext, useContext } from "react";
+import type { Transport } from '@bufbuild/connect-web';
+import { createConnectTransport } from '@bufbuild/connect-web';
+import type { FC, PropsWithChildren } from 'react';
+import { createContext, useContext } from 'react';
 
 const transportContext = createContext(
   createConnectTransport({
     // TODO, should this be initialized to null instead of a useless transport (where, I'm assuming that baseUrl being empty makes it useless)?
-    baseUrl: "",
-  })
+    baseUrl: '',
+  }),
 );
 
 /**
@@ -44,7 +44,7 @@ export const useTransport = () => useContext(transportContext);
  *
  * @example
  * import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
- * import { TransportProvider } from "connect-query";
+ * import { TransportProvider } from "@bufbuild/connect-query";
  *
  * const queryClient = new QueryClient();
  *

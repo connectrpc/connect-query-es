@@ -1,6 +1,6 @@
 {
   "name": "@bufbuild/protoc-gen-connect-query",
-  "version": "0.2.1",
+  "version": "0.0.1",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "repository": {
@@ -8,6 +8,9 @@
     "url": "https://github.com/bufbuild/connect-query.git",
     "directory": "packages/protoc-gen-connect-query"
   },
+  "files": [
+    "dist/**"
+  ],
   "bin": {
     "protoc-gen-connect-query": "bin/protoc-gen-connect-query"
   },
@@ -15,11 +18,11 @@
     "node": ">=16"
   },
   "scripts": {
-    "clean": "rm -rf ./dist/cjs/*",
-    "pregenerate": "npm run build && rm -rf gen",
-    "generate": "buf generate",
+    "clean": "rm -rf dist",
+    "clean:gen": "rm -rf gen",
+    "generate": "pnpm run clean:gen && buf generate",
     "test": "jest",
-    "build": "npx tsc --project tsconfig.build.json",
+    "build": "pnpm clean && tsc --project tsconfig.build.json",
     "build:descriptorset": "buf build --output src/jest/descriptorset.bin"
   },
   "preferUnplugged": true,

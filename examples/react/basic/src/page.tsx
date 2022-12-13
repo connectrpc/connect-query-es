@@ -12,10 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import type { FC, PropsWithChildren } from 'react';
+import { margin } from './css';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-});
+/**
+ * The wrapper for the whole page
+ */
+export const Page: FC<PropsWithChildren> = ({ children }) => (
+  <div
+    style={{
+      margin: margin * 3,
+      maxWidth: 800,
+      display: 'flex',
+    }}
+  >
+    {children}
+  </div>
+);

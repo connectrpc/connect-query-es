@@ -12,28 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { ConnectError, Transport } from "@bufbuild/connect-web";
+import type { ConnectError, Transport } from '@bufbuild/connect-web';
 import type {
   Message,
   MethodInfoUnary,
   PartialMessage,
   PlainMessage,
   ServiceType,
-} from "@bufbuild/protobuf";
+} from '@bufbuild/protobuf';
 import type {
   GetNextPageParamFunction,
   QueryFunctionContext,
-} from "@tanstack/react-query";
-import { unaryFetch } from "./fetch";
+} from '@tanstack/react-query';
+import { unaryFetch } from './fetch';
 import type {
   ConnectPartialQueryKey,
   ConnectQueryKey,
-} from "./connect-query-key";
-import { makeConnectQueryKeyGetter } from "./connect-query-key";
-import { useTransport } from "./use-transport";
-import type { DisableQuery } from "./utils";
-import { protobufSafeUpdater } from "./utils";
-import { assert, disableQuery, isUnaryMethod, unreachableCase } from "./utils";
+} from './connect-query-key';
+import { makeConnectQueryKeyGetter } from './connect-query-key';
+import { useTransport } from './use-transport';
+import type { DisableQuery } from './utils';
+import { protobufSafeUpdater } from './utils';
+import { assert, disableQuery, isUnaryMethod, unreachableCase } from './utils';
 
 /**
  * The set of data and hooks that a unary method supports.
@@ -65,14 +65,14 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
    */
   setQueryData: (
     updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-    input?: PartialMessage<I>
+    input?: PartialMessage<I>,
   ) => [queryKey: ConnectQueryKey<I>, updater: (prev?: O) => O | undefined];
 
   /**
    * This helper is intended to be used with `QueryClient`s `setQueriesData` function.
    */
   setQueriesData: (
-    updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>)
+    updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
   ) => [queryKey: ConnectPartialQueryKey, updater: (prev?: O) => O | undefined];
 
   /**
@@ -84,7 +84,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
       pageParamKey: ParamKey;
       getNextPageParam: (lastPage: O, allPages: O[]) => unknown;
       onError?: (error: ConnectError) => void;
-    }
+    },
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
@@ -92,7 +92,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
       context: QueryFunctionContext<
         ConnectQueryKey<I>,
         PlainMessage<I>[ParamKey]
-      >
+      >,
     ) => Promise<O>;
     getNextPageParam: GetNextPageParamFunction<O>;
     onError?: (error: ConnectError) => void;
@@ -104,7 +104,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   useMutation: () => {
     mutationFn: (
       input?: PartialMessage<I>,
-      context?: QueryFunctionContext<ConnectQueryKey<I>>
+      context?: QueryFunctionContext<ConnectQueryKey<I>>,
     ) => Promise<O>;
   };
 
@@ -116,7 +116,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     options?: {
       getPlaceholderData?: () => PartialMessage<O>;
       onError?: (error: ConnectError) => void;
-    }
+    },
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
@@ -135,7 +135,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
   transport: customTransport,
 }: {
   methodInfo: MethodInfoUnary<I, O>;
-  typeName: ServiceType["typeName"];
+  typeName: ServiceType['typeName'];
   transport?: Transport | undefined;
 }): UnaryHooks<I, O> => {
   if (!isUnaryMethod(methodInfo)) {
@@ -143,7 +143,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       methodInfo,
       `unaryHooks was passed a non unary method, ${
         (methodInfo as { name: string }).name
-      }`
+      }`,
     );
   }
 
@@ -178,7 +178,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
         queryFn: async (context) => {
           assert(
             input !== disableQuery,
-            "queryFn does not accept a disabled query"
+            'queryFn does not accept a disabled query',
           );
 
           return unaryFetch({
@@ -229,7 +229,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
         queryFn: async (context) => {
           assert(
             input !== disableQuery,
-            "queryFn does not accept a disabled query"
+            'queryFn does not accept a disabled query',
           );
           return unaryFetch({
             callOptions: context,

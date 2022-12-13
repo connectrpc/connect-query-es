@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TransportProvider } from "connect-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createConnectTransport } from "@bufbuild/connect-web";
-import { Example } from "./example";
-import "./index.css";
+import * as ReactDOM from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { TransportProvider } from '@bufbuild/connect-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { createConnectTransport } from '@bufbuild/connect-web';
+import { Example } from './example';
+import './index.css';
 
 const queryClient = new QueryClient();
 
@@ -27,7 +27,7 @@ const queryClient = new QueryClient();
  */
 export default function App() {
   const transport = createConnectTransport({
-    baseUrl: "https://demo.connect.build",
+    baseUrl: 'https://demo.connect.build',
   });
   return (
     <TransportProvider transport={transport}>
@@ -39,7 +39,7 @@ export default function App() {
   );
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById('root');
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(<App />);
 }

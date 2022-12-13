@@ -1,10 +1,11 @@
 **/*.md
 
-packages/*/dist
-packages/*/coverage
+/examples/react/*/dist
+/examples/react/*/src/eliza
 
-packages/connect-query/src/jest/mock-data
+/packages/*/dist
+/packages/*/coverage
 
-packages/protoc-gen-connect-query/gen
+/packages/connect-query/src/jest/mock-data
 
-packages/example/src/eliza
+/packages/protoc-gen-connect-query/gen

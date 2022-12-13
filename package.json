@@ -1,25 +1,27 @@
 {
   "private": true,
+  "name": "root",
   "repository": "git@github.com:bufbuild/connect-query.git",
   "scripts": {
-    "generate": "npm --workspaces --if-present run generate",
-    "build": "npm --workspaces --if-present run build",
-    "test": "npm --workspaces --if-present run test",
-    "lint": "npm run lint:code && npm run lint:markdown && npm run lint:spelling",
-    "lint:fix": "npm run lint:code:fix && npm run lint:markdown:fix && npm run lint:spelling",
+    "generate": "pnpm --recursive generate",
+    "build": "pnpm --recursive build",
+    "test": "pnpm --recursive test",
+    "lint": "pnpm run lint:code && pnpm run lint:markdown && pnpm run lint:spelling",
+    "lint:fix": "pnpm run lint:code:fix && pnpm run lint:markdown:fix && pnpm run lint:spelling",
     "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\"",
     "lint:markdown:fix": "markdownlint-cli2-fix \"**/*.md\" \"#**/node_modules\"",
     "lint:spelling": "cspell \"**\" --gitignore",
     "lint:code": "eslint . && prettier . --check",
     "lint:code:fix": "eslint . --fix && prettier . --write",
-    "all": "npm run build && npm run generate && npm run lint:fix && npm run test"
+    "all": "pnpm run build && pnpm run generate && pnpm run build && pnpm run lint:fix && pnpm run test"
   },
   "license": "Apache-2.0",
   "devDependencies": {
     "@jest/globals": "29.3.1",
-    "@typescript-eslint/eslint-plugin": "5.46.0",
-    "@typescript-eslint/parser": "5.46.0",
-    "@typescript-eslint/utils": "5.46.0",
+    "@typescript-eslint/eslint-plugin": "5.46.1",
+    "@typescript-eslint/parser": "5.46.1",
+    "@typescript-eslint/utils": "5.46.1",
+    "@types/node": "^18.11.14",
     "cspell": "6.17.0",
     "eslint": "8.29.0",
     "eslint-config-prettier": "8.5.0",
@@ -29,18 +31,16 @@
     "eslint-plugin-notice": "0.9.10",
     "jest": "29.3.1",
     "jest-mock": "29.3.1",
+    "lerna": "^6.1.0",
     "markdownlint-cli2": "0.5.1",
     "prettier": "2.8.1",
     "ts-jest": "29.0.3",
     "ts-node": "10.9.1",
     "tsdoc-markdown": "0.0.1",
-    "typedoc": "0.23.21",
+    "typedoc": "0.23.22",
     "typedoc-plugin-markdown": "3.14.0",
     "typescript": "4.9.4"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "engineStrict": true,
   "engines": {
     "node": ">=16",

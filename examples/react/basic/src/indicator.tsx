@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { FC, ReactNode } from "react";
-import { border, borderRadius, boxShadow, margin } from "./css";
+import type { FC, ReactNode } from 'react';
+import { border, borderRadius, boxShadow, margin } from './css';
 
 /**
  * a single Indicator
@@ -25,7 +25,7 @@ export const Indicator = <T extends string, U extends T>({
   label: U;
   parent: T;
 }) => {
-  const height = "50px";
+  const height = '50px';
   const active = label === parent;
 
   return (
@@ -35,10 +35,10 @@ export const Indicator = <T extends string, U extends T>({
         height,
         border,
         borderRadius,
-        backgroundColor: active ? "#C4E8FC" : "#FFFFFF",
+        backgroundColor: active ? '#C4E8FC' : '#FFFFFF',
         boxShadow,
         margin,
-        textAlign: "center",
+        textAlign: 'center',
         lineHeight: height,
       }}
     >
@@ -57,14 +57,14 @@ export const Indicators: FC<{
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         margin,
       }}
     >
       <div
         style={{
-          textAlign: "center",
+          textAlign: 'center',
         }}
       >
         {label}

@@ -12,6 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-declare module "stable-hash" {
+declare module 'stable-hash' {
   export default function stableHash(input: unknown): string;
 }

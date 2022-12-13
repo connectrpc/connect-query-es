@@ -16,10 +16,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "connect-query": ["../connect-query"]
+      "@bufbuild/connect-query": ["../../../packages/connect-query"]
     }
   },
   "include": ["src"],
-
   "references": [{ "path": "./tsconfig.node.json" }]
 }

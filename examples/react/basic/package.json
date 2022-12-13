@@ -1,13 +1,13 @@
 {
-  "name": "@bufbuild/connect-query-example",
+  "name": "@bufbuild/connect-query-example-react-basic",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "pregenerate": "rm -rf ./src/eliza",
-    "generate": "buf generate .",
+    "clean": "rm -rf src/eliza",
+    "generate": "pnpm run clean && buf generate . --exclude-path node_modules/@bufbuild/protoc-gen-connect-query/eliza.proto --exclude-path node_modules/@bufbuild/connect-query/eliza.proto",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,9 +15,10 @@
     "@bufbuild/protobuf": "^0.4.0",
     "@bufbuild/protoc-gen-es": "^0.4.0",
     "@bufbuild/protoc-gen-connect-web": "^0.3.3",
+    "@bufbuild/protoc-gen-connect-query": "*",
     "@tanstack/react-query": "^4.19.1",
     "@tanstack/react-query-devtools": "^4.19.1",
-    "connect-query": "*",
+    "@bufbuild/connect-query": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -26,6 +27,6 @@
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^3.0.0",
     "typescript": "^4.9.4",
-    "vite": "^4.0.0"
+    "vite": "^4.0.1"
   }
 }

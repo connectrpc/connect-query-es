@@ -1,6 +1,5 @@
 {
   "words": [
-    "Weizenbaum's",
     "bufbuild",
     "connectquery",
     "connectweb",
@@ -9,13 +8,14 @@
     "inferencing",
     "lcov",
     "nocheck",
-    "pregenerate",
+    "pnpm",
     "proto",
     "protobuf",
     "protoc",
     "protoplugin",
     "tanstack",
-    "tsdoc"
+    "tsdoc",
+    "Weizenbaum's"
   ],
-  "ignorePaths": ["**/*.svg", "**/*.ai"]
+  "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml"]
 }

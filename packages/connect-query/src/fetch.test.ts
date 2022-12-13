@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { beforeAll, describe, expect, it } from "@jest/globals";
-import { unaryFetch } from "./fetch";
-import type { Equal, Expect } from "./jest/test-utils";
-import { hardcodedResponse, patchGlobalThisFetch } from "./jest/test-utils";
-import { ElizaService } from "./jest/mock-data/eliza/eliza_connectweb";
-import type { SayResponse } from "./jest/mock-data/eliza/eliza_pb";
-import { SayRequest } from "./jest/mock-data/eliza/eliza_pb";
-import { createConnectTransport } from "@bufbuild/connect-web";
+import { beforeAll, describe, expect, it } from '@jest/globals';
+import { unaryFetch } from './fetch';
+import type { Equal, Expect } from './jest/test-utils';
+import { hardcodedResponse, patchGlobalThisFetch } from './jest/test-utils';
+import { ElizaService } from './jest/mock-data/eliza/eliza_connectweb';
+import type { SayResponse } from './jest/mock-data/eliza/eliza_pb';
+import { SayRequest } from './jest/mock-data/eliza/eliza_pb';
+import { createConnectTransport } from '@bufbuild/connect-web';
 
-describe("unaryFetch", () => {
+describe('unaryFetch', () => {
   beforeAll(() => {
     patchGlobalThisFetch(hardcodedResponse);
   });
 
   const transport = createConnectTransport({
-    baseUrl: "",
+    baseUrl: '',
   });
 
   const fetchOptions = {
@@ -37,18 +37,18 @@ describe("unaryFetch", () => {
     typeName: ElizaService.typeName,
   }; // satisfies Parameters<typeof unaryFetch>[0];
 
-  it("has the correct return type", () => {
+  it('has the correct return type', () => {
     expect.assertions(0);
     const promise = unaryFetch(fetchOptions);
     type typePromise = Expect<Equal<typeof promise, Promise<SayResponse>>>;
   });
 
-  it("returns a message", async () => {
+  it('returns a message', async () => {
     const response = await unaryFetch(fetchOptions);
     expect(response.toJSON()).toStrictEqual(hardcodedResponse);
   });
 
-  it("can handle empty inputs", async () => {
+  it('can handle empty inputs', async () => {
     const response = await unaryFetch({
       ...fetchOptions,
       input: undefined,
@@ -56,7 +56,7 @@ describe("unaryFetch", () => {
     expect(response.toJSON()).toStrictEqual(hardcodedResponse);
   });
 
-  it("is aware of AbortSignal signals", () => {
+  it('is aware of AbortSignal signals', () => {
     const callOptions = new AbortController();
     // eslint-disable-next-line @typescript-eslint/no-floating-promises -- it is not necessary to await this promise
     unaryFetch({
@@ -65,10 +65,10 @@ describe("unaryFetch", () => {
     });
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("eliza"),
+      expect.stringContaining('eliza'),
       expect.objectContaining({
         signal: callOptions.signal,
-      })
+      }),
     );
   });
 });
