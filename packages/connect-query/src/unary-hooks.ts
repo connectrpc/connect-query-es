@@ -122,7 +122,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
     queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-    getPlaceholderData?: () => Message<O>;
+    placeholderData?: () => O;
     onError?: (error: ConnectError) => void;
   };
 }
@@ -224,7 +224,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
         ...(getPlaceholderData
           ? {
-              getPlaceholderData: () => new methodInfo.O(getPlaceholderData()),
+              placeholderData: () => new methodInfo.O(getPlaceholderData()),
             }
           : {}),
 

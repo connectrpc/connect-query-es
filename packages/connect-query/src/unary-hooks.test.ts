@@ -669,11 +669,7 @@ describe('unaryHooks', () => {
         type typeUseQueryKeys = Expect<
           Equal<
             keyof ReturnType<typeof say.useQuery>,
-            | 'enabled'
-            | 'getPlaceholderData'
-            | 'onError'
-            | 'queryFn'
-            | 'queryKey'
+            'enabled' | 'onError' | 'placeholderData' | 'queryFn' | 'queryKey'
           >
         >;
 
@@ -690,7 +686,7 @@ describe('unaryHooks', () => {
           Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
         ).toStrictEqual([
           'enabled',
-          'getPlaceholderData',
+          'placeholderData',
           'onError',
           'queryFn',
           'queryKey',
@@ -739,8 +735,8 @@ describe('unaryHooks', () => {
         const { result } = renderHook(() => say.useQuery(), wrapper());
         type typeGetPlaceholderData = Expect<
           Equal<
-            typeof result.current.getPlaceholderData,
-            (() => Message<SayResponse>) | undefined
+            typeof result.current.placeholderData,
+            (() => SayResponse) | undefined
           >
         >;
       });
@@ -759,7 +755,7 @@ describe('unaryHooks', () => {
         expect(getPlaceholderData).not.toHaveBeenCalled();
 
         const response = (
-          result.current.getPlaceholderData as () => Message<SayResponse>
+          result.current.placeholderData as () => Message<SayResponse>
         )();
 
         expect(getPlaceholderData).toHaveBeenCalledWith();
