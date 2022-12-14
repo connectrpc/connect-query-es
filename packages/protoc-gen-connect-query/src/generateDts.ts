@@ -21,7 +21,7 @@ import type { PluginInit } from './utils';
 /**
  * Handles generating a TypeScript Declaration file for a given Schema, DescFile (protobuf definition) and protobuf Service.
  */
-export const generateServiceFile =
+const generateServiceFile =
   (schema: Schema, protoFile: DescFile) => (service: DescService) => {
     const f = schema.generateFile(
       `${protoFile.name}-${localName(service)}_connectquery.d.ts`,
