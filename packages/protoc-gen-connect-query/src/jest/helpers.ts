@@ -14,12 +14,10 @@
 
 import { FileDescriptorSet } from '@bufbuild/protobuf';
 import { CodeGeneratorRequest } from '@bufbuild/protobuf';
-import { createEcmaScriptPlugin } from '@bufbuild/protoplugin';
-import { generateDts } from '../generateDts';
-import { generateTs } from '../generateTs';
 import { readFileSync } from 'fs';
 import { resolve, join } from 'path';
 import type { Target } from '@bufbuild/protoplugin/ecmascript';
+import { protocGenConnectQuery } from '../protoc-gen-connect-query-plugin';
 
 /**
  * Returns a FileDescriptorSet from a pre-built Buf image
@@ -40,15 +38,7 @@ export const transpile = (target: Target) => (filename: string) => {
     protoFile: getFileDescriptorSet().file,
   });
 
-  const plugin = createEcmaScriptPlugin({
-    name: 'test-plugin',
-    version: 'v0.0.1337',
-    generateTs,
-    generateDts,
-    generateJs: generateTs,
-  });
-
-  const codeGeneratorResponse = plugin.run(codeGeneratorRequest);
+  const codeGeneratorResponse = protocGenConnectQuery.run(codeGeneratorRequest);
 
   const matchingFile = codeGeneratorResponse.file.find(
     (file) => file.name === filename,
