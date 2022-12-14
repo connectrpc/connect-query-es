@@ -657,7 +657,9 @@ describe('unaryHooks', () => {
           Equal<
             params[1],
             | {
-                getPlaceholderData?: () => PartialMessage<SayResponse>;
+                getPlaceholderData?: (
+                  enabled?: boolean,
+                ) => PartialMessage<SayResponse> | undefined;
                 onError?: (error: ConnectError) => void;
               }
             | undefined
@@ -686,8 +688,8 @@ describe('unaryHooks', () => {
           Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
         ).toStrictEqual([
           'enabled',
-          'placeholderData',
           'onError',
+          'placeholderData',
           'queryFn',
           'queryKey',
         ]);
@@ -723,7 +725,7 @@ describe('unaryHooks', () => {
       });
     });
 
-    describe('getPlaceholderData', () => {
+    describe('placeholderData', () => {
       const placeholderSentence: PartialMessage<SayResponse> = {
         sentence: 'placeholder',
       };
@@ -741,7 +743,7 @@ describe('unaryHooks', () => {
         >;
       });
 
-      it('passes through getPlaceholderData, when provided', () => {
+      it('passes through placeholderData, when provided', () => {
         const getPlaceholderData = jest.fn(() => placeholderSentence);
         const { result } = renderHook(
           () => say.useQuery(input, { getPlaceholderData }),
@@ -749,7 +751,7 @@ describe('unaryHooks', () => {
         );
 
         expect(result.current).toHaveProperty(
-          'getPlaceholderData',
+          'placeholderData',
           expect.any(Function),
         );
         expect(getPlaceholderData).not.toHaveBeenCalled();
@@ -758,7 +760,7 @@ describe('unaryHooks', () => {
           result.current.placeholderData as () => Message<SayResponse>
         )();
 
-        expect(getPlaceholderData).toHaveBeenCalledWith();
+        expect(getPlaceholderData).toHaveBeenCalledWith(true);
         expect(response.toJSON()).toStrictEqual(placeholderSentence);
         expect(response).toBeInstanceOf(SayResponse);
       });
@@ -767,6 +769,22 @@ describe('unaryHooks', () => {
         const { result } = renderHook(() => say.useQuery(input), wrapper());
 
         expect(result.current).not.toHaveProperty('getPlaceholderData');
+      });
+
+      it('will use pass the value of `enabled` to the getPlaceholderData callback', () => {
+        const getPlaceholderData =
+          jest.fn<
+            (
+              enabled?: boolean | undefined,
+            ) => PartialMessage<SayResponse> | undefined
+          >();
+        const { result } = renderHook(
+          () => useQuery(say.useQuery(disableQuery, { getPlaceholderData })),
+          wrapper(),
+        );
+
+        expect(result.current.data?.sentence).toStrictEqual('');
+        expect(getPlaceholderData).toHaveBeenCalledWith(false);
       });
     });
 

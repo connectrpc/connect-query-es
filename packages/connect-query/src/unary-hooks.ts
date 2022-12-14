@@ -115,7 +115,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   useQuery: (
     input?: DisableQuery | PartialMessage<I>,
     options?: {
-      getPlaceholderData?: () => PartialMessage<O>;
+      getPlaceholderData?: (enabled?: boolean) => PartialMessage<O> | undefined;
       onError?: (error: ConnectError) => void;
     },
   ) => {
@@ -219,20 +219,20 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
     useQuery: (input, { getPlaceholderData, onError } = {}) => {
       const contextTransport = useTransport();
       const transport = customTransport ?? contextTransport;
+      const enabled = input !== disableQuery;
+
       return {
-        enabled: input !== disableQuery,
+        enabled,
 
         ...(getPlaceholderData
           ? {
-              placeholderData: () => new methodInfo.O(getPlaceholderData()),
+              placeholderData: () =>
+                new methodInfo.O(getPlaceholderData(enabled)),
             }
           : {}),
 
         queryFn: async (context) => {
-          assert(
-            input !== disableQuery,
-            'queryFn does not accept a disabled query',
-          );
+          assert(enabled, 'queryFn does not accept a disabled query');
           return unaryFetch({
             callOptions: context,
             input,
