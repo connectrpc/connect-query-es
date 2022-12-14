@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import { describe, expect, it } from '@jest/globals';
-import { transpile } from './jest/helpers';
+import { generate } from './jest/helpers';
 import packageJson from '../package.json';
 
 describe('generateDts', () => {
   it('generates a full d.ts file', () => {
-    const result = transpile('dts')(
+    const result = generate('dts')(
       'proto/eliza-ElizaService_connectquery.d.ts',
     );
     expect(result).toStrictEqual([

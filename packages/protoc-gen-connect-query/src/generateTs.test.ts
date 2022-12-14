@@ -14,7 +14,7 @@
 
 import type { Target } from '@bufbuild/protoplugin/ecmascript';
 import { describe, expect, it } from '@jest/globals';
-import { transpile } from './jest/helpers';
+import { generate } from './jest/helpers';
 import packageJson from '../package.json'
 
 describe('generateDts', () => {
@@ -87,7 +87,7 @@ describe('generateDts', () => {
 
   it('generates a full ts file', () => {
     const target = 'ts';
-    const output = transpile(target)(
+    const output = generate(target)(
       `proto/eliza-ElizaService_connectquery.${target}`,
     );
     expect(output).toStrictEqual(expected(target));
@@ -95,7 +95,7 @@ describe('generateDts', () => {
 
   it('generates a full js file', () => {
     const target = 'js';
-    const output = transpile(target)(
+    const output = generate(target)(
       `proto/eliza-ElizaService_connectquery.${target}`,
     );
     expect(output).toStrictEqual(expected(target));
