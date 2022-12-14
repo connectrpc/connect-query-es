@@ -129,10 +129,10 @@ importers:
       typescript: ^4.9.4
     dependencies:
       '@bufbuild/protobuf': 0.4.0
-      '@bufbuild/protoc-gen-connect-web': 0.3.3_iqot6et7zck5yndinjoewa2ewm
-      '@bufbuild/protoc-gen-es': 0.4.0_@bufbuild+protobuf@0.4.0
       '@bufbuild/protoplugin': 0.4.0
     devDependencies:
+      '@bufbuild/protoc-gen-connect-web': 0.3.3_iqot6et7zck5yndinjoewa2ewm
+      '@bufbuild/protoc-gen-es': 0.4.0_@bufbuild+protobuf@0.4.0
       typescript: 4.9.4
 
 packages:
@@ -551,7 +551,7 @@ packages:
       '@bufbuild/protoplugin': 0.4.0
     transitivePeerDependencies:
       - supports-color
-    dev: false
+    dev: true
 
   /@bufbuild/protoc-gen-es/0.4.0_@bufbuild+protobuf@0.4.0:
     resolution: {integrity: sha512-kZkWuD0oCQ2DwRaiReZVTifW62go4uy3Sm0P1ZulpAwMeARxW7GryIWWCyr5pZO66UkAEymGdMfNDR5gbM6XkA==}
