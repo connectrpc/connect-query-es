@@ -743,7 +743,7 @@ describe('unaryHooks', () => {
         >;
       });
 
-      it('passes through placeholderData, when provided', () => {
+      it('passes through getPlaceholderData, when provided', () => {
         const getPlaceholderData = jest.fn(() => placeholderSentence);
         const { result } = renderHook(
           () => say.useQuery(input, { getPlaceholderData }),
