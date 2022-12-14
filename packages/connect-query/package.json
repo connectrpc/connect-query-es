@@ -1,6 +1,6 @@
 {
   "name": "@bufbuild/connect-query",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "license": "Apache-2.0",
