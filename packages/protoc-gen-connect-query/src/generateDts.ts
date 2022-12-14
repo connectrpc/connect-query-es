@@ -19,7 +19,7 @@ import { localName } from '@bufbuild/protoplugin/ecmascript';
 import type { PluginInit } from './utils';
 
 /**
- * Handles generating a TypeScript Definition file for a given Schema, DescFile (protobuf definition) and protobuf Service.
+ * Handles generating a TypeScript Declaration file for a given Schema, DescFile (protobuf definition) and protobuf Service.
  */
 export const generateServiceFile =
   (schema: Schema, protoFile: DescFile) => (service: DescService) => {
