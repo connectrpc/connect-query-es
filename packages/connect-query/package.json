@@ -31,7 +31,6 @@
     "@bufbuild/connect-web": "^0.3.3",
     "@bufbuild/protobuf": "^0.4.0",
     "@bufbuild/protoc-gen-connect-web": "^0.3.3",
-    "@bufbuild/protoplugin": "^0.4.0",
     "@tanstack/react-query": "^4.19.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

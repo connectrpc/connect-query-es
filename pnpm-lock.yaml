@@ -95,7 +95,6 @@ importers:
       '@bufbuild/protobuf': ^0.4.0
       '@bufbuild/protoc-gen-connect-web': ^0.3.3
       '@bufbuild/protoc-gen-es': ^0.4.0
-      '@bufbuild/protoplugin': ^0.4.0
       '@tanstack/react-query': ^4.19.1
       '@testing-library/react': ^13.4.0
       '@types/react': ^18.0.26
@@ -109,7 +108,6 @@ importers:
       '@bufbuild/connect-web': 0.3.3_@bufbuild+protobuf@0.4.0
       '@bufbuild/protobuf': 0.4.0
       '@bufbuild/protoc-gen-connect-web': 0.3.3_2cmzzigfyxyx5mv73gfdjzbvay
-      '@bufbuild/protoplugin': 0.4.0
       '@tanstack/react-query': 4.19.1_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
