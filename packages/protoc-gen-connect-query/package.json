@@ -3,6 +3,7 @@
   "version": "0.0.3",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/bufbuild/connect-query.git",
