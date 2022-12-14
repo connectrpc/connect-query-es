@@ -49,7 +49,10 @@ import type {
   SayRequest,
   CountRequest as CountRequest,
 } from './jest/mock-data/eliza/eliza_pb';
-import type { QueryFunctionContext, UseMutationResult } from '@tanstack/react-query';
+import type {
+  QueryFunctionContext,
+  UseMutationResult,
+} from '@tanstack/react-query';
 import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import type {
   ConnectPartialQueryKey,
@@ -603,10 +606,16 @@ describe('unaryHooks', () => {
         rest,
       );
 
-      type typeMutationFn = Expect<Equal<
-        typeof result.current.mut,
-        UseMutationResult<CountResponse, ConnectError, PartialMessage<CountRequest>>
-      >>;
+      type typeMutationFn = Expect<
+        Equal<
+          typeof result.current.mut,
+          UseMutationResult<
+            CountResponse,
+            ConnectError,
+            PartialMessage<CountRequest>
+          >
+        >
+      >;
 
       await waitFor(() => {
         expect(result.current.mut.isIdle).toBeTruthy();
