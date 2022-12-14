@@ -15,7 +15,7 @@
 import type { Target } from '@bufbuild/protoplugin/ecmascript';
 import { describe, expect, it } from '@jest/globals';
 import { generate } from './jest/helpers';
-import packageJson from '../package.json'
+import packageJson from '../package.json';
 
 describe('generateDts', () => {
   const expected = (target: Target) => [
