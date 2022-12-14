@@ -109,7 +109,6 @@ importers:
       '@bufbuild/connect-web': 0.3.3_@bufbuild+protobuf@0.4.0
       '@bufbuild/protobuf': 0.4.0
       '@bufbuild/protoc-gen-connect-web': 0.3.3_2cmzzigfyxyx5mv73gfdjzbvay
-      '@bufbuild/protoc-gen-es': 0.4.0_@bufbuild+protobuf@0.4.0
       '@bufbuild/protoplugin': 0.4.0
       '@tanstack/react-query': 4.19.1_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
@@ -117,6 +116,7 @@ importers:
       stable-hash: 0.0.2
       typescript: 4.9.4
     devDependencies:
+      '@bufbuild/protoc-gen-es': 0.4.0_@bufbuild+protobuf@0.4.0
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@types/react': 18.0.26
       '@types/react-dom': 18.0.9
@@ -515,7 +515,6 @@ packages:
 
   /@bufbuild/protobuf/0.4.0:
     resolution: {integrity: sha512-ZY17ntYFgt3HNIhpSCfuTEEzTC+k7l8+ssP/pzJklKrIs8YwgBX2xy7YsC5byrfJEbnSuPX4omh2E+1710oIjg==}
-    dev: false
 
   /@bufbuild/protoc-gen-connect-web/0.3.3_2cmzzigfyxyx5mv73gfdjzbvay:
     resolution: {integrity: sha512-J7jETymTWtKPLy8mFwSIW9xfqP91LzXVd0LZWb1AF9pWOk1SZ/JzbJPBlKSqV37SPsOu2lvztMPPsfLBibtSwQ==}
@@ -570,7 +569,6 @@ packages:
       '@bufbuild/protoplugin': 0.4.0
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@bufbuild/protoplugin/0.4.0:
     resolution: {integrity: sha512-1zPdODkj+WE0JWtUsJTQ/1yQbn2pjNhnRtUruCKvwcLGkQ4Cn1aDzgh+X8mGVuT+GJEpypdF2xw7AAMcexo7pA==}
@@ -580,7 +578,6 @@ packages:
       typescript: 4.5.2
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@cspell/cspell-bundled-dicts/6.17.0:
     resolution: {integrity: sha512-BA5cg2mfESbF3Fm/fIGXgbm0LhD8HKxCCiQDRN9FLaj4c69QUgFpQ9LpzGPZEtNn2Pjl2Jn/BEXX27hgaURG9g==}
@@ -2806,7 +2803,6 @@ packages:
       debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /@vitejs/plugin-react/3.0.0_vite@4.0.1:
     resolution: {integrity: sha512-1mvyPc0xYW5G8CHQvJIJXLoMjl5Ct3q2g5Y2s6Ccfgwm45y48LBvsla7az+GkkAtYikWQ4Lxqcsq5RHLcZgtNQ==}
@@ -8172,7 +8168,6 @@ packages:
     resolution: {integrity: sha512-5BlMof9H1yGt0P8/WF+wPNw6GfctgGjXp5hkblpyT+8rkASSmkUKMXrxR0Xg8ThVCi/JnHQiKXeBaEwCeQwMFw==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: false
 
   /typescript/4.9.4:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
