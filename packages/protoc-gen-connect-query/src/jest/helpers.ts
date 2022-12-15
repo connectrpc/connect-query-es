@@ -23,7 +23,14 @@ import { protocGenConnectQuery } from '../protoc-gen-connect-query-plugin';
  * Returns a FileDescriptorSet from a pre-built Buf image
  */
 const getFileDescriptorSet = () => {
-  const buffer = readFileSync(resolve(join(__dirname, './descriptorset.bin')));
+  const buffer = readFileSync(
+    resolve(
+      join(
+        __dirname,
+        '../../node_modules/generated-react/dist/descriptorset.bin',
+      ),
+    ),
+  );
   return FileDescriptorSet.fromBinary(buffer);
 };
 
@@ -33,7 +40,7 @@ const getFileDescriptorSet = () => {
 export const generate = (target: Target) => (filename: string) => {
   const codeGeneratorRequest = new CodeGeneratorRequest({
     parameter: `target=${target}`,
-    fileToGenerate: ['proto/eliza.proto'],
+    fileToGenerate: ['eliza.proto'],
     protoFile: getFileDescriptorSet().file,
   });
 

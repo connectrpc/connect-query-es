@@ -18,14 +18,16 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "pnpm run clean && buf generate --path eliza.proto"
+    "generate": "pnpm run clean && pnpm run generate:code && pnpm run generate:descriptorset",
+    "generate:code": "buf generate --path eliza.proto",
+    "generate:descriptorset": "buf build --path eliza.proto --output dist/descriptorset.bin"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^0.5.0",
+    "@bufbuild/protoc-gen-connect-query": "*",
+    "@bufbuild/protoc-gen-connect-web": "^0.4.0",
+    "@bufbuild/protoc-gen-es": "^0.5.0",
     "@bufbuild/connect-query": "*"
-  },
-  "peerDependencies": {
-    "@bufbuild/protobuf": "^0.4.0"
   },
   "preferUnplugged": true
 }

@@ -21,13 +21,13 @@
   "scripts": {
     "clean": "rm -rf dist",
     "test": "jest",
-    "build": "pnpm clean && tsc --project tsconfig.build.json",
-    "build:descriptorset": "buf build --output src/jest/descriptorset.bin"
+    "build": "pnpm clean && tsc --project tsconfig.build.json"
   },
   "preferUnplugged": true,
   "devDependencies": {
     "@bufbuild/protoc-gen-connect-web": "^0.4.0",
     "@bufbuild/protoc-gen-es": "^0.5.0",
+    "generated-react": "*",
     "typescript": "^4.9.4"
   },
   "dependencies": {

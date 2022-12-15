@@ -50,9 +50,7 @@ describe('createQueryService', () => {
         service,
         transport,
       }).say.useQuery(input);
-
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- not necessary to await
-      queryFn();
+      queryFn(); // eslint-disable-line @typescript-eslint/no-floating-promises -- not necessary to await
     }, wrapper());
 
     expect(globalThis.fetch).toHaveBeenCalledWith(

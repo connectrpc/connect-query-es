@@ -128,9 +128,15 @@ importers:
     specifiers:
       '@bufbuild/connect-query': '*'
       '@bufbuild/protobuf': ^0.5.0
+      '@bufbuild/protoc-gen-connect-query': '*'
+      '@bufbuild/protoc-gen-connect-web': ^0.4.0
+      '@bufbuild/protoc-gen-es': ^0.5.0
     dependencies:
       '@bufbuild/connect-query': link:../connect-query
       '@bufbuild/protobuf': 0.5.0
+      '@bufbuild/protoc-gen-connect-query': link:../protoc-gen-connect-query
+      '@bufbuild/protoc-gen-connect-web': 0.4.0_tewo6tgla3z7dmu2k2bnl5puj4
+      '@bufbuild/protoc-gen-es': 0.5.0_@bufbuild+protobuf@0.5.0
 
   packages/protoc-gen-connect-query:
     specifiers:
@@ -138,6 +144,7 @@ importers:
       '@bufbuild/protoc-gen-connect-web': ^0.4.0
       '@bufbuild/protoc-gen-es': ^0.5.0
       '@bufbuild/protoplugin': ^0.5.0
+      generated-react: '*'
       typescript: ^4.9.4
     dependencies:
       '@bufbuild/protobuf': 0.5.0
@@ -145,6 +152,7 @@ importers:
     devDependencies:
       '@bufbuild/protoc-gen-connect-web': 0.4.0_tewo6tgla3z7dmu2k2bnl5puj4
       '@bufbuild/protoc-gen-es': 0.5.0_@bufbuild+protobuf@0.5.0
+      generated-react: link:../generated-react
       typescript: 4.9.4
 
 packages:
@@ -563,7 +571,6 @@ packages:
       '@bufbuild/protoplugin': 0.5.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@bufbuild/protoc-gen-es/0.5.0_@bufbuild+protobuf@0.5.0:
     resolution: {integrity: sha512-86j44JC0+6X1VTuN0tm4sy99YACbDsAWkjRaYy6LgGJNz65XmkI5hGX2l0GuV8PWRbDgO/B9ne6i9Gtnntu6Vg==}

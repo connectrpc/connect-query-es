@@ -4,6 +4,7 @@
   "repository": "git@github.com:bufbuild/connect-query.git",
   "scripts": {
     "build": "pnpm --recursive build",
+    "generate": "pnpm --recursive generate",
     "test": "pnpm --recursive test",
     "lint": "pnpm run lint:code && pnpm run lint:markdown && pnpm run lint:spelling",
     "lint:fix": "pnpm run lint:code:fix && pnpm run lint:markdown:fix && pnpm run lint:spelling",
@@ -12,7 +13,7 @@
     "lint:spelling": "cspell \"**\" --gitignore",
     "lint:code": "eslint . && prettier . --check",
     "lint:code:fix": "eslint . --fix && prettier . --write",
-    "all": "pnpm run build && pnpm run lint:fix && pnpm run test"
+    "all": "pnpm run build && pnpm run generate && pnpm run lint:fix && pnpm run test"
   },
   "license": "Apache-2.0",
   "devDependencies": {
