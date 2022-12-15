@@ -658,7 +658,7 @@ describe('unaryHooks', () => {
             params[1],
             | {
                 getPlaceholderData?: (
-                  enabled?: boolean,
+                  enabled: boolean,
                 ) => PartialMessage<SayResponse> | undefined;
                 onError?: (error: ConnectError) => void;
               }

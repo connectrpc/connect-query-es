@@ -115,7 +115,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   useQuery: (
     input?: DisableQuery | PartialMessage<I>,
     options?: {
-      getPlaceholderData?: (enabled?: boolean) => PartialMessage<O> | undefined;
+      getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
       onError?: (error: ConnectError) => void;
     },
   ) => {
