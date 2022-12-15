@@ -15,10 +15,10 @@
 import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { renderHook } from '@testing-library/react';
 import { createQueryService } from './create-query-service';
-import { ElizaService } from './jest/mock-data/eliza/eliza_connectweb';
+import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import { isUnaryMethod } from './utils';
 import type { MethodInfo, PartialMessage } from '@bufbuild/protobuf';
-import type { SayRequest, SayResponse } from './jest/mock-data/eliza/eliza_pb';
+import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { Equal, Expect } from './jest/test-utils';
 import {
   hardcodedResponse,
@@ -50,6 +50,7 @@ describe('createQueryService', () => {
         service,
         transport,
       }).say.useQuery(input);
+
       // eslint-disable-next-line @typescript-eslint/no-floating-promises -- not necessary to await
       queryFn();
     }, wrapper());

@@ -1,0 +1,31 @@
+{
+  "name": "generated-react",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Internal-only test code for code generation, often used in tests within this monorepo",
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bufbuild/connect-query.git",
+    "directory": "packages/protoc-gen-connect-query"
+  },
+  "files": [
+    "dist/**"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "pnpm run clean && buf generate --path eliza.proto"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^0.4.0",
+    "@bufbuild/connect-query": "*"
+  },
+  "peerDependencies": {
+    "@bufbuild/protobuf": "^0.4.0"
+  },
+  "preferUnplugged": true
+}

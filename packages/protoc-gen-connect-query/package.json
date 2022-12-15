@@ -20,8 +20,6 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "clean:gen": "rm -rf gen",
-    "generate": "pnpm run clean:gen && buf generate",
     "test": "jest",
     "build": "pnpm clean && tsc --project tsconfig.build.json",
     "build:descriptorset": "buf build --output src/jest/descriptorset.bin"
@@ -30,6 +28,7 @@
   "devDependencies": {
     "@bufbuild/protoc-gen-connect-web": "^0.3.3",
     "@bufbuild/protoc-gen-es": "^0.4.0",
+    "generate-react": "*",
     "typescript": "^4.9.4"
   },
   "dependencies": {

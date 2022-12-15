@@ -14,7 +14,7 @@
 
 import { describe, expect, it, jest } from '@jest/globals';
 import { createQueryHooks, isSupportedMethod } from './create-query-hooks';
-import { ElizaService } from './jest/mock-data/eliza/eliza_connectweb';
+import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import type {
   MethodInfo,
   MethodInfoUnary,
@@ -23,8 +23,7 @@ import type {
 } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
 import type { Alike, Equal, Expect, ExpectFalse } from './jest/test-utils';
-import type { SayRequest } from './jest/mock-data/eliza/eliza_pb';
-import type { SayResponse } from './jest/mock-data/eliza/eliza_pb';
+import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { ConnectQueryKey } from './connect-query-key';
 import type { DisableQuery } from './utils';
 import type { UnaryHooks } from './unary-hooks';

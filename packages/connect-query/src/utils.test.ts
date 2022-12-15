@@ -19,8 +19,8 @@ import type {
 } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
 import { describe, expect, it, jest } from '@jest/globals';
-import { BigIntService } from './jest/mock-data/eliza/eliza_connectweb';
-import type { CountResponse } from './jest/mock-data/eliza/eliza_pb';
+import { BigIntService } from 'generated-react/dist/eliza_connectweb';
+import type { CountResponse } from 'generated-react/dist/eliza_pb';
 import type { Equal, Expect } from './jest/test-utils';
 import {
   assert,

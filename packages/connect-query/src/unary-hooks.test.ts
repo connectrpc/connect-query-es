@@ -42,13 +42,13 @@ import type { DisableQuery } from './utils';
 import {
   ElizaService,
   BigIntService,
-} from './jest/mock-data/eliza/eliza_connectweb';
-import type { CountResponse as CountResponse } from './jest/mock-data/eliza/eliza_pb';
-import { SayResponse } from './jest/mock-data/eliza/eliza_pb';
+} from 'generated-react/dist/eliza_connectweb';
+import type { CountResponse as CountResponse } from 'generated-react/dist/eliza_pb';
+import { SayResponse } from 'generated-react/dist/eliza_pb';
 import type {
   SayRequest,
   CountRequest as CountRequest,
-} from './jest/mock-data/eliza/eliza_pb';
+} from 'generated-react/dist/eliza_pb';
 import type {
   QueryFunctionContext,
   UseMutationResult,

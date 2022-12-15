@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "clean": "rm -rf src/eliza",
-    "generate": "pnpm run clean && buf generate . --exclude-path node_modules/@bufbuild/protoc-gen-connect-query/eliza.proto --exclude-path node_modules/@bufbuild/connect-query/eliza.proto",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,6 +18,7 @@
     "@tanstack/react-query": "^4.19.1",
     "@tanstack/react-query-devtools": "^4.19.1",
     "@bufbuild/connect-query": "*",
+    "generated-react": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

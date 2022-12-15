@@ -16,9 +16,9 @@ import { beforeAll, describe, expect, it } from '@jest/globals';
 import { unaryFetch } from './fetch';
 import type { Equal, Expect } from './jest/test-utils';
 import { hardcodedResponse, patchGlobalThisFetch } from './jest/test-utils';
-import { ElizaService } from './jest/mock-data/eliza/eliza_connectweb';
-import type { SayResponse } from './jest/mock-data/eliza/eliza_pb';
-import { SayRequest } from './jest/mock-data/eliza/eliza_pb';
+import { ElizaService } from 'generated-react/dist/eliza_connectweb';
+import type { SayResponse } from 'generated-react/dist/eliza_pb';
+import { SayRequest } from 'generated-react/dist/eliza_pb';
 import { createConnectTransport } from '@bufbuild/connect-web';
 
 describe('unaryFetch', () => {

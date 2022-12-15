@@ -19,8 +19,8 @@ import type { FC } from 'react';
 import { Data, Datum } from './datum';
 import { Indicator, Indicators } from './indicator';
 import { Page } from './page';
-import { say } from './eliza/eliza-ElizaService_connectquery';
-import { ElizaService } from './eliza/eliza_connectweb';
+import { say } from 'generated-react/dist/eliza-ElizaService_connectquery';
+import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 
 /**
  * This example demonstrates a basic usage of Connect-Query with `useQuery`
