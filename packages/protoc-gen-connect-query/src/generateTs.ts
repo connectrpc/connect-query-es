@@ -80,11 +80,9 @@ export const generateTs: PluginInit['generateJs'] & PluginInit['generateTs'] = (
   schema,
   extension,
 ) => {
-  schema.files
-    .filter((protoFile) => protoFile.services.length > 0)
-    .forEach((protoFile) => {
-      protoFile.services.forEach(
-        generateServiceFile(schema, protoFile, extension),
-      );
-    });
+  schema.files.forEach((protoFile) => {
+    protoFile.services.forEach(
+      generateServiceFile(schema, protoFile, extension),
+    );
+  });
 };

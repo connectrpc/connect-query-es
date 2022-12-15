@@ -57,9 +57,7 @@ const generateServiceFile =
  * This function generates the TypeScript Definition output files
  */
 export const generateDts: PluginInit['generateDts'] = (schema) => {
-  schema.files
-    .filter((protoFile) => protoFile.services.length > 0)
-    .forEach((protoFile) => {
-      protoFile.services.forEach(generateServiceFile(schema, protoFile));
-    });
+  schema.files.forEach((protoFile) => {
+    protoFile.services.forEach(generateServiceFile(schema, protoFile));
+  });
 };
