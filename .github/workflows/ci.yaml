@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Generate
+        run: pnpm run generate
+
       - name: Test
         run: pnpm run test
 
