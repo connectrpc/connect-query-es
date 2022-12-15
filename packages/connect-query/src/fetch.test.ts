@@ -45,7 +45,7 @@ describe('unaryFetch', () => {
 
   it('returns a message', async () => {
     const response = await unaryFetch(fetchOptions);
-    expect(response.toJSON()).toStrictEqual(hardcodedResponse);
+    expect(response.toJson()).toStrictEqual(hardcodedResponse);
   });
 
   it('can handle empty inputs', async () => {
@@ -53,7 +53,7 @@ describe('unaryFetch', () => {
       ...fetchOptions,
       input: undefined,
     });
-    expect(response.toJSON()).toStrictEqual(hardcodedResponse);
+    expect(response.toJson()).toStrictEqual(hardcodedResponse);
   });
 
   it('is aware of AbortSignal signals', () => {

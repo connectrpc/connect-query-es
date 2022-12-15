@@ -761,7 +761,7 @@ describe('unaryHooks', () => {
         )();
 
         expect(getPlaceholderData).toHaveBeenCalledWith(true);
-        expect(response.toJSON()).toStrictEqual(placeholderSentence);
+        expect(response.toJson()).toStrictEqual(placeholderSentence);
         expect(response).toBeInstanceOf(SayResponse);
       });
 
@@ -871,7 +871,7 @@ describe('unaryHooks', () => {
         const { result } = renderHook(() => say.useQuery(input), wrapper());
 
         const response = await result.current.queryFn();
-        expect(response.toJSON()).toStrictEqual(hardcodedResponse);
+        expect(response.toJson()).toStrictEqual(hardcodedResponse);
         expect(globalThis.fetch).toHaveBeenCalledWith(
           expect.stringContaining('eliza'),
           expect.objectContaining({ body: JSON.stringify(input) }),
