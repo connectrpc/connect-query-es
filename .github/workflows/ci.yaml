@@ -20,6 +20,9 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
+      - name: Setup `buf` CLI
+        uses: bufbuild/buf-setup-action@v1.10.0
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
