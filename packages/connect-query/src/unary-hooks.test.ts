@@ -60,6 +60,7 @@ import type {
 } from './connect-query-key';
 import { defaultOptions } from './default-options';
 import { spyOn } from 'jest-mock';
+import { fallbackTransport } from './use-transport';
 
 const consoleErrorSpy = spyOn(console, 'error');
 
@@ -242,7 +243,7 @@ describe('unaryHooks', () => {
     const { setQueryData, setQueriesData } = unaryHooks({
       methodInfo,
       typeName: BigIntService.typeName,
-      transport: createConnectTransport({ baseUrl: 'no-op' }),
+      transport: fallbackTransport,
     });
 
     /** @returns 2n */

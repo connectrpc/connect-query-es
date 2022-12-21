@@ -50,6 +50,9 @@ export const patchGlobalThisFetch = <T,>(
  */
 export const wrapper = (
   config?: QueryClientConfig,
+  transport = createConnectTransport({
+    baseUrl: 'https://demo.connect.build',
+  }),
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;
   queryClient: QueryClient;
@@ -57,11 +60,7 @@ export const wrapper = (
   const queryClient = new QueryClient(config);
   return {
     wrapper: ({ children }) => (
-      <TransportProvider
-        transport={createConnectTransport({
-          baseUrl: 'https://demo.connect.build',
-        })}
-      >
+      <TransportProvider transport={transport}>
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>
