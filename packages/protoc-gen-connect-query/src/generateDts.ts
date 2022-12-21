@@ -16,6 +16,7 @@ import type { DescFile, DescService } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
 import type { Schema } from '@bufbuild/protoplugin';
 import { localName } from '@bufbuild/protoplugin/ecmascript';
+
 import type { PluginInit } from './utils';
 
 /**

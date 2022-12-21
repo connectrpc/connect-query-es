@@ -24,12 +24,13 @@ import type {
   GetNextPageParamFunction,
   QueryFunctionContext,
 } from '@tanstack/react-query';
-import { unaryFetch } from './fetch';
+
 import type {
   ConnectPartialQueryKey,
   ConnectQueryKey,
 } from './connect-query-key';
 import { makeConnectQueryKeyGetter } from './connect-query-key';
+import { unaryFetch } from './fetch';
 import { useTransport } from './use-transport';
 import type { DisableQuery } from './utils';
 import { protobufSafeUpdater } from './utils';

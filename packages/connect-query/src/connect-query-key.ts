@@ -18,6 +18,7 @@ import type {
   PartialMessage,
   ServiceType,
 } from '@bufbuild/protobuf';
+
 import type { DisableQuery } from './utils';
 import { disableQuery } from './utils';
 

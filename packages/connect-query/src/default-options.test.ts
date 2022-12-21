@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { describe, expect, it } from '@jest/globals';
+
 import { defaultOptions } from './default-options';
 
 describe('defaultOptions', () => {

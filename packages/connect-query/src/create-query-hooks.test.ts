@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { describe, expect, it, jest } from '@jest/globals';
-import { createQueryHooks, isSupportedMethod } from './create-query-hooks';
-import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import type {
   MethodInfo,
   MethodInfoUnary,
@@ -22,11 +19,15 @@ import type {
   ServiceType,
 } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
-import type { Alike, Equal, Expect, ExpectFalse } from './jest/test-utils';
+import { describe, expect, it, jest } from '@jest/globals';
+import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
+
 import type { ConnectQueryKey } from './connect-query-key';
-import type { DisableQuery } from './utils';
+import { createQueryHooks, isSupportedMethod } from './create-query-hooks';
+import type { Alike, Equal, Expect, ExpectFalse } from './jest/test-utils';
 import type { UnaryHooks } from './unary-hooks';
+import type { DisableQuery } from './utils';
 
 describe('isSupportedMethod', () => {
   const patch = (kind: MethodKind) => ({

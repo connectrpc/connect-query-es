@@ -12,22 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { beforeAll, describe, expect, it, jest } from '@jest/globals';
-import { renderHook } from '@testing-library/react';
-import { createQueryService } from './create-query-service';
-import { ElizaService } from 'generated-react/dist/eliza_connectweb';
-import { isUnaryMethod } from './utils';
+import { createConnectTransport } from '@bufbuild/connect-web';
 import type { MethodInfo, PartialMessage } from '@bufbuild/protobuf';
+import { beforeAll, describe, expect, it, jest } from '@jest/globals';
+import type { QueryFunctionContext } from '@tanstack/react-query';
+import { renderHook } from '@testing-library/react';
+import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
+
+import type { ConnectQueryKey } from './connect-query-key';
+import { createQueryService } from './create-query-service';
 import type { Equal, Expect } from './jest/test-utils';
 import {
   hardcodedResponse,
   patchGlobalThisFetch,
   wrapper,
 } from './jest/test-utils';
-import { createConnectTransport } from '@bufbuild/connect-web';
-import type { ConnectQueryKey } from './connect-query-key';
-import type { QueryFunctionContext } from '@tanstack/react-query';
+import { isUnaryMethod } from './utils';
 
 describe('createQueryService', () => {
   beforeAll(() => {

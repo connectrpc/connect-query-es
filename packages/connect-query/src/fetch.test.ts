@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { createConnectTransport } from '@bufbuild/connect-web';
 import { beforeAll, describe, expect, it } from '@jest/globals';
-import { unaryFetch } from './fetch';
-import type { Equal, Expect } from './jest/test-utils';
-import { hardcodedResponse, patchGlobalThisFetch } from './jest/test-utils';
 import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import type { SayResponse } from 'generated-react/dist/eliza_pb';
 import { SayRequest } from 'generated-react/dist/eliza_pb';
-import { createConnectTransport } from '@bufbuild/connect-web';
+
+import { unaryFetch } from './fetch';
+import type { Equal, Expect } from './jest/test-utils';
+import { hardcodedResponse, patchGlobalThisFetch } from './jest/test-utils';
 
 describe('unaryFetch', () => {
   beforeAll(() => {

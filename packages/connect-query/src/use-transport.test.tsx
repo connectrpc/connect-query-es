@@ -18,6 +18,7 @@ import { useQuery } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import { spyOn } from 'jest-mock';
+
 import { sleep, wrapper } from './jest/test-utils';
 import { unaryHooks } from './unary-hooks';
 import { fallbackTransport } from './use-transport';

@@ -28,7 +28,13 @@ const config = {
       'examples/**/tsconfig.json',
     ],
   },
-  plugins: ['@typescript-eslint', 'jsdoc', 'notice', 'jest'],
+  plugins: [
+    '@typescript-eslint',
+    'jsdoc',
+    'notice',
+    'jest',
+    'simple-import-sort',
+  ],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/all',
@@ -87,6 +93,8 @@ const config = {
         require: { ArrowFunctionExpression: true },
       },
     ],
+
+    'simple-import-sort/imports': 'error',
   },
   overrides: [
     {

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { describe, expect, it } from '@jest/globals';
+
 import { makeConnectQueryKeyGetter } from './connect-query-key';
 import { disableQuery } from './utils';
 

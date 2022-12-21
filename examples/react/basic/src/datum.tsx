@@ -13,14 +13,15 @@
 // limitations under the License.
 
 import type { FC, ReactNode } from 'react';
+
 import {
-  padding,
-  margin,
   border,
   borderRadius,
-  lightBlue,
-  white,
   boxShadow,
+  lightBlue,
+  margin,
+  padding,
+  white,
 } from './css';
 
 interface DatumProps {

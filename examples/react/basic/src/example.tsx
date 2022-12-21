@@ -13,14 +13,15 @@
 // limitations under the License.
 
 /* eslint-disable @typescript-eslint/no-unused-vars -- this is necessary to demonstrate the typings */
-import { useQuery } from '@tanstack/react-query';
 import { createQueryService } from '@bufbuild/connect-query';
+import { useQuery } from '@tanstack/react-query';
+import { ElizaService } from 'generated-react/dist/eliza_connectweb';
+import { say } from 'generated-react/dist/eliza-ElizaService_connectquery';
 import type { FC } from 'react';
+
 import { Data, Datum } from './datum';
 import { Indicator, Indicators } from './indicator';
 import { Page } from './page';
-import { say } from 'generated-react/dist/eliza-ElizaService_connectquery';
-import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 
 /**
  * This example demonstrates a basic usage of Connect-Query with `useQuery`

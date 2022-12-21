@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import * as ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { TransportProvider } from '@bufbuild/connect-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { createConnectTransport } from '@bufbuild/connect-web';
-import { Example } from './example';
 import './index.css';
+
+import { TransportProvider } from '@bufbuild/connect-query';
+import { createConnectTransport } from '@bufbuild/connect-web';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import * as ReactDOM from 'react-dom/client';
+
+import { Example } from './example';
 
 const queryClient = new QueryClient();
 

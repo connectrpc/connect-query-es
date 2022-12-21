@@ -20,6 +20,7 @@ import {
   localName,
   makeJsDoc,
 } from '@bufbuild/protoplugin/ecmascript';
+
 import type { PluginInit } from './utils';
 
 /**

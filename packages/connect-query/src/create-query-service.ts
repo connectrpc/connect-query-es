@@ -14,6 +14,7 @@
 
 import type { Transport } from '@bufbuild/connect-web';
 import type { ServiceType } from '@bufbuild/protobuf';
+
 import type { QueryHooks } from './create-query-hooks';
 import { createQueryHooks } from './create-query-hooks';
 

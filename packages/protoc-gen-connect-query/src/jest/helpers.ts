@@ -14,9 +14,10 @@
 
 import { FileDescriptorSet } from '@bufbuild/protobuf';
 import { CodeGeneratorRequest } from '@bufbuild/protobuf';
-import { readFileSync } from 'fs';
-import { resolve, join } from 'path';
 import type { Target } from '@bufbuild/protoplugin/ecmascript';
+import { readFileSync } from 'fs';
+import { join, resolve } from 'path';
+
 import { protocGenConnectQuery } from '../protoc-gen-connect-query-plugin';
 
 /**
