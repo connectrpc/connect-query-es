@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import { ConnectError } from '@bufbuild/connect-web';
-import { describe, expect, it, jest } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { useQuery } from '@tanstack/react-query';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { ElizaService } from 'generated-react/dist/eliza_connectweb';
 import { spyOn } from 'jest-mock';
 
@@ -23,7 +23,6 @@ import { sleep, wrapper } from './jest/test-utils';
 import { unaryHooks } from './unary-hooks';
 import { fallbackTransport } from './use-transport';
 
-const consoleErrorSpy = spyOn(console, 'error');
 const error = new ConnectError(
   "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `serverStream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connect.build/docs/web/getting-started for more info.",
 );
@@ -40,6 +39,7 @@ describe('fallbackTransport', () => {
 });
 
 describe('useTransport', () => {
+  const consoleErrorSpy = spyOn(console, 'error').mockImplementation(() => {});
   const say = unaryHooks({
     methodInfo: ElizaService.methods.say,
     typeName: ElizaService.typeName,

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import type { Transport } from '@bufbuild/connect-web';
 import { createConnectTransport } from '@bufbuild/connect-web';
 import { jest } from '@jest/globals';
 import type { QueryClientConfig } from '@tanstack/react-query';
@@ -121,3 +122,21 @@ export const sleep = async (timeout: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
+
+/** this mock is intended to be passed to useContext */
+export const mockTransportContext = {
+  unary: jest.fn(),
+  serverStream: jest.fn(),
+} as Transport;
+
+/** this mock is intended to be passed to a top level helper like `unaryHooks` */
+export const mockTransportTopLevel = {
+  unary: jest.fn(),
+  serverStream: jest.fn(),
+} as Transport;
+
+/** this mock is intended to be passed directly to a helper like `useQuery` */
+export const mockTransportOption = {
+  unary: jest.fn(),
+  serverStream: jest.fn(),
+} as Transport;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { ConnectError } from '@bufbuild/connect-web';
+import type { ConnectError, Transport } from '@bufbuild/connect-web';
 import { createConnectTransport } from '@bufbuild/connect-web';
 import type {
   Message,
@@ -29,6 +29,7 @@ import {
   jest,
 } from '@jest/globals';
 import type {
+  GetNextPageParamFunction,
   QueryFunctionContext,
   UseMutationResult,
 } from '@tanstack/react-query';
@@ -45,6 +46,7 @@ import type {
 } from 'generated-react/dist/eliza_pb';
 import { SayResponse } from 'generated-react/dist/eliza_pb';
 import { spyOn } from 'jest-mock';
+import { createContext, useContext } from 'react';
 
 import type {
   ConnectPartialQueryKey,
@@ -52,6 +54,8 @@ import type {
 } from './connect-query-key';
 import { defaultOptions } from './default-options';
 import type { Equal, Expect } from './jest/test-utils';
+import { mockTransportOption, mockTransportTopLevel } from './jest/test-utils';
+import { mockTransportContext } from './jest/test-utils';
 import { sleep } from './jest/test-utils';
 import {
   hardcodedResponse,
@@ -63,7 +67,7 @@ import { fallbackTransport } from './use-transport';
 import type { DisableQuery } from './utils';
 import { disableQuery } from './utils';
 
-const consoleErrorSpy = spyOn(console, 'error');
+const consoleErrorSpy = spyOn(console, 'error').mockImplementation(() => {});
 
 describe('unaryHooks', () => {
   it('produces the intended API surface', () => {
@@ -386,6 +390,91 @@ describe('unaryHooks', () => {
       });
     });
 
+    it('has the intended API surface', () => {
+      type params = Parameters<typeof useInfiniteQueryCq>;
+
+      type typeUseInfiniteQueryParamsLength = Expect<
+        Equal<params['length'], 2>
+      >;
+
+      type typeUseInfiniteQueryParams0 = Expect<
+        Equal<params[0], DisableQuery | PartialMessage<CountRequest>>
+      >;
+
+      type typeUseInfiniteQueryParams1 = Expect<
+        Equal<
+          params[1],
+          {
+            pageParamKey: 'add';
+            getNextPageParam: (
+              lastPage: CountResponse,
+              allPages: CountResponse[],
+            ) => unknown;
+            onError?: (error: ConnectError) => void;
+            transport?: Transport | undefined;
+          }
+        >
+      >;
+
+      type returnType = ReturnType<typeof useInfiniteQueryCq>;
+
+      type typeUseInfiniteQueryReturnKeys = Expect<
+        Equal<
+          keyof returnType,
+          'enabled' | 'getNextPageParam' | 'onError' | 'queryFn' | 'queryKey'
+        >
+      >;
+
+      type typeUseInfiniteQueryReturn = Expect<
+        Equal<
+          returnType,
+          {
+            enabled: boolean;
+            queryKey: ConnectQueryKey<CountRequest>;
+            queryFn: (
+              context: QueryFunctionContext<
+                ConnectQueryKey<CountRequest>,
+                bigint
+              >,
+            ) => Promise<CountResponse>;
+            getNextPageParam: GetNextPageParamFunction<CountResponse>;
+            onError?: (error: ConnectError) => void;
+          }
+        >
+      >;
+
+      expect(1).toEqual(1);
+    });
+
+    describe('transport', () => {
+      it('prioritizes option transport', () => {
+        const customSay = unaryHooks({
+          methodInfo: ElizaService.methods.say,
+          typeName: ElizaService.typeName,
+          transport: mockTransportTopLevel,
+        });
+        renderHook(
+          () =>
+            useInfiniteQuery(
+              customSay.useInfiniteQuery(
+                {},
+                {
+                  pageParamKey: 'sentence',
+                  getNextPageParam: () => 0,
+                  transport: mockTransportOption,
+                },
+              ),
+            ),
+          wrapper({}, mockTransportContext),
+        );
+
+        expect(mockTransportContext.unary).not.toHaveBeenCalled();
+        expect(mockTransportTopLevel.unary).not.toHaveBeenCalled();
+        expect(mockTransportOption.unary).toHaveBeenCalled();
+        jest.resetAllMocks();
+      });
+    });
+
     it('integrates with `useInfiniteQuery`', async () => {
       const input = { add: 0n };
 
@@ -546,6 +635,70 @@ describe('unaryHooks', () => {
       consoleErrorSpy.mockReset();
     });
 
+    it('prioritizes option transport', async () => {
+      const customSay = unaryHooks({
+        methodInfo: ElizaService.methods.say,
+        typeName: ElizaService.typeName,
+        transport: mockTransportTopLevel,
+      });
+      const { result } = renderHook(
+        () =>
+          useMutation(
+            customSay.useMutation({ transport: mockTransportOption }),
+          ),
+        wrapper({}, mockTransportContext),
+      );
+
+      result.current.mutate({});
+
+      await waitFor(() => {
+        expect(result.current.isError).toBeTruthy();
+      });
+
+      expect(mockTransportContext.unary).not.toHaveBeenCalled();
+      expect(mockTransportTopLevel.unary).not.toHaveBeenCalled();
+      expect(mockTransportOption.unary).toHaveBeenCalled();
+      jest.resetAllMocks();
+    });
+
+    it('has the intended API surface', () => {
+      type params = Parameters<typeof useMutationCq>;
+
+      type typeUseMutationParamsLength = Expect<Equal<params['length'], 0 | 1>>;
+
+      type typeUseMutationParams0 = Expect<
+        Equal<
+          params[0],
+          | {
+              onError?: (error: ConnectError) => void;
+              transport?: Transport | undefined;
+            }
+          | undefined
+        >
+      >;
+
+      type typeUseMutationReturn = Expect<
+        Equal<
+          ReturnType<typeof useMutationCq>,
+          {
+            mutationFn: (
+              input: PartialMessage<CountRequest>,
+              context?:
+                | QueryFunctionContext<ConnectQueryKey<CountRequest>>
+                | undefined,
+            ) => Promise<CountResponse>;
+            onError?: (error: ConnectError) => void;
+          }
+        >
+      >;
+
+      const { result } = renderHook(() => useMutationCq(), wrapper());
+
+      expect(
+        Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
+      ).toStrictEqual(['mutationFn']);
+    });
+
     it('handles a custom onError', async () => {
       const onError = jest.fn();
 
@@ -644,57 +797,85 @@ describe('unaryHooks', () => {
       methodInfo: ElizaService.methods.say,
       typeName: ElizaService.typeName,
     });
+    it('has the intended API surface', () => {
+      type params = Parameters<typeof say.useQuery>;
+      type typeUseQueryParams0 = Expect<
+        Equal<
+          params[0],
+          PartialMessage<SayRequest> | typeof disableQuery | undefined
+        >
+      >;
 
-    describe('types', () => {
-      it('has the intended API surface', () => {
-        type params = Parameters<typeof say.useQuery>;
-        type typeUseQueryParams0 = Expect<
-          Equal<
-            params[0],
-            PartialMessage<SayRequest> | typeof disableQuery | undefined
-          >
-        >;
+      type typeUseQueryParams1 = Expect<
+        Equal<
+          params[1],
+          | {
+              getPlaceholderData?: (
+                enabled: boolean,
+              ) => PartialMessage<SayResponse> | undefined;
+              onError?: (error: ConnectError) => void;
+              transport?: Transport | undefined;
+            }
+          | undefined
+        >
+      >;
 
-        type typeUseQueryParams1 = Expect<
-          Equal<
-            params[1],
-            | {
-                getPlaceholderData?: (
-                  enabled: boolean,
-                ) => PartialMessage<SayResponse> | undefined;
-                onError?: (error: ConnectError) => void;
-              }
-            | undefined
-          >
-        >;
+      type typeUseQueryParams2 = Expect<Equal<params['length'], 0 | 1 | 2>>;
 
-        type typeUseQueryParams2 = Expect<Equal<params['length'], 0 | 1 | 2>>;
+      type typeUseQueryK = Expect<
+        Equal<
+          ReturnType<typeof say.useQuery>,
+          {
+            enabled: boolean;
+            queryKey: ConnectQueryKey<SayRequest>;
+            queryFn: (
+              context?: QueryFunctionContext<ConnectQueryKey<SayRequest>>,
+            ) => Promise<SayResponse>;
+            placeholderData?: () => SayResponse;
+            onError?: (error: ConnectError) => void;
+          }
+        >
+      >;
 
-        type typeUseQueryKeys = Expect<
-          Equal<
-            keyof ReturnType<typeof say.useQuery>,
-            'enabled' | 'onError' | 'placeholderData' | 'queryFn' | 'queryKey'
-          >
-        >;
+      const { result } = renderHook(
+        () =>
+          say.useQuery(undefined, {
+            onError: jest.fn(),
+            getPlaceholderData: jest.fn(() => new SayResponse()),
+          }),
+        wrapper(),
+      );
 
-        const { result } = renderHook(
+      expect(
+        Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
+      ).toStrictEqual([
+        'enabled',
+        'onError',
+        'placeholderData',
+        'queryFn',
+        'queryKey',
+      ]);
+    });
+
+    describe('transport', () => {
+      it('prioritizes option transport', () => {
+        const customSay = unaryHooks({
+          methodInfo: ElizaService.methods.say,
+          typeName: ElizaService.typeName,
+          transport: mockTransportTopLevel,
+        });
+        renderHook(
           () =>
-            say.useQuery(undefined, {
-              onError: jest.fn(),
-              getPlaceholderData: jest.fn(() => new SayResponse()),
-            }),
-          wrapper(),
+            useQuery(
+              customSay.useQuery({}, { transport: mockTransportOption }),
+            ),
+          wrapper({}, mockTransportContext),
         );
 
-        expect(
-          Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
-        ).toStrictEqual([
-          'enabled',
-          'onError',
-          'placeholderData',
-          'queryFn',
-          'queryKey',
-        ]);
+        expect(mockTransportContext.unary).not.toHaveBeenCalled();
+        expect(mockTransportTopLevel.unary).not.toHaveBeenCalled();
+        expect(mockTransportOption.unary).toHaveBeenCalled();
+        jest.resetAllMocks();
       });
     });
 

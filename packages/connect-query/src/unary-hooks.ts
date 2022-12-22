@@ -85,6 +85,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
       pageParamKey: ParamKey;
       getNextPageParam: (lastPage: O, allPages: O[]) => unknown;
       onError?: (error: ConnectError) => void;
+      transport?: Transport | undefined;
     },
   ) => {
     enabled: boolean;
@@ -102,7 +103,10 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   /**
    * This function is intended to be used with TanStack Query's `useMutation` API.
    */
-  useMutation: (options?: { onError?: (error: ConnectError) => void }) => {
+  useMutation: (options?: {
+    onError?: (error: ConnectError) => void;
+    transport?: Transport | undefined;
+  }) => {
     mutationFn: (
       input: PartialMessage<I>,
       context?: QueryFunctionContext<ConnectQueryKey<I>>,
@@ -118,6 +122,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     options?: {
       getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
       onError?: (error: ConnectError) => void;
+      transport?: Transport | undefined;
     },
   ) => {
     enabled: boolean;
@@ -134,7 +139,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
 export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
   methodInfo,
   typeName,
-  transport: customTransport,
+  transport: topLevelCustomTransport,
 }: {
   methodInfo: MethodInfoUnary<I, O>;
   typeName: ServiceType['typeName'];
@@ -171,7 +176,9 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
     ],
 
     useInfiniteQuery: (input, options) => {
-      const transport = useTransport();
+      const contextTransport = useTransport();
+      const transport =
+        options.transport ?? topLevelCustomTransport ?? contextTransport;
       return {
         enabled: input !== disableQuery,
 
@@ -201,8 +208,10 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       };
     },
 
-    useMutation: (options) => {
-      const transport = useTransport();
+    useMutation: (options = {}) => {
+      const contextTransport = useTransport();
+      const transport =
+        options.transport ?? topLevelCustomTransport ?? contextTransport;
 
       return {
         mutationFn: async (input, context) =>
@@ -213,13 +222,18 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             transport,
             typeName,
           }),
-        ...(options?.onError ? { onError: options.onError } : {}),
+        ...(options.onError ? { onError: options.onError } : {}),
       };
     },
 
-    useQuery: (input, { getPlaceholderData, onError } = {}) => {
+    useQuery: (
+      input,
+      { getPlaceholderData, onError, transport: optionsTransport } = {},
+    ) => {
       const contextTransport = useTransport();
-      const transport = customTransport ?? contextTransport;
+      const transport =
+        optionsTransport ?? topLevelCustomTransport ?? contextTransport;
+
       const enabled = input !== disableQuery;
 
       return {
