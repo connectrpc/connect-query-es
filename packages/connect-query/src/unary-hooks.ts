@@ -33,8 +33,13 @@ import { makeConnectQueryKeyGetter } from './connect-query-key';
 import { unaryFetch } from './fetch';
 import { useTransport } from './use-transport';
 import type { DisableQuery } from './utils';
-import { protobufSafeUpdater } from './utils';
-import { assert, disableQuery, isUnaryMethod, unreachableCase } from './utils';
+import {
+  assert,
+  disableQuery,
+  isUnaryMethod,
+  protobufSafeUpdater,
+  unreachableCase,
+} from './utils';
 
 /**
  * The set of data and hooks that a unary method supports.

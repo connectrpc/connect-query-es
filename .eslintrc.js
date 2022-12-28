@@ -33,6 +33,7 @@ const config = {
     'jsdoc',
     'notice',
     'jest',
+    'import',
     'simple-import-sort',
   ],
   extends: [
@@ -41,6 +42,8 @@ const config = {
     'plugin:eslint-comments/recommended',
     'plugin:jest/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     'prettier',
   ],
   settings: {
@@ -49,6 +52,9 @@ const config = {
       noDefaultExampleRules: false,
       checkProperties: true,
       minLines: 1,
+    },
+    'import/resolver': {
+      typescript: {},
     },
   },
   rules: {
