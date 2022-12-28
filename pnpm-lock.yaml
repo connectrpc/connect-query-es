@@ -97,6 +97,43 @@ importers:
       typescript: 4.9.4
       vite: 4.0.1
 
+  examples/react/basic-without-generation:
+    specifiers:
+      '@bufbuild/connect-query': '*'
+      '@bufbuild/connect-web': ^0.4.0
+      '@bufbuild/protobuf': ^0.5.0
+      '@bufbuild/protoc-gen-connect-query': '*'
+      '@bufbuild/protoc-gen-connect-web': ^0.4.0
+      '@bufbuild/protoc-gen-es': ^0.5.0
+      '@tanstack/react-query': ^4.20.4
+      '@tanstack/react-query-devtools': ^4.20.4
+      '@types/react': ^18.0.26
+      '@types/react-dom': ^18.0.9
+      '@vitejs/plugin-react': ^3.0.0
+      generated-react: '*'
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      typescript: ^4.9.4
+      vite: ^4.0.1
+    dependencies:
+      '@bufbuild/connect-query': link:../../../packages/connect-query
+      '@bufbuild/connect-web': 0.4.0_@bufbuild+protobuf@0.5.0
+      '@bufbuild/protobuf': 0.5.0
+      '@bufbuild/protoc-gen-connect-query': link:../../../packages/protoc-gen-connect-query
+      '@bufbuild/protoc-gen-connect-web': 0.4.0_bcrg2xumxrch5vw25syepo46x4
+      '@bufbuild/protoc-gen-es': 0.5.0_@bufbuild+protobuf@0.5.0
+      '@tanstack/react-query': 4.20.4_biqbaboplfbrettd7655fr4n2y
+      '@tanstack/react-query-devtools': 4.20.4_fu3ixcwltlssi3ozitelgaebme
+      generated-react: link:../../../packages/generated-react
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      '@types/react': 18.0.26
+      '@types/react-dom': 18.0.9
+      '@vitejs/plugin-react': 3.0.0_vite@4.0.1
+      typescript: 4.9.4
+      vite: 4.0.1
+
   packages/connect-query:
     specifiers:
       '@bufbuild/connect-web': ^0.4.0
