@@ -1,11 +1,14 @@
 {
   "words": [
+    "backoffs",
     "bufbuild",
     "connectquery",
     "connectweb",
     "descriptorset",
+    "idempotence",
     "idempotency",
     "inferencing",
+    "invalidators",
     "lcov",
     "nocheck",
     "pnpm",
