@@ -108,7 +108,14 @@ const config = {
       rules: {
         '@typescript-eslint/no-empty-function': 'off', // noops are commonly needed in tests
         '@typescript-eslint/unbound-method': 'off', // functors are commonly necessary for tests
-        '@typescript-eslint/no-unused-vars': 'off', // necessary for TypeScript type tests
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            vars: 'all',
+            varsIgnorePattern: 'ExpectType_.*', // necessary for TypeScript type tests
+            argsIgnorePattern: '_',
+          },
+        ],
       },
     },
     {

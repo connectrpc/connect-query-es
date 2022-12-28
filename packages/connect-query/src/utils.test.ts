@@ -127,16 +127,16 @@ describe('protobufSafeUpdater', () => {
     const updater = output;
     const safeUpdater = protobufSafeUpdater(updater, methodInfo.O);
 
-    type typeUpdater = Expect<
+    type ExpectType_Updater = Expect<
       Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>
     >;
     expect(typeof safeUpdater).toStrictEqual('function');
 
     const result = safeUpdater(wrappedInput);
-    type typeResult = Expect<Equal<typeof result, CountResponse>>;
+    type ExpectType_Result = Expect<Equal<typeof result, CountResponse>>;
     expect(result).not.toStrictEqual(wrappedInput);
 
-    type typeBigInt = Expect<Equal<typeof result['count'], bigint>>;
+    type ExpectType_BigInt = Expect<Equal<typeof result['count'], bigint>>;
     expect(typeof result.count).toStrictEqual('bigint');
 
     expect(wrappedInput.count).toStrictEqual(1n);
@@ -149,17 +149,17 @@ describe('protobufSafeUpdater', () => {
     const updater = jest.fn(() => new methodInfo.O({ count: 2n }));
     const safeUpdater = protobufSafeUpdater(updater, methodInfo.O);
 
-    type typeUpdater = Expect<
+    type ExpectType_Updater = Expect<
       Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>
     >;
     expect(typeof safeUpdater).toStrictEqual('function');
 
     const result = safeUpdater(wrappedInput);
     expect(updater).toHaveBeenCalledWith(input);
-    type typeResult = Expect<Equal<typeof result, CountResponse>>;
+    type ExpectType_Result = Expect<Equal<typeof result, CountResponse>>;
     expect(result).not.toStrictEqual(wrappedInput);
 
-    type typeBigInt = Expect<Equal<typeof result['count'], bigint>>;
+    type ExpectType_BigInt = Expect<Equal<typeof result['count'], bigint>>;
     expect(typeof result.count).toStrictEqual('bigint');
 
     expect(wrappedInput.count).toStrictEqual(1n);

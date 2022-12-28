@@ -89,10 +89,12 @@ describe('createQueryService', () => {
         wrapper(),
       );
 
-      type typeEnabled = Expect<Equal<typeof queryOptions.enabled, boolean>>;
+      type ExpectType_Enabled = Expect<
+        Equal<typeof queryOptions.enabled, boolean>
+      >;
       expect(queryOptions).toHaveProperty('enabled', true);
 
-      type typeQueryKey = Expect<
+      type ExpectType_QueryKey = Expect<
         Equal<typeof queryOptions.queryKey, ConnectQueryKey<SayRequest>>
       >;
       expect(queryOptions).toHaveProperty('queryKey', [
@@ -101,7 +103,7 @@ describe('createQueryService', () => {
         input,
       ]);
 
-      type typeQueryFn = Expect<
+      type ExpectType_QueryFn = Expect<
         Equal<
           typeof queryOptions.queryFn,
           (

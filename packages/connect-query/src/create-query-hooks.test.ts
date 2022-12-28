@@ -46,7 +46,7 @@ describe('isSupportedMethod', () => {
       return; // returning is necessary for TypeScript inference below
     }
 
-    type typeKind = Expect<Equal<typeof method.kind, MethodKind.Unary>>;
+    type ExpectType_Kind = Expect<Equal<typeof method.kind, MethodKind.Unary>>;
   });
 
   it('rejects all other methods', () => {
@@ -72,19 +72,21 @@ describe('createQueryHooks', () => {
       },
     });
 
-    type typeSay = Expect<
+    type ExpectType_Say = Expect<
       Equal<typeof hooks.say, UnaryHooks<SayRequest, SayResponse>>
     >;
 
-    type typeHooksKeys = Expect<
+    type ExpectType_HooksKeys = Expect<
       Equal<[keyof typeof hooks], ['say' | 'sayAgain']>
     >;
     expect(Object.keys(hooks)).toStrictEqual(['say', 'sayAgain']);
 
-    type typeConverse = ExpectFalse<Alike<keyof typeof hooks, 'converse'>>;
+    type ExpectType_Converse = ExpectFalse<
+      Alike<keyof typeof hooks, 'converse'>
+    >;
     expect(hooks).not.toHaveProperty('converse');
 
-    type typeGetQueryKey = Equal<
+    type ExpectType_GetQueryKey = Equal<
       typeof hooks['say']['getQueryKey'],
       (
         input: DisableQuery | PartialMessage<SayRequest>,
@@ -92,7 +94,7 @@ describe('createQueryHooks', () => {
     >;
     expect(hooks.say).toHaveProperty('getQueryKey', expect.any(Function));
 
-    type typeMethodInfo = Expect<
+    type ExpectType_MethodInfo = Expect<
       Equal<
         typeof hooks['say']['methodInfo'],
         MethodInfoUnary<SayRequest, SayResponse>

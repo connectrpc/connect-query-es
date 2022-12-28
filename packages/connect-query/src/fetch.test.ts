@@ -41,7 +41,9 @@ describe('unaryFetch', () => {
   it('has the correct return type', () => {
     expect.assertions(0);
     const promise = unaryFetch(fetchOptions);
-    type typePromise = Expect<Equal<typeof promise, Promise<SayResponse>>>;
+    type ExpectType_Promise = Expect<
+      Equal<typeof promise, Promise<SayResponse>>
+    >;
   });
 
   it('returns a message', async () => {

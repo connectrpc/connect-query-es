@@ -46,7 +46,6 @@ import type {
 } from 'generated-react/dist/eliza_pb';
 import { SayResponse } from 'generated-react/dist/eliza_pb';
 import { spyOn } from 'jest-mock';
-import { createContext, useContext } from 'react';
 
 import type {
   ConnectPartialQueryKey,
@@ -77,7 +76,7 @@ describe('unaryHooks', () => {
       typeName: ElizaService.typeName,
     });
 
-    type expect = Expect<
+    type ExpectType_sayKeys = Expect<
       Equal<
         keyof typeof say,
         | 'createData'
@@ -173,7 +172,7 @@ describe('unaryHooks', () => {
       methodInfo: ElizaService.methods.say,
       typeName: ElizaService.typeName,
     });
-    type typeGetQuery = Expect<
+    type ExpectType_GetQuery = Expect<
       Equal<typeof getPartialQueryKey, () => ConnectPartialQueryKey>
     >;
 
@@ -190,7 +189,7 @@ describe('unaryHooks', () => {
       methodInfo: ElizaService.methods.say,
       typeName: ElizaService.typeName,
     });
-    type typeGetQuery = Expect<
+    type ExpectType_GetQuery = Expect<
       Equal<
         typeof getQueryKey,
         (
@@ -237,7 +236,7 @@ describe('unaryHooks', () => {
         typeName: ElizaService.typeName,
       });
 
-      type expect = Expect<
+      type ExpectType_sayMethodInfo = Expect<
         Equal<typeof say.methodInfo, MethodInfoUnary<SayRequest, SayResponse>>
       >;
       expect(say.methodInfo).toStrictEqual(ElizaService.methods.say);
@@ -276,7 +275,7 @@ describe('unaryHooks', () => {
     describe('setQueriesData', () => {
       it('returns the correct queryKey', () => {
         const [queryKey] = setQueriesData(partialUpdater);
-        type typeQueryKey = Expect<
+        type ExpectType_QueryKey = Expect<
           Equal<typeof queryKey, ConnectPartialQueryKey>
         >;
         expect(queryKey).toStrictEqual([
@@ -291,7 +290,7 @@ describe('unaryHooks', () => {
           () => useQuery(useQueryCq(request)),
           rest,
         );
-        type typeData = Expect<
+        type ExpectType_Data = Expect<
           Equal<typeof result.current.data, CountResponse | undefined>
         >;
 
@@ -313,7 +312,7 @@ describe('unaryHooks', () => {
     describe('setQueryData', () => {
       it('returns the correct queryKey', () => {
         const [queryKey] = setQueryData(partialUpdater, request);
-        type typeQueryKey = Expect<
+        type ExpectType_QueryKey = Expect<
           Equal<typeof queryKey, ConnectQueryKey<CountRequest>>
         >;
         expect(queryKey).toStrictEqual([
@@ -355,7 +354,7 @@ describe('unaryHooks', () => {
           rest,
         );
 
-        type typeData = Expect<
+        type ExpectType_Data = Expect<
           Equal<typeof result.current.data, CountResponse | undefined>
         >;
 
@@ -394,15 +393,15 @@ describe('unaryHooks', () => {
     it('has the intended API surface', () => {
       type params = Parameters<typeof useInfiniteQueryCq>;
 
-      type typeUseInfiniteQueryParamsLength = Expect<
+      type ExpectType_UseInfiniteQueryParamsLength = Expect<
         Equal<params['length'], 2>
       >;
 
-      type typeUseInfiniteQueryParams0 = Expect<
+      type ExpectType_UseInfiniteQueryParams0 = Expect<
         Equal<params[0], DisableQuery | PartialMessage<CountRequest>>
       >;
 
-      type typeUseInfiniteQueryParams1 = Expect<
+      type ExpectType_UseInfiniteQueryParams1 = Expect<
         Equal<
           params[1],
           {
@@ -419,14 +418,14 @@ describe('unaryHooks', () => {
 
       type returnType = ReturnType<typeof useInfiniteQueryCq>;
 
-      type typeUseInfiniteQueryReturnKeys = Expect<
+      type ExpectType_UseInfiniteQueryReturnKeys = Expect<
         Equal<
           keyof returnType,
           'enabled' | 'getNextPageParam' | 'onError' | 'queryFn' | 'queryKey'
         >
       >;
 
-      type typeUseInfiniteQueryReturn = Expect<
+      type ExpectType_UseInfiniteQueryReturn = Expect<
         Equal<
           returnType,
           {
@@ -665,9 +664,11 @@ describe('unaryHooks', () => {
     it('has the intended API surface', () => {
       type params = Parameters<typeof useMutationCq>;
 
-      type typeUseMutationParamsLength = Expect<Equal<params['length'], 0 | 1>>;
+      type ExpectType_UseMutationParamsLength = Expect<
+        Equal<params['length'], 0 | 1>
+      >;
 
-      type typeUseMutationParams0 = Expect<
+      type ExpectType_UseMutationParams0 = Expect<
         Equal<
           params[0],
           | {
@@ -678,7 +679,7 @@ describe('unaryHooks', () => {
         >
       >;
 
-      type typeUseMutationReturn = Expect<
+      type ExpectType_UseMutationReturn = Expect<
         Equal<
           ReturnType<typeof useMutationCq>,
           {
@@ -703,8 +704,6 @@ describe('unaryHooks', () => {
     it('handles a custom onError', async () => {
       const onError = jest.fn();
 
-      const { queryClient, ...rest } = wrapper({ defaultOptions });
-
       const { result, rerender } = renderHook(
         () =>
           useMutation({
@@ -712,7 +711,7 @@ describe('unaryHooks', () => {
             mutationFn: async () => Promise.reject('error'),
             mutationKey: getQueryKey(),
           }),
-        rest,
+        wrapper({ defaultOptions }),
       );
 
       rerender();
@@ -722,7 +721,7 @@ describe('unaryHooks', () => {
       expect(onError).toHaveBeenCalledTimes(0);
       expect(consoleErrorSpy).not.toHaveBeenCalled();
 
-      type typeError = Expect<
+      type ExpectType_Error = Expect<
         Equal<typeof result.current.error, ConnectError | null>
       >;
 
@@ -762,7 +761,7 @@ describe('unaryHooks', () => {
         rest,
       );
 
-      type typeMutationFn = Expect<
+      type ExpectType_MutationFn = Expect<
         Equal<
           typeof result.current.mut,
           UseMutationResult<
@@ -800,14 +799,14 @@ describe('unaryHooks', () => {
     });
     it('has the intended API surface', () => {
       type params = Parameters<typeof say.useQuery>;
-      type typeUseQueryParams0 = Expect<
+      type ExpectType_UseQueryParams0 = Expect<
         Equal<
           params[0],
           PartialMessage<SayRequest> | typeof disableQuery | undefined
         >
       >;
 
-      type typeUseQueryParams1 = Expect<
+      type ExpectType_UseQueryParams1 = Expect<
         Equal<
           params[1],
           | {
@@ -821,9 +820,11 @@ describe('unaryHooks', () => {
         >
       >;
 
-      type typeUseQueryParams2 = Expect<Equal<params['length'], 0 | 1 | 2>>;
+      type ExpectType_UseQueryParams2 = Expect<
+        Equal<params['length'], 0 | 1 | 2>
+      >;
 
-      type typeUseQueryK = Expect<
+      type ExpectType_UseQueryK = Expect<
         Equal<
           ReturnType<typeof say.useQuery>,
           {
@@ -884,7 +885,9 @@ describe('unaryHooks', () => {
       it('has the correct type', () => {
         expect.assertions(0);
         const { result } = renderHook(() => say.useQuery({}), wrapper());
-        type typeExpect = Expect<Equal<typeof result.current.enabled, boolean>>;
+        type ExpectType_Expect = Expect<
+          Equal<typeof result.current.enabled, boolean>
+        >;
       });
 
       it('is enabled when input does not match the `disableQuery` symbol', () => {
@@ -919,7 +922,7 @@ describe('unaryHooks', () => {
       it('has the correct type', () => {
         expect.assertions(0);
         const { result } = renderHook(() => say.useQuery(), wrapper());
-        type typeGetPlaceholderData = Expect<
+        type ExpectType_GetPlaceholderData = Expect<
           Equal<
             typeof result.current.placeholderData,
             (() => SayResponse) | undefined
@@ -1020,7 +1023,7 @@ describe('unaryHooks', () => {
       it('has the correct type', () => {
         expect.assertions(0);
         const { result } = renderHook(() => say.useQuery(), wrapper());
-        type typeQueryFn = Expect<
+        type ExpectType_QueryFn = Expect<
           Equal<
             typeof result.current.queryFn,
             (
@@ -1069,7 +1072,7 @@ describe('unaryHooks', () => {
       it('has the correct type', () => {
         expect.assertions(0);
         const { result } = renderHook(() => say.useQuery(), wrapper());
-        type typeQueryKey = Expect<
+        type ExpectType_QueryKey = Expect<
           Equal<
             typeof result.current.queryKey,
             [string, string, PartialMessage<SayRequest>]
