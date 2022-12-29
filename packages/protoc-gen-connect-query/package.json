@@ -35,7 +35,7 @@
     "@bufbuild/protobuf": "^1.0.0"
   },
   "peerDependencies": {
-    "@bufbuild/protoc-gen-es": "0.1.1"
+    "@bufbuild/protoc-gen-es": "1.x"
   },
   "peerDependenciesMeta": {
     "@bufbuild/protoc-gen-es": {
