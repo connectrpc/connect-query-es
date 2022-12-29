@@ -125,18 +125,26 @@ export const sleep = async (timeout: number) =>
 
 /** this mock is intended to be passed to useContext */
 export const mockTransportContext = {
-  unary: jest.fn(),
+  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
   serverStream: jest.fn(),
 } as Transport;
 
 /** this mock is intended to be passed to a top level helper like `unaryHooks` */
 export const mockTransportTopLevel = {
-  unary: jest.fn(),
+  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
   serverStream: jest.fn(),
 } as Transport;
 
 /** this mock is intended to be passed directly to a helper like `useQuery` */
 export const mockTransportOption = {
-  unary: jest.fn(),
+  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
   serverStream: jest.fn(),
 } as Transport;
+
+export const mockCallOptions = {
+  signal: new AbortController().signal,
+  timeoutMs: 9000,
+  headers: new Headers({
+    'Content-Type': 'application/x-shockwave-flash; version="1"',
+  }),
+}; // satisfies CallOptions;

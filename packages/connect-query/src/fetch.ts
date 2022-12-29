@@ -40,8 +40,8 @@ export const unaryFetch = async <I extends Message<I>, O extends Message<O>>({
     { typeName, methods: {} }, // https://github.com/bufbuild/connect-web/pull/318
     methodInfo,
     callOptions?.signal,
-    undefined,
-    undefined,
+    callOptions?.timeoutMs,
+    callOptions?.headers,
     input,
   );
   return response.message;

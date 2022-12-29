@@ -20,7 +20,12 @@ import { SayRequest } from 'generated-react/dist/eliza_pb';
 
 import { unaryFetch } from './fetch';
 import type { Equal, Expect } from './jest/test-utils';
-import { hardcodedResponse, patchGlobalThisFetch } from './jest/test-utils';
+import {
+  hardcodedResponse,
+  mockCallOptions,
+  mockTransportOption,
+  patchGlobalThisFetch,
+} from './jest/test-utils';
 
 describe('unaryFetch', () => {
   beforeAll(() => {
@@ -60,18 +65,53 @@ describe('unaryFetch', () => {
   });
 
   it('is aware of AbortSignal signals', () => {
-    const callOptions = new AbortController();
     // eslint-disable-next-line @typescript-eslint/no-floating-promises -- it is not necessary to await this promise
     unaryFetch({
       ...fetchOptions,
-      callOptions,
+      callOptions: mockCallOptions,
     });
 
     expect(globalThis.fetch).toHaveBeenCalledWith(
       expect.stringContaining('eliza'),
       expect.objectContaining({
-        signal: callOptions.signal,
+        signal: mockCallOptions.signal,
       }),
+    );
+  });
+
+  it('is aware of timeoutMs callOption', () => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- it is not necessary to await this promise
+    unaryFetch({
+      ...fetchOptions,
+      callOptions: { timeoutMs: mockCallOptions.timeoutMs },
+      transport: mockTransportOption,
+    });
+
+    expect(mockTransportOption.unary).toHaveBeenCalledWith(
+      expect.anything(), // service
+      expect.anything(), // method
+      undefined, // signal
+      mockCallOptions.timeoutMs, // timeoutMs
+      undefined, // headers
+      expect.anything(), // input
+    );
+  });
+
+  it('is aware of headers callOption', () => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises -- it is not necessary to await this promise
+    unaryFetch({
+      ...fetchOptions,
+      callOptions: { headers: mockCallOptions.headers },
+      transport: mockTransportOption,
+    });
+
+    expect(mockTransportOption.unary).toHaveBeenCalledWith(
+      expect.anything(), // service
+      expect.anything(), // method
+      undefined, // signal
+      undefined, // timeoutMs
+      mockCallOptions.headers, // headers
+      expect.anything(), // input
     );
   });
 });

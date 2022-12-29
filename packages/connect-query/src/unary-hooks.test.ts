@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { ConnectError, Transport } from '@bufbuild/connect-web';
+import type {
+  CallOptions,
+  ConnectError,
+  Transport,
+} from '@bufbuild/connect-web';
 import { createConnectTransport } from '@bufbuild/connect-web';
 import type {
   Message,
@@ -55,6 +59,7 @@ import { defaultOptions } from './default-options';
 import type { Equal, Expect } from './jest/test-utils';
 import {
   hardcodedResponse,
+  mockCallOptions,
   mockTransportContext,
   mockTransportOption,
   mockTransportTopLevel,
@@ -412,6 +417,7 @@ describe('unaryHooks', () => {
             ) => unknown;
             onError?: (error: ConnectError) => void;
             transport?: Transport | undefined;
+            callOptions?: CallOptions | undefined;
           }
         >
       >;
@@ -599,6 +605,33 @@ describe('unaryHooks', () => {
         expect(consoleErrorSpy).toHaveBeenCalledWith('error');
       });
     });
+
+    it('passes through callOptions', () => {
+      renderHook(
+        () =>
+          useInfiniteQuery(
+            useInfiniteQueryCq(
+              { add: 1n },
+              {
+                pageParamKey: 'add',
+                getNextPageParam: (lastPage) => Number(lastPage.count),
+                transport: mockTransportOption,
+                callOptions: mockCallOptions,
+              },
+            ),
+          ),
+        wrapper({ defaultOptions }),
+      );
+
+      expect(mockTransportOption.unary).toHaveBeenCalledWith(
+        expect.anything(), // service
+        expect.anything(), // method
+        mockCallOptions.signal, // signal
+        mockCallOptions.timeoutMs, // timeoutMs
+        mockCallOptions.headers, // headers
+        expect.anything(), // input
+      );
+    });
   });
 
   describe('useMutation', () => {
@@ -674,6 +707,7 @@ describe('unaryHooks', () => {
           | {
               onError?: (error: ConnectError) => void;
               transport?: Transport | undefined;
+              callOptions?: CallOptions | undefined;
             }
           | undefined
         >
@@ -790,6 +824,35 @@ describe('unaryHooks', () => {
       expect(result.current.mut.data?.count).toStrictEqual(2n);
       expect(result.current.get.data?.count).toStrictEqual(2n);
     });
+
+    it('passes through callOptions', async () => {
+      const { result } = renderHook(
+        () =>
+          useMutation({
+            ...useMutationCq({
+              callOptions: mockCallOptions,
+              transport: mockTransportOption,
+            }),
+            mutationKey: getQueryKey({ add: 1n }),
+          }),
+        wrapper({ defaultOptions }),
+      );
+
+      result.current.mutate({ add: 2n });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBeTruthy();
+      });
+
+      expect(mockTransportOption.unary).toHaveBeenCalledWith(
+        expect.anything(), // service
+        expect.anything(), // method
+        mockCallOptions.signal, // signal
+        mockCallOptions.timeoutMs, // timeoutMs
+        mockCallOptions.headers, // headers
+        expect.anything(), // input
+      );
+    });
   });
 
   describe('useQuery', () => {
@@ -815,6 +878,7 @@ describe('unaryHooks', () => {
               ) => PartialMessage<SayResponse> | undefined;
               onError?: (error: ConnectError) => void;
               transport?: Transport | undefined;
+              callOptions?: CallOptions | undefined;
             }
           | undefined
         >
@@ -1062,6 +1126,31 @@ describe('unaryHooks', () => {
         expect(globalThis.fetch).toHaveBeenCalledWith(
           expect.stringContaining('eliza'),
           expect.objectContaining({ body: JSON.stringify(input) }),
+        );
+      });
+
+      it('passes through callOptions', () => {
+        renderHook(
+          () =>
+            useQuery(
+              say.useQuery(
+                {},
+                {
+                  transport: mockTransportOption,
+                  callOptions: mockCallOptions,
+                },
+              ),
+            ),
+          wrapper(),
+        );
+
+        expect(mockTransportOption.unary).toHaveBeenCalledWith(
+          expect.anything(), // service
+          expect.anything(), // method
+          mockCallOptions.signal, // signal
+          mockCallOptions.timeoutMs, // timeoutMs
+          mockCallOptions.headers, // headers
+          expect.anything(), // input
         );
       });
     });

@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { ConnectError, Transport } from '@bufbuild/connect-web';
+import type {
+  CallOptions,
+  ConnectError,
+  Transport,
+} from '@bufbuild/connect-web';
 import type {
   Message,
   MethodInfoUnary,
@@ -89,8 +93,10 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     options: {
       pageParamKey: ParamKey;
       getNextPageParam: (lastPage: O, allPages: O[]) => unknown;
+
       onError?: (error: ConnectError) => void;
       transport?: Transport | undefined;
+      callOptions?: CallOptions | undefined;
     },
   ) => {
     enabled: boolean;
@@ -111,6 +117,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   useMutation: (options?: {
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
+    callOptions?: CallOptions | undefined;
   }) => {
     mutationFn: (
       input: PartialMessage<I>,
@@ -126,8 +133,10 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     input?: DisableQuery | PartialMessage<I>,
     options?: {
       getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
+
       onError?: (error: ConnectError) => void;
       transport?: Transport | undefined;
+      callOptions?: CallOptions | undefined;
     },
   ) => {
     enabled: boolean;
@@ -180,14 +189,23 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       protobufSafeUpdater(updater, methodInfo.O),
     ],
 
-    useInfiniteQuery: (input, options) => {
+    useInfiniteQuery: (
+      input,
+      {
+        transport: optionsTransport,
+        getNextPageParam,
+        pageParamKey,
+        onError,
+        callOptions,
+      },
+    ) => {
       const contextTransport = useTransport();
       const transport =
-        options.transport ?? topLevelCustomTransport ?? contextTransport;
+        optionsTransport ?? topLevelCustomTransport ?? contextTransport;
       return {
         enabled: input !== disableQuery,
 
-        getNextPageParam: options.getNextPageParam,
+        getNextPageParam,
 
         queryFn: async (context) => {
           assert(
@@ -196,10 +214,10 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
           );
 
           return unaryFetch({
-            callOptions: context,
+            callOptions: callOptions ?? context,
             input: {
               ...input,
-              [options.pageParamKey]: context.pageParam,
+              [pageParamKey]: context.pageParam,
             },
             methodInfo,
             transport,
@@ -209,31 +227,40 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
         queryKey: getQueryKey(input),
 
-        ...(options.onError ? { onError: options.onError } : {}),
+        ...(onError ? { onError } : {}),
       };
     },
 
-    useMutation: (options = {}) => {
+    useMutation: ({
+      transport: optionsTransport,
+      callOptions,
+      onError,
+    } = {}) => {
       const contextTransport = useTransport();
       const transport =
-        options.transport ?? topLevelCustomTransport ?? contextTransport;
+        optionsTransport ?? topLevelCustomTransport ?? contextTransport;
 
       return {
         mutationFn: async (input, context) =>
           unaryFetch({
-            callOptions: context,
+            callOptions: callOptions ?? context,
             input,
             methodInfo,
             transport,
             typeName,
           }),
-        ...(options.onError ? { onError: options.onError } : {}),
+        ...(onError ? { onError } : {}),
       };
     },
 
     useQuery: (
       input,
-      { getPlaceholderData, onError, transport: optionsTransport } = {},
+      {
+        getPlaceholderData,
+        onError,
+        transport: optionsTransport,
+        callOptions,
+      } = {},
     ) => {
       const contextTransport = useTransport();
       const transport =
@@ -254,7 +281,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
         queryFn: async (context) => {
           assert(enabled, 'queryFn does not accept a disabled query');
           return unaryFetch({
-            callOptions: context,
+            callOptions: callOptions ?? context,
             input,
             methodInfo,
             transport,
