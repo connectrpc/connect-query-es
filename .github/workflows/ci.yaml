@@ -42,8 +42,8 @@ jobs:
       - name: Generate
         run: pnpm run generate
 
-      - name: Test
-        run: pnpm run test
-
       - name: Lint
         run: pnpm run lint
+
+      - name: Test
+        run: pnpm run test

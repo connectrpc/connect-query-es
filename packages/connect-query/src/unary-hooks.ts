@@ -55,6 +55,28 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   createData: (data: PartialMessage<O>) => O;
 
   /**
+   * createUseQueryOptions is intended to be used with `useQuery`, but is not a hook.  Since hooks cannot be called conditionally (or in loops), it can sometimes be helpful to use `createUseQueryOptions` to prepare an input to TanStack's `useQuery` API.
+   *
+   * The caveat being that if you go the route of using `createUseQueryOptions` you must provide transport.  You can get transport from the `useTransport` export.  If you cannot use hooks to retrieve transport, then look at the documentation for `TransportProvider` to learn more about how to use Connect-Web's createConnectTransport` or `createGrpcWebTransport`APIs.
+   */
+  createUseQueryOptions: (
+    input: DisableQuery | PartialMessage<I> | undefined,
+    options: {
+      getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
+
+      onError?: (error: ConnectError) => void;
+      transport: Transport;
+      callOptions?: CallOptions | undefined;
+    },
+  ) => {
+    enabled: boolean;
+    queryKey: ConnectQueryKey<I>;
+    queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
+    placeholderData?: () => O;
+    onError?: (error: ConnectError) => void;
+  };
+
+  /**
    * This helper is useful for getting query keys matching a wider set of queries associated to this Connect `Service`, per TanStack Query's partial matching mechanism.
    */
   getPartialQueryKey: () => ConnectPartialQueryKey;
@@ -170,8 +192,48 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
   const getQueryKey = makeConnectQueryKeyGetter(typeName, methodInfo.name);
 
+  const createUseQueryOptions: UnaryHooks<I, O>['createUseQueryOptions'] = (
+    input,
+    { callOptions, getPlaceholderData, onError, transport },
+  ) => {
+    const enabled = input !== disableQuery;
+
+    assert(
+      transport !== undefined, // eslint-disable-line @typescript-eslint/no-unnecessary-condition -- yes, it's true that according to the types it should not be possible for a user to pass `undefined` for transport, but it's much nicer to catch them here if they do (as in, without TypeScript or in a insufficiently sound TypeScript configuration).
+      'createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.',
+    );
+
+    return {
+      enabled,
+
+      ...(getPlaceholderData
+        ? {
+            placeholderData: () =>
+              new methodInfo.O(getPlaceholderData(enabled)),
+          }
+        : {}),
+
+      queryFn: async (context) => {
+        assert(enabled, 'queryFn does not accept a disabled query');
+        return unaryFetch({
+          callOptions: callOptions ?? context,
+          input,
+          methodInfo,
+          transport,
+          typeName,
+        });
+      },
+
+      queryKey: getQueryKey(input),
+
+      ...(onError ? { onError } : {}),
+    };
+  };
+
   return {
     createData: (input) => new methodInfo.O(input),
+
+    createUseQueryOptions,
 
     getPartialQueryKey: () => [typeName, methodInfo.name],
 
@@ -253,46 +315,15 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       };
     },
 
-    useQuery: (
-      input,
-      {
-        getPlaceholderData,
-        onError,
-        transport: optionsTransport,
-        callOptions,
-      } = {},
-    ) => {
+    useQuery: (input, options = {}) => {
       const contextTransport = useTransport();
       const transport =
-        optionsTransport ?? topLevelCustomTransport ?? contextTransport;
+        options.transport ?? topLevelCustomTransport ?? contextTransport;
 
-      const enabled = input !== disableQuery;
-
-      return {
-        enabled,
-
-        ...(getPlaceholderData
-          ? {
-              placeholderData: () =>
-                new methodInfo.O(getPlaceholderData(enabled)),
-            }
-          : {}),
-
-        queryFn: async (context) => {
-          assert(enabled, 'queryFn does not accept a disabled query');
-          return unaryFetch({
-            callOptions: callOptions ?? context,
-            input,
-            methodInfo,
-            transport,
-            typeName,
-          });
-        },
-
-        queryKey: getQueryKey(input),
-
-        ...(onError ? { onError } : {}),
-      };
+      return createUseQueryOptions(input, {
+        ...options,
+        transport,
+      });
     },
   };
 };

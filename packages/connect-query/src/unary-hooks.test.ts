@@ -85,6 +85,7 @@ describe('unaryHooks', () => {
       Equal<
         keyof typeof say,
         | 'createData'
+        | 'createUseQueryOptions'
         | 'getPartialQueryKey'
         | 'getQueryKey'
         | 'methodInfo'
@@ -98,6 +99,7 @@ describe('unaryHooks', () => {
 
     const matchers: Record<keyof typeof say, unknown> = {
       createData: expect.any(Function),
+      createUseQueryOptions: expect.any(Function),
       getPartialQueryKey: expect.any(Function),
       getQueryKey: expect.any(Function),
       methodInfo: expect.objectContaining(ElizaService.methods.say),
@@ -169,6 +171,71 @@ describe('unaryHooks', () => {
       const expected = new BigIntService.methods.count.O(partial);
 
       expect(createData(partial)).toStrictEqual(expected);
+    });
+  });
+
+  // note: the bulk of this helper is tested via the API's main entry point: `useQuery`, which simply calls this function with automatic inference of transport.
+  describe('createUseQueryOptions', () => {
+    const { createUseQueryOptions } = unaryHooks({
+      methodInfo: BigIntService.methods.count,
+      typeName: BigIntService.typeName,
+    });
+
+    it('has the intended API surface', () => {
+      type ExpectType_CreateUserQueryOptionsParams = Expect<
+        Equal<Parameters<typeof createUseQueryOptions>['length'], 2>
+      >;
+      type ExpectType_CreateUserQueryOptionsParams0 = Expect<
+        Equal<
+          Parameters<typeof createUseQueryOptions>[0],
+          DisableQuery | PartialMessage<Message<CountRequest>> | undefined
+        >
+      >;
+      type ExpectType_CreateUserQueryOptionsParams1 = Expect<
+        Equal<
+          Parameters<typeof createUseQueryOptions>[1],
+          {
+            getPlaceholderData?: (
+              enabled: boolean,
+            ) => PartialMessage<CountResponse> | undefined;
+            onError?: (error: ConnectError) => void;
+            transport: Transport;
+            callOptions?: CallOptions | undefined;
+          }
+        >
+      >;
+      type ExpectType_CreateUserQueryOptionsReturn = Expect<
+        Equal<
+          ReturnType<typeof createUseQueryOptions>,
+          {
+            enabled: boolean;
+            queryKey: ConnectQueryKey<CountRequest>;
+            queryFn: (
+              context?:
+                | QueryFunctionContext<ConnectQueryKey<CountRequest>>
+                | undefined,
+            ) => Promise<CountResponse>;
+            placeholderData?: () => CountResponse;
+            onError?: (error: ConnectError) => void;
+          }
+        >
+      >;
+
+      expect.assertions(0);
+    });
+
+    it('requires transport', () => {
+      const message =
+        'createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.';
+      expect(() =>
+        createUseQueryOptions(
+          {},
+          {
+            // @ts-expect-error(2322) intentionally incorrect
+            transport: undefined,
+          },
+        ),
+      ).toThrow(`Invalid assertion: ${message}`);
     });
   });
 
