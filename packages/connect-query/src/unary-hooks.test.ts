@@ -215,7 +215,7 @@ describe('unaryHooks', () => {
                 | QueryFunctionContext<ConnectQueryKey<CountRequest>>
                 | undefined,
             ) => Promise<CountResponse>;
-            placeholderData?: () => CountResponse;
+            placeholderData?: () => CountResponse | undefined;
             onError?: (error: ConnectError) => void;
           }
         >
@@ -964,7 +964,7 @@ describe('unaryHooks', () => {
             queryFn: (
               context?: QueryFunctionContext<ConnectQueryKey<SayRequest>>,
             ) => Promise<SayResponse>;
-            placeholderData?: () => SayResponse;
+            placeholderData?: () => SayResponse | undefined;
             onError?: (error: ConnectError) => void;
           }
         >
@@ -1056,7 +1056,7 @@ describe('unaryHooks', () => {
         type ExpectType_GetPlaceholderData = Expect<
           Equal<
             typeof result.current.placeholderData,
-            (() => SayResponse) | undefined
+            (() => SayResponse | undefined) | undefined
           >
         >;
       });
@@ -1095,13 +1095,29 @@ describe('unaryHooks', () => {
             (
               enabled?: boolean | undefined,
             ) => PartialMessage<SayResponse> | undefined
-          >();
+          >(() => ({}));
         const { result } = renderHook(
           () => useQuery(say.useQuery(disableQuery, { getPlaceholderData })),
           wrapper(),
         );
 
         expect(result.current.data?.sentence).toStrictEqual('');
+        expect(getPlaceholderData).toHaveBeenCalledWith(false);
+      });
+
+      it('will be undefined if getPlaceholderData returns undefined', () => {
+        const getPlaceholderData =
+          jest.fn<
+            (
+              enabled?: boolean | undefined,
+            ) => PartialMessage<SayResponse> | undefined
+          >(() => undefined);
+        const { result } = renderHook(
+          () => useQuery(say.useQuery(disableQuery, { getPlaceholderData })),
+          wrapper(),
+        );
+
+        expect(result.current.data?.sentence).toStrictEqual(undefined);
         expect(getPlaceholderData).toHaveBeenCalledWith(false);
       });
     });
