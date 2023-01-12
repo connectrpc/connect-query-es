@@ -72,7 +72,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
     queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-    placeholderData?: () => O;
+    placeholderData?: () => O | undefined;
     onError?: (error: ConnectError) => void;
   };
 
@@ -164,7 +164,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
     queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-    placeholderData?: () => O;
+    placeholderData?: () => O | undefined;
     onError?: (error: ConnectError) => void;
   };
 }
@@ -203,13 +203,20 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       'createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.',
     );
 
+    
+
     return {
       enabled,
 
       ...(getPlaceholderData
         ? {
-            placeholderData: () =>
-              new methodInfo.O(getPlaceholderData(enabled)),
+            placeholderData: () => {
+              const placeholderData = getPlaceholderData(enabled);
+              if (placeholderData === undefined) {
+                return undefined;
+              }
+              return new methodInfo.O(placeholderData);
+            }
           }
         : {}),
 
