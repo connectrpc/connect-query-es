@@ -1,21 +1,24 @@
 # Connect-Query
 
-<!-- markdownlint-disable-next-line MD033 -- `p` tag is necessary for centering the image -->
+<!-- markdownlint-disable-next-line MD033 -- necessary for spacing the logo -->
+<br/>
+<!-- markdownlint-disable-next-line MD033 -- `p` tag is necessary for centering -->
 <p align="center">
   <!-- markdownlint-disable-next-line MD033 -- `img` tag is necessary for setting width -->
-  <img src="assets/connect-query@16x.png" width="50%" margin="auto" />
+  <img src="assets/connect-query@16x.png" width="38.2%" margin="auto" />
 </p>
+<!-- markdownlint-disable-next-line MD033 -- necessary for spacing the logo -->
+<br/>
 
 Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested.  It enables effortless communication with servers that speak the [Connect Protocol](https://connect.build/docs/protocol).
 
 - [Connect-Query](#connect-query)
 - [Quickstart](#quickstart)
   - [Generated Code](#generated-code)
-  - [How to generate code](#how-to-generate-code)
 - [Connect-Query API](#connect-query-api)
   - [`createQueryService`](#createqueryservice)
-  - [`TransportProvider` (React only)](#transportprovider-react-only)
-  - [`useTransport` (React only)](#usetransport-react-only)
+  - [`TransportProvider`](#transportprovider)
+  - [`useTransport`](#usetransport)
   - [`UnaryHooks.createData`](#unaryhookscreatedata)
   - [`UnaryHooks.createUseQueryOptions`](#unaryhookscreateusequeryoptions)
   - [`UnaryHooks.getPartialQueryKey`](#unaryhooksgetpartialquerykey)
@@ -23,9 +26,9 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [`UnaryHooks.methodInfo`](#unaryhooksmethodinfo)
   - [`UnaryHooks.setQueryData`](#unaryhookssetquerydata)
   - [`UnaryHooks.setQueriesData`](#unaryhookssetqueriesdata)
-  - [`UnaryHooks.useInfiniteQuery` (React only)](#unaryhooksuseinfinitequery-react-only)
-  - [`UnaryHooks.useMutation` (React only)](#unaryhooksusemutation-react-only)
-  - [`UnaryHooks.useQuery` (React only)](#unaryhooksusequery-react-only)
+  - [`UnaryHooks.useInfiniteQuery`](#unaryhooksuseinfinitequery)
+  - [`UnaryHooks.useMutation`](#unaryhooksusemutation)
+  - [`UnaryHooks.useQuery`](#unaryhooksusequery)
   - [`ConnectQueryKey`](#connectquerykey)
   - [`ConnectPartialQueryKey`](#connectpartialquerykey)
 - [Frequently Asked Questions](#frequently-asked-questions)
@@ -37,6 +40,7 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [Do I have to use a code generator?](#do-i-have-to-use-a-code-generator)
   - [What if I have a custom `Transport`?](#what-if-i-have-a-custom-transport)
   - [Does this only work with React?](#does-this-only-work-with-react)
+    - [SolidJS Example](#solidjs-example)
 
 # Quickstart
 
@@ -54,7 +58,31 @@ export const Example: FC = () => {
 
 **_That's it!_**
 
-The code generator does all the work of turning your protobuf into something you can easily import.  TypeScript types all populate out-of-the-box.  Your documentation is also converted to [TSDoc](https://tsdoc.org/).
+The code generator does all the work of turning your Protobuf file into something you can easily import.  TypeScript types all populate out-of-the-box.  Your documentation is also converted to [TSDoc](https://tsdoc.org/).
+
+One of the best features of this library is that once you write your schema in Protobuf form, the TypeScript types are generated and then inferred.  You never again need to specify the types of your data since the library does it automatically.
+
+<!-- markdownlint-disable-next-line MD033 -- provides half line break between next paragraph -->
+<dl></dl>
+<!-- markdownlint-disable-next-line MD033 -- `p` tag is necessary for centering -->
+<p align="center">
+
+[![Connect-Query Usage Example](./assets/cq-intro-thumb-github.png)](https://youtu.be/TODO)
+
+</p>
+
+<!-- markdownlint-disable-next-line MD033 -- necessary for making the text small (and lessening top margin) -->
+<sup>
+  <!-- markdownlint-disable-next-line MD033 -- `p` tag is necessary for centering -->
+  <p align="center">
+    <!-- markdownlint-disable-next-line MD033 -- necessary for making the text italic inside of a `p` tag -->
+    <em>
+      play the above video to see the types in action
+    </em>
+  </p>
+</sup>
+<!-- markdownlint-disable-next-line MD033 -- provides half line break between next paragraph -->
+<dl></dl>
 
 ## Generated Code
 
@@ -80,76 +108,9 @@ export const example = createQueryService({
 }).example;
 ```
 
-If you want to use Connect Query dynamically without code generation, you can call `createQueryService` exactly as the generated code does.
+If you want to use Connect-Query dynamically without code generation, you can call [`createQueryService`](#createqueryservice) exactly as the generated code does.
 
-## How to generate code
-
-Consider this simple proto file:
-
-```protobuf
-syntax = "proto3";
-
-package buf.connect.demo.example.v1;
-
-message Nothing {}
-
-message Todo {
-  string id = 1;
-  string name = 2;
-  bool completed = 3;
-}
-
-message Todos {
-  repeated Todo todos = 1;
-}
-
-service TodoService {
-  rpc GetTodos(Nothing) returns (Todos);
-  rpc AddTodo(Todo) returns (Nothing);
-}
-```
-
-This file creates an RPC with the following:
-
-- `GetTodos` takes no inputs and returns an array of `Todo`s.
-- `AddTodo` adds a new `Todo` and returns nothing.
-
-Next, tell Buf to use the two plugins with a new configuration file named `buf.gen.yaml`:
-
-```yaml title="buf.gen.yaml"
-version: v1
-plugins:
-  - plugin: es
-    out: gen
-    opt: target=ts
-  - plugin: connect-query
-    out: gen
-    opt: target=ts
-```
-
-Then, add a line to the `scripts` section of your `package.json` to run `buf generate`.  
-
-```json
-"scripts": {
-    ...
-    "buf:generate": "buf generate example.proto"
-},
-```
-
-Finally, tell Buf to generate code by running your command:
-
-```bash
-npm run buf:generate
-```
-
-Now you should see your generated code:
-
-```tree
-.
-└── gen/
-    ├── example_pb.ts
-    └── example-TodoService_connectquery.ts
-```
+For more information on code generation, see the [documentation](./packages/protoc-gen-connect-query/README.md) for `protoc-gen-connect-query`.
 
 # Connect-Query API
 
@@ -160,8 +121,8 @@ const createQueryService: <Service extends ServiceType>({
   service,
   transport,
 }: {
-    service: Service;
-    transport?: Transport;
+  service: Service;
+  transport?: Transport;
 }) => QueryHooks<Service>
 ```
 
@@ -193,7 +154,9 @@ export const { say } = createQueryService({
 const { data, isLoading, ...etc } = useQuery(say.useQuery());
 ```
 
-## `TransportProvider` (React only)
+## `TransportProvider`
+
+> Note: This API can only be used with React
 
 ```ts
 const TransportProvider: FC<PropsWithChildren<{
@@ -210,9 +173,9 @@ Broadly speaking, "transport" joins two concepts:
 
 With these two pieces of information in hand, the transport provides the critical mechanism by which your app can make network requests.
 
-To learn more about the two modes of transport, take a look at the npm package `@bufbuild/connect-web`.
+To learn more about the two modes of transport, take a look at the Connect-Web documentation on [choosing a protocol](https://connect.build/docs/web/choosing-a-protocol/).
 
-To get started with Connect-Query, simply import a transport (either `createConnectTransport` or `createGrpcWebTransport` from `@bufbuild/connect-web`) and pass it to the provider.
+To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@bufbuild/connect-web`](https://www.npmjs.com/package/@bufbuild/connect-web)) and pass it to the provider.
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -234,7 +197,9 @@ export const App() {
 }
 ```
 
-## `useTransport` (React only)
+## `useTransport`
+
+> Note: This API can only be used with React
 
 ```ts
 const useTransport: () => Transport;
@@ -254,23 +219,25 @@ Use this to create a data object that can be used as `placeholderData` or initia
 
 ```ts
 const createUseQueryOptions: (
-    input: DisableQuery | PartialMessage<I> | undefined,
-    options: {
-      getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
-      onError?: (error: ConnectError) => void;
-      transport: Transport;
-      callOptions?: CallOptions | undefined;
-    },
-  ) => {
-    enabled: boolean;
-    queryKey: ConnectQueryKey<I>;
-    queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-    placeholderData?: () => O;
-    onError?: (error: ConnectError) => void;
-  };
+ input: DisableQuery | PartialMessage<I> | undefined,
+ options: {
+   getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
+   onError?: (error: ConnectError) => void;
+   transport: Transport;
+   callOptions?: CallOptions | undefined;
+ },
+) => {
+ enabled: boolean;
+ queryKey: ConnectQueryKey<I>;
+ queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
+ placeholderData?: () => O | undefined;
+ onError?: (error: ConnectError) => void;
+};
 ```
 
-createUseQueryOptions is intended to be used with `useQuery`, but is not a hook.  Since hooks cannot be called conditionally (or in loops), it can sometimes be helpful to use `createUseQueryOptions` to prepare an input to TanStack's `useQuery` API.
+`createUseQueryOptions` is intended to be used with TanStack's [`useQuery`](https://tanstack.com/query/v4/docs/react/reference/useQuery) hook.  The difference is that `createUseQueryOptions` is not a hook.  Since hooks cannot be called conditionally, it can sometimes be helpful to use `createUseQueryOptions` to prepare an input to TanStack's `useQuery`.
+
+It is also useful to use alongside TanStack's [`useQueries`](https://tanstack.com/query/v4/docs/react/reference/useQueries) hook since hooks cannot be called in loops.
 
 ## `UnaryHooks.getPartialQueryKey`
 
@@ -278,7 +245,7 @@ createUseQueryOptions is intended to be used with `useQuery`, but is not a hook.
 const getPartialQueryKey: () => ConnectPartialQueryKey;
 ```
 
-This helper is useful for getting query keys matching a wider set of queries associated to this Connect `Service`, per TanStack Query's partial matching mechanism.
+This helper is useful for getting query keys matching a wider set of queries associated to this Connect `Service`, per TanStack Query's [partial matching](https://tanstack.com/query/v4/docs/react/guides/query-invalidation#query-matching-with-invalidatequeries) mechanism.
 
 ## `UnaryHooks.getQueryKey`
 
@@ -286,7 +253,7 @@ This helper is useful for getting query keys matching a wider set of queries ass
 const getQueryKey: (input?: DisableQuery | PartialMessage<I>) => ConnectQueryKey<I>;
 ```
 
-This helper is useful to manually compute the `queryKey` sent to TanStack Query.  Otherwise, this has no side effects.
+This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query.  This function has no side effects.
 
 ## `UnaryHooks.methodInfo`
 
@@ -310,7 +277,7 @@ const setQueryData: (
 ];
 ```
 
-This helper is intended to be used with `QueryClient`s `setQueryData` function.
+This helper is intended to be used with `QueryClient`s [`setQueryData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetquerydata) function.
 
 ## `UnaryHooks.setQueriesData`
 
@@ -325,9 +292,11 @@ const setQueriesData: (
 ];
 ```
 
-This helper is intended to be used with `QueryClient`s `setQueriesData` function.
+This helper is intended to be used with `QueryClient`s [`setQueriesData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetqueriesdata) function.
 
-## `UnaryHooks.useInfiniteQuery` (React only)
+## `UnaryHooks.useInfiniteQuery`
+
+> Note: This API can only be used with React
 
 ```ts
 const useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
@@ -335,7 +304,6 @@ const useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
   options: {
     pageParamKey: ParamKey;
     getNextPageParam: (lastPage: O, allPages: O[]) => unknown;
-
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
@@ -354,9 +322,11 @@ const useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
 };
 ```
 
-This helper is intended to be used with `QueryClient`s `useInfiniteQuery` function.
+This helper is intended to be used with `QueryClient`s [`useInfiniteQuery`](https://tanstack.com/query/v4/docs/react/reference/useInfiniteQuery) function.
 
-## `UnaryHooks.useMutation` (React only)
+## `UnaryHooks.useMutation`
+
+> Note: This API can only be used with React
 
 ```ts
 const useMutation: (options?: {
@@ -372,18 +342,17 @@ const useMutation: (options?: {
 };
 ```
 
-This function is intended to be used with TanStack Query's `useMutation` API.
+This function is intended to be used with TanStack Query's [`useMutation`](https://tanstack.com/query/v4/docs/react/reference/useMutation) function.
 
-## `UnaryHooks.useQuery` (React only)
+## `UnaryHooks.useQuery`
 
-This function is intended to be used with Tanstack Query's `useQuery` API.
+> Note: This API can only be used with React
 
 ```ts
 const useQuery: (
   input?: DisableQuery | PartialMessage<I>,
   options?: {
     getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
-
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
@@ -392,10 +361,12 @@ const useQuery: (
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
   queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-  placeholderData?: () => O;
+  placeholderData?: () => O | undefined;
   onError?: (error: ConnectError) => void;
 };
 ```
+
+This function is intended to be used with Tanstack Query's [`useQuery`](https://tanstack.com/query/v4/docs/react/reference/useQuery) function.
 
 ## `ConnectQueryKey`
 
@@ -409,14 +380,14 @@ type ConnectQueryKey<I extends Message<I>> = [
 
 TanStack Query requires query keys in order to decide when the query should automatically update.
 
-`QueryKey`s in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
+[`QueryKey`s](https://tanstack.com/query/v4/docs/react/guides/query-keys) in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
 
-For example, for a query key might look like this:
+For example, a query key might look like this:
 
 ```ts
 [
-  "buf.connect.demo.eliza.v1.ElizaService",
-  "Say",
+  "buf.connect.demo.example.v1.ExampleService",
+  "GetTodos",
   { sentence: "hello there" },
 ]
 ```
@@ -432,6 +403,15 @@ type ConnectPartialQueryKey = [
 ];
 ```
 
+For example, a partial query key might look like this:
+
+```ts
+[
+  "buf.connect.demo.example.v1.ExampleService",
+  "GetTodos",
+]
+```
+
 # Frequently Asked Questions
 
 ## Is this ready for production?
@@ -443,62 +423,21 @@ Buf has been using Connect-Query in production for some time.  Also, there is 10
 Here is a high-level overview of how Connect-Query fits in with Connect-Web and Protobuf-ES:
 
 <details>
-<summary>flowchart</summary>
+<summary>Expand to see a detailed dependency graph</summary>
 
-![connect-query_dependency_graph](./assets/connect-query_dependency_graph.png)
+<img
+  alt="connect-query_dependency_graph"
+  src="./assets/connect-query_dependency_graph.png"
+  width="75%"
+/>
 
 </details>
 
-Your `*.proto` file serves as the primary input to the code generators `protoc-gen-connect-query` and `protoc-gen-es`.  Both of these code generators also rely on primitives provided by Protobuf-ES.  The Buf CLI produces the generated output.  The final generated code uses `Transport` from Connect-Web and generates a final Connect-Query API.  Then in your codebase you import the generated code.
+Your Protobuf files serve as the primary input to the code generators `protoc-gen-connect-query` and `protoc-gen-es`.  Both of these code generators also rely on primitives provided by Protobuf-ES.  The Buf CLI produces the generated output.  The final generated code uses `Transport` from Connect-Web and generates a final Connect-Query API.
 
 ## What is `Transport`
 
-`Transport` is a regular JavaScript object with two methods, `unary` and `serverStream`:
-
-```ts
-/**
- * Transport represents the underlying transport for a client.
- * A transport implements a protocol, such as Connect or gRPC-web,
- * and allows for the concrete clients to be independent of the protocol.
- */
-export interface Transport {
-    /**
-     * Call a unary RPC
-     * a method that takes a single input message,
-     * and responds with a single output message.
-     */
-    unary<
-      I extends Message<I> = AnyMessage,
-      O extends Message<O> = AnyMessage
-    >(
-      service: ServiceType,
-      method: MethodInfo<I, O>,
-      signal: AbortSignal | undefined,
-      timeoutMs: number | undefined,
-      header: HeadersInit | undefined,
-      message: PartialMessage<I>
-    ): Promise<UnaryResponse<O>>;
-
-    /**
-     * Call a server-streaming RPC
-     * a method that takes a single input message,
-     * and responds with zero or more output messages.
-     */
-    serverStream<
-      I extends Message<I> = AnyMessage,
-      O extends Message<O> = AnyMessage
-    >(
-      service: ServiceType,
-      method: MethodInfo<I, O>,
-      signal: AbortSignal | undefined,
-      timeoutMs: number | undefined,
-      header: HeadersInit | undefined,
-      message: PartialMessage<I>
-    ): Promise<StreamResponse<O>>;
-}
-```
-
-While there are a lot of available options, the highlights are that `Transport` is the important mechanism by which calls to a gRPC-web or Connect backend are made from the browser.
+`Transport` is a regular JavaScript object with two methods, `unary` and `serverStream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.
 
 ## What if I already use Connect-Web?
 
@@ -512,7 +451,7 @@ That said, we encourage you to check out the [Connect protocol](https://connect.
 
 ## Do I have to use a code generator?
 
-No.  The code generator just calls `createQueryService` with the arguments already added, but you are free to do that yourself if you wish.
+No.  The code generator just calls [`createQueryService`](#createqueryservice) with the arguments already added, but you are free to do that yourself if you wish.
 
 ## What if I have a custom `Transport`?
 
@@ -520,7 +459,7 @@ If the `Transport` attached to React Context via the `TransportProvider` isn't w
 
 ## Does this only work with React?
 
-You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue).  However, since the hooks APIs like `useQuery` and `useMutation` automatically infer `Transport` from React Context, these APIs will only work with React, as of now.  There is nothing else React specific in the Connect-Query codebase.  As we expand the scope of the project, we do hope to support all APIs on all TanStack Query variants.
+You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue).  However, since the hooks APIs like [`UnaryHooks.useQuery`](#unaryhooksusequery-react-only) and [`UnaryHooks.useMutation`](#unaryhooksusemutation-react-only) automatically infer `Transport` from React Context, these APIs will only work with React, as of now.  There is nothing else React specific in the Connect-Query codebase.  As we expand the scope of the project, we do hope to support all APIs on all TanStack Query variants.
 
 | Connect-Query API       | React              | Solid              | Svelte             | Vue             |
 | ----------------------- | ------------------ | ------------------ | ------------------ | ------------------ |
@@ -543,6 +482,27 @@ You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue).
 | `useTransport`          | :heavy_check_mark: | :x:                | :x:                | :x:                |
 | `TransportProvider`     | :heavy_check_mark: | :x:                | :x:                | :x:                |
 
-> If you're a TanStack Query user that uses something other than React, we'd love to hear from you.  Please reach out to us on the [Buf Slack](https://join.slack.com/t/bufbuild/shared_invite/zt-f5k547ki-VDs_iC4TblNCu7ubhRD17w).
+> Tip: If you're a TanStack Query user that uses something other than React, we'd love to hear from you.  Please reach out to us on the [Buf Slack](https://join.slack.com/t/bufbuild/shared_invite/zt-f5k547ki-VDs_iC4TblNCu7ubhRD17w).
+
+### SolidJS Example
 
 Say, for example, you're using Solid together with TanStack Query's `useQuery` API.  In this case you can use `UnaryHooks.createUseQueryOptions` instead of `UnaryHooks.useQuery`.  The only difference is that `createUseQueryOptions` requires you to pass in a `Transport` because it is not a hook and hooks are where transport is automatically inferred.
+
+Here's an example using SolidJS:
+
+```tsx
+import { createQuery } from "@tanstack/solid-query";
+import { getTodos } from "./example-ElizaService_connectquery";
+
+function Component() {
+  const options = example.createUseQueryOptions(
+    { name: 'My First Todo' },
+    { transport }
+  );
+  const query = createQuery({
+    ...options,
+    queryKey: () => options.queryKey
+  });
+  return <div>{whatever}</div>
+}
+```
