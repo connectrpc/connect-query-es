@@ -4,21 +4,32 @@
     "bufbuild",
     "connectquery",
     "connectweb",
+    "Deno",
     "descriptorset",
+    "excalidraw",
     "idempotence",
     "idempotency",
     "inferencing",
     "invalidators",
+    "keyof",
     "lcov",
     "nocheck",
     "pnpm",
     "proto",
     "protobuf",
     "protoc",
+    "protofile",
     "protoplugin",
+    "Quickstart",
     "tanstack",
+    "todos",
     "tsdoc",
+    "Vindaloo",
     "Weizenbaum's"
   ],
-  "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml"]
+  "ignorePaths": [
+    "**/*.svg",
+    "**/*.ai",
+    "**/pnpm-lock.yaml"
+  ]
 }

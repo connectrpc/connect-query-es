@@ -41,6 +41,7 @@ export const useTransport = () => useContext(transportContext);
  * `TransportProvider` is the main mechanism by which Connect-Query keeps track of the `Transport` used by your application.
  *
  * Broadly speaking, "transport" joins two concepts:
+ *
  *   1. The protocol of communication.  For this there are two options: the {@link https://connect.build/docs/protocol/ Connect Protocol}, or the {@link https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md gRPC-Web Protocol}.
  *   1. The protocol options.  The primary important piece of information here is the `baseUrl`, but there are also other potentially critical options like request credentials and binary wire format encoding options.
  *

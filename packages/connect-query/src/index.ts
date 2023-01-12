@@ -24,7 +24,7 @@ export {
   supportedMethodKinds,
   isSupportedMethod,
 } from './create-query-hooks';
-export type { ConnectQueryKey } from './connect-query-key';
+export type { ConnectQueryKey, ConnectPartialQueryKey } from './connect-query-key';
 export type { UnaryHooks } from './unary-hooks';
 export { unaryHooks } from './unary-hooks';
 export { disableQuery } from './utils';

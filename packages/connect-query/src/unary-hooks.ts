@@ -50,7 +50,7 @@ import {
  */
 export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   /**
-   * Use this to create a data object that can be used as placeholderData or initialData.
+   * Use this to create a data object that can be used as `placeholderData` or `initialData`.
    */
   createData: (data: PartialMessage<O>) => O;
 
