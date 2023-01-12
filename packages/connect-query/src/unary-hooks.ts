@@ -203,8 +203,6 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       'createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.',
     );
 
-    
-
     return {
       enabled,
 
