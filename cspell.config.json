@@ -11,6 +11,7 @@
     "idempotency",
     "inferencing",
     "invalidators",
+    "keyof",
     "lcov",
     "nocheck",
     "pnpm",
