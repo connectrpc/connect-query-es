@@ -1,18 +1,10 @@
-# Connect-Query
+<img src="assets/connect-query@16x.png" width="15%" />
 
-<!-- markdownlint-disable-next-line MD033 -- necessary for spacing the logo -->
-<br/>
-<!-- markdownlint-disable-next-line MD033 -- `p` tag is necessary for centering -->
-<p align="center">
-  <!-- markdownlint-disable-next-line MD033 -- `img` tag is necessary for setting width -->
-  <img src="assets/connect-query@16x.png" width="38.2%" margin="auto" />
-</p>
-<!-- markdownlint-disable-next-line MD033 -- necessary for spacing the logo -->
-<br/>
+<!-- omit in toc -->
+# Connect-Query
 
 Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested.  It enables effortless communication with servers that speak the [Connect Protocol](https://connect.build/docs/protocol).
 
-- [Connect-Query](#connect-query)
 - [Quickstart](#quickstart)
   - [Generated Code](#generated-code)
 - [Connect-Query API](#connect-query-api)
@@ -62,22 +54,19 @@ The code generator does all the work of turning your Protobuf file into somethin
 
 One of the best features of this library is that once you write your schema in Protobuf form, the TypeScript types are generated and then inferred.  You never again need to specify the types of your data since the library does it automatically.
 
-<!-- markdownlint-disable-next-line MD033 -- provides half line break between next paragraph -->
-<dl></dl>
-<!-- markdownlint-disable-next-line MD033 -- `p` tag is necessary for centering -->
-<p align="center">
-
-[![Connect-Query Usage Example](./assets/cq-intro-thumb-github.png)](https://youtu.be/TODO)
-
-</p>
+<!-- markdownlint-disable-next-line MD033 -- necessary for centering -->
+<div align="center">
+  <!-- markdownlint-disable-next-line MD033 -- necessary for cross-renderer video (i.e. not just on GitHub) -->
+  <video src="https://user-images.githubusercontent.com/15232461/212362170-65eb9efa-faa5-46fd-ac61-080719d011a5.mp4" />
+</div>
 
 <!-- markdownlint-disable-next-line MD033 -- necessary for making the text small (and lessening top margin) -->
 <sup>
-  <!-- markdownlint-disable-next-line MD033 -- `p` tag is necessary for centering -->
+  <!-- markdownlint-disable-next-line MD033 -- necessary for centering -->
   <p align="center">
     <!-- markdownlint-disable-next-line MD033 -- necessary for making the text italic inside of a `p` tag -->
     <em>
-      play the above video to see the types in action
+      play the above video to see the TypeScript types in action
     </em>
   </p>
 </sup>
@@ -277,7 +266,7 @@ const setQueryData: (
 ];
 ```
 
-This helper is intended to be used with `QueryClient`s [`setQueryData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetquerydata) function.
+This helper is intended to be used with TanStack Query `QueryClient`'s [`setQueryData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetquerydata) function.
 
 ## `UnaryHooks.setQueriesData`
 
@@ -292,7 +281,7 @@ const setQueriesData: (
 ];
 ```
 
-This helper is intended to be used with `QueryClient`s [`setQueriesData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetqueriesdata) function.
+This helper is intended to be used with TanStack Query `QueryClient`'s [`setQueriesData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetqueriesdata) function.
 
 ## `UnaryHooks.useInfiniteQuery`
 
@@ -322,7 +311,7 @@ const useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
 };
 ```
 
-This helper is intended to be used with `QueryClient`s [`useInfiniteQuery`](https://tanstack.com/query/v4/docs/react/reference/useInfiniteQuery) function.
+This helper is intended to be used with TanStack Query's [`useInfiniteQuery`](https://tanstack.com/query/v4/docs/react/reference/useInfiniteQuery) function.
 
 ## `UnaryHooks.useMutation`
 
@@ -388,7 +377,7 @@ For example, a query key might look like this:
 [
   "buf.connect.demo.example.v1.ExampleService",
   "GetTodos",
-  { sentence: "hello there" },
+  { id: "0fdf2ebe-9a0c-4366-9772-cfb21346c3f9" },
 ]
 ```
 
@@ -437,7 +426,7 @@ Your Protobuf files serve as the primary input to the code generators `protoc-ge
 
 ## What is `Transport`
 
-`Transport` is a regular JavaScript object with two methods, `unary` and `serverStream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.
+`Transport` is a regular JavaScript object with two methods, `unary` and `serverStream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.  Read more about Transport on the [connect docs](https://connect.build/docs/web/choosing-a-protocol).
 
 ## What if I already use Connect-Web?
 
@@ -459,7 +448,7 @@ If the `Transport` attached to React Context via the `TransportProvider` isn't w
 
 ## Does this only work with React?
 
-You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue).  However, since the hooks APIs like [`UnaryHooks.useQuery`](#unaryhooksusequery-react-only) and [`UnaryHooks.useMutation`](#unaryhooksusemutation-react-only) automatically infer `Transport` from React Context, these APIs will only work with React, as of now.  There is nothing else React specific in the Connect-Query codebase.  As we expand the scope of the project, we do hope to support all APIs on all TanStack Query variants.
+You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue).  However, since the hooks APIs like [`UnaryHooks.useQuery`](#unaryhooksusequery) and [`UnaryHooks.useMutation`](#unaryhooksusemutation) automatically infer `Transport` from React Context, these APIs will only work with React, as of now.  There is nothing else React specific in the Connect-Query codebase.  As we expand the scope of the project, we do hope to support all APIs on all TanStack Query variants.
 
 | Connect-Query API       | React              | Solid              | Svelte             | Vue             |
 | ----------------------- | ------------------ | ------------------ | ------------------ | ------------------ |
