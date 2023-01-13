@@ -87,7 +87,7 @@ describe('createQueryHooks', () => {
     expect(hooks).not.toHaveProperty('converse');
 
     type ExpectType_GetQueryKey = Equal<
-      typeof hooks['say']['getQueryKey'],
+      (typeof hooks)['say']['getQueryKey'],
       (
         input: DisableQuery | PartialMessage<SayRequest>,
       ) => ConnectQueryKey<SayRequest>
@@ -96,7 +96,7 @@ describe('createQueryHooks', () => {
 
     type ExpectType_MethodInfo = Expect<
       Equal<
-        typeof hooks['say']['methodInfo'],
+        (typeof hooks)['say']['methodInfo'],
         MethodInfoUnary<SayRequest, SayResponse>
       >
     >;

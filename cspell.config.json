@@ -27,9 +27,5 @@
     "Vindaloo",
     "Weizenbaum's"
   ],
-  "ignorePaths": [
-    "**/*.svg",
-    "**/*.ai",
-    "**/pnpm-lock.yaml"
-  ]
+  "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw"]
 }

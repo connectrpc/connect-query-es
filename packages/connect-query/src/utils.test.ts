@@ -136,7 +136,7 @@ describe('protobufSafeUpdater', () => {
     type ExpectType_Result = Expect<Equal<typeof result, CountResponse>>;
     expect(result).not.toStrictEqual(wrappedInput);
 
-    type ExpectType_BigInt = Expect<Equal<typeof result['count'], bigint>>;
+    type ExpectType_BigInt = Expect<Equal<(typeof result)['count'], bigint>>;
     expect(typeof result.count).toStrictEqual('bigint');
 
     expect(wrappedInput.count).toStrictEqual(1n);
@@ -159,7 +159,7 @@ describe('protobufSafeUpdater', () => {
     type ExpectType_Result = Expect<Equal<typeof result, CountResponse>>;
     expect(result).not.toStrictEqual(wrappedInput);
 
-    type ExpectType_BigInt = Expect<Equal<typeof result['count'], bigint>>;
+    type ExpectType_BigInt = Expect<Equal<(typeof result)['count'], bigint>>;
     expect(typeof result.count).toStrictEqual('bigint');
 
     expect(wrappedInput.count).toStrictEqual(1n);

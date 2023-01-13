@@ -24,11 +24,11 @@ import { disableQuery } from './utils';
 
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
- * 
+ *
  * `QueryKey`s in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
- * 
+ *
  * For example, for a query key might look like this:
- * 
+ *
  * @example
  * [
  *   "buf.connect.demo.eliza.v1.ElizaService",
@@ -52,9 +52,9 @@ export type ConnectPartialQueryKey = [
 
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
- * 
+ *
  * In Connect-Query, much of this is handled automatically by this function.
- * 
+ *
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */
 export const makeConnectQueryKeyGetter =

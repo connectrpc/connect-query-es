@@ -214,7 +214,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
                 return undefined;
               }
               return new methodInfo.O(placeholderData);
-            }
+            },
           }
         : {}),
 

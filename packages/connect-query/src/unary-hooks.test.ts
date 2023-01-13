@@ -1090,12 +1090,11 @@ describe('unaryHooks', () => {
       });
 
       it('will use pass the value of `enabled` to the getPlaceholderData callback', () => {
-        const getPlaceholderData =
-          jest.fn<
-            (
-              enabled?: boolean | undefined,
-            ) => PartialMessage<SayResponse> | undefined
-          >(() => ({}));
+        const getPlaceholderData = jest.fn<
+          (
+            enabled?: boolean | undefined,
+          ) => PartialMessage<SayResponse> | undefined
+        >(() => ({}));
         const { result } = renderHook(
           () => useQuery(say.useQuery(disableQuery, { getPlaceholderData })),
           wrapper(),
@@ -1106,12 +1105,11 @@ describe('unaryHooks', () => {
       });
 
       it('will be undefined if getPlaceholderData returns undefined', () => {
-        const getPlaceholderData =
-          jest.fn<
-            (
-              enabled?: boolean | undefined,
-            ) => PartialMessage<SayResponse> | undefined
-          >(() => undefined);
+        const getPlaceholderData = jest.fn<
+          (
+            enabled?: boolean | undefined,
+          ) => PartialMessage<SayResponse> | undefined
+        >(() => undefined);
         const { result } = renderHook(
           () => useQuery(say.useQuery(disableQuery, { getPlaceholderData })),
           wrapper(),

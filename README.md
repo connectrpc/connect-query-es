@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-next-line MD041 MD033 -- 033: necessary for setting the width; 041: this is the style of bufbuild READMEs -->
 <img src="assets/connect-query@16x.png" width="15%" />
 
 <!-- omit in toc -->
