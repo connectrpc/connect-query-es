@@ -87,6 +87,8 @@ const config = {
       'error',
       {
         templateFile: 'assets/license-header',
+        varRegexps: { YEAR: new Date().getFullYear() },
+        onNonMatchingHeader: 'replace',
       },
     ],
 
