@@ -472,7 +472,7 @@ You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue).
 | `useTransport`          | :heavy_check_mark: | :x:                | :x:                | :x:                |
 | `TransportProvider`     | :heavy_check_mark: | :x:                | :x:                | :x:                |
 
-> Tip: If you're a TanStack Query user that uses something other than React, we'd love to hear from you.  Please reach out to us on the [Buf Slack](https://join.slack.com/t/bufbuild/shared_invite/zt-f5k547ki-VDs_iC4TblNCu7ubhRD17w).
+> Tip: If you're a TanStack Query user that uses something other than React, we'd love to hear from you.  Please reach out to us on the [Buf Slack](https://buf.build/links/slack).
 
 ### SolidJS Example
 
