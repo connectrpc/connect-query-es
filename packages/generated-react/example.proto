@@ -23,4 +23,5 @@ service TodoService {
   // A helpful RPC to get all current Todos
   rpc GetTodos(Empty) returns (Todos);
   rpc AddTodo(Todo) returns (Todos);
+  rpc Delete(Empty) returns (Empty);
 }

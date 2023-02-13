@@ -17,7 +17,8 @@ import { MethodKind } from '@bufbuild/protobuf';
 import type { Schema } from '@bufbuild/protoplugin';
 import { localName } from '@bufbuild/protoplugin/ecmascript';
 
-import type { PluginInit } from './utils';
+import type { PluginInit} from './utils';
+import { sanitizeIdentifiers } from './utils';
 
 /**
  * Handles generating a TypeScript Declaration file for a given Schema, DescFile (protobuf definition) and protobuf Service.
@@ -36,7 +37,7 @@ const generateServiceFile =
           {
             f.print(
               `export const `,
-              localName(method),
+              sanitizeIdentifiers(localName(method)),
               `: `,
               f.import('UnaryHooks', '@bufbuild/connect-query'),
               `<`,

@@ -32,6 +32,15 @@ export const TodoService = {
       O: Todos,
       kind: MethodKind.Unary,
     },
+    /**
+     * @generated from rpc buf.connect.demo.example.v1.TodoService.Delete
+     */
+    delete: {
+      name: "Delete",
+      I: Empty,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
   }
 } as const;
 

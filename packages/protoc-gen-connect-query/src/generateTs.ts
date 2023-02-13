@@ -21,7 +21,8 @@ import {
   makeJsDoc,
 } from '@bufbuild/protoplugin/ecmascript';
 
-import type { PluginInit } from './utils';
+import type { PluginInit} from './utils';
+import { sanitizeIdentifiers } from './utils';
 
 /**
  * Handles generating a source code file for a given Schema, DescFile (protobuf definition) and protobuf Service.
@@ -43,10 +44,9 @@ const generateServiceFile =
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
-        // TODO idempotency
         f.print(makeJsDoc(method));
         f.print(
-          `export const ${localName(method)} = `,
+          `export const ${sanitizeIdentifiers(localName(method))} = `,
           f.import('createQueryService', '@bufbuild/connect-query'),
           `({`,
         );

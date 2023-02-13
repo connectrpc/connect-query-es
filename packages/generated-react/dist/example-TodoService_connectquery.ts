@@ -44,3 +44,20 @@ export const addTodo = createQueryService({
     typeName: "buf.connect.demo.example.v1.TodoService",
   },
 }).addTodo;
+
+/**
+ * @generated from rpc buf.connect.demo.example.v1.TodoService.Delete
+ */
+export const delete_RPC = createQueryService({
+  service: {
+    methods: {
+      delete: {
+        name: "Delete",
+        kind: MethodKind.Unary,
+        I: Empty,
+        O: Empty,
+      },
+    },
+    typeName: "buf.connect.demo.example.v1.TodoService",
+  },
+}).delete;
