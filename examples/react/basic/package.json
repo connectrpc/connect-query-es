@@ -9,23 +9,23 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@bufbuild/connect-web": "^0.6.0",
+    "@bufbuild/connect-query": "^0.1.0",
+    "@bufbuild/connect-web": "^0.7.0",
     "@bufbuild/protobuf": "^1.0.0",
+    "@bufbuild/protoc-gen-connect-query": "^0.1.0",
+    "@bufbuild/protoc-gen-connect-web": "^0.7.0",
     "@bufbuild/protoc-gen-es": "^1.0.0",
-    "@bufbuild/protoc-gen-connect-web": "^0.6.0",
-    "@bufbuild/protoc-gen-connect-query": "*",
-    "@tanstack/react-query": "^4.22.0",
-    "@tanstack/react-query-devtools": "^4.22.0",
-    "@bufbuild/connect-query": "*",
-    "generated-react": "*",
+    "@tanstack/react-query": "^4.24.6",
+    "@tanstack/react-query-devtools": "^4.24.6",
+    "generated-react": "^0.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.26",
+    "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.10",
-    "@vitejs/plugin-react": "^3.0.1",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.4"
+    "@vitejs/plugin-react": "^3.1.0",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.1"
   }
 }
