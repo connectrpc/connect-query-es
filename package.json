@@ -13,7 +13,8 @@
     "lint:spelling": "cspell \"**\" --gitignore",
     "lint:code": "eslint . && prettier . --check",
     "lint:code:fix": "eslint . --fix && prettier . --write",
-    "all": "pnpm run build && pnpm run generate && pnpm run lint:fix && pnpm run test"
+    "all": "pnpm run build && pnpm run generate && pnpm run lint:fix && pnpm run test",
+    "update-all": "pnpm update --recursive --latest && pnpm outdated --recursive"
   },
   "license": "Apache-2.0",
   "devDependencies": {

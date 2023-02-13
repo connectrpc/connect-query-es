@@ -54,10 +54,10 @@ importers:
 
   examples/react/basic:
     specifiers:
-      '@bufbuild/connect-query': ^0.1.0
+      '@bufbuild/connect-query': workspace:^0.1.0
       '@bufbuild/connect-web': ^0.7.0
       '@bufbuild/protobuf': ^1.0.0
-      '@bufbuild/protoc-gen-connect-query': ^0.1.0
+      '@bufbuild/protoc-gen-connect-query': workspace:^0.1.0
       '@bufbuild/protoc-gen-connect-web': ^0.7.0
       '@bufbuild/protoc-gen-es': ^1.0.0
       '@tanstack/react-query': ^4.24.6
@@ -65,7 +65,7 @@ importers:
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.10
       '@vitejs/plugin-react': ^3.1.0
-      generated-react: ^0.0.0
+      generated-react: workspace:^0.0.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -91,10 +91,10 @@ importers:
 
   examples/react/basic-without-generation:
     specifiers:
-      '@bufbuild/connect-query': ^0.1.0
+      '@bufbuild/connect-query': workspace:^0.1.0
       '@bufbuild/connect-web': ^0.7.0
       '@bufbuild/protobuf': ^1.0.0
-      '@bufbuild/protoc-gen-connect-query': ^0.1.0
+      '@bufbuild/protoc-gen-connect-query': workspace:^0.1.0
       '@bufbuild/protoc-gen-connect-web': ^0.7.0
       '@bufbuild/protoc-gen-es': ^1.0.0
       '@tanstack/react-query': ^4.24.6
@@ -102,7 +102,7 @@ importers:
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.10
       '@vitejs/plugin-react': ^3.1.0
-      generated-react: ^0.0.0
+      generated-react: workspace:^0.0.0
       react: ^18.2.0
       react-dom: ^18.2.0
       typescript: ^4.9.5
@@ -136,7 +136,7 @@ importers:
       '@testing-library/react': ^13.4.0
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.10
-      generated-react: ^0.0.0
+      generated-react: workspace:^0.0.0
       jest-environment-jsdom: ^29.4.2
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -161,9 +161,9 @@ importers:
 
   packages/generated-react:
     specifiers:
-      '@bufbuild/connect-query': ^0.1.0
+      '@bufbuild/connect-query': workspace:^0.1.0
       '@bufbuild/protobuf': ^1.0.0
-      '@bufbuild/protoc-gen-connect-query': ^0.1.0
+      '@bufbuild/protoc-gen-connect-query': workspace:^0.1.0
       '@bufbuild/protoc-gen-connect-web': ^0.7.0
       '@bufbuild/protoc-gen-es': ^1.0.0
     dependencies:
@@ -179,7 +179,7 @@ importers:
       '@bufbuild/protoc-gen-connect-web': ^0.7.0
       '@bufbuild/protoc-gen-es': ^1.0.0
       '@bufbuild/protoplugin': ^1.0.0
-      generated-react: ^0.0.0
+      generated-react: workspace:^0.0.0
       typescript: ^4.9.5
     dependencies:
       '@bufbuild/protobuf': 1.0.0
