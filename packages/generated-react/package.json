@@ -19,10 +19,11 @@
   "scripts": {
     "clean": "rm -rf dist",
     "generate": "pnpm run clean && pnpm run generate:code && pnpm run generate:descriptorset",
-    "generate:code": "buf generate --path eliza.proto --path example.proto",
-    "generate:descriptorset": "buf build --path eliza.proto --path example.proto --output dist/descriptorset.bin"
+    "generate:code": "pnpm buf generate --path eliza.proto --path example.proto",
+    "generate:descriptorset": "pnpm buf build --path eliza.proto --path example.proto --output dist/descriptorset.bin"
   },
   "dependencies": {
+    "@bufbuild/buf": "^1.14.0",
     "@bufbuild/protobuf": "^1.0.0",
     "@bufbuild/protoc-gen-connect-query": "*",
     "@bufbuild/protoc-gen-connect-web": "^0.6.0",

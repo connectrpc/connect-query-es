@@ -89,7 +89,7 @@ plugins:
 To use the [buf CLI](https://docs.buf.build/generate/usage#run-generate) to generate code for all protobuf files within your project, simply run:
 
 ```bash
-buf generate
+npx @bufbuild/buf generate
 ```
 
 > Note that `buf` can generate from various [inputs](https://docs.buf.build/reference/inputs), not just local protobuf files. For example, `npm run generate buf.build/bufbuild/eliza` generates code for the module [bufbuild/eliza](https://buf.build/bufbuild/eliza) on the Buf Schema Registry.
@@ -121,7 +121,7 @@ Add a line to the `scripts` section of your `package.json` to run `buf generate`
 ```json
 "scripts": {
     ...
-    "buf:generate": "buf generate example.proto"
+    "buf:generate": "npx @bufbuild/buf generate example.proto"
 },
 ```
 
