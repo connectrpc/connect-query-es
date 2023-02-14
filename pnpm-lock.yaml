@@ -161,12 +161,14 @@ importers:
 
   packages/generated-react:
     specifiers:
+      '@bufbuild/buf': ^1.14.0
       '@bufbuild/connect-query': workspace:^0.1.0
       '@bufbuild/protobuf': ^1.0.0
       '@bufbuild/protoc-gen-connect-query': workspace:^0.1.0
       '@bufbuild/protoc-gen-connect-web': ^0.7.0
       '@bufbuild/protoc-gen-es': ^1.0.0
     dependencies:
+      '@bufbuild/buf': 1.14.0
       '@bufbuild/connect-query': link:../connect-query
       '@bufbuild/protobuf': 1.0.0
       '@bufbuild/protoc-gen-connect-query': link:../protoc-gen-connect-query
