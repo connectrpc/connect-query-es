@@ -25,14 +25,14 @@
   },
   "preferUnplugged": true,
   "devDependencies": {
-    "@bufbuild/protoc-gen-connect-web": "^0.6.0",
+    "@bufbuild/protoc-gen-connect-web": "^0.7.0",
     "@bufbuild/protoc-gen-es": "^1.0.0",
-    "generated-react": "*",
-    "typescript": "^4.9.4"
+    "generated-react": "workspace:^0.0.0",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@bufbuild/protoplugin": "^1.0.0",
-    "@bufbuild/protobuf": "^1.0.0"
+    "@bufbuild/protobuf": "^1.0.0",
+    "@bufbuild/protoplugin": "^1.0.0"
   },
   "peerDependencies": {
     "@bufbuild/protoc-gen-es": "1.x"
