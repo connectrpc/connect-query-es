@@ -32,9 +32,9 @@ describe('fallbackTransport', () => {
     await expect(Promise.reject(fallbackTransport.unary)).rejects.toThrow(
       error,
     );
-    await expect(
-      Promise.reject(fallbackTransport.serverStream),
-    ).rejects.toThrow(error);
+    await expect(Promise.reject(fallbackTransport.stream)).rejects.toThrow(
+      error,
+    );
   });
 });
 

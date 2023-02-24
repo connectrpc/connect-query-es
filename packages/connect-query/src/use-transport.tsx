@@ -25,7 +25,7 @@ export const fallbackTransport: Transport = {
   unary: () => {
     throw fallbackTransportError;
   },
-  serverStream: () => {
+  stream: () => {
     throw fallbackTransportError;
   },
 };
