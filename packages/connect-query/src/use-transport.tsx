@@ -18,14 +18,14 @@ import type { FC, PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
 const fallbackTransportError = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `serverStream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connect.build/docs/web/getting-started for more info.",
+  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connect.build/docs/web/getting-started for more info.",
 );
 
 export const fallbackTransport: Transport = {
   unary: () => {
     throw fallbackTransportError;
   },
-  serverStream: () => {
+  stream: () => {
     throw fallbackTransportError;
   },
 };

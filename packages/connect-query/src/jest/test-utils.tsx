@@ -126,19 +126,19 @@ export const sleep = async (timeout: number) =>
 /** this mock is intended to be passed to useContext */
 export const mockTransportContext = {
   unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  serverStream: jest.fn(),
+  stream: jest.fn(),
 } as Transport;
 
 /** this mock is intended to be passed to a top level helper like `unaryHooks` */
 export const mockTransportTopLevel = {
   unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  serverStream: jest.fn(),
+  stream: jest.fn(),
 } as Transport;
 
 /** this mock is intended to be passed directly to a helper like `useQuery` */
 export const mockTransportOption = {
   unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  serverStream: jest.fn(),
+  stream: jest.fn(),
 } as Transport;
 
 export const mockCallOptions = {
