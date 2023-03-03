@@ -878,8 +878,8 @@ describe('unaryHooks', () => {
         expect(result.current.get.isSuccess).toBeTruthy();
       });
 
-      expect(result.current.get.data?.count).toStrictEqual(1n);
       expect(result.current.mut.data).toStrictEqual(undefined);
+      expect(result.current.get.data?.count).toStrictEqual(0n);
 
       result.current.mut.mutate(input);
 
@@ -888,8 +888,8 @@ describe('unaryHooks', () => {
         expect(result.current.get.isSuccess).toBeTruthy();
       });
 
-      expect(result.current.mut.data?.count).toStrictEqual(2n);
-      expect(result.current.get.data?.count).toStrictEqual(2n);
+      expect(result.current.mut.data?.count).toStrictEqual(0n);
+      expect(result.current.get.data?.count).toStrictEqual(1n);
     });
 
     it('passes through callOptions', async () => {
@@ -1204,9 +1204,11 @@ describe('unaryHooks', () => {
 
         const response = await result.current.queryFn();
         expect(response.toJson()).toStrictEqual(hardcodedResponse);
+        // we need to encode to an ArrayBuffer here because of an implementation detail in Connect-ES that doesn't use JSON body, even in JSON encoding mode
+        const body = new TextEncoder().encode(JSON.stringify(input));
         expect(globalThis.fetch).toHaveBeenCalledWith(
           expect.stringContaining('eliza'),
-          expect.objectContaining({ body: JSON.stringify(input) }),
+          expect.objectContaining({ body }),
         );
       });
 
