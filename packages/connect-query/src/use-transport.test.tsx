@@ -24,7 +24,7 @@ import { unaryHooks } from './unary-hooks';
 import { fallbackTransport } from './use-transport';
 
 const error = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `serverStream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connect.build/docs/web/getting-started for more info.",
+  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connect.build/docs/web/getting-started for more info.",
 );
 
 describe('fallbackTransport', () => {
@@ -32,9 +32,9 @@ describe('fallbackTransport', () => {
     await expect(Promise.reject(fallbackTransport.unary)).rejects.toThrow(
       error,
     );
-    await expect(
-      Promise.reject(fallbackTransport.serverStream),
-    ).rejects.toThrow(error);
+    await expect(Promise.reject(fallbackTransport.stream)).rejects.toThrow(
+      error,
+    );
   });
 });
 

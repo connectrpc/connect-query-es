@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@bufbuild/connect-web';
+import type { Transport } from '@bufbuild/connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
 import { jest } from '@jest/globals';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
+import { stringify } from 'safe-stable-stringify';
 
 import { TransportProvider } from '../use-transport';
 
@@ -37,9 +38,17 @@ export const patchGlobalThisFetch = <T,>(
   globalThis.fetch = jest.fn<typeof globalThis.fetch>(
     async (_, init = { body: null }) =>
       Promise.resolve({
-        json: async () =>
+        // Note, this is a very non-ideal hack to "get us through" while we figure out how to handle this better since `response.json` is no longer called by Connect-ES
+        arrayBuffer: async () =>
           Promise.resolve(
-            typeof mockValue === 'function' ? mockValue(init.body) : mockValue,
+            new TextEncoder().encode(
+              // this is needed to handle bigints
+              stringify(
+                typeof mockValue === 'function'
+                  ? mockValue(init.body)
+                  : mockValue,
+              ),
+            ).buffer,
           ),
         headers: new Headers({ 'content-type': 'application/json' }),
         status: 200,
@@ -126,19 +135,19 @@ export const sleep = async (timeout: number) =>
 /** this mock is intended to be passed to useContext */
 export const mockTransportContext = {
   unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  serverStream: jest.fn(),
+  stream: jest.fn(),
 } as Transport;
 
 /** this mock is intended to be passed to a top level helper like `unaryHooks` */
 export const mockTransportTopLevel = {
   unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  serverStream: jest.fn(),
+  stream: jest.fn(),
 } as Transport;
 
 /** this mock is intended to be passed directly to a helper like `useQuery` */
 export const mockTransportOption = {
   unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  serverStream: jest.fn(),
+  stream: jest.fn(),
 } as Transport;
 
 export const mockCallOptions = {

@@ -427,7 +427,7 @@ Your Protobuf files serve as the primary input to the code generators `protoc-ge
 
 ## What is `Transport`
 
-`Transport` is a regular JavaScript object with two methods, `unary` and `serverStream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.  Read more about Transport on the [connect docs](https://connect.build/docs/web/choosing-a-protocol).
+`Transport` is a regular JavaScript object with two methods, `unary` and `stream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.  Read more about Transport on the [connect docs](https://connect.build/docs/web/choosing-a-protocol).
 
 ## What if I already use Connect-Web?
 
