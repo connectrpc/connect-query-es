@@ -128,6 +128,7 @@ importers:
 
   packages/connect-query:
     specifiers:
+      '@bufbuild/connect': ^0.8.1
       '@bufbuild/connect-web': ^0.8.1
       '@bufbuild/protobuf': ^1.1.0
       '@bufbuild/protoc-gen-connect-web': ^0.8.1
@@ -145,9 +146,10 @@ importers:
       stable-hash: ^0.0.3
       typescript: ^4.9.5
     dependencies:
+      '@bufbuild/connect': 0.8.1_@bufbuild+protobuf@1.1.0
       '@bufbuild/connect-web': 0.8.1_@bufbuild+protobuf@1.1.0
       '@bufbuild/protobuf': 1.1.0
-      '@bufbuild/protoc-gen-connect-web': 0.8.1_n25m6wsv4xjwtwz6nuroendqhi
+      '@bufbuild/protoc-gen-connect-web': 0.8.1_x5l27l5uceu53isgouxx3hb7e4
       stable-hash: 0.0.3
     devDependencies:
       '@bufbuild/protoc-gen-es': 1.1.0_@bufbuild+protobuf@1.1.0
@@ -671,6 +673,26 @@ packages:
       '@bufbuild/protoplugin': 1.1.0
     transitivePeerDependencies:
       - supports-color
+
+  /@bufbuild/protoc-gen-connect-web/0.8.1_x5l27l5uceu53isgouxx3hb7e4:
+    resolution: {integrity: sha512-JyK2pf6l1yr9FWQFlK6QbM6CLfbgfMi/2lgwkGG8aVNfQkV/9efNT4eFk8S53YXqpn+g+Xvwya7M04bi2rdm6g==}
+    engines: {node: '>=14'}
+    hasBin: true
+    peerDependencies:
+      '@bufbuild/connect': 0.8.1
+      '@bufbuild/protoc-gen-es': ^1.0.0
+    peerDependenciesMeta:
+      '@bufbuild/connect':
+        optional: true
+      '@bufbuild/protoc-gen-es':
+        optional: true
+    dependencies:
+      '@bufbuild/connect': 0.8.1_@bufbuild+protobuf@1.1.0
+      '@bufbuild/protoc-gen-es': 1.1.0_@bufbuild+protobuf@1.1.0
+      '@bufbuild/protoplugin': 1.1.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@bufbuild/protoc-gen-es/1.1.0_@bufbuild+protobuf@1.1.0:
     resolution: {integrity: sha512-2xASwRsd1pAh/tzqlH7L+HRrlfreuSMRGr0xbZGcSQI5kTixgLLPSaNwankQplwcWTyGA59hY3cx6o78RsvlcQ==}

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@bufbuild/connect-web';
+import type { Transport } from '@bufbuild/connect';
 import type { ServiceType } from '@bufbuild/protobuf';
 
 import type { QueryHooks } from './create-query-hooks';

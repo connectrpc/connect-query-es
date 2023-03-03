@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@bufbuild/connect-web';
-import { ConnectError } from '@bufbuild/connect-web';
+import type { Transport } from '@bufbuild/connect';
+import { ConnectError } from '@bufbuild/connect';
 import type { FC, PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 

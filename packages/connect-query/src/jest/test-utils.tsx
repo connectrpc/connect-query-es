@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@bufbuild/connect-web';
+import type { Transport } from '@bufbuild/connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
 import { jest } from '@jest/globals';
 import type { QueryClientConfig } from '@tanstack/react-query';
