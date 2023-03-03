@@ -26,13 +26,13 @@
   "preferUnplugged": true,
   "devDependencies": {
     "@bufbuild/protoc-gen-connect-web": "^0.8.1",
-    "@bufbuild/protoc-gen-es": "^1.0.0",
-    "generated-react": "workspace:^0.0.0",
+    "@bufbuild/protoc-gen-es": "^1.1.0",
+    "generated-react": "workspace:*",
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^1.0.0",
-    "@bufbuild/protoplugin": "^1.0.0"
+    "@bufbuild/protobuf": "^1.1.0",
+    "@bufbuild/protoplugin": "^1.1.0"
   },
   "peerDependencies": {
     "@bufbuild/protoc-gen-es": "1.x"

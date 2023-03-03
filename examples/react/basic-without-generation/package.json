@@ -9,15 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@bufbuild/connect-query": "workspace:^0.1.0",
+    "@bufbuild/connect-query": "workspace:*",
     "@bufbuild/connect-web": "^0.8.1",
-    "@bufbuild/protobuf": "^1.0.0",
-    "@bufbuild/protoc-gen-connect-query": "workspace:^0.1.0",
+    "@bufbuild/protobuf": "^1.1.0",
+    "@bufbuild/protoc-gen-connect-query": "workspace:*",
     "@bufbuild/protoc-gen-connect-web": "^0.8.1",
-    "@bufbuild/protoc-gen-es": "^1.0.0",
+    "@bufbuild/protoc-gen-es": "^1.1.0",
     "@tanstack/react-query": "^4.24.6",
     "@tanstack/react-query-devtools": "^4.24.6",
-    "generated-react": "workspace:^0.0.0",
+    "generated-react": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

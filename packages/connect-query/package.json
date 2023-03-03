@@ -19,12 +19,12 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^1.0.0",
+    "@bufbuild/protoc-gen-es": "^1.1.0",
     "@tanstack/react-query": "^4.24.6",
     "@testing-library/react": "^13.4.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.10",
-    "generated-react": "workspace:^0.0.0",
+    "generated-react": "workspace:*",
     "jest-environment-jsdom": "^29.4.2",
     "node-fetch": "^3.3.0",
     "react": "^18.2.0",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@bufbuild/connect-web": "^0.8.1",
-    "@bufbuild/protobuf": "^1.0.0",
+    "@bufbuild/protobuf": "^1.1.0",
     "@bufbuild/protoc-gen-connect-web": "^0.8.1",
     "stable-hash": "^0.0.3"
   }
