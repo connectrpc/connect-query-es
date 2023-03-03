@@ -104,6 +104,13 @@ const config = {
   },
   overrides: [
     {
+      files: ['**/*.js'],
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+    {
       files: ['**/*.test.ts', '**/*.test.tsx', 'jest.config.ts'],
       rules: {
         '@typescript-eslint/no-empty-function': 'off', // noops are commonly needed in tests
