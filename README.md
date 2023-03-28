@@ -26,7 +26,6 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [`ConnectPartialQueryKey`](#connectpartialquerykey)
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [How do I pass other TanStack Query options?](#how-do-i-pass-other-tanstack-query-options)
-    - [Why does it work this way?](#why-does-it-work-this-way)
   - [Is this ready for production?](#is-this-ready-for-production)
   - [What is Connect-Query's relationship to Connect-Web and Protobuf-ES?](#what-is-connect-querys-relationship-to-connect-web-and-protobuf-es)
   - [What is `Transport`](#what-is-transport)
@@ -434,14 +433,14 @@ That means, that if you want to add extra TanStack Query options, you can simply
   });
 ```
 
-### Why does it work this way?
-
-You may be familiar with other projects that directly wrap react-query directly (such as tRPC).  We worked with the TanStack team to develop this API and determined that it's most flexible to simply return an options object.
-
-1. You have full control over what's actually passed to TanStack Query.  For example, if you have a query where you'd like to modify the `queryKey`, you can do so directly.
-1. It provides full transparency into what Connect Query is actually doing.  This means that if you want to see what _exactly_ Connect Query is doing, you can simply inspect the object.  This makes for a much more straightforward experience when you're debugging your app.
-1. This means that the resulting call is plain TanStack Query in every way, which means that you can still integrate with any existing TanStack Query plugins or extensions you may already be using.
-1. Not wrapping TanStack Query itself means that you can immediately use Connect-Query with any new functionality or options of TanStack Query.
+> Why does it work this way?
+>
+> You may be familiar with other projects that directly wrap react-query directly (such as tRPC).  We worked with the TanStack team to develop this API and determined that it's most flexible to simply return an options object.
+>
+> 1. You have full control over what's actually passed to TanStack Query.  For example, if you have a query where you'd like to modify the `queryKey`, you can do so directly.
+> 1. It provides full transparency into what Connect Query is actually doing.  This means that if you want to see what _exactly_ Connect Query is doing, you can simply inspect the object.  This makes for a much more straightforward experience when you're debugging your app.
+> 1. This means that the resulting call is plain TanStack Query in every way, which means that you can still integrate with any existing TanStack Query plugins or extensions you may already be using.
+> 1. Not wrapping TanStack Query itself means that you can immediately use Connect-Query with any new functionality or options of TanStack Query.
 
 ## Is this ready for production?
 
