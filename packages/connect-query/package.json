@@ -29,7 +29,6 @@
     "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "safe-stable-stringify": "^2.4.3",
     "typescript": "^5.0.2"
   },
   "peerDependencies": {

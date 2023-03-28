@@ -30,7 +30,6 @@ import type {
   ConnectQueryKey,
 } from './connect-query-key';
 import { makeConnectQueryKeyGetter } from './connect-query-key';
-import { unaryFetch } from './fetch';
 import { useTransport } from './use-transport';
 import type { DisableQuery } from './utils';
 import {
@@ -216,13 +215,15 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
       queryFn: async (context) => {
         assert(enabled, 'queryFn does not accept a disabled query');
-        return unaryFetch({
-          callOptions: callOptions ?? context,
-          input,
+        const result = await transport.unary<I, O>(
+          { typeName, methods: {} },
           methodInfo,
-          transport,
-          typeName,
-        });
+          (callOptions ?? context)?.signal,
+          callOptions?.timeoutMs,
+          callOptions?.headers,
+          input ?? {},
+        );
+        return result.message;
       },
 
       queryKey: getQueryKey(input),
@@ -275,17 +276,18 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             input !== disableQuery,
             'queryFn does not accept a disabled query',
           );
-
-          return unaryFetch({
-            callOptions: callOptions ?? context,
-            input: {
+          const result = await transport.unary<I, O>(
+            { typeName, methods: {} },
+            methodInfo,
+            (callOptions ?? context).signal,
+            callOptions?.timeoutMs,
+            callOptions?.headers,
+            {
               ...input,
               [pageParamKey]: context.pageParam,
             },
-            methodInfo,
-            transport,
-            typeName,
-          });
+          );
+          return result.message;
         },
 
         queryKey: getQueryKey(input),
@@ -304,14 +306,17 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
         optionsTransport ?? topLevelCustomTransport ?? contextTransport;
 
       return {
-        mutationFn: async (input, context) =>
-          unaryFetch({
-            callOptions: callOptions ?? context,
-            input,
+        mutationFn: async (input, context) => {
+          const result = await transport.unary<I, O>(
+            { typeName, methods: {} },
             methodInfo,
-            transport,
-            typeName,
-          }),
+            (callOptions ?? context)?.signal,
+            callOptions?.timeoutMs,
+            callOptions?.headers,
+            input,
+          );
+          return result.message;
+        },
         ...(onError ? { onError } : {}),
       };
     },

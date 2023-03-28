@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createConnectTransport } from '@bufbuild/connect-web';
 import type { MethodInfo, PartialMessage } from '@bufbuild/protobuf';
-import { beforeAll, describe, expect, it, jest } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import type { QueryFunctionContext } from '@tanstack/react-query';
 import { renderHook } from '@testing-library/react';
 import { ElizaService } from 'generated-react/dist/eliza_connectweb';
@@ -22,29 +21,17 @@ import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 
 import type { ConnectQueryKey } from './connect-query-key';
 import { createQueryService } from './create-query-service';
-import type { Equal, Expect } from './jest/test-utils';
-import {
-  hardcodedResponse,
-  patchGlobalThisFetch,
-  wrapper,
-} from './jest/test-utils';
+import type { Equal, Expect} from './jest/test-utils';
+import { mockElizaTransport , wrapper } from './jest/test-utils';
 import { isUnaryMethod } from './utils';
 
 describe('createQueryService', () => {
-  beforeAll(() => {
-    patchGlobalThisFetch(hardcodedResponse);
-  });
-
   const service = ElizaService;
   const methodName = 'say';
   const input: PartialMessage<SayResponse> = { sentence: 'ziltoid' };
 
   it('uses a custom transport', () => {
-    const baseUrl = 'custom';
-    const transport = createConnectTransport({ baseUrl });
-
-    // @ts-expect-error(2322) intentionally overriding for a jest spy
-    transport.unary = jest.spyOn(transport, 'unary');
+    const transport = mockElizaTransport();
 
     renderHook(() => {
       const { queryFn } = createQueryService({
@@ -54,10 +41,6 @@ describe('createQueryService', () => {
       queryFn(); // eslint-disable-line @typescript-eslint/no-floating-promises -- not necessary to await
     }, wrapper());
 
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      expect.stringContaining(baseUrl),
-      expect.anything(),
-    );
     expect(transport.unary).toHaveBeenCalled();
   });
 

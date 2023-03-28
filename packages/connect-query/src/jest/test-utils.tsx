@@ -12,48 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@bufbuild/connect';
+import type { CallOptions, MethodImpl, Transport } from '@bufbuild/connect';
+import { createConnectRouter, createMethodImplSpec } from '@bufbuild/connect';
+import {
+  createUniversalMethodHandler,
+  validateReadWriteMaxBytes,
+} from '@bufbuild/connect/protocol';
+import {
+  createHandlerFactory,
+  createTransport,
+} from '@bufbuild/connect/protocol-connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
+import type { Message, PlainMessage, ServiceType } from '@bufbuild/protobuf';
 import { jest } from '@jest/globals';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BigIntService, ElizaService } from 'generated-react/dist/eliza_connectweb';
+import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
-import { stringify } from 'safe-stable-stringify';
 
 import { TransportProvider } from '../use-transport';
+import { createRouterHttpClient } from './router-http-client';
 
 /**
- * in these tests, `globalThis.fetch` has been manually mocked by `patchGlobThisFetch` to always respond with this response.
+ * a shared response to always respond with in tests
  */
-export const hardcodedResponse = { sentence: 'success' };
-
-/**
- * This test-only helper patches `globalThis.fetch` to always return the same hardcoded response, irrespective of the inputs.
- *
- * If you pass a non-function as the mockValue, any call to `globalThis.fetch` will indiscriminately return that value.  However, if you pass a function, that function will be called on the input to `globalThis.fetch` (to be exact, the second argument: the one that contains the data).  That function's output will then be the return value of any calls to `globalThis.fetch` with the same input.
- */
-export const patchGlobalThisFetch = <T,>(
-  mockValue: T extends (...args: unknown[]) => infer U ? U : T,
-) => {
-  globalThis.fetch = jest.fn<typeof globalThis.fetch>(
-    async (_, init = { body: null }) =>
-      Promise.resolve({
-        // Note, this is a very non-ideal hack to "get us through" while we figure out how to handle this better since `response.json` is no longer called by Connect-ES
-        arrayBuffer: async () =>
-          Promise.resolve(
-            new TextEncoder().encode(
-              // this is needed to handle bigints
-              stringify(
-                typeof mockValue === 'function'
-                  ? mockValue(init.body)
-                  : mockValue,
-              ),
-            ).buffer,
-          ),
-        headers: new Headers({ 'content-type': 'application/json' }),
-        status: 200,
-      } as Response),
-  );
+export const hardcodedResponse: PlainMessage<SayResponse> = {
+  sentence: 'success',
 };
 
 /**
@@ -132,23 +117,97 @@ export const sleep = async (timeout: number) =>
     setTimeout(resolve, timeout);
   });
 
-/** this mock is intended to be passed to useContext */
-export const mockTransportContext = {
-  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  stream: jest.fn(),
-} as Transport;
+/**
+ *
+ */
+const makeMockTransport = <
+  I extends Message<I>,
+  O extends Message<O>,
+  S extends ServiceType,
+  M extends S['methods'][keyof S['methods']],
+  // Spy extends (...args: any) => any
+>({
+  response,
+  service,
+  methodInfo,
+}: // spy,
+{
+  /** */
+  response: MethodImpl<M>;
+  /** */
+  methodInfo: M;
+  /** */
+  service: S;
+  // spy?: (implementation?: Spy | undefined) => Spy;
+}) => {
+  const spec = createMethodImplSpec(service, methodInfo, response);
+  const handler = createUniversalMethodHandler(spec, [
+    createHandlerFactory({}),
+  ]);
 
-/** this mock is intended to be passed to a top level helper like `unaryHooks` */
-export const mockTransportTopLevel = {
-  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  stream: jest.fn(),
-} as Transport;
+  const httpClient = createRouterHttpClient({
+    ...createConnectRouter({}),
+    handlers: [handler],
+  });
 
-/** this mock is intended to be passed directly to a helper like `useQuery` */
-export const mockTransportOption = {
-  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  stream: jest.fn(),
-} as Transport;
+  const transport = createTransport({
+    httpClient,
+    baseUrl: 'in-memory',
+    useBinaryFormat: false,
+    interceptors: [],
+    acceptCompression: [],
+    sendCompression: null,
+    ...validateReadWriteMaxBytes(undefined, undefined, undefined),
+  });
+
+  const spy = ''.length === 0 ? jest.fn : null;
+  if (spy) {
+    return {
+      // eslint-disable-next-line @typescript-eslint/unbound-method -- TODO
+      stream: spy(transport.stream),
+      unary: spy(() => ({
+        // @ts-expect-error(1234) TODO
+        message: response(),
+      })),
+    } as unknown as Transport;
+  }
+
+  return transport;
+};
+
+/**
+ * a mock Transport for Eliza
+ */
+export const mockElizaTransport = () => makeMockTransport({
+  service: ElizaService,
+  methodInfo: ElizaService.methods.say,
+  response: () => new SayResponse(hardcodedResponse),
+});
+
+/**
+ * a mock Transport for BigInt
+ */
+export const mockBigIntTransport = () => makeMockTransport({
+  service: BigIntService,
+  methodInfo: BigIntService.methods.count,
+  response: () => new CountResponse({ count: 1n }),
+});
+
+/**
+ * acts as an impromptu database
+ */
+export const mockStatefulBigIntTransport = () => {
+  let count = 0n;
+
+  return makeMockTransport({
+    service: BigIntService,
+    methodInfo: BigIntService.methods.count,
+    response: () => {
+      count += 1n;
+      return new CountResponse({ count });
+    },
+  });
+};
 
 export const mockCallOptions = {
   signal: new AbortController().signal,
@@ -156,4 +215,4 @@ export const mockCallOptions = {
   headers: new Headers({
     'Content-Type': 'application/x-shockwave-flash; version="1"',
   }),
-}; // satisfies CallOptions;
+} satisfies CallOptions;
