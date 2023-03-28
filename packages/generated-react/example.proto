@@ -23,4 +23,10 @@ service TodoService {
   // A helpful RPC to get all current Todos
   rpc GetTodos(Empty) returns (Todos);
   rpc AddTodo(Todo) returns (Todos);
+  
+  // this RPC exists to test how JavaScript reserved keywords are translated
+  rpc Delete(Empty) returns (Empty);
+  
+  // this RPC exists to test how JavaScript reserved object properties are translated
+  rpc ValueOf(Empty) returns (Empty);
 }

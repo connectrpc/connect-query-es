@@ -2,6 +2,7 @@
   "words": [
     "backoffs",
     "bufbuild",
+    "codegen",
     "connectquery",
     "connectweb",
     "Deno",

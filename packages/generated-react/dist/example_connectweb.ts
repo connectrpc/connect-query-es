@@ -32,6 +32,28 @@ export const TodoService = {
       O: Todos,
       kind: MethodKind.Unary,
     },
+    /**
+     * this RPC exists to test how JavaScript reserved keywords are translated
+     *
+     * @generated from rpc buf.connect.demo.example.v1.TodoService.Delete
+     */
+    delete: {
+      name: "Delete",
+      I: Empty,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * this RPC exists to test how JavaScript reserved object properties are translated
+     *
+     * @generated from rpc buf.connect.demo.example.v1.TodoService.ValueOf
+     */
+    valueOf$: {
+      name: "ValueOf",
+      I: Empty,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
   }
 } as const;
 

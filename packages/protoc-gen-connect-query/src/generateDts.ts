@@ -13,11 +13,13 @@
 // limitations under the License.
 
 import type { DescFile, DescService } from '@bufbuild/protobuf';
-import { MethodKind } from '@bufbuild/protobuf';
+import { codegenInfo, MethodKind } from '@bufbuild/protobuf';
 import type { Schema } from '@bufbuild/protoplugin';
 import { localName } from '@bufbuild/protoplugin/ecmascript';
 
 import type { PluginInit } from './utils';
+
+const { safeIdentifier } = codegenInfo;
 
 /**
  * Handles generating a TypeScript Declaration file for a given Schema, DescFile (protobuf definition) and protobuf Service.
@@ -36,7 +38,7 @@ const generateServiceFile =
           {
             f.print(
               `export const `,
-              localName(method),
+              safeIdentifier(localName(method)),
               `: `,
               f.import('UnaryHooks', '@bufbuild/connect-query'),
               `<`,
