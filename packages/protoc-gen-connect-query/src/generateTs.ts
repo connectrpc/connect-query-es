@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import type { DescFile, DescService } from '@bufbuild/protobuf';
-import { MethodKind } from '@bufbuild/protobuf';
+import { codegenInfo, MethodKind } from '@bufbuild/protobuf';
 import type { Schema } from '@bufbuild/protoplugin';
 import {
   literalString,
@@ -22,6 +22,8 @@ import {
 } from '@bufbuild/protoplugin/ecmascript';
 
 import type { PluginInit } from './utils';
+
+const { safeIdentifier } = codegenInfo;
 
 /**
  * Handles generating a source code file for a given Schema, DescFile (protobuf definition) and protobuf Service.
@@ -43,10 +45,9 @@ const generateServiceFile =
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
-        // TODO idempotency
         f.print(makeJsDoc(method));
         f.print(
-          `export const ${localName(method)} = `,
+          `export const ${safeIdentifier(localName(method))} = `,
           f.import('createQueryService', '@bufbuild/connect-query'),
           `({`,
         );

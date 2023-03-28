@@ -44,3 +44,41 @@ export const addTodo = createQueryService({
     typeName: "buf.connect.demo.example.v1.TodoService",
   },
 }).addTodo;
+
+/**
+ * this RPC exists to test how JavaScript reserved keywords are translated
+ *
+ * @generated from rpc buf.connect.demo.example.v1.TodoService.Delete
+ */
+export const delete$ = createQueryService({
+  service: {
+    methods: {
+      delete: {
+        name: "Delete",
+        kind: MethodKind.Unary,
+        I: Empty,
+        O: Empty,
+      },
+    },
+    typeName: "buf.connect.demo.example.v1.TodoService",
+  },
+}).delete;
+
+/**
+ * this RPC exists to test how JavaScript reserved object properties are translated
+ *
+ * @generated from rpc buf.connect.demo.example.v1.TodoService.ValueOf
+ */
+export const valueOf$ = createQueryService({
+  service: {
+    methods: {
+      valueOf$: {
+        name: "ValueOf",
+        kind: MethodKind.Unary,
+        I: Empty,
+        O: Empty,
+      },
+    },
+    typeName: "buf.connect.demo.example.v1.TodoService",
+  },
+}).valueOf$;

@@ -19,18 +19,18 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^1.1.0",
-    "@tanstack/react-query": "^4.24.10",
+    "@bufbuild/protoc-gen-es": "^1.2.0",
+    "@tanstack/react-query": "^4.28.0",
     "@testing-library/react": "^14.0.0",
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.30",
     "@types/react-dom": "^18.0.11",
     "generated-react": "workspace:*",
-    "jest-environment-jsdom": "^29.4.3",
-    "node-fetch": "^3.3.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "safe-stable-stringify": "^2.4.2",
-    "typescript": "^4.9.5"
+    "safe-stable-stringify": "^2.4.3",
+    "typescript": "^5.0.2"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^4.20.4",
@@ -38,10 +38,10 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@bufbuild/connect-web": "^0.8.1",
-    "@bufbuild/connect": "^0.8.1",
-    "@bufbuild/protobuf": "^1.1.0",
-    "@bufbuild/protoc-gen-connect-web": "^0.8.1",
+    "@bufbuild/connect": "^0.8.4",
+    "@bufbuild/connect-web": "^0.8.4",
+    "@bufbuild/protobuf": "^1.2.0",
+    "@bufbuild/protoc-gen-connect-web": "^0.8.4",
     "stable-hash": "^0.0.3"
   }
 }
