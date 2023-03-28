@@ -25,6 +25,8 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [`ConnectQueryKey`](#connectquerykey)
   - [`ConnectPartialQueryKey`](#connectpartialquerykey)
 - [Frequently Asked Questions](#frequently-asked-questions)
+  - [How do I pass other TanStack Query options?](#how-do-i-pass-other-tanstack-query-options)
+    - [Why does it work this way?](#why-does-it-work-this-way)
   - [Is this ready for production?](#is-this-ready-for-production)
   - [What is Connect-Query's relationship to Connect-Web and Protobuf-ES?](#what-is-connect-querys-relationship-to-connect-web-and-protobuf-es)
   - [What is `Transport`](#what-is-transport)
@@ -403,6 +405,43 @@ For example, a partial query key might look like this:
 ```
 
 # Frequently Asked Questions
+
+## How do I pass other TanStack Query options?
+
+Say you have an query that looks something like this:
+
+```ts
+import { useQuery } from '@tanstack/react-query';
+import { example } from 'your-generated-code/example-ExampleService_connectquery';
+
+export const Example: FC = () => {
+  const { data } = useQuery(example.useQuery({}));
+  return <div>{data}</div>;
+};
+```
+
+On line 5, `example.useQuery({})` just returns an object with a few TanStack Query options preconfigured for you (for example, `queryKey` and `queryFn` and `onError`).  All of the Connect-Query hooks APIs work this way, so you can always inspect the TypeScript type to see which specific TanStack query options are configured.
+
+That means, that if you want to add extra TanStack Query options, you can simply spread the object resulting from Connect-Query:
+
+```ts
+  const { data } = useQuery({
+    ...example.useQuery({}),
+
+    // Add any extra TanStack Query options here.
+    // TypeScript will ensure they're valid!
+    refetchInterval: 1000,
+  });
+```
+
+### Why does it work this way?
+
+You may be familiar with other projects that directly wrap react-query directly (such as tRPC).  We worked with the TanStack team to develop this API and determined that it's most flexible to simply return an options object.
+
+1. You have full control over what's actually passed to TanStack Query.  For example, if you have a query where you'd like to modify the `queryKey`, you can do so directly.
+1. It provides full transparency into what Connect Query is actually doing.  This means that if you want to see what _exactly_ Connect Query is doing, you can simply inspect the object.  This makes for a much more straightforward experience when you're debugging your app.
+1. This means that the resulting call is plain TanStack Query in every way, which means that you can still integrate with any existing TanStack Query plugins or extensions you may already be using.
+1. Not wrapping TanStack Query itself means that you can immediately use Connect-Query with any new functionality or options of TanStack Query.
 
 ## Is this ready for production?
 
