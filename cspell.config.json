@@ -16,6 +16,7 @@
     "lcov",
     "nocheck",
     "pnpm",
+    "preconfigured",
     "proto",
     "protobuf",
     "protoc",
