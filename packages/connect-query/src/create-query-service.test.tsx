@@ -21,8 +21,8 @@ import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 
 import type { ConnectQueryKey } from './connect-query-key';
 import { createQueryService } from './create-query-service';
-import type { Equal, Expect} from './jest/test-utils';
-import { mockElizaTransport , wrapper } from './jest/test-utils';
+import type { Equal, Expect } from './jest/test-utils';
+import { mockEliza, wrapper } from './jest/test-utils';
 import { isUnaryMethod } from './utils';
 
 describe('createQueryService', () => {
@@ -31,8 +31,7 @@ describe('createQueryService', () => {
   const input: PartialMessage<SayResponse> = { sentence: 'ziltoid' };
 
   it('uses a custom transport', () => {
-    const transport = mockElizaTransport();
-
+    const { transport, say } = mockEliza();
     renderHook(() => {
       const { queryFn } = createQueryService({
         service,
@@ -41,7 +40,7 @@ describe('createQueryService', () => {
       queryFn(); // eslint-disable-line @typescript-eslint/no-floating-promises -- not necessary to await
     }, wrapper());
 
-    expect(transport.unary).toHaveBeenCalled();
+    expect(say).toHaveBeenCalled();
   });
 
   it('contains the right options', () => {

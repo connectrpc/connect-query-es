@@ -12,22 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { CallOptions, MethodImpl, Transport} from '@bufbuild/connect';
-import { createConnectRouter, createMethodImplSpec,createRouterHttpClient  } from '@bufbuild/connect';
-import {
-  createUniversalMethodHandler,
-  validateReadWriteMaxBytes,
-} from '@bufbuild/connect/protocol';
-import {
-  createHandlerFactory,
-  createTransport,
-} from '@bufbuild/connect/protocol-connect';
+import type { CallOptions, ConnectRouter } from '@bufbuild/connect';
+import { createConnectRouter, createRouterHttpClient } from '@bufbuild/connect';
+import { validateReadWriteMaxBytes } from '@bufbuild/connect/protocol';
+import { createTransport } from '@bufbuild/connect/protocol-connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
-import type { Message, PlainMessage, ServiceType } from '@bufbuild/protobuf';
+import type { PlainMessage } from '@bufbuild/protobuf';
 import { jest } from '@jest/globals';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BigIntService, ElizaService } from 'generated-react/dist/eliza_connectweb';
+import {
+  BigIntService,
+  ElizaService,
+} from 'generated-react/dist/eliza_connectweb';
 import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
 
@@ -117,95 +114,67 @@ export const sleep = async (timeout: number) =>
   });
 
 /**
- *
+ * TODO: this will (ideally) be provided by connect itself and not live in this codebase
  */
-const makeMockTransport = <
-  I extends Message<I>,
-  O extends Message<O>,
-  S extends ServiceType,
-  M extends S['methods'][keyof S['methods']],
-  // Spy extends (...args: any) => any
->({
-  response,
-  service,
-  methodInfo,
-}: // spy,
-{
-  /** */
-  response: MethodImpl<M>;
-  /** */
-  methodInfo: M;
-  /** */
-  service: S;
-  // spy?: (implementation?: Spy | undefined) => Spy;
-}) => {
-  const spec = createMethodImplSpec(service, methodInfo, response);
-  const handler = createUniversalMethodHandler(spec, [
-    createHandlerFactory({}),
-  ]);
+const makeMockTransport = (routes: (router: ConnectRouter) => void) => {
+  const router = createConnectRouter();
+  routes(router);
+  const httpClient = createRouterHttpClient(router);
 
-  const httpClient = createRouterHttpClient({
-    ...createConnectRouter({}),
-    handlers: [handler],
-  });
-
-  const transport = createTransport({
+  return createTransport({
     httpClient,
-    baseUrl: 'in-memory',
+    baseUrl: 'http://in.memory.com',
     useBinaryFormat: false,
     interceptors: [],
     acceptCompression: [],
     sendCompression: null,
     ...validateReadWriteMaxBytes(undefined, undefined, undefined),
   });
-
-  const spy = ''.length === 0 ? jest.fn : null;
-  if (spy) {
-    return {
-      // eslint-disable-next-line @typescript-eslint/unbound-method -- TODO
-      stream: spy(transport.stream),
-      unary: spy(() => ({
-        // @ts-expect-error(1234) TODO
-        message: response(),
-      })),
-    } as unknown as Transport;
-  }
-
-  return transport;
 };
 
 /**
- * a mock Transport for Eliza
+ * a stateless mock for ElizaService
  */
-export const mockElizaTransport = () => makeMockTransport({
-  service: ElizaService,
-  methodInfo: ElizaService.methods.say,
-  response: () => new SayResponse(hardcodedResponse),
-});
+export const mockEliza = () => {
+  const say = jest.fn(() => new SayResponse(hardcodedResponse));
+  return {
+    transport: makeMockTransport(({ service }) => {
+      service(ElizaService, { say });
+    }),
+    say,
+  };
+};
 
 /**
- * a mock Transport for BigInt
+ * a stateless mock for BigIntService
  */
-export const mockBigIntTransport = () => makeMockTransport({
-  service: BigIntService,
-  methodInfo: BigIntService.methods.count,
-  response: () => new CountResponse({ count: 1n }),
-});
+export const mockBigInt = () => {
+  const count = jest.fn(() => new CountResponse({ count: 1n }));
+  return {
+    transport: makeMockTransport(({ service }) => {
+      service(BigIntService, { count });
+    }),
+    count,
+  };
+};
 
 /**
- * acts as an impromptu database
+ * a mock for BigIntService that acts as an impromptu database
  */
 export const mockStatefulBigIntTransport = () => {
   let count = 0n;
-
-  return makeMockTransport({
-    service: BigIntService,
-    methodInfo: BigIntService.methods.count,
-    response: () => {
-      count += 1n;
-      return new CountResponse({ count });
-    },
+  const spy = jest.fn(() => {
+    count += 1n;
+    return new CountResponse({ count });
   });
+  return {
+    transport: makeMockTransport(({ service }) => {
+      service(BigIntService, {
+        count: spy,
+      });
+    }),
+    count: spy,
+  };
 };
 
 export const mockCallOptions = {
