@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { CallOptions, MethodImpl, Transport } from '@bufbuild/connect';
-import { createConnectRouter, createMethodImplSpec } from '@bufbuild/connect';
+import type { CallOptions, MethodImpl, Transport} from '@bufbuild/connect';
+import { createConnectRouter, createMethodImplSpec,createRouterHttpClient  } from '@bufbuild/connect';
 import {
   createUniversalMethodHandler,
   validateReadWriteMaxBytes,
@@ -32,7 +32,6 @@ import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
 
 import { TransportProvider } from '../use-transport';
-import { createRouterHttpClient } from './router-http-client';
 
 /**
  * a shared response to always respond with in tests

@@ -215,7 +215,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
       queryFn: async (context) => {
         assert(enabled, 'queryFn does not accept a disabled query');
-        const result = await transport.unary<I, O>(
+        const result = await transport.unary(
           { typeName, methods: {} },
           methodInfo,
           (callOptions ?? context)?.signal,
@@ -276,7 +276,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             input !== disableQuery,
             'queryFn does not accept a disabled query',
           );
-          const result = await transport.unary<I, O>(
+          const result = await transport.unary(
             { typeName, methods: {} },
             methodInfo,
             (callOptions ?? context).signal,
@@ -307,7 +307,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
       return {
         mutationFn: async (input, context) => {
-          const result = await transport.unary<I, O>(
+          const result = await transport.unary(
             { typeName, methods: {} },
             methodInfo,
             (callOptions ?? context)?.signal,

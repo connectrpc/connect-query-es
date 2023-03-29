@@ -19,7 +19,14 @@ import type {
   PartialMessage,
 } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
-import { afterAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import {
+  afterAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 import type {
   GetNextPageParamFunction,
   QueryFunctionContext,
@@ -31,7 +38,11 @@ import {
   BigIntService,
   ElizaService,
 } from 'generated-react/dist/eliza_connectweb';
-import type { CountRequest, CountResponse,SayRequest } from 'generated-react/dist/eliza_pb';
+import type {
+  CountRequest,
+  CountResponse,
+  SayRequest,
+} from 'generated-react/dist/eliza_pb';
 import { SayResponse } from 'generated-react/dist/eliza_pb';
 import { spyOn } from 'jest-mock';
 
@@ -40,11 +51,12 @@ import type {
   ConnectQueryKey,
 } from './connect-query-key';
 import { defaultOptions } from './default-options';
-import type { Equal, Expect} from './jest/test-utils';
-import {   mockBigIntTransport,
+import type { Equal, Expect } from './jest/test-utils';
+import {
+  mockBigIntTransport,
   mockCallOptions,
   mockElizaTransport,
-mockStatefulBigIntTransport ,
+  mockStatefulBigIntTransport,
   sleep,
   wrapper,
 } from './jest/test-utils';
@@ -54,16 +66,21 @@ import { disableQuery } from './utils';
 
 const consoleErrorSpy = spyOn(console, 'error').mockImplementation(() => {});
 
+const genCount = unaryHooks({
+  methodInfo: BigIntService.methods.count,
+  typeName: BigIntService.typeName,
+});
+
+const genSay = unaryHooks({
+  methodInfo: ElizaService.methods.say,
+  typeName: ElizaService.typeName,
+});
+
 describe('unaryHooks', () => {
   it('produces the intended API surface', () => {
-    const say = unaryHooks({
-      methodInfo: ElizaService.methods.say,
-      typeName: ElizaService.typeName,
-    });
-
     type ExpectType_sayKeys = Expect<
       Equal<
-        keyof typeof say,
+        keyof typeof genSay,
         | 'createData'
         | 'createUseQueryOptions'
         | 'getPartialQueryKey'
@@ -77,7 +94,7 @@ describe('unaryHooks', () => {
       >
     >;
 
-    const matchers: Record<keyof typeof say, unknown> = {
+    const matchers: Record<keyof typeof genSay, unknown> = {
       createData: expect.any(Function),
       createUseQueryOptions: expect.any(Function),
       getPartialQueryKey: expect.any(Function),
@@ -91,11 +108,11 @@ describe('unaryHooks', () => {
     };
 
     const sorter = (a: string, b: string) => a.localeCompare(b);
-    expect(Object.keys(say).sort(sorter)).toStrictEqual(
+    expect(Object.keys(genSay).sort(sorter)).toStrictEqual(
       Object.keys(matchers).sort(sorter),
     );
 
-    expect(say).toMatchObject(matchers);
+    expect(genSay).toMatchObject(matchers);
   });
 
   it('throws when provided non unary services', () => {
@@ -116,54 +133,40 @@ describe('unaryHooks', () => {
     const input: PartialMessage<SayRequest> = { sentence: 'ziltoid' };
 
     renderHook(() => {
-      const { queryFn } = unaryHooks({
-        methodInfo: ElizaService.methods.say,
-        typeName: ElizaService.typeName,
-        transport,
-      }).useQuery(input);
+      const { queryFn } = genSay.useQuery(input);
       // eslint-disable-next-line @typescript-eslint/no-floating-promises -- not necessary to await
       queryFn();
-    }, wrapper());
+    }, wrapper(undefined, transport));
 
     expect(transport.unary).toHaveBeenCalled();
   });
 
   describe('createData', () => {
-    const { createData } = unaryHooks({
-      methodInfo: BigIntService.methods.count,
-      typeName: BigIntService.typeName,
-    });
-
     it('creates data as expected', () => {
       const partial: PartialMessage<CountResponse> = {
         count: 1n,
       };
       const expected = new BigIntService.methods.count.O(partial);
 
-      expect(createData(partial)).toStrictEqual(expected);
+      expect(genCount.createData(partial)).toStrictEqual(expected);
     });
   });
 
   // note: the bulk of this helper is tested via the API's main entry point: `useQuery`, which simply calls this function with automatic inference of transport.
   describe('createUseQueryOptions', () => {
-    const { createUseQueryOptions } = unaryHooks({
-      methodInfo: BigIntService.methods.count,
-      typeName: BigIntService.typeName,
-    });
-
     it('has the intended API surface', () => {
       type ExpectType_CreateUserQueryOptionsParams = Expect<
-        Equal<Parameters<typeof createUseQueryOptions>['length'], 2>
+        Equal<Parameters<typeof genCount.createUseQueryOptions>['length'], 2>
       >;
       type ExpectType_CreateUserQueryOptionsParams0 = Expect<
         Equal<
-          Parameters<typeof createUseQueryOptions>[0],
+          Parameters<typeof genCount.createUseQueryOptions>[0],
           DisableQuery | PartialMessage<Message<CountRequest>> | undefined
         >
       >;
       type ExpectType_CreateUserQueryOptionsParams1 = Expect<
         Equal<
-          Parameters<typeof createUseQueryOptions>[1],
+          Parameters<typeof genCount.createUseQueryOptions>[1],
           {
             getPlaceholderData?: (
               enabled: boolean,
@@ -176,7 +179,7 @@ describe('unaryHooks', () => {
       >;
       type ExpectType_CreateUserQueryOptionsReturn = Expect<
         Equal<
-          ReturnType<typeof createUseQueryOptions>,
+          ReturnType<typeof genCount.createUseQueryOptions>,
           {
             enabled: boolean;
             queryKey: ConnectQueryKey<CountRequest>;
@@ -198,7 +201,7 @@ describe('unaryHooks', () => {
       const message =
         'createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.';
       expect(() =>
-        createUseQueryOptions(
+        genCount.createUseQueryOptions(
           {},
           {
             // @ts-expect-error(2322) intentionally incorrect
@@ -206,20 +209,23 @@ describe('unaryHooks', () => {
           },
         ),
       ).toThrow(`Invalid assertion: ${message}`);
+      expect(() =>
+        genCount.createUseQueryOptions(
+          {},
+          // @ts-expect-error(2322) intentionally incorrect
+          {},
+        ),
+      ).toThrow(`Invalid assertion: ${message}`);
     });
   });
 
   describe('getPartialQueryKey', () => {
-    const { getPartialQueryKey } = unaryHooks({
-      methodInfo: ElizaService.methods.say,
-      typeName: ElizaService.typeName,
-    });
     type ExpectType_GetQuery = Expect<
-      Equal<typeof getPartialQueryKey, () => ConnectPartialQueryKey>
+      Equal<typeof genSay.getPartialQueryKey, () => ConnectPartialQueryKey>
     >;
 
     it('returns a partial query key', () => {
-      expect(getPartialQueryKey()).toStrictEqual([
+      expect(genSay.getPartialQueryKey()).toStrictEqual([
         'buf.connect.demo.eliza.v1.ElizaService',
         'Say',
       ]);
@@ -227,13 +233,9 @@ describe('unaryHooks', () => {
   });
 
   describe('getQueryKey', () => {
-    const { getQueryKey } = unaryHooks({
-      methodInfo: ElizaService.methods.say,
-      typeName: ElizaService.typeName,
-    });
     type ExpectType_GetQuery = Expect<
       Equal<
-        typeof getQueryKey,
+        typeof genSay.getQueryKey,
         (
           input?: DisableQuery | PartialMessage<SayRequest>,
         ) => ConnectQueryKey<SayRequest>
@@ -242,7 +244,7 @@ describe('unaryHooks', () => {
 
     it('returns a simple query key with an input', () => {
       const sentence = { sentence: 'ziltoid' };
-      expect(getQueryKey(sentence)).toStrictEqual([
+      expect(genSay.getQueryKey(sentence)).toStrictEqual([
         'buf.connect.demo.eliza.v1.ElizaService',
         'Say',
         sentence,
@@ -250,7 +252,7 @@ describe('unaryHooks', () => {
     });
 
     it('returns handles disableQuery', () => {
-      expect(getQueryKey(disableQuery)).toStrictEqual([
+      expect(genSay.getQueryKey(disableQuery)).toStrictEqual([
         'buf.connect.demo.eliza.v1.ElizaService',
         'Say',
         {},
@@ -258,12 +260,18 @@ describe('unaryHooks', () => {
     });
 
     it('returns handles no input', () => {
-      expect(getQueryKey()).toStrictEqual([
+      expect(genSay.getQueryKey()).toStrictEqual([
         'buf.connect.demo.eliza.v1.ElizaService',
         'Say',
         {},
       ]);
-      expect(getQueryKey(undefined)).toStrictEqual([
+      expect(genSay.getQueryKey(undefined)).toStrictEqual([
+        'buf.connect.demo.eliza.v1.ElizaService',
+        'Say',
+        {},
+      ]);
+      // @ts-expect-error(2345) intentionally incorrect
+      expect(genSay.getQueryKey(null)).toStrictEqual([
         'buf.connect.demo.eliza.v1.ElizaService',
         'Say',
         {},
@@ -273,43 +281,25 @@ describe('unaryHooks', () => {
 
   describe('methodInfo', () => {
     it('attaches the methodInfo for convenience', () => {
-      const say = unaryHooks({
-        methodInfo: ElizaService.methods.say,
-        typeName: ElizaService.typeName,
-      });
-
       type ExpectType_sayMethodInfo = Expect<
-        Equal<typeof say.methodInfo, MethodInfoUnary<SayRequest, SayResponse>>
+        Equal<
+          typeof genSay.methodInfo,
+          MethodInfoUnary<SayRequest, SayResponse>
+        >
       >;
-      expect(say.methodInfo).toStrictEqual(ElizaService.methods.say);
+      expect(genSay.methodInfo).toStrictEqual(ElizaService.methods.say);
     });
   });
 
   describe('setQueriesData & setQueryData', () => {
-    const methodInfo = BigIntService.methods.count;
-    const { setQueryData, setQueriesData } = unaryHooks({
-      methodInfo,
-      typeName: BigIntService.typeName,
-    });
-
     /** @returns 2n */
-    const partialUpdater = new methodInfo.O({ count: 2n });
+    const partialUpdater = new BigIntService.methods.count.O({ count: 2n });
 
-    /** @returns input + 1n */
-    const functionUpdater = ({ count }: { count: bigint } = { count: 1n }) =>
-      new methodInfo.O({
-        count: count + 1n,
-      });
     const request = { add: 2n };
-
-    const { useQuery: bigIntUserQuery } = unaryHooks({
-      methodInfo: BigIntService.methods.count,
-      typeName: BigIntService.typeName,
-    });
 
     describe('setQueriesData', () => {
       it('returns the correct queryKey', () => {
-        const [queryKey] = setQueriesData(partialUpdater);
+        const [queryKey] = genCount.setQueriesData(partialUpdater);
         type ExpectType_QueryKey = Expect<
           Equal<typeof queryKey, ConnectPartialQueryKey>
         >;
@@ -324,7 +314,7 @@ describe('unaryHooks', () => {
         const { queryClient, ...rest } = wrapper({ defaultOptions });
 
         const { result, rerender } = renderHook(
-          () => useQuery(bigIntUserQuery(request, { transport })),
+          () => useQuery(genCount.useQuery(request, { transport })),
           rest,
         );
         type ExpectType_Data = Expect<
@@ -337,7 +327,7 @@ describe('unaryHooks', () => {
 
         expect(result.current.data?.count).toStrictEqual(1n);
 
-        queryClient.setQueriesData(...setQueriesData(partialUpdater));
+        queryClient.setQueriesData(...genCount.setQueriesData(partialUpdater));
         rerender();
 
         // this value comes from the partial updater
@@ -347,7 +337,7 @@ describe('unaryHooks', () => {
 
     describe('setQueryData', () => {
       it('returns the correct queryKey', () => {
-        const [queryKey] = setQueryData(partialUpdater, request);
+        const [queryKey] = genCount.setQueryData(partialUpdater, request);
         type ExpectType_QueryKey = Expect<
           Equal<typeof queryKey, ConnectQueryKey<CountRequest>>
         >;
@@ -359,10 +349,13 @@ describe('unaryHooks', () => {
       });
 
       it('allows a partial message updater', async () => {
-        const { queryClient, ...rest } = wrapper({ defaultOptions }, mockBigIntTransport());
+        const { queryClient, ...rest } = wrapper(
+          { defaultOptions },
+          mockBigIntTransport(),
+        );
 
         const { result, rerender } = renderHook(
-          () => useQuery(bigIntUserQuery(request)),
+          () => useQuery(genCount.useQuery(request)),
           rest,
         );
 
@@ -374,7 +367,9 @@ describe('unaryHooks', () => {
 
         expect(result.current.data?.count).toStrictEqual(1n);
 
-        queryClient.setQueryData(...setQueryData(partialUpdater, request));
+        queryClient.setQueryData(
+          ...genCount.setQueryData(partialUpdater, request),
+        );
         rerender();
 
         // this value comes from the partial updater
@@ -382,10 +377,20 @@ describe('unaryHooks', () => {
       });
 
       it('allows a function updater', async () => {
-        const { queryClient, ...rest } = wrapper({ defaultOptions }, mockBigIntTransport());
+        /** @returns input + 1n */
+        const functionUpdater = (
+          { count }: { count: bigint } = { count: 1n },
+        ) =>
+          new BigIntService.methods.count.O({
+            count: count + 1n,
+          });
 
+        const { queryClient, ...rest } = wrapper(
+          { defaultOptions },
+          mockBigIntTransport(),
+        );
         const { result, rerender } = renderHook(
-          () => useQuery(bigIntUserQuery(request)),
+          () => useQuery(genCount.useQuery(request)),
           rest,
         );
 
@@ -399,7 +404,9 @@ describe('unaryHooks', () => {
 
         expect(result.current.data?.count).toStrictEqual(1n);
 
-        queryClient.setQueryData(...setQueryData(functionUpdater, request));
+        queryClient.setQueryData(
+          ...genCount.setQueryData(functionUpdater, request),
+        );
         rerender();
 
         // this value comes from the partial updater
@@ -409,13 +416,8 @@ describe('unaryHooks', () => {
   });
 
   describe('useInfiniteQuery', () => {
-    const { useInfiniteQuery: useInfiniteQueryCq, getQueryKey } = unaryHooks({
-      methodInfo: BigIntService.methods.count,
-      typeName: BigIntService.typeName,
-    });
-
     it('has the intended API surface', () => {
-      type params = Parameters<typeof useInfiniteQueryCq>;
+      type params = Parameters<typeof genCount.useInfiniteQuery>;
 
       type ExpectType_UseInfiniteQueryParamsLength = Expect<
         Equal<params['length'], 2>
@@ -441,7 +443,7 @@ describe('unaryHooks', () => {
         >
       >;
 
-      type returnType = ReturnType<typeof useInfiniteQueryCq>;
+      type returnType = ReturnType<typeof genCount.useInfiniteQuery>;
 
       type ExpectType_UseInfiniteQueryReturnKeys = Expect<
         Equal<
@@ -508,7 +510,7 @@ describe('unaryHooks', () => {
       const { result, rerender } = renderHook(
         () =>
           useInfiniteQuery(
-            useInfiniteQueryCq(input, {
+            genCount.useInfiniteQuery(input, {
               pageParamKey: 'add',
               getNextPageParam: (lastPage) => Number(lastPage.count),
             }),
@@ -547,7 +549,7 @@ describe('unaryHooks', () => {
     it('is disabled when input matches the `disableQuery` symbol', async () => {
       const { result } = renderHook(
         () =>
-          useInfiniteQueryCq(disableQuery, {
+          genCount.useInfiniteQuery(disableQuery, {
             pageParamKey: 'add',
             getNextPageParam: (lastPage) => Number(lastPage.count),
           }),
@@ -567,7 +569,7 @@ describe('unaryHooks', () => {
         Number(lastPage.count);
       const { result } = renderHook(
         () =>
-          useInfiniteQueryCq(input, {
+          genCount.useInfiniteQuery(input, {
             pageParamKey: 'add',
             getNextPageParam,
             transport: mockBigIntTransport(),
@@ -579,7 +581,7 @@ describe('unaryHooks', () => {
 
       const { count } = await result.current.queryFn({
         pageParam: 1n,
-        queryKey: getQueryKey(input),
+        queryKey: genCount.getQueryKey(input),
         meta: {},
       });
 
@@ -594,7 +596,7 @@ describe('unaryHooks', () => {
       it("doesn't use onError if it isn't passed", () => {
         const { result } = renderHook(
           // @ts-expect-error(2345) intentionally missing
-          () => useInfiniteQueryCq({}, {}),
+          () => genCount.useInfiniteQuery({}, {}),
           wrapper(),
         );
         expect(result.current.onError).toBeUndefined();
@@ -607,7 +609,7 @@ describe('unaryHooks', () => {
           () =>
             useQuery({
               // @ts-expect-error(2345) intentionally invalid input
-              ...useInfiniteQueryCq({ nope: 'nope nope' }, { onError }),
+              ...genCount.useInfiniteQuery({ nope: 'nope nope' }, { onError }),
               queryFn: async () => Promise.reject('error'),
               retry: false,
             }),
@@ -635,7 +637,7 @@ describe('unaryHooks', () => {
       renderHook(
         () =>
           useInfiniteQuery(
-            useInfiniteQueryCq(
+            genCount.useInfiniteQuery(
               { add: 1n },
               {
                 pageParamKey: 'add',
@@ -660,37 +662,6 @@ describe('unaryHooks', () => {
   });
 
   describe('useMutation', () => {
-    const {
-      useMutation: useMutationCq,
-      useQuery: useQueryCq,
-      setQueryData,
-      getQueryKey,
-    } = unaryHooks({
-      methodInfo: BigIntService.methods.count,
-      typeName: BigIntService.typeName,
-    });
-
-    // beforeEach(() => {
-    //   let count = 0;
-    //   patchGlobalThisFetch((body = '{"add": 0}') => {
-    //     let add = 0;
-    //     if (body) {
-    //       try {
-    //         const request = JSON.parse(body) as CountRequest;
-    //         add = Number(request.add);
-    //       } catch (error) {
-    //         add = 0;
-    //       }
-    //     }
-
-    //     count += add;
-
-    //     return {
-    //       count,
-    //     };
-    //   });
-    // });
-
     it('prioritizes option transport', async () => {
       const mockTransportContext = mockElizaTransport();
       const mockTransportTopLevel = mockElizaTransport();
@@ -721,7 +692,7 @@ describe('unaryHooks', () => {
     });
 
     it('has the intended API surface', () => {
-      type params = Parameters<typeof useMutationCq>;
+      type params = Parameters<typeof genCount.useMutation>;
 
       type ExpectType_UseMutationParamsLength = Expect<
         Equal<params['length'], 0 | 1>
@@ -741,7 +712,7 @@ describe('unaryHooks', () => {
 
       type ExpectType_UseMutationReturn = Expect<
         Equal<
-          ReturnType<typeof useMutationCq>,
+          ReturnType<typeof genCount.useMutation>,
           {
             mutationFn: (
               input: PartialMessage<CountRequest>,
@@ -754,7 +725,7 @@ describe('unaryHooks', () => {
         >
       >;
 
-      const { result } = renderHook(() => useMutationCq(), wrapper());
+      const { result } = renderHook(() => genCount.useMutation(), wrapper());
 
       expect(
         Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
@@ -768,9 +739,9 @@ describe('unaryHooks', () => {
       const { result, rerender } = renderHook(
         () =>
           useMutation({
-            ...useMutationCq({ onError }),
+            ...genCount.useMutation({ onError }),
             mutationFn: async () => Promise.reject('error'),
-            mutationKey: getQueryKey(),
+            mutationKey: genCount.getQueryKey(),
           }),
         wrapper({ defaultOptions }, mockBigIntTransport()),
       );
@@ -800,24 +771,27 @@ describe('unaryHooks', () => {
       /** this input will add one to the total count */
       const input = { add: 1n };
 
-      const { queryClient, ...rest } = wrapper({ defaultOptions }, mockStatefulBigIntTransport());
+      const { queryClient, ...rest } = wrapper(
+        { defaultOptions },
+        mockStatefulBigIntTransport(),
+      );
 
       const { result } = renderHook(
         () => ({
           mut: useMutation({
-            ...useMutationCq(),
-            mutationKey: getQueryKey(input),
+            ...genCount.useMutation(),
+            mutationKey: genCount.getQueryKey(input),
             onSuccess: () => {
-              const queryKey = getQueryKey(input);
+              const queryKey = genCount.getQueryKey(input);
               const { count = 0n } =
                 queryClient.getQueryData<CountResponse>(queryKey) ?? {};
 
               queryClient.setQueryData(
-                ...setQueryData({ count: count + input.add }, input),
+                ...genCount.setQueryData({ count: count + input.add }, input),
               );
             },
           }),
-          get: useQuery(useQueryCq(input)),
+          get: useQuery(genCount.useQuery(input)),
         }),
         rest,
       );
@@ -857,11 +831,11 @@ describe('unaryHooks', () => {
       const { result } = renderHook(
         () =>
           useMutation({
-            ...useMutationCq({
+            ...genCount.useMutation({
               callOptions: mockCallOptions,
               transport,
             }),
-            mutationKey: getQueryKey({ add: 1n }),
+            mutationKey: genCount.getQueryKey({ add: 1n }),
           }),
         wrapper({ defaultOptions }),
       );
@@ -884,12 +858,8 @@ describe('unaryHooks', () => {
   });
 
   describe('useQuery', () => {
-    const say = unaryHooks({
-      methodInfo: ElizaService.methods.say,
-      typeName: ElizaService.typeName,
-    });
     it('has the intended API surface', () => {
-      type params = Parameters<typeof say.useQuery>;
+      type params = Parameters<typeof genSay.useQuery>;
       type ExpectType_UseQueryParams0 = Expect<
         Equal<
           params[0],
@@ -918,7 +888,7 @@ describe('unaryHooks', () => {
 
       type ExpectType_UseQueryK = Expect<
         Equal<
-          ReturnType<typeof say.useQuery>,
+          ReturnType<typeof genSay.useQuery>,
           {
             enabled: boolean;
             queryKey: ConnectQueryKey<SayRequest>;
@@ -933,7 +903,7 @@ describe('unaryHooks', () => {
 
       const { result } = renderHook(
         () =>
-          say.useQuery(undefined, {
+          genSay.useQuery(undefined, {
             onError: jest.fn(),
             getPlaceholderData: jest.fn(() => new SayResponse()),
           }),
@@ -978,27 +948,27 @@ describe('unaryHooks', () => {
     describe('enabled', () => {
       it('has the correct type', () => {
         expect.assertions(0);
-        const { result } = renderHook(() => say.useQuery({}), wrapper());
+        const { result } = renderHook(() => genSay.useQuery({}), wrapper());
         type ExpectType_Expect = Expect<
           Equal<typeof result.current.enabled, boolean>
         >;
       });
 
       it('is enabled when input does not match the `disableQuery` symbol', () => {
-        const { result } = renderHook(() => say.useQuery({}), wrapper());
+        const { result } = renderHook(() => genSay.useQuery({}), wrapper());
 
         expect(result.current).toHaveProperty('enabled', true);
       });
 
       it('is enabled with an empty input', () => {
-        const { result } = renderHook(() => say.useQuery(), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(), wrapper());
 
         expect(result.current).toHaveProperty('enabled', true);
       });
 
       it('is disabled when input matches the `disableQuery` symbol', () => {
         const { result } = renderHook(
-          () => say.useQuery(disableQuery),
+          () => genSay.useQuery(disableQuery),
           wrapper(),
         );
 
@@ -1015,7 +985,7 @@ describe('unaryHooks', () => {
 
       it('has the correct type', () => {
         expect.assertions(0);
-        const { result } = renderHook(() => say.useQuery(), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(), wrapper());
         type ExpectType_GetPlaceholderData = Expect<
           Equal<
             typeof result.current.placeholderData,
@@ -1027,7 +997,7 @@ describe('unaryHooks', () => {
       it('passes through getPlaceholderData, when provided', () => {
         const getPlaceholderData = jest.fn(() => placeholderSentence);
         const { result } = renderHook(
-          () => say.useQuery(input, { getPlaceholderData }),
+          () => genSay.useQuery(input, { getPlaceholderData }),
           wrapper(),
         );
 
@@ -1047,7 +1017,7 @@ describe('unaryHooks', () => {
       });
 
       it('does not pass through getPlaceholderData if not provided', () => {
-        const { result } = renderHook(() => say.useQuery(input), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(input), wrapper());
 
         expect(result.current).not.toHaveProperty('getPlaceholderData');
       });
@@ -1059,7 +1029,7 @@ describe('unaryHooks', () => {
           ) => PartialMessage<SayResponse> | undefined
         >(() => ({}));
         const { result } = renderHook(
-          () => useQuery(say.useQuery(disableQuery, { getPlaceholderData })),
+          () => useQuery(genSay.useQuery(disableQuery, { getPlaceholderData })),
           wrapper(),
         );
 
@@ -1074,7 +1044,7 @@ describe('unaryHooks', () => {
           ) => PartialMessage<SayResponse> | undefined
         >(() => undefined);
         const { result } = renderHook(
-          () => useQuery(say.useQuery(disableQuery, { getPlaceholderData })),
+          () => useQuery(genSay.useQuery(disableQuery, { getPlaceholderData })),
           wrapper(),
         );
 
@@ -1092,7 +1062,7 @@ describe('unaryHooks', () => {
       });
 
       it("doesn't use onError if it isn't passed", () => {
-        const { result } = renderHook(() => say.useQuery(), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(), wrapper());
         expect(result.current.onError).toBeUndefined();
       });
 
@@ -1102,7 +1072,7 @@ describe('unaryHooks', () => {
           () =>
             useQuery({
               // @ts-expect-error(2345) intentionally invalid input
-              ...say.useQuery({ nope: 'nope nope' }, { onError }),
+              ...genSay.useQuery({ nope: 'nope nope' }, { onError }),
               queryFn: async () => Promise.reject('error'),
               retry: false,
             }),
@@ -1129,7 +1099,7 @@ describe('unaryHooks', () => {
 
       it('has the correct type', () => {
         expect.assertions(0);
-        const { result } = renderHook(() => say.useQuery(), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(), wrapper());
         type ExpectType_QueryFn = Expect<
           Equal<
             typeof result.current.queryFn,
@@ -1143,14 +1113,14 @@ describe('unaryHooks', () => {
       });
 
       it('generates a query function', () => {
-        const { result } = renderHook(() => say.useQuery(input), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(input), wrapper());
 
         expect(result.current).toHaveProperty('queryFn', expect.any(Function));
       });
 
       it('throws when the `queryFn` is passed `disabledQuery` symbol as an input', async () => {
         const { result } = renderHook(
-          () => say.useQuery(disableQuery),
+          () => genSay.useQuery(disableQuery),
           wrapper(),
         );
 
@@ -1166,7 +1136,7 @@ describe('unaryHooks', () => {
         renderHook(
           () =>
             useQuery(
-              say.useQuery(
+              genSay.useQuery(
                 {},
                 {
                   transport,
@@ -1193,7 +1163,7 @@ describe('unaryHooks', () => {
 
       it('has the correct type', () => {
         expect.assertions(0);
-        const { result } = renderHook(() => say.useQuery(), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(), wrapper());
         type ExpectType_QueryKey = Expect<
           Equal<
             typeof result.current.queryKey,
@@ -1203,7 +1173,7 @@ describe('unaryHooks', () => {
       });
 
       it('generates a query key', () => {
-        const { result } = renderHook(() => say.useQuery(input), wrapper());
+        const { result } = renderHook(() => genSay.useQuery(input), wrapper());
 
         expect(result.current).toHaveProperty('queryKey', [
           ElizaService.typeName,
