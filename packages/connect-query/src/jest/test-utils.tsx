@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { CallOptions, ConnectRouter } from '@bufbuild/connect';
-import { createConnectRouter, createRouterTransport } from '@bufbuild/connect';
-import { validateReadWriteMaxBytes } from '@bufbuild/connect/protocol';
-import { createTransport } from '@bufbuild/connect/protocol-connect';
+import type { CallOptions } from '@bufbuild/connect';
+import { createRouterTransport } from '@bufbuild/connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
-import type { PlainMessage } from '@bufbuild/protobuf';
-import { jest } from '@jest/globals';
+import type { PartialMessage, PlainMessage } from '@bufbuild/protobuf';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
@@ -112,50 +109,38 @@ export const sleep = async (timeout: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
+
 /**
  * a stateless mock for ElizaService
  */
-export const mockEliza = () => {
-  const say = jest.fn(() => new SayResponse(hardcodedResponse));
-  return {
-    transport: createRouterTransport(({ service }) => {
-      service(ElizaService, { say });
-    }),
-    say,
-  };
-};
+export const mockEliza = (customResponse?: PartialMessage<SayResponse>) =>
+  createRouterTransport(({ service }) => {
+    service(ElizaService, {
+      say: () => new SayResponse(customResponse ?? hardcodedResponse),
+    });
+  });
 
 /**
  * a stateless mock for BigIntService
  */
-export const mockBigInt = () => {
-  const count = jest.fn(() => new CountResponse({ count: 1n }));
-  return {
-    transport: createRouterTransport(({ service }) => {
-      service(BigIntService, { count });
-    }),
-    count,
-  };
-};
+export const mockBigInt = () =>
+  createRouterTransport(({ service }) => {
+    service(BigIntService, { count: () => new CountResponse({ count: 1n }) });
+  });
 
 /**
  * a mock for BigIntService that acts as an impromptu database
  */
-export const mockStatefulBigIntTransport = () => {
-  let count = 0n;
-  const spy = jest.fn(() => {
-    count += 1n;
-    return new CountResponse({ count });
+export const mockStatefulBigIntTransport = () =>
+  createRouterTransport(({ service }) => {
+    let count = 0n;
+    service(BigIntService, {
+      count: () => {
+        count += 1n;
+        return new CountResponse({ count });
+      },
+    });
   });
-  return {
-    transport: createRouterTransport(({ service }) => {
-      service(BigIntService, {
-        count: spy,
-      });
-    }),
-    count: spy,
-  };
-};
 
 export const mockCallOptions = {
   signal: new AbortController().signal,

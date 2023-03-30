@@ -53,6 +53,7 @@ import type {
 import { defaultOptions } from './default-options';
 import type { Equal, Expect } from './jest/test-utils';
 import {
+  hardcodedResponse,
   mockBigInt,
   mockCallOptions,
   mockEliza,
@@ -128,17 +129,19 @@ describe('unaryHooks', () => {
     }).toThrow('unaryHooks was passed a non unary method, Say');
   });
 
-  it('uses a custom transport', () => {
-    const { transport, say } = mockEliza();
+  it('uses a custom transport', async () => {
+    const transport = mockEliza();
     const input: PartialMessage<SayRequest> = { sentence: 'ziltoid' };
 
-    renderHook(() => {
+    const { result } = renderHook(async () => {
       const { queryFn } = genSay.useQuery(input);
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises -- not necessary to await
-      queryFn();
+
+      return queryFn();
     }, wrapper(undefined, transport));
 
-    expect(say).toHaveBeenCalled();
+    const response = await result.current;
+
+    expect(response).toEqual(hardcodedResponse);
   });
 
   describe('createData', () => {
@@ -310,7 +313,7 @@ describe('unaryHooks', () => {
       });
 
       it('allows a partial message updater', async () => {
-        const { transport } = mockBigInt();
+        const transport = mockBigInt();
         const { queryClient, ...rest } = wrapper({ defaultOptions });
 
         const { result, rerender } = renderHook(
@@ -351,7 +354,7 @@ describe('unaryHooks', () => {
       it('allows a partial message updater', async () => {
         const { queryClient, ...rest } = wrapper(
           { defaultOptions },
-          mockBigInt().transport,
+          mockBigInt(),
         );
 
         const { result, rerender } = renderHook(
@@ -387,7 +390,7 @@ describe('unaryHooks', () => {
 
         const { queryClient, ...rest } = wrapper(
           { defaultOptions },
-          mockBigInt().transport,
+          mockBigInt(),
         );
         const { result, rerender } = renderHook(
           () => useQuery(genCount.useQuery(request)),
@@ -473,18 +476,19 @@ describe('unaryHooks', () => {
     });
 
     describe('transport', () => {
-      it('prioritizes option transport', () => {
-        const { transport: mockTransportContext, say: sayContext } =
-          mockEliza();
-        const { transport: mockTransportTopLevel, say: sayTopLevel } =
-          mockEliza();
-        const { transport: mockTransportOption, say: sayOption } = mockEliza();
+      it('prioritizes option transport', async () => {
+        const mockTransportContext = mockEliza();
+        const mockTransportTopLevel = mockEliza();
+        const mockTransportOption = mockEliza({
+          sentence: 'mockTransportOption',
+        });
         const customSay = unaryHooks({
           methodInfo: ElizaService.methods.say,
           typeName: ElizaService.typeName,
           transport: mockTransportTopLevel,
         });
-        renderHook(
+
+        const { result } = renderHook(
           () =>
             useInfiniteQuery(
               customSay.useInfiniteQuery(
@@ -499,9 +503,13 @@ describe('unaryHooks', () => {
           wrapper({}, mockTransportContext),
         );
 
-        expect(sayContext).not.toHaveBeenCalled();
-        expect(sayTopLevel).not.toHaveBeenCalled();
-        expect(sayOption).toHaveBeenCalled();
+        await waitFor(() => {
+          expect(result.current.isSuccess).toBeTruthy();
+        });
+
+        expect(result.current.data?.pages[0]).toMatchObject({
+          sentence: 'mockTransportOption',
+        });
       });
     });
 
@@ -516,7 +524,7 @@ describe('unaryHooks', () => {
               getNextPageParam: (lastPage) => Number(lastPage.count),
             }),
           ),
-        wrapper({ defaultOptions }, mockStatefulBigIntTransport().transport),
+        wrapper({ defaultOptions }, mockStatefulBigIntTransport()),
       );
 
       expect(result.current.data).toStrictEqual(undefined);
@@ -573,7 +581,7 @@ describe('unaryHooks', () => {
           genCount.useInfiniteQuery(input, {
             pageParamKey: 'add',
             getNextPageParam,
-            transport: mockBigInt().transport,
+            transport: mockBigInt(),
           }),
         wrapper(),
       );
@@ -633,7 +641,7 @@ describe('unaryHooks', () => {
     });
 
     it('passes through callOptions', () => {
-      const { transport } = mockBigInt();
+      const transport = mockBigInt();
       const transportSpy = jest.spyOn(transport, 'unary');
       renderHook(
         () =>
@@ -664,12 +672,11 @@ describe('unaryHooks', () => {
 
   describe('useMutation', () => {
     it('prioritizes option transport', async () => {
-      const { transport: mockTransportContext, say: mockSayContext } =
-        mockEliza();
-      const { transport: mockTransportTopLevel, say: mockSayTopLevel } =
-        mockEliza();
-      const { transport: mockTransportOption, say: mockSayOption } =
-        mockEliza();
+      const mockTransportContext = mockEliza();
+      const mockTransportTopLevel = mockEliza();
+      const mockTransportOption = mockEliza({
+        sentence: 'mockTransportOption',
+      });
 
       const customSay = unaryHooks({
         methodInfo: ElizaService.methods.say,
@@ -690,9 +697,9 @@ describe('unaryHooks', () => {
         expect(result.current.isSuccess).toBeTruthy();
       });
 
-      expect(mockSayContext).not.toHaveBeenCalled();
-      expect(mockSayTopLevel).not.toHaveBeenCalled();
-      expect(mockSayOption).toHaveBeenCalled();
+      expect(result.current.data).toMatchObject({
+        sentence: 'mockTransportOption',
+      });
     });
 
     it('has the intended API surface', () => {
@@ -747,7 +754,7 @@ describe('unaryHooks', () => {
             mutationFn: async () => Promise.reject('error'),
             mutationKey: genCount.getQueryKey(),
           }),
-        wrapper({ defaultOptions }, mockBigInt().transport),
+        wrapper({ defaultOptions }, mockBigInt()),
       );
 
       rerender();
@@ -777,7 +784,7 @@ describe('unaryHooks', () => {
 
       const { queryClient, ...rest } = wrapper(
         { defaultOptions },
-        mockStatefulBigIntTransport().transport,
+        mockStatefulBigIntTransport(),
       );
 
       const { result } = renderHook(
@@ -831,7 +838,7 @@ describe('unaryHooks', () => {
     });
 
     it('passes through callOptions', async () => {
-      const { transport } = mockBigInt();
+      const transport = mockBigInt();
       const transportSpy = jest.spyOn(transport, 'unary');
       const { result } = renderHook(
         () =>
@@ -927,19 +934,18 @@ describe('unaryHooks', () => {
     });
 
     describe('transport', () => {
-      it('prioritizes option transport', () => {
-        const { transport: mockTransportContext, say: sayMockContext } =
-          mockEliza();
-        const { transport: mockTransportTopLevel, say: sayMockTopLevel } =
-          mockEliza();
-        const { transport: mockTransportOption, say: sayMockOption } =
-          mockEliza();
+      it('prioritizes option transport', async () => {
+        const mockTransportContext = mockEliza();
+        const mockTransportTopLevel = mockEliza();
+        const mockTransportOption = mockEliza({
+          sentence: 'mockTransportOption',
+        });
         const customSay = unaryHooks({
           methodInfo: ElizaService.methods.say,
           typeName: ElizaService.typeName,
           transport: mockTransportTopLevel,
         });
-        renderHook(
+        const { result } = renderHook(
           () =>
             useQuery(
               customSay.useQuery({}, { transport: mockTransportOption }),
@@ -947,9 +953,13 @@ describe('unaryHooks', () => {
           wrapper({}, mockTransportContext),
         );
 
-        expect(sayMockContext).not.toHaveBeenCalled();
-        expect(sayMockTopLevel).not.toHaveBeenCalled();
-        expect(sayMockOption).toHaveBeenCalled();
+        await waitFor(() => {
+          expect(result.current.isSuccess).toBeTruthy();
+        });
+
+        expect(result.current.data).toMatchObject({
+          sentence: 'mockTransportOption',
+        });
       });
     });
 
@@ -1140,7 +1150,7 @@ describe('unaryHooks', () => {
       });
 
       it('passes through callOptions', () => {
-        const { transport } = mockEliza();
+        const transport = mockEliza();
         const transportSpy = jest.spyOn(transport, 'unary');
         renderHook(
           () =>
