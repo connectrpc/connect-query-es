@@ -64,10 +64,7 @@ export const createQueryService = <Service extends ServiceType>({
 
   let hooks = servicesToHooks.get(service) as QueryHooks<Service> | undefined;
   if (!hooks) {
-    hooks = createQueryHooks({
-      service,
-      transport,
-    });
+    hooks = createQueryHooks({ service });
     servicesToHooks.set(service, hooks);
   }
 
