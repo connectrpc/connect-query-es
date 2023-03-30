@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import type { CallOptions, ConnectRouter } from '@bufbuild/connect';
-import { createConnectRouter, createRouterHttpClient } from '@bufbuild/connect';
+import { createConnectRouter, createRouterTransport } from '@bufbuild/connect';
 import { validateReadWriteMaxBytes } from '@bufbuild/connect/protocol';
 import { createTransport } from '@bufbuild/connect/protocol-connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
@@ -112,33 +112,13 @@ export const sleep = async (timeout: number) =>
   new Promise((resolve) => {
     setTimeout(resolve, timeout);
   });
-
-/**
- * TODO: this will (ideally) be provided by connect itself and not live in this codebase
- */
-const makeMockTransport = (routes: (router: ConnectRouter) => void) => {
-  const router = createConnectRouter();
-  routes(router);
-  const httpClient = createRouterHttpClient(router);
-
-  return createTransport({
-    httpClient,
-    baseUrl: 'http://in.memory.com',
-    useBinaryFormat: false,
-    interceptors: [],
-    acceptCompression: [],
-    sendCompression: null,
-    ...validateReadWriteMaxBytes(undefined, undefined, undefined),
-  });
-};
-
 /**
  * a stateless mock for ElizaService
  */
 export const mockEliza = () => {
   const say = jest.fn(() => new SayResponse(hardcodedResponse));
   return {
-    transport: makeMockTransport(({ service }) => {
+    transport: createRouterTransport(({ service }) => {
       service(ElizaService, { say });
     }),
     say,
@@ -151,7 +131,7 @@ export const mockEliza = () => {
 export const mockBigInt = () => {
   const count = jest.fn(() => new CountResponse({ count: 1n }));
   return {
-    transport: makeMockTransport(({ service }) => {
+    transport: createRouterTransport(({ service }) => {
       service(BigIntService, { count });
     }),
     count,
@@ -168,7 +148,7 @@ export const mockStatefulBigIntTransport = () => {
     return new CountResponse({ count });
   });
   return {
-    transport: makeMockTransport(({ service }) => {
+    transport: createRouterTransport(({ service }) => {
       service(BigIntService, {
         count: spy,
       });
