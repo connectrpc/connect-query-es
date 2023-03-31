@@ -53,7 +53,6 @@ import type {
 import { defaultOptions } from './default-options';
 import type { Equal, Expect } from './jest/test-utils';
 import {
-  hardcodedResponse,
   mockBigInt,
   mockCallOptions,
   mockEliza,
@@ -130,18 +129,18 @@ describe('unaryHooks', () => {
   });
 
   it('uses a custom transport', async () => {
-    const transport = mockEliza();
     const input: PartialMessage<SayRequest> = { sentence: 'ziltoid' };
+    const transport = mockEliza();
 
     const { result } = renderHook(async () => {
       const { queryFn } = genSay.useQuery(input);
 
       return queryFn();
-    }, wrapper(undefined, transport));
+    }, wrapper({}, transport));
 
     const response = await result.current;
 
-    expect(response).toEqual(hardcodedResponse);
+    expect(response.sentence).toEqual(`Hello ${input.sentence}`);
   });
 
   describe('createData', () => {
@@ -366,8 +365,6 @@ describe('unaryHooks', () => {
           expect(result.current.isSuccess).toBeTruthy();
         });
 
-        expect(typeof result.current.data?.count).toStrictEqual('bigint');
-
         expect(result.current.data?.count).toStrictEqual(1n);
 
         queryClient.setQueryData(
@@ -480,7 +477,7 @@ describe('unaryHooks', () => {
         const mockTransportContext = mockEliza();
         const mockTransportTopLevel = mockEliza();
         const mockTransportOption = mockEliza({
-          sentence: 'mockTransportOption',
+          sentence: 'override',
         });
         const customSay = unaryHooks({
           methodInfo: ElizaService.methods.say,
@@ -492,7 +489,7 @@ describe('unaryHooks', () => {
           () =>
             useInfiniteQuery(
               customSay.useInfiniteQuery(
-                {},
+                { sentence: 'Infinity' },
                 {
                   pageParamKey: 'sentence',
                   getNextPageParam: () => 0,
@@ -507,21 +504,19 @@ describe('unaryHooks', () => {
           expect(result.current.isSuccess).toBeTruthy();
         });
 
-        expect(result.current.data?.pages[0]).toMatchObject({
-          sentence: 'mockTransportOption',
-        });
+        expect(result.current.data?.pages[0].sentence).toStrictEqual('override');
       });
     });
 
     it('integrates with `useInfiniteQuery`', async () => {
-      const input = { add: 0n };
+      const input = { add: 1n };
 
       const { result, rerender } = renderHook(
         () =>
           useInfiniteQuery(
             genCount.useInfiniteQuery(input, {
               pageParamKey: 'add',
-              getNextPageParam: (lastPage) => Number(lastPage.count),
+              getNextPageParam: (lastPage) => lastPage.count + input.add,
             }),
           ),
         wrapper({ defaultOptions }, mockStatefulBigIntTransport()),
@@ -536,14 +531,14 @@ describe('unaryHooks', () => {
       expect(result.current.data?.pageParams).toStrictEqual([undefined]);
 
       expect(result.current.data?.pages).toHaveLength(1);
-      expect(result.current.data?.pages[0].count).toStrictEqual(1n);
+      expect(result.current.data?.pages[0].count).toStrictEqual(0n); // starts at 0
 
       // execute a single increment
       await result.current.fetchNextPage();
       rerender();
 
       expect(result.current.data?.pages).toHaveLength(2);
-      expect(result.current.data?.pages[1].count).toStrictEqual(2n);
+      expect(result.current.data?.pages[1].count).toStrictEqual(1n); // adds 1 to (last page (0) * 2)
 
       // execute two increments at once
       await result.current.fetchNextPage();
@@ -551,8 +546,8 @@ describe('unaryHooks', () => {
       rerender();
 
       expect(result.current.data?.pages).toHaveLength(4);
-      expect(result.current.data?.pages[2].count).toStrictEqual(3n);
-      expect(result.current.data?.pages[3].count).toStrictEqual(4n);
+      expect(result.current.data?.pages[2].count).toStrictEqual(3n); // adds 1 to (last page (1) * 2)
+      expect(result.current.data?.pages[3].count).toStrictEqual(7n); // adds 1 to (last page (3) * 2)
     });
 
     it('is disabled when input matches the `disableQuery` symbol', async () => {
@@ -780,7 +775,7 @@ describe('unaryHooks', () => {
 
     it('makes a mutation', async () => {
       /** this input will add one to the total count */
-      const input = { add: 1n };
+      const input = { add: 2n };
 
       const { queryClient, ...rest } = wrapper(
         { defaultOptions },
@@ -817,14 +812,16 @@ describe('unaryHooks', () => {
           >
         >
       >;
+      expect(result.current.mut.data?.count).toStrictEqual(undefined);
+      expect(result.current.get.data?.count).toStrictEqual(undefined);
 
       await waitFor(() => {
         expect(result.current.mut.isIdle).toBeTruthy();
         expect(result.current.get.isSuccess).toBeTruthy();
       });
 
-      expect(result.current.mut.data).toStrictEqual(undefined);
-      expect(result.current.get.data?.count).toStrictEqual(1n);
+      expect(result.current.mut.data?.count).toStrictEqual(undefined);
+      expect(result.current.get.data?.count).toStrictEqual(2n);
 
       result.current.mut.mutate(input);
 
@@ -833,8 +830,8 @@ describe('unaryHooks', () => {
         expect(result.current.get.isSuccess).toBeTruthy();
       });
 
-      expect(result.current.mut.data?.count).toStrictEqual(2n);
-      expect(result.current.get.data?.count).toStrictEqual(2n);
+      expect(result.current.mut.data?.count).toStrictEqual(4n);
+      expect(result.current.get.data?.count).toStrictEqual(4n);
     });
 
     it('passes through callOptions', async () => {
@@ -938,8 +935,9 @@ describe('unaryHooks', () => {
         const mockTransportContext = mockEliza();
         const mockTransportTopLevel = mockEliza();
         const mockTransportOption = mockEliza({
-          sentence: 'mockTransportOption',
+          sentence: 'override'
         });
+        const input = { sentence: 'useQuery' };
         const customSay = unaryHooks({
           methodInfo: ElizaService.methods.say,
           typeName: ElizaService.typeName,
@@ -948,7 +946,7 @@ describe('unaryHooks', () => {
         const { result } = renderHook(
           () =>
             useQuery(
-              customSay.useQuery({}, { transport: mockTransportOption }),
+              customSay.useQuery(input, { transport: mockTransportOption }),
             ),
           wrapper({}, mockTransportContext),
         );
@@ -957,9 +955,7 @@ describe('unaryHooks', () => {
           expect(result.current.isSuccess).toBeTruthy();
         });
 
-        expect(result.current.data).toMatchObject({
-          sentence: 'mockTransportOption',
-        });
+        expect(result.current.data?.sentence).toStrictEqual('override');
       });
     });
 

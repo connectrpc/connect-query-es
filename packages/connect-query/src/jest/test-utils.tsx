@@ -22,17 +22,11 @@ import {
   BigIntService,
   ElizaService,
 } from 'generated-react/dist/eliza_connectweb';
+import type { CountRequest, SayRequest} from 'generated-react/dist/eliza_pb';
 import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
 
 import { TransportProvider } from '../use-transport';
-
-/**
- * a shared response to always respond with in tests
- */
-export const hardcodedResponse: PlainMessage<SayResponse> = {
-  sentence: 'success',
-};
 
 /**
  * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-Query's `TransportProvider`.
@@ -113,10 +107,10 @@ export const sleep = async (timeout: number) =>
 /**
  * a stateless mock for ElizaService
  */
-export const mockEliza = (customResponse?: PartialMessage<SayResponse>) =>
+export const mockEliza = (override?: PartialMessage<SayRequest>) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
-      say: () => new SayResponse(customResponse ?? hardcodedResponse),
+      say: (input: SayRequest) => new SayResponse(override ?? { sentence: `Hello ${input.sentence}` }),
     });
   });
 
@@ -135,8 +129,10 @@ export const mockStatefulBigIntTransport = () =>
   createRouterTransport(({ service }) => {
     let count = 0n;
     service(BigIntService, {
-      count: () => {
-        count += 1n;
+      count: (request?: CountRequest) => {
+        if (request) {
+          count += request.add;
+        }
         return new CountResponse({ count });
       },
     });

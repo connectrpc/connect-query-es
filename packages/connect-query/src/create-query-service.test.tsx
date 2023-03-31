@@ -22,7 +22,7 @@ import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { ConnectQueryKey } from './connect-query-key';
 import { createQueryService } from './create-query-service';
 import type { Equal, Expect } from './jest/test-utils';
-import { hardcodedResponse, mockEliza, wrapper } from './jest/test-utils';
+import { mockEliza, wrapper } from './jest/test-utils';
 import { isUnaryMethod } from './utils';
 
 describe('createQueryService', () => {
@@ -42,7 +42,7 @@ describe('createQueryService', () => {
 
     const response = await result.current;
 
-    expect(response).toEqual(hardcodedResponse);
+    expect(response.sentence).toEqual(`Hello ${input.sentence}`);
   });
 
   it('contains the right options', () => {

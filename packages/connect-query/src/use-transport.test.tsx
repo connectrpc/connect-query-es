@@ -48,7 +48,7 @@ describe('useTransport', () => {
   it('throws the fallback error', async () => {
     const { result, rerender } = renderHook(
       () => useQuery({ ...say.useQuery(), retry: false }),
-      wrapper(undefined, fallbackTransport),
+      wrapper({}, fallbackTransport),
     );
     rerender();
 
