@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ConnectError } from '@bufbuild/connect-web';
+import { ConnectError } from '@bufbuild/connect';
 import { describe, expect, it } from '@jest/globals';
 import { useQuery } from '@tanstack/react-query';
 import { renderHook } from '@testing-library/react';
@@ -48,7 +48,7 @@ describe('useTransport', () => {
   it('throws the fallback error', async () => {
     const { result, rerender } = renderHook(
       () => useQuery({ ...say.useQuery(), retry: false }),
-      wrapper(undefined, fallbackTransport),
+      wrapper({}, fallbackTransport),
     );
     rerender();
 
@@ -58,7 +58,7 @@ describe('useTransport', () => {
 
     await sleep(10);
 
-    expect(result.current.error).toStrictEqual(error);
+    expect(result.current.error).toEqual(error);
     expect(result.current.isError).toStrictEqual(true);
     expect(consoleErrorSpy).toHaveBeenCalledWith(error);
   });

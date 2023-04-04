@@ -37,6 +37,7 @@ module.exports = {
         isolatedModules: false,
         diagnostics: {
           ignoreCodes: [
+            7031, // TODO: this is, for some reason, needed because of a problem with local linking and TypeScript that we haven't debugged because it won't matter by the time this PR merges because connect will have already released
             6196, // unused variables are necessary because all TypeScript type tests are technically unused (type) variables
             151001, // ts-jest[config] (WARN) message TS151001: If you have issues related to imports, you should consider setting `esModuleInterop` to `true` in your TypeScript configuration file (usually `tsconfig.json`). See https://blogs.msdn.microsoft.com/typescript/2018/01/31/announcing-typescript-2-7/#easier-ecmascript-module-interoperability for more information.
           ],

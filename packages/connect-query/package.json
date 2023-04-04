@@ -22,15 +22,14 @@
     "@bufbuild/protoc-gen-es": "^1.2.0",
     "@tanstack/react-query": "^4.28.0",
     "@testing-library/react": "^14.0.0",
-    "@types/react": "^18.0.30",
+    "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "generated-react": "workspace:*",
     "jest-environment-jsdom": "^29.5.0",
     "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "safe-stable-stringify": "^2.4.3",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.3"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^4.20.4",
@@ -38,10 +37,10 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@bufbuild/connect": "^0.8.4",
-    "@bufbuild/connect-web": "^0.8.4",
+    "@bufbuild/connect": "^0.8.5",
+    "@bufbuild/connect-web": "^0.8.5",
     "@bufbuild/protobuf": "^1.2.0",
-    "@bufbuild/protoc-gen-connect-web": "^0.8.4",
+    "@bufbuild/protoc-gen-connect-web": "^0.8.5",
     "stable-hash": "^0.0.3"
   }
 }

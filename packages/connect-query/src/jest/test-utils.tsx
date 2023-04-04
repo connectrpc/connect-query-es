@@ -12,49 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@bufbuild/connect';
+import type { CallOptions } from '@bufbuild/connect';
+import { createRouterTransport } from '@bufbuild/connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
-import { jest } from '@jest/globals';
+import type { PartialMessage } from '@bufbuild/protobuf';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  BigIntService,
+  ElizaService,
+} from 'generated-react/dist/eliza_connectweb';
+import type { CountRequest, SayRequest } from 'generated-react/dist/eliza_pb';
+import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
-import { stringify } from 'safe-stable-stringify';
 
 import { TransportProvider } from '../use-transport';
-
-/**
- * in these tests, `globalThis.fetch` has been manually mocked by `patchGlobThisFetch` to always respond with this response.
- */
-export const hardcodedResponse = { sentence: 'success' };
-
-/**
- * This test-only helper patches `globalThis.fetch` to always return the same hardcoded response, irrespective of the inputs.
- *
- * If you pass a non-function as the mockValue, any call to `globalThis.fetch` will indiscriminately return that value.  However, if you pass a function, that function will be called on the input to `globalThis.fetch` (to be exact, the second argument: the one that contains the data).  That function's output will then be the return value of any calls to `globalThis.fetch` with the same input.
- */
-export const patchGlobalThisFetch = <T,>(
-  mockValue: T extends (...args: unknown[]) => infer U ? U : T,
-) => {
-  globalThis.fetch = jest.fn<typeof globalThis.fetch>(
-    async (_, init = { body: null }) =>
-      Promise.resolve({
-        // Note, this is a very non-ideal hack to "get us through" while we figure out how to handle this better since `response.json` is no longer called by Connect-ES
-        arrayBuffer: async () =>
-          Promise.resolve(
-            new TextEncoder().encode(
-              // this is needed to handle bigints
-              stringify(
-                typeof mockValue === 'function'
-                  ? mockValue(init.body)
-                  : mockValue,
-              ),
-            ).buffer,
-          ),
-        headers: new Headers({ 'content-type': 'application/json' }),
-        status: 200,
-      } as Response),
-  );
-};
 
 /**
  * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-Query's `TransportProvider`.
@@ -132,23 +104,40 @@ export const sleep = async (timeout: number) =>
     setTimeout(resolve, timeout);
   });
 
-/** this mock is intended to be passed to useContext */
-export const mockTransportContext = {
-  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  stream: jest.fn(),
-} as Transport;
+/**
+ * a stateless mock for ElizaService
+ */
+export const mockEliza = (override?: PartialMessage<SayRequest>) =>
+  createRouterTransport(({ service }) => {
+    service(ElizaService, {
+      say: (input: SayRequest) =>
+        new SayResponse(override ?? { sentence: `Hello ${input.sentence}` }),
+    });
+  });
 
-/** this mock is intended to be passed to a top level helper like `unaryHooks` */
-export const mockTransportTopLevel = {
-  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  stream: jest.fn(),
-} as Transport;
+/**
+ * a stateless mock for BigIntService
+ */
+export const mockBigInt = () =>
+  createRouterTransport(({ service }) => {
+    service(BigIntService, { count: () => new CountResponse({ count: 1n }) });
+  });
 
-/** this mock is intended to be passed directly to a helper like `useQuery` */
-export const mockTransportOption = {
-  unary: jest.fn().mockImplementation(() => ({ message: hardcodedResponse })),
-  stream: jest.fn(),
-} as Transport;
+/**
+ * a mock for BigIntService that acts as an impromptu database
+ */
+export const mockStatefulBigIntTransport = () =>
+  createRouterTransport(({ service }) => {
+    let count = 0n;
+    service(BigIntService, {
+      count: (request?: CountRequest) => {
+        if (request) {
+          count += request.add;
+        }
+        return new CountResponse({ count });
+      },
+    });
+  });
 
 export const mockCallOptions = {
   signal: new AbortController().signal,
@@ -156,4 +145,4 @@ export const mockCallOptions = {
   headers: new Headers({
     'Content-Type': 'application/x-shockwave-flash; version="1"',
   }),
-}; // satisfies CallOptions;
+} satisfies CallOptions;
