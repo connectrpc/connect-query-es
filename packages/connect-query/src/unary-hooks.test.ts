@@ -214,7 +214,7 @@ describe('unaryHooks', () => {
               context?:
                 | QueryFunctionContext<ConnectQueryKey<CountRequest>>
                 | undefined,
-            ) => Promise<CountResponse>;
+            ) => Promise<CountResponse | undefined>;
             placeholderData?: () => CountResponse | undefined;
             onError?: (error: ConnectError) => void;
           }

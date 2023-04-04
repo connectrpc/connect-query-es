@@ -67,7 +67,9 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
-    queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
+    queryFn: (
+      context?: QueryFunctionContext<ConnectQueryKey<I>>,
+    ) => Promise<O | undefined>;
     placeholderData?: () => O | undefined;
     onError?: (error: ConnectError) => void;
   };
