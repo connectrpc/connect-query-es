@@ -10,22 +10,22 @@
   },
   "dependencies": {
     "@bufbuild/connect-query": "workspace:*",
-    "@bufbuild/connect-web": "^0.8.4",
+    "@bufbuild/connect-web": "^0.8.5",
     "@bufbuild/protobuf": "^1.2.0",
     "@bufbuild/protoc-gen-connect-query": "workspace:*",
-    "@bufbuild/protoc-gen-connect-web": "^0.8.4",
+    "@bufbuild/protoc-gen-connect-web": "^0.8.5",
     "@bufbuild/protoc-gen-es": "^1.2.0",
     "@tanstack/react-query": "^4.28.0",
-    "@tanstack/react-query-devtools": "^4.28.0",
+    "@tanstack/react-query-devtools": "^4.29.0",
     "generated-react": "workspace:^0.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.30",
+    "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
-    "typescript": "^5.0.2",
+    "typescript": "^5.0.3",
     "vite": "^4.2.1"
   }
 }

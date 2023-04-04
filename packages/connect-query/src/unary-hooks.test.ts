@@ -129,7 +129,7 @@ describe('unaryHooks', () => {
   });
 
   it('uses a custom transport', async () => {
-    const input: PartialMessage<SayRequest> = { sentence: 'ziltoid' };
+    const input = { sentence: 'ziltoid' } satisfies PartialMessage<SayRequest>;
     const transport = mockEliza();
 
     const { result } = renderHook(async () => {
@@ -504,7 +504,9 @@ describe('unaryHooks', () => {
           expect(result.current.isSuccess).toBeTruthy();
         });
 
-        expect(result.current.data?.pages[0].sentence).toStrictEqual('override');
+        expect(result.current.data?.pages[0].sentence).toStrictEqual(
+          'override',
+        );
       });
     });
 
@@ -935,7 +937,7 @@ describe('unaryHooks', () => {
         const mockTransportContext = mockEliza();
         const mockTransportTopLevel = mockEliza();
         const mockTransportOption = mockEliza({
-          sentence: 'override'
+          sentence: 'override',
         });
         const input = { sentence: 'useQuery' };
         const customSay = unaryHooks({

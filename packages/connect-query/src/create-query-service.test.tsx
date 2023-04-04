@@ -28,7 +28,7 @@ import { isUnaryMethod } from './utils';
 describe('createQueryService', () => {
   const service = ElizaService;
   const methodName = 'say';
-  const input: PartialMessage<SayResponse> = { sentence: 'ziltoid' };
+  const input = { sentence: 'ziltoid' } satisfies PartialMessage<SayResponse>;
 
   it('uses a custom transport', async () => {
     const transport = mockEliza();

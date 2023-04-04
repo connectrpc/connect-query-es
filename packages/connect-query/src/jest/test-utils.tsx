@@ -15,14 +15,14 @@
 import type { CallOptions } from '@bufbuild/connect';
 import { createRouterTransport } from '@bufbuild/connect';
 import { createConnectTransport } from '@bufbuild/connect-web';
-import type { PartialMessage, PlainMessage } from '@bufbuild/protobuf';
+import type { PartialMessage } from '@bufbuild/protobuf';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   BigIntService,
   ElizaService,
 } from 'generated-react/dist/eliza_connectweb';
-import type { CountRequest, SayRequest} from 'generated-react/dist/eliza_pb';
+import type { CountRequest, SayRequest } from 'generated-react/dist/eliza_pb';
 import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
 
@@ -110,7 +110,8 @@ export const sleep = async (timeout: number) =>
 export const mockEliza = (override?: PartialMessage<SayRequest>) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
-      say: (input: SayRequest) => new SayResponse(override ?? { sentence: `Hello ${input.sentence}` }),
+      say: (input: SayRequest) =>
+        new SayResponse(override ?? { sentence: `Hello ${input.sentence}` }),
     });
   });
 

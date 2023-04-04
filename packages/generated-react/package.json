@@ -27,7 +27,7 @@
     "@bufbuild/connect-query": "workspace:*",
     "@bufbuild/protobuf": "^1.2.0",
     "@bufbuild/protoc-gen-connect-query": "workspace:*",
-    "@bufbuild/protoc-gen-connect-web": "^0.8.4",
+    "@bufbuild/protoc-gen-connect-web": "^0.8.5",
     "@bufbuild/protoc-gen-es": "^1.2.0"
   },
   "preferUnplugged": true
