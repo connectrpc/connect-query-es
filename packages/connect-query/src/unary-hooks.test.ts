@@ -963,7 +963,7 @@ describe('unaryHooks', () => {
             queryKey: ConnectQueryKey<SayRequest>;
             queryFn: (
               context?: QueryFunctionContext<ConnectQueryKey<SayRequest>>,
-            ) => Promise<SayResponse>;
+            ) => Promise<SayResponse | undefined>;
             placeholderData?: () => SayResponse | undefined;
             onError?: (error: ConnectError) => void;
           }
@@ -1175,7 +1175,7 @@ describe('unaryHooks', () => {
               context?:
                 | QueryFunctionContext<ConnectQueryKey<SayRequest>>
                 | undefined,
-            ) => Promise<SayResponse>
+            ) => Promise<SayResponse | undefined>
           >
         >;
       });
@@ -1203,7 +1203,7 @@ describe('unaryHooks', () => {
         const { result } = renderHook(() => say.useQuery(input), wrapper());
 
         const response = await result.current.queryFn();
-        expect(response.toJson()).toStrictEqual(hardcodedResponse);
+        expect(response?.toJson()).toStrictEqual(hardcodedResponse);
         // we need to encode to an ArrayBuffer here because of an implementation detail in Connect-ES that doesn't use JSON body, even in JSON encoding mode
         const body = new TextEncoder().encode(JSON.stringify(input));
         expect(globalThis.fetch).toHaveBeenCalledWith(

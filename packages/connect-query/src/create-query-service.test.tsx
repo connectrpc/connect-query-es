@@ -110,7 +110,7 @@ describe('createQueryService', () => {
             context?:
               | QueryFunctionContext<ConnectQueryKey<SayRequest>>
               | undefined,
-          ) => Promise<SayResponse>
+          ) => Promise<SayResponse | undefined>
         >
       >;
       expect(queryOptions).toHaveProperty('queryFn', expect.any(Function));
