@@ -10,7 +10,7 @@
       "require": "./dist/index.cjs"
     }
   },
-  "main": "./src/index.ts",
+  "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
