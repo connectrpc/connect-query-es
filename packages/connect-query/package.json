@@ -1,13 +1,20 @@
 {
   "name": "@bufbuild/connect-query",
-  "version": "0.2.1",
-  "license": "Apache-2.0",
-  "sideEffects": false,
+  "version": "0.2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
+  "license": "Apache-2.0",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/bufbuild/connect-query.git",
@@ -15,7 +22,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "tsup",
+    "build": "pnpm clean && pnpm unbuild",
     "test": "jest"
   },
   "devDependencies": {
@@ -28,8 +35,8 @@
     "jest-environment-jsdom": "^29.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "unbuild": "^1.2.0"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^4.20.4",

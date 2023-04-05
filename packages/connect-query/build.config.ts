@@ -12,15 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Config } from 'jest';
+import { defineBuildConfig } from 'unbuild';
 
-const config: Config = {
-  preset: '../../jest-preset.js',
-  testEnvironment: '<rootDir>/jest-environment-jsdom.cjs',
-  moduleNameMapper: {
-    '(.+)\\.js': '$1', // https://connect.build/docs/web/supported-browsers-and-frameworks/#jest
-  },
-  testMatch: ['<rootDir>/**/*.test.ts?(x)'],
-};
-
-export default config;
+export default defineBuildConfig({
+  declaration: true,
+});
