@@ -1,6 +1,8 @@
 {
   "name": "@bufbuild/connect-query",
   "version": "0.2.0",
+  "license": "Apache-2.0",
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {
@@ -13,8 +15,6 @@
   "files": [
     "dist/**"
   ],
-  "license": "Apache-2.0",
-  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/bufbuild/connect-query.git",
