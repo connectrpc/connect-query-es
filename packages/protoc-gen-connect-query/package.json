@@ -1,6 +1,6 @@
 {
   "name": "@bufbuild/protoc-gen-connect-query",
-  "version": "0.2.0",
+  "version": "0.2.0-alpha.0",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
