@@ -9,9 +9,13 @@
     "url": "https://github.com/bufbuild/connect-query.git",
     "directory": "packages/protoc-gen-connect-query"
   },
-  "files": [
-    "dist/**"
-  ],
+  "main": "dist/cjs/src/index.js",
+  "types": "dist/types/src/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/src/index.js",
+    "require": "./dist/cjs/src/index.js",
+    "types": "./dist/types/src/index.d.ts"
+  },
   "bin": {
     "protoc-gen-connect-query": "bin/protoc-gen-connect-query"
   },
@@ -19,15 +23,18 @@
     "node": ">=16"
   },
   "scripts": {
+    "build:cjs": "tsc --project tsconfig.build.cjs.json",
+    "build:esm": "tsc --project tsconfig.build.esm.json",
+    "build": "pnpm run clean && pnpm run build:cjs && pnpm run build:esm && tsx scripts/post-build.ts",
     "clean": "rm -rf dist",
-    "test": "jest",
-    "build": "pnpm clean && tsc --project tsconfig.build.json"
+    "test": "jest"
   },
   "preferUnplugged": true,
   "devDependencies": {
     "@bufbuild/protoc-gen-connect-web": "^0.8.5",
     "@bufbuild/protoc-gen-es": "^1.2.0",
     "generated-react": "workspace:*",
+    "tsx": "^3.12.6",
     "typescript": "^5.0.3"
   },
   "dependencies": {

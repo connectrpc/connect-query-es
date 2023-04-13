@@ -1,13 +1,15 @@
 {
   "name": "@bufbuild/connect-query",
   "version": "0.2.0",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/cjs/src/index.js",
+  "types": "dist/types/src/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/src/index.js",
+    "require": "./dist/cjs/src/index.js",
+    "types": "./dist/types/src/index.d.ts"
+  },
   "license": "Apache-2.0",
   "sideEffects": false,
-  "files": [
-    "dist/**"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bufbuild/connect-query.git",
@@ -15,7 +17,9 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "pnpm run clean && tsc --project tsconfig.build.json",
+    "build:cjs": "tsc --project tsconfig.build.cjs.json",
+    "build:esm": "tsc --project tsconfig.build.esm.json",
+    "build": "pnpm run clean && pnpm run build:cjs && pnpm run build:esm && tsx scripts/post-build.ts",
     "test": "jest"
   },
   "devDependencies": {
@@ -29,6 +33,7 @@
     "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tsx": "^3.12.6",
     "typescript": "^5.0.3"
   },
   "peerDependencies": {

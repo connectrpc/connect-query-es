@@ -1,9 +1,4 @@
 {
   "files": ["src/protoc-gen-connect-query-plugin.ts"],
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "dist/cjs",
-    "module": "CommonJS",
-    "resolveJsonModule": true
-  }
+  "extends": "../../tsconfig.base.json"
 }
