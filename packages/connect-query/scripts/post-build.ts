@@ -18,11 +18,19 @@ import packageJson from '../package.json';
 
 const { version, name } = packageJson;
 
-const data = {
+const cjs = {
   _: 'this package.json file exists to make sure that Node knows to interpret the `.js` files in this directory as CommonJS and not as ESM, which it will do by default for files ending with `.js` unless the `type` field set to `commonjs`',
   type: 'commonjs',
   version,
   name,
 };
 
-writeFileSync('./dist/cjs/package.json', JSON.stringify(data, null, 2));
+writeFileSync('./dist/cjs/package.json', JSON.stringify(cjs, null, 2));
+
+const esm = {
+  type: 'module',
+  version,
+  name,
+};
+
+writeFileSync('./dist/esm/package.json', JSON.stringify(esm, null, 2));
