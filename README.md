@@ -453,6 +453,7 @@ Here is a high-level overview of how Connect-Query fits in with Connect-Web and 
 <details>
 <summary>Expand to see a detailed dependency graph</summary>
 
+<!-- markdownlint-disable-next-line MD033 -- 033: necessary for setting the width; -->
 <img
   alt="connect-query_dependency_graph"
   src="./assets/connect-query_dependency_graph.png"
