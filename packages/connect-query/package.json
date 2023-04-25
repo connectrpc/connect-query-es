@@ -1,13 +1,13 @@
 {
   "name": "@bufbuild/connect-query",
   "version": "0.2.0",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
   "license": "Apache-2.0",
   "sideEffects": false,
   "files": [
     "dist/**"
   ],
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/bufbuild/connect-query.git",
@@ -15,7 +15,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "pnpm run clean && tsc --project tsconfig.build.json",
+    "build": "tsup",
     "test": "jest"
   },
   "devDependencies": {
@@ -28,6 +28,7 @@
     "jest-environment-jsdom": "^29.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
