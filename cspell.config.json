@@ -27,8 +27,7 @@
     "protoplugin",
     "tanstack",
     "todos",
-    "tsdoc",
-    "tsup"
+    "tsdoc"
   ],
   "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw"]
 }
