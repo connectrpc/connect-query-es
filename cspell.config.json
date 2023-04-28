@@ -1,11 +1,14 @@
 {
   "words": [
+    "Deno",
+    "Quickstart",
+    "Vindaloo",
+    "Weizenbaum's",
     "backoffs",
     "bufbuild",
     "codegen",
     "connectquery",
     "connectweb",
-    "Deno",
     "descriptorset",
     "excalidraw",
     "idempotence",
@@ -22,12 +25,9 @@
     "protoc",
     "protofile",
     "protoplugin",
-    "Quickstart",
     "tanstack",
     "todos",
-    "tsdoc",
-    "Vindaloo",
-    "Weizenbaum's"
+    "tsdoc"
   ],
   "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw"]
 }

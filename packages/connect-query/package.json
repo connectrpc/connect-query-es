@@ -6,8 +6,14 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
+      },
+      "require": {
+        "default": "./dist/index.cjs",
+        "types": "./dist/index.d.ts"
+      }
     }
   },
   "main": "./dist/index.cjs",
@@ -27,17 +33,16 @@
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^1.2.0",
-    "@tanstack/react-query": "^4.28.0",
+    "@tanstack/react-query": "^4.29.5",
     "@testing-library/react": "^14.0.0",
-    "@types/react": "^18.0.33",
-    "@types/react-dom": "^18.0.11",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
     "generated-react": "workspace:*",
     "jest-environment-jsdom": "^29.5.0",
-    "node-fetch": "^3.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.0.3",
-    "unbuild": "^1.2.0"
+    "typescript": "^5.0.4",
+    "unbuild": "^1.2.1"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^4.20.4",
@@ -45,10 +50,10 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@bufbuild/connect": "^0.8.5",
-    "@bufbuild/connect-web": "^0.8.5",
+    "@bufbuild/connect": "^0.8.6",
+    "@bufbuild/connect-web": "^0.8.6",
     "@bufbuild/protobuf": "^1.2.0",
-    "@bufbuild/protoc-gen-connect-web": "^0.8.5",
+    "@bufbuild/protoc-gen-connect-web": "^0.8.6",
     "stable-hash": "^0.0.3"
   }
 }

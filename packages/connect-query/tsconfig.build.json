@@ -2,9 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "skipLibCheck": true,
-    "declarationDir": "dist"
+    "declarationDir": "dist",
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "src/jest"]
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "src/jest/**"]
 }
