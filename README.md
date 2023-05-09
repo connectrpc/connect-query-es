@@ -35,6 +35,7 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [What if I have a custom `Transport`?](#what-if-i-have-a-custom-transport)
   - [Does this only work with React?](#does-this-only-work-with-react)
     - [SolidJS Example](#solidjs-example)
+  - [What about Streaming?](#what-about-streaming)
 
 # Quickstart
 
@@ -535,3 +536,15 @@ function Component() {
   return <div>{whatever}</div>
 }
 ```
+
+## What about Streaming?
+
+Connect-Query currently only supports Unary RPC methods, which use a simple request/response style of communication similar to GET or POST requests in REST. This is because it aligns most closely with TanStack Query's paradigms. However, we understand that there may be use cases for Server Streaming, Client Streaming, and Bidirectional Streaming, and we're eager to hear about them.
+
+At Buf, we strive to build software that solves real-world problems, so we'd love to learn more about your specific use case. If you can provide a small, reproducible example, it will help us shape the development of a future API for streaming with Connect-Query.
+
+To get started, we invite you to open a pull request with an example project in the examples directory of the Connect-Query repository. If you're not quite sure how to implement your idea, don't worry - we want to see how you envision it working. If you already have an isolated example, you may also provide a simple CodeSandbox or Git repository.
+
+If you're not yet at the point of creating an example project, feel free to open an issue in the repository and describe your use case. We'll follow up with questions to better understand your needs.
+
+Your input and ideas are crucial in shaping the future development of Connect-Query.  We appreciate your input and look forward to hearing from you.
