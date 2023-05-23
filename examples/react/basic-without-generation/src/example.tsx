@@ -14,7 +14,7 @@
 
 import { createQueryService } from '@bufbuild/connect-query';
 import { useQuery } from '@tanstack/react-query';
-import { ElizaService } from 'generated-react/dist/eliza_connectweb';
+import { ElizaService } from 'generated-react/dist/eliza_connect';
 import type { FC } from 'react';
 
 import { Data, Datum } from './datum';

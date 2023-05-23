@@ -16,7 +16,7 @@ import { ConnectError } from '@bufbuild/connect';
 import { describe, expect, it } from '@jest/globals';
 import { useQuery } from '@tanstack/react-query';
 import { renderHook } from '@testing-library/react';
-import { ElizaService } from 'generated-react/dist/eliza_connectweb';
+import { ElizaService } from 'generated-react/dist/eliza_connect';
 import { spyOn } from 'jest-mock';
 
 import { sleep, wrapper } from './jest/test-utils';

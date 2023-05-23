@@ -20,10 +20,10 @@
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^1.2.0",
-    "@tanstack/react-query": "^4.29.5",
+    "@tanstack/react-query": "^4.29.7",
     "@testing-library/react": "^14.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
     "generated-react": "workspace:*",
     "jest-environment-jsdom": "^29.5.0",
     "react": "^18.2.0",
@@ -37,10 +37,10 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "@bufbuild/connect": "^0.8.6",
-    "@bufbuild/connect-web": "^0.8.6",
+    "@bufbuild/connect": "^0.9.0",
+    "@bufbuild/connect-web": "^0.9.0",
     "@bufbuild/protobuf": "^1.2.0",
-    "@bufbuild/protoc-gen-connect-web": "^0.8.6",
+    "@bufbuild/protoc-gen-connect-es": "^0.9.0",
     "stable-hash": "^0.0.3"
   }
 }

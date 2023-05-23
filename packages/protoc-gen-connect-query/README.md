@@ -111,7 +111,7 @@ Note that we are adding `node_modules/.bin` to the `$PATH`, so that the protocol
 > Note: Since yarn v2 and above does not use a `node_modules` directory, you need to change the variable a bit:
 >
 > ```bash
-> PATH=$(dirname $(yarn bin protoc-gen-es)):$(dirname $(yarn bin protoc-gen-connect-web)):$PATH
+> PATH=$(dirname $(yarn bin protoc-gen-es)):$(dirname $(yarn bin protoc-gen-connect-es)):$PATH
 > ```
 
 ### With Node

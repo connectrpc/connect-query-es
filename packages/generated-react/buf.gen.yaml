@@ -10,7 +10,7 @@ plugins:
       - import_extension=.js
 
   - name: connect-web
-    path: ../protoc-gen-connect-query/node_modules/.bin/protoc-gen-connect-web
+    path: ../protoc-gen-connect-query/node_modules/.bin/protoc-gen-connect-es
     out: dist
     opt:
       - target=ts

@@ -37,7 +37,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import {
   BigIntService,
   ElizaService,
-} from 'generated-react/dist/eliza_connectweb';
+} from 'generated-react/dist/eliza_connect';
 import type {
   CountRequest,
   CountResponse,
