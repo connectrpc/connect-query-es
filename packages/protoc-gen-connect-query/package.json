@@ -25,7 +25,7 @@
   },
   "preferUnplugged": true,
   "devDependencies": {
-    "@bufbuild/protoc-gen-connect-web": "^0.8.6",
+    "@bufbuild/protoc-gen-connect-web": "^0.9.0",
     "@bufbuild/protoc-gen-es": "^1.2.0",
     "generated-react": "workspace:*",
     "typescript": "^5.0.4"
