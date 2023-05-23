@@ -16,7 +16,7 @@ import type { MethodInfo, PartialMessage } from '@bufbuild/protobuf';
 import { describe, expect, it } from '@jest/globals';
 import type { QueryFunctionContext } from '@tanstack/react-query';
 import { renderHook } from '@testing-library/react';
-import { ElizaService } from 'generated-react/dist/eliza_connectweb';
+import { ElizaService } from 'generated-react/dist/eliza_connect';
 import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 
 import type { ConnectQueryKey } from './connect-query-key';

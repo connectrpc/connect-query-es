@@ -13,7 +13,7 @@
     "@bufbuild/connect-web": "^0.9.0",
     "@bufbuild/protobuf": "^1.2.0",
     "@bufbuild/protoc-gen-connect-query": "workspace:*",
-    "@bufbuild/protoc-gen-connect-web": "^0.9.0",
+    "@bufbuild/protoc-gen-connect-es": "^0.9.0",
     "@bufbuild/protoc-gen-es": "^1.2.0",
     "@tanstack/react-query": "^4.29.7",
     "@tanstack/react-query-devtools": "^4.29.7",

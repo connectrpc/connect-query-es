@@ -21,7 +21,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   BigIntService,
   ElizaService,
-} from 'generated-react/dist/eliza_connectweb';
+} from 'generated-react/dist/eliza_connect';
 import type { CountRequest, SayRequest } from 'generated-react/dist/eliza_pb';
 import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';

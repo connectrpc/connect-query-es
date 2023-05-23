@@ -19,7 +19,7 @@ import type {
 } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
 import { describe, expect, it, jest } from '@jest/globals';
-import { BigIntService } from 'generated-react/dist/eliza_connectweb';
+import { BigIntService } from 'generated-react/dist/eliza_connect';
 import type { CountResponse } from 'generated-react/dist/eliza_pb';
 
 import type { Equal, Expect } from './jest/test-utils';

@@ -20,7 +20,7 @@ import type {
 } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
 import { describe, expect, it, jest } from '@jest/globals';
-import { ElizaService } from 'generated-react/dist/eliza_connectweb';
+import { ElizaService } from 'generated-react/dist/eliza_connect';
 import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 
 import type { ConnectQueryKey } from './connect-query-key';
