@@ -52,7 +52,7 @@ import type {
   ConnectQueryKey,
 } from './connect-query-key';
 import { defaultOptions } from './default-options';
-import type { Equal, Expect } from './jest/test-utils';
+import type { Alike, Equal, Expect } from './jest/test-utils';
 import {
   mockBigInt,
   mockCallOptions,
@@ -434,18 +434,37 @@ describe('unaryHooks', () => {
       >;
 
       type ExpectType_UseInfiniteQueryParams1 = Expect<
-        Equal<
+        Alike<
           params[1],
-          {
-            pageParamKey: 'add';
-            getNextPageParam: (
-              lastPage: CountResponse,
-              allPages: CountResponse[],
-            ) => unknown;
-            onError?: (error: ConnectError) => void;
-            transport?: Transport | undefined;
-            callOptions?: CallOptions | undefined;
-          }
+          | {
+              applyPageParam: (options: {
+                pageParam: bigint | undefined;
+                input: PartialMessage<CountRequest>;
+              }) => PartialMessage<CountRequest>;
+              getNextPageParam: (
+                lastPage: CountResponse,
+                allPages: CountResponse[],
+              ) => bigint | undefined;
+              onError?: (error: ConnectError) => void;
+              transport?: Transport | undefined;
+              callOptions?: CallOptions | undefined;
+              sanitizeInputKey?: (
+                input: PartialMessage<CountRequest>,
+              ) => unknown;
+            }
+          | {
+              pageParamKey: 'add';
+              getNextPageParam: (
+                lastPage: CountResponse,
+                allPages: CountResponse[],
+              ) => bigint | undefined;
+              onError?: (error: ConnectError) => void;
+              transport?: Transport | undefined;
+              callOptions?: CallOptions | undefined;
+              sanitizeInputKey?: (
+                input: PartialMessage<CountRequest>,
+              ) => unknown;
+            }
         >
       >;
 
@@ -499,7 +518,7 @@ describe('unaryHooks', () => {
                 { sentence: 'Infinity' },
                 {
                   pageParamKey: 'sentence',
-                  getNextPageParam: () => 0,
+                  getNextPageParam: () => '0',
                   transport: mockTransportOption,
                 },
               ),
@@ -584,7 +603,7 @@ describe('unaryHooks', () => {
         () =>
           genCount.useInfiniteQuery(disableQuery, {
             pageParamKey: 'add',
-            getNextPageParam: (lastPage) => Number(lastPage.count),
+            getNextPageParam: (lastPage) => lastPage.count,
           }),
         wrapper(),
       );
@@ -598,8 +617,7 @@ describe('unaryHooks', () => {
 
     it('allows a pageParam for the queryFn', async () => {
       const input = { add: 1n };
-      const getNextPageParam = (lastPage: CountResponse) =>
-        Number(lastPage.count);
+      const getNextPageParam = (lastPage: CountResponse) => lastPage.count;
       const { result } = renderHook(
         () =>
           genCount.useInfiniteQuery(input, {
@@ -628,8 +646,14 @@ describe('unaryHooks', () => {
 
       it("doesn't use onError if it isn't passed", () => {
         const { result } = renderHook(
-          // @ts-expect-error(2345) intentionally missing
-          () => genCount.useInfiniteQuery({}, {}),
+          () =>
+            genCount.useInfiniteQuery(
+              {},
+              {
+                pageParamKey: 'add',
+                getNextPageParam: (lastPage) => lastPage.count,
+              },
+            ),
           wrapper(),
         );
         expect(result.current.onError).toBeUndefined();
@@ -641,8 +665,11 @@ describe('unaryHooks', () => {
         const { result, rerender } = renderHook(
           () =>
             useQuery({
-              // @ts-expect-error(2345) intentionally invalid input
-              ...genCount.useInfiniteQuery({ nope: 'nope nope' }, { onError }),
+              ...genCount.useInfiniteQuery(
+                // @ts-expect-error(2345) intentionally invalid input
+                { nope: 'nope nope' },
+                { onError, pageParamKey: 'add' },
+              ),
               queryFn: async () => Promise.reject('error'),
               retry: false,
             }),
@@ -674,7 +701,7 @@ describe('unaryHooks', () => {
               { add: 1n },
               {
                 pageParamKey: 'add',
-                getNextPageParam: (lastPage) => Number(lastPage.count),
+                getNextPageParam: (lastPage) => lastPage.count,
                 transport,
                 callOptions: mockCallOptions,
               },
@@ -720,6 +747,110 @@ describe('unaryHooks', () => {
         mockCallOptions.headers, // headers
         expect.objectContaining({
           page: 1n,
+        }), // input
+      );
+    });
+
+    it('removes the specified pageParamKey by default', () => {
+      const transport = mockPaginatedTransport();
+      const { result } = renderHook(
+        () =>
+          genPaginated.useInfiniteQuery(
+            { page: 1n },
+            {
+              pageParamKey: 'page',
+              getNextPageParam: (lastPage) => lastPage.page + 1n,
+              transport,
+              callOptions: mockCallOptions,
+            },
+          ),
+        wrapper({ defaultOptions }),
+      );
+
+      expect(result.current.queryKey).toStrictEqual([
+        'buf.connect.demo.eliza.v1.PaginatedService',
+        'List',
+        {
+          page: undefined,
+        },
+      ]);
+    });
+
+    it('allows cleaning the queryKey', () => {
+      const transport = mockPaginatedTransport();
+      const { result } = renderHook(
+        () =>
+          genPaginated.useInfiniteQuery(
+            { page: 1n },
+            {
+              applyPageParam: ({ pageParam, input }) => {
+                if (pageParam === undefined) {
+                  return input;
+                }
+                return {
+                  ...input,
+                  page: pageParam,
+                };
+              },
+              sanitizeInputKey: (input) => ({
+                ...input,
+                page: undefined,
+              }),
+              getNextPageParam: (lastPage) => lastPage.page + 1n,
+              transport,
+              callOptions: mockCallOptions,
+            },
+          ),
+        wrapper({ defaultOptions }),
+      );
+
+      expect(result.current.queryKey).toStrictEqual([
+        'buf.connect.demo.eliza.v1.PaginatedService',
+        'List',
+        {
+          page: undefined,
+        },
+      ]);
+    });
+
+    it('allows applying a page param dynamically', () => {
+      const transport = mockPaginatedTransport();
+      const transportSpy = jest.spyOn(transport, 'unary');
+      renderHook(
+        () =>
+          useInfiniteQuery(
+            genPaginated.useInfiniteQuery(
+              { page: 1n },
+              {
+                applyPageParam: ({ pageParam, input }) => {
+                  if (pageParam === undefined) {
+                    return {
+                      ...input,
+                      page: 2n,
+                    };
+                  }
+                  return {
+                    ...input,
+                    page: pageParam,
+                  };
+                },
+                getNextPageParam: (lastPage) => lastPage.page + 1n,
+                transport,
+                callOptions: mockCallOptions,
+              },
+            ),
+          ),
+        wrapper({ defaultOptions }),
+      );
+
+      expect(transportSpy).toHaveBeenCalledWith(
+        expect.anything(), // service
+        expect.anything(), // method
+        mockCallOptions.signal, // signal
+        mockCallOptions.timeoutMs, // timeoutMs
+        mockCallOptions.headers, // headers
+        expect.objectContaining({
+          page: 2n,
         }), // input
       );
     });
