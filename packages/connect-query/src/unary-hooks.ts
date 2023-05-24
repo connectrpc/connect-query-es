@@ -266,6 +266,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       const contextTransport = useTransport();
       const transport =
         optionsTransport ?? topLevelCustomTransport ?? contextTransport;
+
       return {
         enabled: input !== disableQuery,
 
@@ -276,6 +277,8 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             input !== disableQuery,
             'queryFn does not accept a disabled query',
           );
+          const valueAtPageParam =
+            input[pageParamKey as unknown as keyof PartialMessage<I>];
           const result = await transport.unary(
             { typeName, methods: {} },
             methodInfo,
@@ -284,7 +287,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             callOptions?.headers,
             {
               ...input,
-              [pageParamKey]: context.pageParam,
+              [pageParamKey]: context.pageParam ?? valueAtPageParam,
             },
           );
           return result.message;
