@@ -143,16 +143,19 @@ export const mockStatefulBigIntTransport = () =>
 /**
  * a mock for PaginatedService that acts as an impromptu database
  */
-export const mockStatefulPaginatedTransport = () =>
+export const mockPaginatedTransport = () =>
   createRouterTransport(({ service }) => {
-    let base = 1n;
     service(PaginatedService, {
       list: (request) => {
+        const base = (request.page - 1n) * 3n;
         const result = {
           page: request.page,
-          items: [`${base} Item`, `${base + 1n} Item`, `${base + 2n} Item`],
+          items: [
+            `${base + 1n} Item`,
+            `${base + 2n} Item`,
+            `${base + 3n} Item`,
+          ],
         };
-        base += 3n;
         return result;
       },
     });

@@ -57,8 +57,8 @@ import {
   mockBigInt,
   mockCallOptions,
   mockEliza,
+  mockPaginatedTransport,
   mockStatefulBigIntTransport,
-  mockStatefulPaginatedTransport,
   sleep,
   wrapper,
 } from './jest/test-utils';
@@ -528,7 +528,7 @@ describe('unaryHooks', () => {
               getNextPageParam: (lastPage) => lastPage.page + 1n,
             }),
           ),
-        wrapper({ defaultOptions }, mockStatefulPaginatedTransport()),
+        wrapper({ defaultOptions }, mockPaginatedTransport()),
       );
 
       expect(result.current.data).toStrictEqual(undefined);
@@ -540,7 +540,12 @@ describe('unaryHooks', () => {
       expect(result.current.data?.pageParams).toStrictEqual([undefined]);
 
       expect(result.current.data?.pages).toHaveLength(1);
-      expect(result.current.data?.pages[0].page).toStrictEqual(1n); // starts at 0
+      expect(result.current.data?.pages[0].page).toStrictEqual(1n);
+      expect(result.current.data?.pages[0].items).toStrictEqual([
+        `1 Item`,
+        `2 Item`,
+        `3 Item`,
+      ]);
 
       // execute a single increment
       await result.current.fetchNextPage();
@@ -689,7 +694,7 @@ describe('unaryHooks', () => {
     });
 
     it('passes through the current pageParam on initial fetch', () => {
-      const transport = mockStatefulPaginatedTransport();
+      const transport = mockPaginatedTransport();
       const transportSpy = jest.spyOn(transport, 'unary');
       renderHook(
         () =>
