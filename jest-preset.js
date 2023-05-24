@@ -30,6 +30,7 @@ module.exports = {
   snapshotFormat: {
     printBasicPrototype: false,
   },
+  workerThreads: true,
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',

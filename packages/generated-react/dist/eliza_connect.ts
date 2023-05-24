@@ -17,7 +17,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConverseRequest, ConverseResponse, CountRequest, CountResponse, IntroduceRequest, IntroduceResponse, Nothing, SayRequest, SayResponse } from "./eliza_pb.js";
+import { ConverseRequest, ConverseResponse, CountRequest, CountResponse, IntroduceRequest, IntroduceResponse, ListRequest, ListResponse, Nothing, SayRequest, SayResponse } from "./eliza_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -180,6 +180,24 @@ export const BigIntService = {
       name: "Count",
       I: CountRequest,
       O: CountResponse,
+      kind: MethodKind.Unary,
+    },
+  }
+} as const;
+
+/**
+ * @generated from service buf.connect.demo.eliza.v1.PaginatedService
+ */
+export const PaginatedService = {
+  typeName: "buf.connect.demo.eliza.v1.PaginatedService",
+  methods: {
+    /**
+     * @generated from rpc buf.connect.demo.eliza.v1.PaginatedService.List
+     */
+    list: {
+      name: "List",
+      I: ListRequest,
+      O: ListResponse,
       kind: MethodKind.Unary,
     },
   }

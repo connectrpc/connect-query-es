@@ -19,26 +19,23 @@
 
 import { createQueryService } from "connect-query";
 import { MethodKind } from "@bufbuild/protobuf";
-import { SayRequest, SayResponse } from "./eliza_pb.js";
+import { ListRequest, ListResponse } from "./eliza_pb.js";
 
-export const typeName = "buf.connect.demo.eliza.v1.SecondService";
+export const typeName = "buf.connect.demo.eliza.v1.PaginatedService";
 
 /**
- * Say is a unary request demo. This method should allow for a one sentence
- * response given a one sentence request.
- *
- * @generated from rpc buf.connect.demo.eliza.v1.SecondService.Say
+ * @generated from rpc buf.connect.demo.eliza.v1.PaginatedService.List
  */
-export const say = createQueryService({
+export const list = createQueryService({
   service: {
     methods: {
-      say: {
-        name: "Say",
+      list: {
+        name: "List",
         kind: MethodKind.Unary,
-        I: SayRequest,
-        O: SayResponse,
+        I: ListRequest,
+        O: ListResponse,
       },
     },
-    typeName: "buf.connect.demo.eliza.v1.SecondService",
+    typeName: "buf.connect.demo.eliza.v1.PaginatedService",
   },
-}).say;
+}).list;
