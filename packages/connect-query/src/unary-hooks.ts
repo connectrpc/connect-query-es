@@ -17,7 +17,6 @@ import type {
   Message,
   MethodInfoUnary,
   PartialMessage,
-  PlainMessage,
   ServiceType,
 } from '@bufbuild/protobuf';
 import type {
@@ -105,7 +104,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   /**
    * This helper is intended to be used with `QueryClient`s `useInfiniteQuery` function.
    */
-  useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
+  useInfiniteQuery: <ParamKey extends keyof PartialMessage<I>>(
     input: DisableQuery | PartialMessage<I>,
     options: {
       pageParamKey: ParamKey;
@@ -121,7 +120,7 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
     queryFn: (
       context: QueryFunctionContext<
         ConnectQueryKey<I>,
-        PlainMessage<I>[ParamKey]
+        PartialMessage<I>[ParamKey]
       >,
     ) => Promise<O>;
     getNextPageParam: GetNextPageParamFunction<O>;
@@ -277,8 +276,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             input !== disableQuery,
             'queryFn does not accept a disabled query',
           );
-          const valueAtPageParam =
-            input[pageParamKey as unknown as keyof PartialMessage<I>];
+          const valueAtPageParam = input[pageParamKey];
           const result = await transport.unary(
             { typeName, methods: {} },
             methodInfo,

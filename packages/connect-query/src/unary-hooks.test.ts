@@ -467,7 +467,7 @@ describe('unaryHooks', () => {
             queryFn: (
               context: QueryFunctionContext<
                 ConnectQueryKey<CountRequest>,
-                bigint
+                bigint | undefined
               >,
             ) => Promise<CountResponse>;
             getNextPageParam: GetNextPageParamFunction<CountResponse>;
