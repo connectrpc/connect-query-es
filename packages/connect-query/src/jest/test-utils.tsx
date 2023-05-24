@@ -21,6 +21,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   BigIntService,
   ElizaService,
+  PaginatedService,
 } from 'generated-react/dist/eliza_connect';
 import type { CountRequest, SayRequest } from 'generated-react/dist/eliza_pb';
 import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
@@ -135,6 +136,27 @@ export const mockStatefulBigIntTransport = () =>
           count += request.add;
         }
         return new CountResponse({ count });
+      },
+    });
+  });
+
+/**
+ * a mock for PaginatedService that acts as an impromptu database
+ */
+export const mockPaginatedTransport = () =>
+  createRouterTransport(({ service }) => {
+    service(PaginatedService, {
+      list: (request) => {
+        const base = (request.page - 1n) * 3n;
+        const result = {
+          page: request.page,
+          items: [
+            `${base + 1n} Item`,
+            `${base + 2n} Item`,
+            `${base + 3n} Item`,
+          ],
+        };
+        return result;
       },
     });
   });

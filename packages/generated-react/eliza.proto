@@ -101,3 +101,16 @@ message CountResponse {
 service BigIntService {
   rpc Count(CountRequest) returns (CountResponse);
 }
+
+message ListRequest {
+  int64 page = 1;
+}
+
+message ListResponse {
+  int64 page = 1;
+  repeated string items = 2;
+}
+
+service PaginatedService {
+  rpc List(ListRequest) returns (ListResponse);
+}

@@ -37,6 +37,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import {
   BigIntService,
   ElizaService,
+  PaginatedService,
 } from 'generated-react/dist/eliza_connect';
 import type {
   CountRequest,
@@ -56,6 +57,7 @@ import {
   mockBigInt,
   mockCallOptions,
   mockEliza,
+  mockPaginatedTransport,
   mockStatefulBigIntTransport,
   sleep,
   wrapper,
@@ -74,6 +76,11 @@ const genCount = unaryHooks({
 const genSay = unaryHooks({
   methodInfo: ElizaService.methods.say,
   typeName: ElizaService.typeName,
+});
+
+const genPaginated = unaryHooks({
+  methodInfo: PaginatedService.methods.list,
+  typeName: PaginatedService.typeName,
 });
 
 describe('unaryHooks', () => {
@@ -460,7 +467,7 @@ describe('unaryHooks', () => {
             queryFn: (
               context: QueryFunctionContext<
                 ConnectQueryKey<CountRequest>,
-                bigint
+                bigint | undefined
               >,
             ) => Promise<CountResponse>;
             getNextPageParam: GetNextPageParamFunction<CountResponse>;
@@ -511,17 +518,17 @@ describe('unaryHooks', () => {
     });
 
     it('integrates with `useInfiniteQuery`', async () => {
-      const input = { add: 1n };
+      const input = { page: 1n };
 
       const { result, rerender } = renderHook(
         () =>
           useInfiniteQuery(
-            genCount.useInfiniteQuery(input, {
-              pageParamKey: 'add',
-              getNextPageParam: (lastPage) => lastPage.count + input.add,
+            genPaginated.useInfiniteQuery(input, {
+              pageParamKey: 'page',
+              getNextPageParam: (lastPage) => lastPage.page + 1n,
             }),
           ),
-        wrapper({ defaultOptions }, mockStatefulBigIntTransport()),
+        wrapper({ defaultOptions }, mockPaginatedTransport()),
       );
 
       expect(result.current.data).toStrictEqual(undefined);
@@ -533,14 +540,26 @@ describe('unaryHooks', () => {
       expect(result.current.data?.pageParams).toStrictEqual([undefined]);
 
       expect(result.current.data?.pages).toHaveLength(1);
-      expect(result.current.data?.pages[0].count).toStrictEqual(0n); // starts at 0
+      expect(result.current.data?.pages[0].page).toStrictEqual(1n);
+      expect(result.current.data?.pages[0].items).toStrictEqual([
+        `1 Item`,
+        `2 Item`,
+        `3 Item`,
+      ]);
 
       // execute a single increment
       await result.current.fetchNextPage();
       rerender();
 
+      expect(result.current.data?.pageParams).toStrictEqual([undefined, 2n]);
+
       expect(result.current.data?.pages).toHaveLength(2);
-      expect(result.current.data?.pages[1].count).toStrictEqual(1n); // adds 1 to (last page (0) * 2)
+      expect(result.current.data?.pages[1].page).toStrictEqual(2n);
+      expect(result.current.data?.pages[1].items).toStrictEqual([
+        `4 Item`,
+        `5 Item`,
+        `6 Item`,
+      ]);
 
       // execute two increments at once
       await result.current.fetchNextPage();
@@ -548,8 +567,16 @@ describe('unaryHooks', () => {
       rerender();
 
       expect(result.current.data?.pages).toHaveLength(4);
-      expect(result.current.data?.pages[2].count).toStrictEqual(3n); // adds 1 to (last page (1) * 2)
-      expect(result.current.data?.pages[3].count).toStrictEqual(7n); // adds 1 to (last page (3) * 2)
+      expect(result.current.data?.pages[2].items).toStrictEqual([
+        `7 Item`,
+        `8 Item`,
+        `9 Item`,
+      ]);
+      expect(result.current.data?.pages[3].items).toStrictEqual([
+        `10 Item`,
+        `11 Item`,
+        `12 Item`,
+      ]);
     });
 
     it('is disabled when input matches the `disableQuery` symbol', async () => {
@@ -663,6 +690,37 @@ describe('unaryHooks', () => {
         mockCallOptions.timeoutMs, // timeoutMs
         mockCallOptions.headers, // headers
         expect.anything(), // input
+      );
+    });
+
+    it('passes through the current pageParam on initial fetch', () => {
+      const transport = mockPaginatedTransport();
+      const transportSpy = jest.spyOn(transport, 'unary');
+      renderHook(
+        () =>
+          useInfiniteQuery(
+            genPaginated.useInfiniteQuery(
+              { page: 1n },
+              {
+                pageParamKey: 'page',
+                getNextPageParam: (lastPage) => lastPage.page + 1n,
+                transport,
+                callOptions: mockCallOptions,
+              },
+            ),
+          ),
+        wrapper({ defaultOptions }),
+      );
+
+      expect(transportSpy).toHaveBeenCalledWith(
+        expect.anything(), // service
+        expect.anything(), // method
+        mockCallOptions.signal, // signal
+        mockCallOptions.timeoutMs, // timeoutMs
+        mockCallOptions.headers, // headers
+        expect.objectContaining({
+          page: 1n,
+        }), // input
       );
     });
   });
