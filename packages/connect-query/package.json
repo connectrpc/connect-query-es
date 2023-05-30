@@ -3,6 +3,10 @@
   "version": "0.2.3",
   "license": "Apache-2.0",
   "sideEffects": false,
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=8"
+  },
   "files": [
     "dist/**"
   ],

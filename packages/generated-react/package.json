@@ -14,7 +14,8 @@
     "dist/**"
   ],
   "engines": {
-    "node": ">=16"
+    "node": ">=16",
+    "pnpm": ">=8"
   },
   "scripts": {
     "clean": "rm -rf dist",
