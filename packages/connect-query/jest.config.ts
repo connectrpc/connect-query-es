@@ -16,11 +16,16 @@ import type { Config } from 'jest';
 
 const config: Config = {
   preset: '../../jest-preset.js',
-  testEnvironment: '<rootDir>/jest-environment-jsdom.js',
+  testEnvironment: 'jsdom',
   moduleNameMapper: {
     '(.+)\\.js': '$1', // https://connect.build/docs/web/supported-browsers-and-frameworks/#jest
   },
   testMatch: ['<rootDir>/**/*.test.ts?(x)'],
+  globals: {
+    TextEncoder,
+    TextDecoder,
+    Uint8Array,
+  },
 };
 
 export default config;
