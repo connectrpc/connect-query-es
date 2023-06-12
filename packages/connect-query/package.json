@@ -29,7 +29,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tsup": "^6.7.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "@bufbuild/protobuf": "1.2.0",
+    "@bufbuild/connect-web": "0.9.1",
+    "@bufbuild/connect": "0.9.1"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^4.20.4",
