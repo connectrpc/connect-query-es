@@ -39,6 +39,12 @@ import {
   unreachableCase,
 } from './utils';
 
+type RequireExactlyOne<T, Keys extends keyof T = keyof T> = {
+  [K in Keys]-?: Partial<Record<Exclude<Keys, K>, undefined>> &
+    Required<Pick<T, K>>;
+}[Keys] &
+  Pick<T, Exclude<keyof T, Keys>>;
+
 interface BaseInfiniteQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
@@ -123,17 +129,13 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
   useInfiniteQuery: <ParamKey extends keyof PartialMessage<I>>(
     input: DisableQuery | PartialMessage<I>,
     options: BaseInfiniteQueryOptions<I, O, ParamKey> &
-      (
-        | {
-            applyPageParam: (options: {
-              pageParam: PartialMessage<I>[ParamKey] | undefined;
-              input: PartialMessage<I>;
-            }) => PartialMessage<I>;
-          }
-        | {
-            pageParamKey: ParamKey;
-          }
-      ),
+      RequireExactlyOne<{
+        applyPageParam: (options: {
+          pageParam: PartialMessage<I>[ParamKey] | undefined;
+          input: PartialMessage<I>;
+        }) => PartialMessage<I>;
+        pageParamKey: ParamKey;
+      }>,
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
@@ -292,7 +294,8 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
       if (enabled) {
         sanitizedInput =
-          'pageParamKey' in otherOptions
+          'pageParamKey' in otherOptions &&
+          otherOptions.pageParamKey !== undefined
             ? {
                 ...input,
                 [otherOptions.pageParamKey]: undefined,
@@ -311,11 +314,13 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             'queryFn does not accept a disabled query',
           );
           const valueAtPageParam =
-            'pageParamKey' in otherOptions
+            'pageParamKey' in otherOptions &&
+            otherOptions.pageParamKey !== undefined
               ? input[otherOptions.pageParamKey]
               : undefined;
           const inputCombinedWithPageParam =
-            'applyPageParam' in otherOptions
+            'applyPageParam' in otherOptions &&
+            otherOptions.applyPageParam !== undefined
               ? otherOptions.applyPageParam({
                   pageParam: context.pageParam,
                   input,
