@@ -197,13 +197,13 @@ importers:
         version: 0.0.3
     devDependencies:
       '@bufbuild/connect':
-        specifier: 0.9.1
+        specifier: ^0.9.1
         version: 0.9.1(@bufbuild/protobuf@1.2.0)
       '@bufbuild/connect-web':
-        specifier: 0.9.1
+        specifier: ^0.9.1
         version: 0.9.1(@bufbuild/protobuf@1.2.0)
       '@bufbuild/protobuf':
-        specifier: 1.2.0
+        specifier: ^1.2.0
         version: 1.2.0
       '@bufbuild/protoc-gen-es':
         specifier: ^1.2.0
