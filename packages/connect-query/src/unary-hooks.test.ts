@@ -52,7 +52,7 @@ import type {
   ConnectQueryKey,
 } from './connect-query-key';
 import { defaultOptions } from './default-options';
-import type { Alike, Equal, Expect } from './jest/test-utils';
+import type { Equal, Expect } from './jest/test-utils';
 import {
   mockBigInt,
   mockCallOptions,
@@ -433,41 +433,6 @@ describe('unaryHooks', () => {
         Equal<params[0], DisableQuery | PartialMessage<CountRequest>>
       >;
 
-      type ExpectType_UseInfiniteQueryParams1 = Expect<
-        Alike<
-          params[1],
-          | {
-              applyPageParam: (options: {
-                pageParam: bigint | undefined;
-                input: PartialMessage<CountRequest>;
-              }) => PartialMessage<CountRequest>;
-              getNextPageParam: (
-                lastPage: CountResponse,
-                allPages: CountResponse[],
-              ) => bigint | undefined;
-              onError?: (error: ConnectError) => void;
-              transport?: Transport | undefined;
-              callOptions?: CallOptions | undefined;
-              sanitizeInputKey?: (
-                input: PartialMessage<CountRequest>,
-              ) => unknown;
-            }
-          | {
-              pageParamKey: 'add';
-              getNextPageParam: (
-                lastPage: CountResponse,
-                allPages: CountResponse[],
-              ) => bigint | undefined;
-              onError?: (error: ConnectError) => void;
-              transport?: Transport | undefined;
-              callOptions?: CallOptions | undefined;
-              sanitizeInputKey?: (
-                input: PartialMessage<CountRequest>,
-              ) => unknown;
-            }
-        >
-      >;
-
       type returnType = ReturnType<typeof genCount.useInfiniteQuery>;
 
       type ExpectType_UseInfiniteQueryReturnKeys = Expect<
@@ -748,6 +713,32 @@ describe('unaryHooks', () => {
         expect.objectContaining({
           page: 1n,
         }), // input
+      );
+    });
+
+    // eslint-disable-next-line jest/expect-expect -- this test is just for a TS error
+    it('provides typescript errors if both pageParamKey and applyPageParam are provided', () => {
+      const transport = mockPaginatedTransport();
+      renderHook(
+        () =>
+          useInfiniteQuery(
+            genPaginated.useInfiniteQuery(
+              { page: 1n },
+              // @ts-expect-error(2345) intentionally invalid applyPageParam + pageParamKey
+              {
+                pageParamKey: 'page',
+                getNextPageParam: (lastPage) => lastPage.page + 1n,
+                transport,
+                callOptions: mockCallOptions,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- test ignore
+                applyPageParam: (input: unknown) => ({
+                  // @ts-expect-error(2345) ignore these errors for testing
+                  ...input,
+                }),
+              },
+            ),
+          ),
+        wrapper({ defaultOptions }),
       );
     });
 
