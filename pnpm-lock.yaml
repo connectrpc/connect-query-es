@@ -66,7 +66,7 @@ importers:
         version: 2.8.8
       ts-jest:
         specifier: 29.1.0
-        version: 29.1.0(@babel/core@7.21.8)(jest@29.5.0)(typescript@5.0.4)
+        version: 29.1.0(jest@29.5.0)(typescript@5.0.4)
       ts-node:
         specifier: 10.9.1
         version: 10.9.1(@types/node@20.2.3)(typescript@5.0.4)
@@ -87,7 +87,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -124,7 +124,7 @@ importers:
         version: 5.0.4
       vite:
         specifier: ^4.3.8
-        version: 4.3.8(@types/node@20.2.3)
+        version: 4.3.8
 
   examples/react/basic-without-generation:
     dependencies:
@@ -139,7 +139,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -176,26 +176,23 @@ importers:
         version: 5.0.4
       vite:
         specifier: ^4.3.8
-        version: 4.3.8(@types/node@20.2.3)
+        version: 4.3.8
 
   packages/connect-query:
     dependencies:
-      '@bufbuild/connect':
-        specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/protobuf@1.2.0)
-      '@bufbuild/connect-web':
-        specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/protobuf@1.2.0)
-      '@bufbuild/protobuf':
-        specifier: ^1.2.0
-        version: 1.2.0
-      '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
       stable-hash:
         specifier: ^0.0.3
         version: 0.0.3
     devDependencies:
+      '@bufbuild/connect':
+        specifier: ^0.9.1
+        version: 0.9.1(@bufbuild/protobuf@1.2.0)
+      '@bufbuild/connect-web':
+        specifier: ^0.9.1
+        version: 0.9.1(@bufbuild/protobuf@1.2.0)
+      '@bufbuild/protobuf':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@bufbuild/protoc-gen-es':
         specifier: ^1.2.0
         version: 1.2.0(@bufbuild/protobuf@1.2.0)
@@ -225,7 +222,7 @@ importers:
         version: 18.2.0(react@18.2.0)
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(ts-node@10.9.1)(typescript@5.0.4)
+        version: 6.7.0(typescript@5.0.4)
       typescript:
         specifier: ^5.0.4
         version: 5.0.4
@@ -243,7 +240,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../protoc-gen-connect-query
@@ -262,7 +259,7 @@ importers:
     devDependencies:
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-es':
         specifier: ^1.2.0
         version: 1.2.0(@bufbuild/protobuf@1.2.0)
@@ -720,17 +717,35 @@ packages:
       '@bufbuild/protobuf': 1.2.0
     dev: false
 
+  /@bufbuild/connect-web@0.9.1(@bufbuild/protobuf@1.2.0):
+    resolution: {integrity: sha512-rQU2Aob68F9Olk5udbNO8qGdh49Iv374WJjjAYatqVDXhKIKIL0+2nUoYadjOnKS0D/hYETMotNuMvCuoLfgVQ==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.2.0
+    dependencies:
+      '@bufbuild/connect': 0.9.1(@bufbuild/protobuf@1.2.0)
+      '@bufbuild/protobuf': 1.2.0
+    dev: true
+
   /@bufbuild/connect@0.9.0(@bufbuild/protobuf@1.2.0):
     resolution: {integrity: sha512-UGOapHlbdbXW9Os08plEuR2k3ZwFWni3BnYVSEPITDTjgEqTagbm6lNWurXM53FDPvueSYYTTJF3Rivhp03xbQ==}
     peerDependencies:
       '@bufbuild/protobuf': ^1.2.0
     dependencies:
       '@bufbuild/protobuf': 1.2.0
+    dev: false
+
+  /@bufbuild/connect@0.9.1(@bufbuild/protobuf@1.2.0):
+    resolution: {integrity: sha512-4O/PSMLWd3oQkwBuJBGBzFtPsnFC5dTRPGHFNFODna9wZJ6r45ccsOWsA4qXBL7gW2EKw93zRa0KVuge2dCOQQ==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.2.0
+    dependencies:
+      '@bufbuild/protobuf': 1.2.0
+    dev: true
 
   /@bufbuild/protobuf@1.2.0:
     resolution: {integrity: sha512-MBVuQMOBHxgGnZ9XCUIi8WOy5O/T4ma3TduCRhRvndv3UDbG9cHgd8h6nOYSGyBYPEvXf1z9nTwhp8mVIDbq2g==}
 
-  /@bufbuild/protoc-gen-connect-es@0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0):
+  /@bufbuild/protoc-gen-connect-es@0.9.0(@bufbuild/protoc-gen-es@1.2.0):
     resolution: {integrity: sha512-PiLmuti2hbHiZ0u/frUExq9o+RFHnOOnkgPbFZ0JJd0X4bug7q/LWOPWhGwuLKwiZjO+D7XkdApzvvRXchUlwA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -743,7 +758,6 @@ packages:
       '@bufbuild/protoc-gen-es':
         optional: true
     dependencies:
-      '@bufbuild/connect': 0.9.0(@bufbuild/protobuf@1.2.0)
       '@bufbuild/protobuf': 1.2.0
       '@bufbuild/protoc-gen-es': 1.2.0(@bufbuild/protobuf@1.2.0)
       '@bufbuild/protoplugin': 1.2.0
@@ -1993,7 +2007,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.21.0(@babel/core@7.21.8)
       '@babel/plugin-transform-react-jsx-source': 7.19.6(@babel/core@7.21.8)
       react-refresh: 0.14.0
-      vite: 4.3.8(@types/node@20.2.3)
+      vite: 4.3.8
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3038,7 +3052,7 @@ packages:
       debug: 4.3.4
       enhanced-resolve: 5.14.0
       eslint: 8.41.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.59.7)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.5)(eslint@8.41.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.59.7)(eslint-import-resolver-typescript@3.5.5)(eslint@8.41.0)
       eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.59.7)(eslint-import-resolver-typescript@3.5.5)(eslint@8.41.0)
       get-tsconfig: 4.5.0
       globby: 13.1.4
@@ -3077,6 +3091,35 @@ packages:
       debug: 3.2.7
       eslint: 8.41.0
       eslint-import-resolver-node: 0.3.7
+      eslint-import-resolver-typescript: 3.5.5(@typescript-eslint/parser@5.59.7)(eslint-plugin-import@2.27.5)(eslint@8.41.0)
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /eslint-module-utils@2.8.0(@typescript-eslint/parser@5.59.7)(eslint-import-resolver-typescript@3.5.5)(eslint@8.41.0):
+    resolution: {integrity: sha512-aWajIYfsqCKRDgUfjEXNN/JlrzauMuSEy5sbd7WXbtW3EH6A6MpwEh42c7qD+MqQo9QMJ6fWLAeIJynx0g6OAw==}
+    engines: {node: '>=4'}
+    peerDependencies:
+      '@typescript-eslint/parser': '*'
+      eslint: '*'
+      eslint-import-resolver-node: '*'
+      eslint-import-resolver-typescript: '*'
+      eslint-import-resolver-webpack: '*'
+    peerDependenciesMeta:
+      '@typescript-eslint/parser':
+        optional: true
+      eslint:
+        optional: true
+      eslint-import-resolver-node:
+        optional: true
+      eslint-import-resolver-typescript:
+        optional: true
+      eslint-import-resolver-webpack:
+        optional: true
+    dependencies:
+      '@typescript-eslint/parser': 5.59.7(eslint@8.41.0)(typescript@5.0.4)
+      debug: 3.2.7
+      eslint: 8.41.0
       eslint-import-resolver-typescript: 3.5.5(@typescript-eslint/parser@5.59.7)(eslint-plugin-import@2.27.5)(eslint@8.41.0)
     transitivePeerDependencies:
       - supports-color
@@ -5099,7 +5142,7 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /postcss-load-config@3.1.4(ts-node@10.9.1):
+  /postcss-load-config@3.1.4:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
     engines: {node: '>= 10'}
     peerDependencies:
@@ -5112,7 +5155,6 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.1.0
-      ts-node: 10.9.1(@types/node@20.2.3)(typescript@5.0.4)
       yaml: 1.10.2
     dev: true
 
@@ -5687,7 +5729,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-jest@29.1.0(@babel/core@7.21.8)(jest@29.5.0)(typescript@5.0.4):
+  /ts-jest@29.1.0(jest@29.5.0)(typescript@5.0.4):
     resolution: {integrity: sha512-ZhNr7Z4PcYa+JjMl62ir+zPiNJfXJN6E8hSLnaUKhOgqcn8vb3e537cpkd0FuAfRK3sR1LSqM1MOhliXNgOFPA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -5708,7 +5750,6 @@ packages:
       esbuild:
         optional: true
     dependencies:
-      '@babel/core': 7.21.8
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
       jest: 29.5.0(@types/node@20.2.3)(ts-node@10.9.1)
@@ -5769,7 +5810,7 @@ packages:
     resolution: {integrity: sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==}
     dev: true
 
-  /tsup@6.7.0(ts-node@10.9.1)(typescript@5.0.4):
+  /tsup@6.7.0(typescript@5.0.4):
     resolution: {integrity: sha512-L3o8hGkaHnu5TdJns+mCqFsDBo83bJ44rlK7e6VdanIvpea4ArPcU3swWGsLVbXak1PqQx/V+SSmFPujBK+zEQ==}
     engines: {node: '>=14.18'}
     hasBin: true
@@ -5793,7 +5834,7 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 3.1.4(ts-node@10.9.1)
+      postcss-load-config: 3.1.4
       resolve-from: 5.0.0
       rollup: 3.23.0
       source-map: 0.8.0-beta.0
@@ -5943,7 +5984,7 @@ packages:
       convert-source-map: 1.9.0
     dev: true
 
-  /vite@4.3.8(@types/node@20.2.3):
+  /vite@4.3.8:
     resolution: {integrity: sha512-uYB8PwN7hbMrf4j1xzGDk/lqjsZvCDbt/JC5dyfxc19Pg8kRm14LinK/uq+HSLNswZEoKmweGdtpbnxRtrAXiQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -5968,7 +6009,6 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.2.3
       esbuild: 0.17.19
       postcss: 8.4.23
       rollup: 3.23.0
