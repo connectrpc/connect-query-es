@@ -39,7 +39,6 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
 
 # Quickstart
 
-
 ## Install
 
 ```sh
