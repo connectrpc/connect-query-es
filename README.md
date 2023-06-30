@@ -39,6 +39,16 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
 
 # Quickstart
 
+## Install
+
+```sh
+npm install @bufbuild/connect-query
+```
+
+Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf` and `@bufbuild/connect` installed.
+
+## Usage
+
 Connect-Query will immediately feel familiar to you if you've used TanStack Query.  It provides a set of convenient helpers that you can pass to the same TanStack Query functions you're already using:
 
 ```ts
