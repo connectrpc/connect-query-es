@@ -39,6 +39,28 @@ import {
   unreachableCase,
 } from './utils';
 
+type RequireExactlyOne<T, Keys extends keyof T = keyof T> = {
+  [K in Keys]-?: Partial<Record<Exclude<Keys, K>, undefined>> &
+    Required<Pick<T, K>>;
+}[Keys] &
+  Pick<T, Exclude<keyof T, Keys>>;
+
+interface BaseInfiniteQueryOptions<
+  I extends Message<I>,
+  O extends Message<O>,
+  ParamKey extends keyof PartialMessage<I>,
+> {
+  getNextPageParam: (lastPage: O, allPages: O[]) => PartialMessage<I>[ParamKey];
+  /**
+   * The option allows you to remove fields or otherwise customize the input used to generate the query key.
+   * By default, we will remove the pageParamKey from the input. If this is provided, we will use this result instead.
+   */
+  sanitizeInputKey?: (input: PartialMessage<I>) => unknown;
+  onError?: (error: ConnectError) => void;
+  transport?: Transport | undefined;
+  callOptions?: CallOptions | undefined;
+}
+
 /**
  * The set of data and hooks that a unary method supports.
  */
@@ -106,14 +128,14 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
    */
   useInfiniteQuery: <ParamKey extends keyof PartialMessage<I>>(
     input: DisableQuery | PartialMessage<I>,
-    options: {
-      pageParamKey: ParamKey;
-      getNextPageParam: (lastPage: O, allPages: O[]) => unknown;
-
-      onError?: (error: ConnectError) => void;
-      transport?: Transport | undefined;
-      callOptions?: CallOptions | undefined;
-    },
+    options: BaseInfiniteQueryOptions<I, O, ParamKey> &
+      RequireExactlyOne<{
+        applyPageParam: (options: {
+          pageParam: PartialMessage<I>[ParamKey] | undefined;
+          input: PartialMessage<I>;
+        }) => PartialMessage<I>;
+        pageParamKey: ParamKey;
+      }>,
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
@@ -257,17 +279,32 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
       {
         transport: optionsTransport,
         getNextPageParam,
-        pageParamKey,
         onError,
         callOptions,
+        sanitizeInputKey,
+        ...otherOptions
       },
     ) => {
       const contextTransport = useTransport();
       const transport =
         optionsTransport ?? topLevelCustomTransport ?? contextTransport;
 
+      const enabled = input !== disableQuery;
+      let sanitizedInput = input;
+
+      if (enabled) {
+        sanitizedInput =
+          'pageParamKey' in otherOptions &&
+          otherOptions.pageParamKey !== undefined
+            ? {
+                ...input,
+                [otherOptions.pageParamKey]: undefined,
+              }
+            : sanitizeInputKey?.(input) ?? input;
+      }
+
       return {
-        enabled: input !== disableQuery,
+        enabled,
 
         getNextPageParam,
 
@@ -276,22 +313,36 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
             input !== disableQuery,
             'queryFn does not accept a disabled query',
           );
-          const valueAtPageParam = input[pageParamKey];
+          const valueAtPageParam =
+            'pageParamKey' in otherOptions &&
+            otherOptions.pageParamKey !== undefined
+              ? input[otherOptions.pageParamKey]
+              : undefined;
+          const inputCombinedWithPageParam =
+            'applyPageParam' in otherOptions &&
+            otherOptions.applyPageParam !== undefined
+              ? otherOptions.applyPageParam({
+                  pageParam: context.pageParam,
+                  input,
+                })
+              : {
+                  ...input,
+                  [otherOptions.pageParamKey]:
+                    context.pageParam ?? valueAtPageParam,
+                };
+
           const result = await transport.unary(
             { typeName, methods: {} },
             methodInfo,
             (callOptions ?? context).signal,
             callOptions?.timeoutMs,
             callOptions?.headers,
-            {
-              ...input,
-              [pageParamKey]: context.pageParam ?? valueAtPageParam,
-            },
+            inputCombinedWithPageParam,
           );
           return result.message;
         },
 
-        queryKey: getQueryKey(input),
+        queryKey: getQueryKey(sanitizedInput),
 
         ...(onError ? { onError } : {}),
       };
