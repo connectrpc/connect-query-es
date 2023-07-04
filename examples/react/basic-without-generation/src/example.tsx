@@ -53,7 +53,7 @@ export const Example: FC = () => {
         <Datum label="data" datum={JSON.stringify(data)} />
         <Datum label="error" datum={JSON.stringify(error)} />
       </Data>
-      Sampel change
+      Sample change
     </Page>
   );
 };
