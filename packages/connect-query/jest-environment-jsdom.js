@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { TextDecoder, TextEncoder } from 'util';
-
 import { TestEnvironment } from 'jest-environment-jsdom';
+import { TextDecoder, TextEncoder } from 'util';
 
 // This test environment is needed because, as of 0.8.1, the Connect-ES codebase will not work in the jsdom environment due to a lack of TextEncoder and Text Decoder
 class CustomJsdomEnvironment extends TestEnvironment {
