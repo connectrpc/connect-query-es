@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const { TextDecoder, TextEncoder } = require('util');
-
-const JsdomEnvironment = require('jest-environment-jsdom').default;
+import { TestEnvironment } from 'jest-environment-jsdom';
+import { TextDecoder, TextEncoder } from 'util';
 
 // This test environment is needed because, as of 0.8.1, the Connect-ES codebase will not work in the jsdom environment due to a lack of TextEncoder and Text Decoder
-class CustomJsdomEnvironment extends JsdomEnvironment {
+class CustomJsdomEnvironment extends TestEnvironment {
   // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility -- it works and I'm not playing with it.
   async setup() {
     await super.setup();
@@ -38,4 +37,4 @@ class CustomJsdomEnvironment extends JsdomEnvironment {
   }
 }
 
-module.exports = CustomJsdomEnvironment;
+export default CustomJsdomEnvironment;
