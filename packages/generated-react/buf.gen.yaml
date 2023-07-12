@@ -20,3 +20,8 @@ plugins:
     path: ../protoc-gen-connect-query/bin/protoc-gen-connect-query
     opt: target=ts
     out: dist
+
+  - name: protoc-gen-connect-query-with-hooks
+    path: ../protoc-gen-connect-query-with-hooks/bin/protoc-gen-connect-query-with-hooks
+    opt: target=ts
+    out: dist
