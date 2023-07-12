@@ -1,19 +1,19 @@
 {
-  "name": "@bufbuild/protoc-gen-connect-query",
-  "version": "0.4.0",
+  "name": "@bufbuild/protoc-gen-connect-query-with-hooks",
+  "version": "0.0.1",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/bufbuild/connect-query.git",
-    "directory": "packages/protoc-gen-connect-query"
+    "directory": "packages/protoc-gen-connect-query-with-hooks"
   },
   "files": [
     "dist/**"
   ],
   "bin": {
-    "protoc-gen-connect-query": "bin/protoc-gen-connect-query"
+    "protoc-gen-connect-query-with-hooks": "bin/protoc-gen-connect-query-with-hooks"
   },
   "engines": {
     "node": ">=16"
@@ -26,6 +26,7 @@
   "preferUnplugged": true,
   "devDependencies": {
     "@bufbuild/protoc-gen-connect-es": "^0.11.0",
+    "@bufbuild/protoc-gen-connect-query": "workspace:*",
     "@bufbuild/protoc-gen-es": "^1.2.1",
     "generated-react": "workspace:*",
     "typescript": "^5.1.6"
