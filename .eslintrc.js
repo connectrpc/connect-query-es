@@ -85,7 +85,6 @@ const config = {
       'error',
       {
         templateFile: 'assets/license-header',
-        ignorePatterns: ['**/package.json'],
       },
     ],
 
