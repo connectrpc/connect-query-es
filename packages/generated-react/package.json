@@ -23,13 +23,13 @@
     "generate:descriptorset": "pnpm buf build --path eliza.proto --path example.proto --output dist/descriptorset.bin"
   },
   "dependencies": {
-    "@bufbuild/buf": "1.23.1",
+    "@bufbuild/buf": "1.19.0-1",
     "@bufbuild/connect-query": "workspace:*",
-    "@bufbuild/protobuf": "^1.2.1",
-    "@bufbuild/protoc-gen-connect-es": "^0.11.0",
+    "@bufbuild/protobuf": "^1.2.0",
     "@bufbuild/protoc-gen-connect-query": "workspace:*",
     "@bufbuild/protoc-gen-connect-query-with-hooks": "workspace:*",
-    "@bufbuild/protoc-gen-es": "^1.2.1"
+    "@bufbuild/protoc-gen-connect-es": "^0.9.0",
+    "@bufbuild/protoc-gen-es": "^1.2.0"
   },
   "preferUnplugged": true
 }
