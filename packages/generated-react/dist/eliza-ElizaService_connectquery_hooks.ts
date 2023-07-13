@@ -18,7 +18,10 @@
 // @ts-nocheck
 
 import { say, sayAgain } from "./eliza-ElizaService_connectquery.ts";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import { PartialMessage } from "@bufbuild/protobuf";
+import { SayRequest, SayResponse } from "./eliza_pb.js";
+import { ConnectError } from "@bufbuild/connect";
 
 /**
  * Say is a unary request demo. This method should allow for a one sentence
@@ -27,13 +30,61 @@ import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
  * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.Say
  */
 export const useSayQuery = 
-  (...inputs: Parameters<typeof say.useQuery>) => useQuery(say.useQuery(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof say.useQuery>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof say.useQuery>
+    ) => Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
+  }) => {
+    const baseOptions = say.useQuery(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useQuery(options);
+  };
 
 export const useSayMutation = 
-  (...inputs: Parameters<typeof say.useMutation>) => useMutation(say.useMutation(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof say.useMutation>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof say.useMutation>
+    ) => Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>;
+  }) => {
+    const baseOptions = say.useMutation(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useMutation(options);
+  };
 
 export const useSayInfiniteQuery = 
-  (...inputs: Parameters<typeof say.useInfiniteQuery>) => useInfiniteQuery(say.useInfiniteQuery(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof say.useInfiniteQuery>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof say.useInfiniteQuery>
+    ) => Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
+  }) => {
+    const baseOptions = say.useInfiniteQuery(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useInfiniteQuery(options);
+  };
 
 /**
  * Say is a unary request demo. This method should allow for a one sentence
@@ -42,10 +93,58 @@ export const useSayInfiniteQuery =
  * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.SayAgain
  */
 export const useSayAgainQuery = 
-  (...inputs: Parameters<typeof sayAgain.useQuery>) => useQuery(sayAgain.useQuery(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof sayAgain.useQuery>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof sayAgain.useQuery>
+    ) => Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
+  }) => {
+    const baseOptions = sayAgain.useQuery(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useQuery(options);
+  };
 
 export const useSayAgainMutation = 
-  (...inputs: Parameters<typeof sayAgain.useMutation>) => useMutation(sayAgain.useMutation(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof sayAgain.useMutation>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof sayAgain.useMutation>
+    ) => Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>;
+  }) => {
+    const baseOptions = sayAgain.useMutation(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useMutation(options);
+  };
 
 export const useSayAgainInfiniteQuery = 
-  (...inputs: Parameters<typeof sayAgain.useInfiniteQuery>) => useInfiniteQuery(sayAgain.useInfiniteQuery(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof sayAgain.useInfiniteQuery>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof sayAgain.useInfiniteQuery>
+    ) => Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
+  }) => {
+    const baseOptions = sayAgain.useInfiniteQuery(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useInfiniteQuery(options);
+  };

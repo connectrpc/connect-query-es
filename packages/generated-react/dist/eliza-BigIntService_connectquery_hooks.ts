@@ -18,16 +18,67 @@
 // @ts-nocheck
 
 import { count } from "./eliza-BigIntService_connectquery.ts";
-import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import { PartialMessage } from "@bufbuild/protobuf";
+import { CountRequest, CountResponse } from "./eliza_pb.js";
+import { ConnectError } from "@bufbuild/connect";
 
 /**
  * @generated from rpc buf.connect.demo.eliza.v1.BigIntService.Count
  */
 export const useCountQuery = 
-  (...inputs: Parameters<typeof count.useQuery>) => useQuery(count.useQuery(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof count.useQuery>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof count.useQuery>
+    ) => Partial<UseBaseQueryOptions<PartialMessage<CountRequest>, ConnectError>>;
+  }) => {
+    const baseOptions = count.useQuery(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useQuery(options);
+  };
 
 export const useCountMutation = 
-  (...inputs: Parameters<typeof count.useMutation>) => useMutation(count.useMutation(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof count.useMutation>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof count.useMutation>
+    ) => Partial<UseMutationOptions<PartialMessage<CountResponse>, ConnectError, PartialMessage<CountRequest>>>;
+  }) => {
+    const baseOptions = count.useMutation(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useMutation(options);
+  };
 
 export const useCountInfiniteQuery = 
-  (...inputs: Parameters<typeof count.useInfiniteQuery>) => useInfiniteQuery(count.useInfiniteQuery(inputs));
+  ({
+    inputs,
+    transformParams,
+  }: {
+    inputs: Parameters<typeof count.useInfiniteQuery>;
+    transformParams?: (
+      baseOptions: ReturnType<typeof count.useInfiniteQuery>
+    ) => Partial<UseInfiniteQueryOptions<PartialMessage<CountRequest>, ConnectError>>;
+  }) => {
+    const baseOptions = count.useInfiniteQuery(...inputs);
+    let options = baseOptions;
+    if (transformParams) {
+      options = Object.assign({}, baseOptions, transformParams(baseOptions));
+    }
+
+    return useInfiniteQuery(options);
+  };

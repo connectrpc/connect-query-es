@@ -54,33 +54,91 @@ const generateServiceFile =
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
         const literalMethodName = safeIdentifier(localName(method));
-
+        
         const serviceName = f.import(literalMethodName, connectQueryFile);
+        const partialMessage = f.import('PartialMessage', "@bufbuild/protobuf");
+        const connectError = f.import('ConnectError', "@bufbuild/connect");
+
         
         f.print(makeJsDoc(method));
 
         // convert serviceName to first letter uppercase
         const serviceNameFirstLetterUppercase = literalMethodName.charAt(0).toUpperCase() + literalMethodName.slice(1);
+        
         // useQuery
         const useQuery = f.import('useQuery', importHookFrom);
+        const useBaseQueryOptions = f.import('UseBaseQueryOptions', importHookFrom);
+
         f.print(
           `export const use`, serviceNameFirstLetterUppercase, 'Query = '); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
-        f.print(`  (...inputs: Parameters<typeof `, serviceName, `.useQuery>) => `, useQuery, '(', serviceName, `.useQuery(inputs)`, ');');
-        f.print()
+        f.print(`  ({`);
+        f.print(`    inputs,`);
+        f.print(`    transformParams,`);
+        f.print(`  }: {`);
+        f.print(`    inputs: Parameters<typeof `, serviceName, `.useQuery>;`);
+        f.print(`    transformParams?: (`);
+        f.print(`      baseOptions: ReturnType<typeof `, serviceName, `.useQuery>`);
+        f.print(`    ) => Partial<`, useBaseQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>;`);
+        f.print(`  }) => {`);
+        f.print(`    const baseOptions = `, serviceName, `.useQuery(...inputs);`);
+        f.print(`    let options = baseOptions;`);
+        f.print(`    if (transformParams) {`);
+        f.print(`      options = Object.assign({}, baseOptions, transformParams(baseOptions));`);
+        f.print(`    }`);
+        f.print();
+        f.print(`    return `, useQuery, '(options);');
+        f.print(`  };`);
+        f.print();
 
         // useMutation
         const useMutation = f.import('useMutation', importHookFrom);
+        const useMutationOptions = f.import('UseMutationOptions', importHookFrom);
+
         f.print(  
           `export const use`, serviceNameFirstLetterUppercase, 'Mutation = ');
-        f.print(`  (...inputs: Parameters<typeof `, serviceName, `.useMutation>) => `, useMutation, '(', serviceName, `.useMutation(inputs)`, ');');
-        f.print()
+        f.print(`  ({`);
+        f.print(`    inputs,`);
+        f.print(`    transformParams,`);
+        f.print(`  }: {`);
+        f.print(`    inputs: Parameters<typeof `, serviceName, `.useMutation>;`);
+        f.print(`    transformParams?: (`);
+        f.print(`      baseOptions: ReturnType<typeof `, serviceName, `.useMutation>`);
+        f.print(`    ) => Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>;`);
+        f.print(`  }) => {`);
+        f.print(`    const baseOptions = `, serviceName, `.useMutation(...inputs);`);
+        f.print(`    let options = baseOptions;`);
+        f.print(`    if (transformParams) {`);
+        f.print(`      options = Object.assign({}, baseOptions, transformParams(baseOptions));`);
+        f.print(`    }`);
+        f.print();
+        f.print(`    return `, useMutation, '(options);');
+        f.print(`  };`);
+        f.print();
 
         // useInfiniteQuery
         const useInfiniteQuery = f.import('useInfiniteQuery', importHookFrom);
+        const useInfiniteQueryOptions = f.import('UseInfiniteQueryOptions', importHookFrom);
+
         f.print(
           `export const use`, serviceNameFirstLetterUppercase, 'InfiniteQuery = ');
-        f.print(`  (...inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>) => `, useInfiniteQuery, '(', serviceName, `.useInfiniteQuery(inputs)`, ');');
-
+        f.print(`  ({`);
+        f.print(`    inputs,`);
+        f.print(`    transformParams,`);
+        f.print(`  }: {`);
+        f.print(`    inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>;`);
+        f.print(`    transformParams?: (`);
+        f.print(`      baseOptions: ReturnType<typeof `, serviceName, `.useInfiniteQuery>`);
+        f.print(`    ) => Partial<`, useInfiniteQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>;`);
+        f.print(`  }) => {`);
+        f.print(`    const baseOptions = `, serviceName, `.useInfiniteQuery(...inputs);`);
+        f.print(`    let options = baseOptions;`);
+        f.print(`    if (transformParams) {`);
+        f.print(`      options = Object.assign({}, baseOptions, transformParams(baseOptions));`);
+        f.print(`    }`);
+        f.print();
+        f.print(`    return `, useInfiniteQuery, '(options);');
+        f.print(`  };`);
+        
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {
           f.print();
