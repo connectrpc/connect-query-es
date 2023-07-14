@@ -17,68 +17,66 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { list } from "./eliza-PaginatedService_connectquery.ts";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
-import { PartialMessage } from "@bufbuild/protobuf";
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { ListRequest, ListResponse } from "./eliza_pb.js";
+import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
  * @generated from rpc buf.connect.demo.eliza.v1.PaginatedService.List
  */
-export const useListQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof list.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof list.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<ListRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = list.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const list = createQueryService({
+  service: {
+    methods: {
+      list: {
+        name: "List",
+        kind: MethodKind.Unary,
+        I: ListRequest,
+        O: ListResponse,
+      },
+    },
+    typeName: "buf.connect.demo.eliza.v1.PaginatedService",
+  },
+}).list;
 
-    return useQuery(options);
+export const useListQuery = 
+  (
+    inputs: Parameters<typeof list.useQuery>[0],
+    options: Parameters<typeof list.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<ListRequest>, ConnectError>>
+  ) => {
+    const baseOptions = list.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useListMutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof list.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof list.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<ListResponse>, ConnectError, PartialMessage<ListRequest>>>;
-  }) => {
-    const baseOptions = list.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof list.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<ListResponse>, ConnectError, PartialMessage<ListRequest>>>
+  ) => {
+    const baseOptions = list.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useListInfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof list.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof list.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<ListRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = list.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof list.useInfiniteQuery>[0],
+    options: Parameters<typeof list.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<ListRequest>, ConnectError>>
+  ) => {
+    const baseOptions = list.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };

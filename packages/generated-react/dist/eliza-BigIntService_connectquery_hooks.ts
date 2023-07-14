@@ -17,68 +17,73 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { count } from "./eliza-BigIntService_connectquery.ts";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
-import { PartialMessage } from "@bufbuild/protobuf";
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { CountRequest, CountResponse } from "./eliza_pb.js";
+import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
  * @generated from rpc buf.connect.demo.eliza.v1.BigIntService.Count
  */
-export const useCountQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof count.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof count.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<CountRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = count.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const count = createQueryService({
+  service: {
+    methods: {
+      count: {
+        name: "Count",
+        kind: MethodKind.Unary,
+        I: CountRequest,
+        O: CountResponse,
+      },
+    },
+    typeName: "buf.connect.demo.eliza.v1.BigIntService",
+  },
+}).count;
 
-    return useQuery(options);
+export const useCountQuery = 
+  (
+    inputs: Parameters<typeof count.useQuery>[0],
+    options: Parameters<typeof count.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<CountRequest>, ConnectError>>
+  ) => {
+    const baseOptions = count.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useCountMutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof count.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof count.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<CountResponse>, ConnectError, PartialMessage<CountRequest>>>;
-  }) => {
-    const baseOptions = count.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof count.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<CountResponse>, ConnectError, PartialMessage<CountRequest>>>
+  ) => {
+    const baseOptions = count.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useCountInfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof count.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof count.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<CountRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = count.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof count.useInfiniteQuery>[0],
+    options: Parameters<typeof count.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<CountRequest>, ConnectError>>
+  ) => {
+    const baseOptions = count.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
+
+
+  useCountMutation({
+
+  }, {
+    
+  })

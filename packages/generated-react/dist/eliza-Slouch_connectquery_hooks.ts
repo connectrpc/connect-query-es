@@ -17,68 +17,66 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { work } from "./eliza-Slouch_connectquery.ts";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
-import { PartialMessage } from "@bufbuild/protobuf";
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { Nothing } from "./eliza_pb.js";
+import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
  * @generated from rpc buf.connect.demo.eliza.v1.Slouch.Work
  */
-export const useWorkQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof work.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof work.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<Nothing>, ConnectError>>;
-  }) => {
-    const baseOptions = work.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const work = createQueryService({
+  service: {
+    methods: {
+      work: {
+        name: "Work",
+        kind: MethodKind.Unary,
+        I: Nothing,
+        O: Nothing,
+      },
+    },
+    typeName: "buf.connect.demo.eliza.v1.Slouch",
+  },
+}).work;
 
-    return useQuery(options);
+export const useWorkQuery = 
+  (
+    inputs: Parameters<typeof work.useQuery>[0],
+    options: Parameters<typeof work.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Nothing>, ConnectError>>
+  ) => {
+    const baseOptions = work.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useWorkMutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof work.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof work.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<Nothing>, ConnectError, PartialMessage<Nothing>>>;
-  }) => {
-    const baseOptions = work.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof work.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Nothing>, ConnectError, PartialMessage<Nothing>>>
+  ) => {
+    const baseOptions = work.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useWorkInfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof work.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof work.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<Nothing>, ConnectError>>;
-  }) => {
-    const baseOptions = work.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof work.useInfiniteQuery>[0],
+    options: Parameters<typeof work.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Nothing>, ConnectError>>
+  ) => {
+    const baseOptions = work.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };

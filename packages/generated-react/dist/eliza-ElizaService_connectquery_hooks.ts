@@ -17,10 +17,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { say, sayAgain } from "./eliza-ElizaService_connectquery.ts";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
-import { PartialMessage } from "@bufbuild/protobuf";
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { SayRequest, SayResponse } from "./eliza_pb.js";
+import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
@@ -29,61 +29,59 @@ import { ConnectError } from "@bufbuild/connect";
  *
  * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.Say
  */
-export const useSayQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof say.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof say.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = say.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const say = createQueryService({
+  service: {
+    methods: {
+      say: {
+        name: "Say",
+        kind: MethodKind.Unary,
+        I: SayRequest,
+        O: SayResponse,
+      },
+    },
+    typeName: "buf.connect.demo.eliza.v1.ElizaService",
+  },
+}).say;
 
-    return useQuery(options);
+export const useSayQuery = 
+  (
+    inputs: Parameters<typeof say.useQuery>[0],
+    options: Parameters<typeof say.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>
+  ) => {
+    const baseOptions = say.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useSayMutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof say.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof say.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>;
-  }) => {
-    const baseOptions = say.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof say.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>
+  ) => {
+    const baseOptions = say.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useSayInfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof say.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof say.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = say.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof say.useInfiniteQuery>[0],
+    options: Parameters<typeof say.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>
+  ) => {
+    const baseOptions = say.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 /**
@@ -92,59 +90,57 @@ export const useSayInfiniteQuery =
  *
  * @generated from rpc buf.connect.demo.eliza.v1.ElizaService.SayAgain
  */
-export const useSayAgainQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof sayAgain.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof sayAgain.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = sayAgain.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const sayAgain = createQueryService({
+  service: {
+    methods: {
+      sayAgain: {
+        name: "SayAgain",
+        kind: MethodKind.Unary,
+        I: SayRequest,
+        O: SayResponse,
+      },
+    },
+    typeName: "buf.connect.demo.eliza.v1.ElizaService",
+  },
+}).sayAgain;
 
-    return useQuery(options);
+export const useSayAgainQuery = 
+  (
+    inputs: Parameters<typeof sayAgain.useQuery>[0],
+    options: Parameters<typeof sayAgain.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>
+  ) => {
+    const baseOptions = sayAgain.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useSayAgainMutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof sayAgain.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof sayAgain.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>;
-  }) => {
-    const baseOptions = sayAgain.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof sayAgain.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>
+  ) => {
+    const baseOptions = sayAgain.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useSayAgainInfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof sayAgain.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof sayAgain.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>;
-  }) => {
-    const baseOptions = sayAgain.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof sayAgain.useInfiniteQuery>[0],
+    options: Parameters<typeof sayAgain.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>
+  ) => {
+    const baseOptions = sayAgain.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };

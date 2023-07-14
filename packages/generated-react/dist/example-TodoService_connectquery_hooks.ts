@@ -3,10 +3,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { addTodo, delete$, getTodos, valueOf$ } from "./example-TodoService_connectquery.ts";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
-import { PartialMessage } from "@bufbuild/protobuf";
+import { createQueryService } from "@bufbuild/connect-query";
+import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { Empty, Todo, Todos } from "./example_pb.js";
+import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
@@ -14,121 +14,117 @@ import { ConnectError } from "@bufbuild/connect";
  *
  * @generated from rpc buf.connect.demo.example.v1.TodoService.GetTodos
  */
-export const useGetTodosQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof getTodos.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof getTodos.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>;
-  }) => {
-    const baseOptions = getTodos.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const getTodos = createQueryService({
+  service: {
+    methods: {
+      getTodos: {
+        name: "GetTodos",
+        kind: MethodKind.Unary,
+        I: Empty,
+        O: Todos,
+      },
+    },
+    typeName: "buf.connect.demo.example.v1.TodoService",
+  },
+}).getTodos;
 
-    return useQuery(options);
+export const useGetTodosQuery = 
+  (
+    inputs: Parameters<typeof getTodos.useQuery>[0],
+    options: Parameters<typeof getTodos.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>
+  ) => {
+    const baseOptions = getTodos.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useGetTodosMutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof getTodos.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof getTodos.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Empty>>>;
-  }) => {
-    const baseOptions = getTodos.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof getTodos.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Empty>>>
+  ) => {
+    const baseOptions = getTodos.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useGetTodosInfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof getTodos.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof getTodos.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>;
-  }) => {
-    const baseOptions = getTodos.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof getTodos.useInfiniteQuery>[0],
+    options: Parameters<typeof getTodos.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>
+  ) => {
+    const baseOptions = getTodos.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 /**
  * @generated from rpc buf.connect.demo.example.v1.TodoService.AddTodo
  */
-export const useAddTodoQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof addTodo.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof addTodo.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<Todo>, ConnectError>>;
-  }) => {
-    const baseOptions = addTodo.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const addTodo = createQueryService({
+  service: {
+    methods: {
+      addTodo: {
+        name: "AddTodo",
+        kind: MethodKind.Unary,
+        I: Todo,
+        O: Todos,
+      },
+    },
+    typeName: "buf.connect.demo.example.v1.TodoService",
+  },
+}).addTodo;
 
-    return useQuery(options);
+export const useAddTodoQuery = 
+  (
+    inputs: Parameters<typeof addTodo.useQuery>[0],
+    options: Parameters<typeof addTodo.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Todo>, ConnectError>>
+  ) => {
+    const baseOptions = addTodo.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useAddTodoMutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof addTodo.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof addTodo.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Todo>>>;
-  }) => {
-    const baseOptions = addTodo.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof addTodo.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Todo>>>
+  ) => {
+    const baseOptions = addTodo.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useAddTodoInfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof addTodo.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof addTodo.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<Todo>, ConnectError>>;
-  }) => {
-    const baseOptions = addTodo.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof addTodo.useInfiniteQuery>[0],
+    options: Parameters<typeof addTodo.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Todo>, ConnectError>>
+  ) => {
+    const baseOptions = addTodo.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 /**
@@ -136,61 +132,59 @@ export const useAddTodoInfiniteQuery =
  *
  * @generated from rpc buf.connect.demo.example.v1.TodoService.Delete
  */
-export const useDelete$Query = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof delete$.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof delete$.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>;
-  }) => {
-    const baseOptions = delete$.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const delete$ = createQueryService({
+  service: {
+    methods: {
+      delete: {
+        name: "Delete",
+        kind: MethodKind.Unary,
+        I: Empty,
+        O: Empty,
+      },
+    },
+    typeName: "buf.connect.demo.example.v1.TodoService",
+  },
+}).delete;
 
-    return useQuery(options);
+export const useDelete$Query = 
+  (
+    inputs: Parameters<typeof delete$.useQuery>[0],
+    options: Parameters<typeof delete$.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>
+  ) => {
+    const baseOptions = delete$.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useDelete$Mutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof delete$.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof delete$.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>;
-  }) => {
-    const baseOptions = delete$.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof delete$.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>
+  ) => {
+    const baseOptions = delete$.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useDelete$InfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof delete$.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof delete$.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>;
-  }) => {
-    const baseOptions = delete$.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof delete$.useInfiniteQuery>[0],
+    options: Parameters<typeof delete$.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>
+  ) => {
+    const baseOptions = delete$.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 /**
@@ -198,59 +192,57 @@ export const useDelete$InfiniteQuery =
  *
  * @generated from rpc buf.connect.demo.example.v1.TodoService.ValueOf
  */
-export const useValueOf$Query = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof valueOf$.useQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof valueOf$.useQuery>
-    ) => Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>;
-  }) => {
-    const baseOptions = valueOf$.useQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+export const valueOf$ = createQueryService({
+  service: {
+    methods: {
+      valueOf$: {
+        name: "ValueOf",
+        kind: MethodKind.Unary,
+        I: Empty,
+        O: Empty,
+      },
+    },
+    typeName: "buf.connect.demo.example.v1.TodoService",
+  },
+}).valueOf$;
 
-    return useQuery(options);
+export const useValueOf$Query = 
+  (
+    inputs: Parameters<typeof valueOf$.useQuery>[0],
+    options: Parameters<typeof valueOf$.useQuery>[1],
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>
+  ) => {
+    const baseOptions = valueOf$.useQuery(inputs, options);
+
+    return useQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useValueOf$Mutation = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof valueOf$.useMutation>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof valueOf$.useMutation>
-    ) => Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>;
-  }) => {
-    const baseOptions = valueOf$.useMutation(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    options: Parameters<typeof valueOf$.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>
+  ) => {
+    const baseOptions = valueOf$.useMutation(options);
 
-    return useMutation(options);
+    return useMutation({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };
 
 export const useValueOf$InfiniteQuery = 
-  ({
-    inputs,
-    transformParams,
-  }: {
-    inputs: Parameters<typeof valueOf$.useInfiniteQuery>;
-    transformParams?: (
-      baseOptions: ReturnType<typeof valueOf$.useInfiniteQuery>
-    ) => Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>;
-  }) => {
-    const baseOptions = valueOf$.useInfiniteQuery(...inputs);
-    let options = baseOptions;
-    if (transformParams) {
-      options = Object.assign({}, baseOptions, transformParams(baseOptions));
-    }
+  (
+    inputs: Parameters<typeof valueOf$.useInfiniteQuery>[0],
+    options: Parameters<typeof valueOf$.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>
+  ) => {
+    const baseOptions = valueOf$.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery(options);
+    return useInfiniteQuery({
+      ...baseOptions,
+      ...queryOptions,
+    });
   };

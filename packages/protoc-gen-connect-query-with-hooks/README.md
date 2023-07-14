@@ -27,7 +27,7 @@ Learn more about Connect-Query at [github.com/bufbuild/connect-query](https://gi
 To install the plugins and their runtime libraries, run:
 
 ```shell
-npm install --save-dev @bufbuild/protoc-gen-connect-query-with-hooks @bufbuild/protoc-gen-connect-query @bufbuild/protoc-gen-es
+npm install --save-dev @bufbuild/protoc-gen-connect-query-with-hooks @bufbuild/protoc-gen-es
 npm install @bufbuild/connect-query @bufbuild/protobuf
 ```
 
@@ -76,11 +76,6 @@ version: v1
 plugins:
     # This will invoke protoc-gen-es and write output to src/gen
   - name: es
-    out: src/gen
-    opt: target=ts
-
-    # This will invoke protoc-gen-connect-query
-  - name: connect-query
     out: src/gen
     opt: target=ts
 
