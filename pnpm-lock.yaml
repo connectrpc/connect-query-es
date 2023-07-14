@@ -1,9 +1,5 @@
 lockfileVersion: '6.1'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -248,9 +244,9 @@ importers:
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../protoc-gen-connect-query
-      '@bufbuild/protoc-gen-connect-query-with-hooks':
+      '@bufbuild/protoc-gen-connect-query-react':
         specifier: workspace:*
-        version: link:../protoc-gen-connect-query-with-hooks
+        version: link:../protoc-gen-connect-query-react
       '@bufbuild/protoc-gen-es':
         specifier: ^1.2.0
         version: 1.2.0(@bufbuild/protobuf@1.2.0)
@@ -277,7 +273,7 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
-  packages/protoc-gen-connect-query-with-hooks:
+  packages/protoc-gen-connect-query-react:
     dependencies:
       '@bufbuild/protobuf':
         specifier: ^1.2.0

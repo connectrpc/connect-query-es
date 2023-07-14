@@ -1,8 +1,0 @@
-#!/usr/bin/env node
-
-const { runNodeJs } = require('@bufbuild/protoplugin');
-const {
-    protocGenConnectQueryWithHooks,
-} = require('../dist/cjs/src/protoc-gen-connect-query-with-hooks-plugin.js');
-
-runNodeJs(protocGenConnectQueryWithHooks);

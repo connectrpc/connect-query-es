@@ -51,7 +51,7 @@ const generateServiceFile =
         : '@tanstack/react-query';
 
     const f = schema.generateFile(
-      `${protoFile.name}-${localName(service)}_connectquery_hooks.${extension}`,
+      `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
     );
     f.preamble(protoFile);
 

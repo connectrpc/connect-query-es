@@ -17,8 +17,8 @@ import { createEcmaScriptPlugin } from '@bufbuild/protoplugin';
 import { version } from '../package.json';
 import { generateTs } from './generateTs';
 
-export const protocGenConnectQueryWithHooks = createEcmaScriptPlugin({
-  name: 'protoc-gen-connect-query-with-hooks',
+export const protocGenConnectQueryReact = createEcmaScriptPlugin({
+  name: 'protoc-gen-connect-query-react',
   version: `v${String(version)}`,
   generateTs,
 

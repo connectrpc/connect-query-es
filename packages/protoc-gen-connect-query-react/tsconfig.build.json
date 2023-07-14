@@ -1,5 +1,5 @@
 {
-  "files": ["src/protoc-gen-connect-query-with-hooks-plugin.ts"],
+  "files": ["src/protoc-gen-connect-query-react-plugin.ts"],
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist/cjs",

@@ -1,5 +1,5 @@
 {
-  "name": "@bufbuild/protoc-gen-connect-query-with-hooks",
+  "name": "@bufbuild/protoc-gen-connect-query-react",
   "version": "0.0.1",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
@@ -7,13 +7,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/bufbuild/connect-query.git",
-    "directory": "packages/protoc-gen-connect-query-with-hooks"
+    "directory": "packages/protoc-gen-connect-query-react"
   },
   "files": [
     "dist/**"
   ],
   "bin": {
-    "protoc-gen-connect-query-with-hooks": "bin/protoc-gen-connect-query-with-hooks"
+    "protoc-gen-connect-query-react": "bin/protoc-gen-connect-query-react"
   },
   "engines": {
     "node": ">=16"

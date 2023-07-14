@@ -17,7 +17,7 @@ import type { Target } from '@bufbuild/protoplugin/ecmascript';
 import { readFileSync } from 'fs';
 import { join, resolve } from 'path';
 
-import { protocGenConnectQueryWithHooks } from '../protoc-gen-connect-query-with-hooks-plugin';
+import { protocGenConnectQueryReact } from '../protoc-gen-connect-query-react-plugin';
 
 /**
  * Returns a FileDescriptorSet from a pre-built Buf image
@@ -49,7 +49,7 @@ export const generate =
     });
 
     const codeGeneratorResponse =
-      protocGenConnectQueryWithHooks.run(codeGeneratorRequest);
+      protocGenConnectQueryReact.run(codeGeneratorRequest);
 
     const matchingFile = codeGeneratorResponse.file.find(
       (file) => file.name === filename,
