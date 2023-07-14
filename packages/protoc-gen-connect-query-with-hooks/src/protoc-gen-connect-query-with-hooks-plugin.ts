@@ -31,6 +31,7 @@ export const protocGenConnectQueryWithHooks = createEcmaScriptPlugin({
         [key]: value,
       };
     }
-    return undefined;
+
+    throw new Error(`invalid option "${key}"`);
   },
 });

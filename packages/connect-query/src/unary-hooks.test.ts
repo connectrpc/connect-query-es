@@ -167,7 +167,7 @@ describe('unaryHooks', () => {
       type ExpectType_CreateUserQueryOptionsParams = Expect<
         Equal<Parameters<typeof genCount.createUseQueryOptions>['length'], 2>
       >;
-      
+
       type ExpectType_CreateUserQueryOptionsParams1 = Expect<
         Equal<
           Parameters<typeof genCount.createUseQueryOptions>[1],

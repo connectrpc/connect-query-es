@@ -38,10 +38,12 @@ const getFileDescriptorSet = () => {
  * Creates a plugin with the given function to generate TypeScript, runs the plugin, and returns a function to retrieve output files.
  */
 export const generate =
-  (target: Target, importHookFrom = '@tanstack/react-query') =>
+  (target: Target, importHookFrom = '') =>
   (filename: string) => {
     const codeGeneratorRequest = new CodeGeneratorRequest({
-      parameter: `target=${target},import-hook-from=${importHookFrom}`,
+      parameter: `target=${target}${
+        importHookFrom ? `,${importHookFrom}` : ''
+      }`,
       fileToGenerate: ['eliza.proto'],
       protoFile: getFileDescriptorSet().file,
     });
