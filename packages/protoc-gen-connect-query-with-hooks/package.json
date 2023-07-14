@@ -32,8 +32,8 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^1.2.1",
-    "@bufbuild/protoplugin": "^1.2.1"
+    "@bufbuild/protobuf": "^1.2.0",
+    "@bufbuild/protoplugin": "^1.2.0"
   },
   "peerDependencies": {
     "@bufbuild/protoc-gen-es": "1.x"
