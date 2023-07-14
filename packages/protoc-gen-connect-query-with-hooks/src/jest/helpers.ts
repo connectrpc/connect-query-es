@@ -37,27 +37,30 @@ const getFileDescriptorSet = () => {
 /**
  * Creates a plugin with the given function to generate TypeScript, runs the plugin, and returns a function to retrieve output files.
  */
-export const generate = (target: Target, importHookFrom= '@tanstack/react-query') => (filename: string) => {
-  const codeGeneratorRequest = new CodeGeneratorRequest({
-    parameter: `target=${target},import-hook-from=${importHookFrom}`,
-    fileToGenerate: ['eliza.proto'],
-    protoFile: getFileDescriptorSet().file,
-  });
+export const generate =
+  (target: Target, importHookFrom = '@tanstack/react-query') =>
+  (filename: string) => {
+    const codeGeneratorRequest = new CodeGeneratorRequest({
+      parameter: `target=${target},import-hook-from=${importHookFrom}`,
+      fileToGenerate: ['eliza.proto'],
+      protoFile: getFileDescriptorSet().file,
+    });
 
-  const codeGeneratorResponse = protocGenConnectQueryWithHooks.run(codeGeneratorRequest);
+    const codeGeneratorResponse =
+      protocGenConnectQueryWithHooks.run(codeGeneratorRequest);
 
-  const matchingFile = codeGeneratorResponse.file.find(
-    (file) => file.name === filename,
-  );
-
-  if (!matchingFile) {
-    throw new Error(
-      `did not find file ${filename} in ${JSON.stringify(
-        codeGeneratorResponse.file,
-      )}`,
+    const matchingFile = codeGeneratorResponse.file.find(
+      (file) => file.name === filename,
     );
-  }
 
-  const content = matchingFile.content ?? '';
-  return content.trim().split('\n');
-};
+    if (!matchingFile) {
+      throw new Error(
+        `did not find file ${filename} in ${JSON.stringify(
+          codeGeneratorResponse.file,
+        )}`,
+      );
+    }
+
+    const content = matchingFile.content ?? '';
+    return content.trim().split('\n');
+  };

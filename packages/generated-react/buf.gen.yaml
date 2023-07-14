@@ -23,7 +23,7 @@ plugins:
 
   - name: protoc-gen-connect-query-with-hooks
     path: ../protoc-gen-connect-query-with-hooks/bin/protoc-gen-connect-query-with-hooks
-    opt: 
+    opt:
       - target=ts
       - import-hook-from=@tanstack/react-query
     out: dist

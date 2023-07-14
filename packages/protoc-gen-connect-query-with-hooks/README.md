@@ -204,7 +204,8 @@ Unfortunately, not all bundlers and tools have caught up yet, and Deno requires 
 This option exists for other plugins but is not applicable to `protoc-gen-connect-query-with-hooks` because, unlike most other plugins, it does not generate a maximum of one output file for every input proto file.  Instead, it generates one output file per service.  If you provide a valid proto file that contains no services, `protoc-gen-connect-query-with-hooks` will have no output.
 
 ### `import-hook-from`
-This option allows you to specify the import path for the `useQuery` hook.  By default, it is `@tanstack/connect-query`, but you can change it to whatever you want.  For example, if you want to use the `useQuery` hook from `@myorg/connect-query`, you would set `import-hook-from=@myorg/connect-query`.
+
+This option allows you to specify the import path for the `useQuery` hook.  By default, it is `@tanstack/connect-query`, but you can change it to whatever you want.  For example, if you want to use the `useQuery` hook from `@your-path/connect-query`, you would set `import-hook-from=@your-path/connect-query`.
 
 ## Example Generated Code
 
