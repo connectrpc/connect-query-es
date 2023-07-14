@@ -105,18 +105,12 @@ const generateServiceFile =
         f.print(
           `export const use`,
           serviceNameFirstLetterUppercase,
-          'Query = ',
+          'Query = (',
         ); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
-        f.print(`  (`);
         f.print(
           `    inputs: Parameters<typeof `,
           serviceName,
           `.useQuery>[0],`,
-        );
-        f.print(
-          `    options: Parameters<typeof `,
-          serviceName,
-          `.useQuery>[1],`,
         );
         f.print(
           `    queryOptions?: Partial<`,
@@ -127,9 +121,14 @@ const generateServiceFile =
           method.input,
           `>, `,
           connectError,
-          `>>`,
+          `>>,`,
         );
-        f.print(`  ) => {`);
+        f.print(
+          `    options?: Parameters<typeof `,
+          serviceName,
+          `.useQuery>[1]`,
+        );
+        f.print(`) => {`);
         f.print(
           `    const baseOptions = `,
           serviceName,
@@ -137,10 +136,10 @@ const generateServiceFile =
         );
         f.print(``);
         f.print(`    return `, useQuery, `({`);
-        f.print(`      ...baseOptions,`);
-        f.print(`      ...queryOptions,`);
+        f.print(`        ...baseOptions,`);
+        f.print(`        ...queryOptions,`);
         f.print(`    });`);
-        f.print(`  };`);
+        f.print(`};`);
         f.print(``);
 
         // useMutation
@@ -153,13 +152,7 @@ const generateServiceFile =
         f.print(
           `export const use`,
           serviceNameFirstLetterUppercase,
-          'Mutation = ',
-        );
-        f.print(`  (`);
-        f.print(
-          `    options: Parameters<typeof `,
-          serviceName,
-          `.useMutation>[0],`,
+          'Mutation = (',
         );
         f.print(
           `    queryOptions?: Partial<`,
@@ -174,9 +167,14 @@ const generateServiceFile =
           partialMessage,
           `<`,
           method.input,
-          `>>>`,
+          `>>>,`,
         );
-        f.print(`  ) => {`);
+        f.print(
+          `    options?: Parameters<typeof `,
+          serviceName,
+          `.useMutation>[0]`,
+        );
+        f.print(`) => {`);
         f.print(
           `    const baseOptions = `,
           serviceName,
@@ -184,10 +182,10 @@ const generateServiceFile =
         );
         f.print(``);
         f.print(`    return `, useMutation, `({`);
-        f.print(`      ...baseOptions,`);
-        f.print(`      ...queryOptions,`);
+        f.print(`        ...baseOptions,`);
+        f.print(`        ...queryOptions,`);
         f.print(`    });`);
-        f.print(`  };`);
+        f.print(`};`);
         f.print(``);
 
         // useInfiniteQuery
@@ -200,18 +198,12 @@ const generateServiceFile =
         f.print(
           `export const use`,
           serviceNameFirstLetterUppercase,
-          'InfiniteQuery = ',
+          'InfiniteQuery = (',
         );
-        f.print(`  (`);
         f.print(
           `    inputs: Parameters<typeof `,
           serviceName,
           `.useInfiniteQuery>[0],`,
-        );
-        f.print(
-          `    options: Parameters<typeof `,
-          serviceName,
-          `.useInfiniteQuery>[1],`,
         );
         f.print(
           `    queryOptions?: Partial<`,
@@ -222,9 +214,14 @@ const generateServiceFile =
           method.input,
           `>, `,
           connectError,
-          `>>`,
+          `>>,`,
         );
-        f.print(`  ) => {`);
+        f.print(
+          `    options?: Parameters<typeof `,
+          serviceName,
+          `.useInfiniteQuery>[1]`,
+        );
+        f.print(`) => {`);
         f.print(
           `    const baseOptions = `,
           serviceName,
@@ -232,10 +229,10 @@ const generateServiceFile =
         );
         f.print(``);
         f.print(`    return `, useInfiniteQuery, `({`);
-        f.print(`      ...baseOptions,`);
-        f.print(`      ...queryOptions,`);
+        f.print(`        ...baseOptions,`);
+        f.print(`        ...queryOptions,`);
         f.print(`    });`);
-        f.print(`  };`);
+        f.print(`};`);
 
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {

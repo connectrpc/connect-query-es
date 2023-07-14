@@ -28,46 +28,43 @@ export const getTodos = createQueryService({
   },
 }).getTodos;
 
-export const useGetTodosQuery = 
-  (
+export const useGetTodosQuery = (
     inputs: Parameters<typeof getTodos.useQuery>[0],
-    options: Parameters<typeof getTodos.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
+    options?: Parameters<typeof getTodos.useQuery>[1]
+) => {
     const baseOptions = getTodos.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useGetTodosMutation = 
-  (
-    options: Parameters<typeof getTodos.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Empty>>>
-  ) => {
+export const useGetTodosMutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Empty>>>,
+    options?: Parameters<typeof getTodos.useMutation>[0]
+) => {
     const baseOptions = getTodos.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useGetTodosInfiniteQuery = 
-  (
+export const useGetTodosInfiniteQuery = (
     inputs: Parameters<typeof getTodos.useInfiniteQuery>[0],
-    options: Parameters<typeof getTodos.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
+    options?: Parameters<typeof getTodos.useInfiniteQuery>[1]
+) => {
     const baseOptions = getTodos.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
 /**
  * @generated from rpc buf.connect.demo.example.v1.TodoService.AddTodo
@@ -86,46 +83,43 @@ export const addTodo = createQueryService({
   },
 }).addTodo;
 
-export const useAddTodoQuery = 
-  (
+export const useAddTodoQuery = (
     inputs: Parameters<typeof addTodo.useQuery>[0],
-    options: Parameters<typeof addTodo.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Todo>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Todo>, ConnectError>>,
+    options?: Parameters<typeof addTodo.useQuery>[1]
+) => {
     const baseOptions = addTodo.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useAddTodoMutation = 
-  (
-    options: Parameters<typeof addTodo.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Todo>>>
-  ) => {
+export const useAddTodoMutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Todo>>>,
+    options?: Parameters<typeof addTodo.useMutation>[0]
+) => {
     const baseOptions = addTodo.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useAddTodoInfiniteQuery = 
-  (
+export const useAddTodoInfiniteQuery = (
     inputs: Parameters<typeof addTodo.useInfiniteQuery>[0],
-    options: Parameters<typeof addTodo.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Todo>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Todo>, ConnectError>>,
+    options?: Parameters<typeof addTodo.useInfiniteQuery>[1]
+) => {
     const baseOptions = addTodo.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
 /**
  * this RPC exists to test how JavaScript reserved keywords are translated
@@ -146,46 +140,43 @@ export const delete$ = createQueryService({
   },
 }).delete;
 
-export const useDelete$Query = 
-  (
+export const useDelete$Query = (
     inputs: Parameters<typeof delete$.useQuery>[0],
-    options: Parameters<typeof delete$.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
+    options?: Parameters<typeof delete$.useQuery>[1]
+) => {
     const baseOptions = delete$.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useDelete$Mutation = 
-  (
-    options: Parameters<typeof delete$.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>
-  ) => {
+export const useDelete$Mutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>,
+    options?: Parameters<typeof delete$.useMutation>[0]
+) => {
     const baseOptions = delete$.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useDelete$InfiniteQuery = 
-  (
+export const useDelete$InfiniteQuery = (
     inputs: Parameters<typeof delete$.useInfiniteQuery>[0],
-    options: Parameters<typeof delete$.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
+    options?: Parameters<typeof delete$.useInfiniteQuery>[1]
+) => {
     const baseOptions = delete$.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
 /**
  * this RPC exists to test how JavaScript reserved object properties are translated
@@ -206,43 +197,40 @@ export const valueOf$ = createQueryService({
   },
 }).valueOf$;
 
-export const useValueOf$Query = 
-  (
+export const useValueOf$Query = (
     inputs: Parameters<typeof valueOf$.useQuery>[0],
-    options: Parameters<typeof valueOf$.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
+    options?: Parameters<typeof valueOf$.useQuery>[1]
+) => {
     const baseOptions = valueOf$.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useValueOf$Mutation = 
-  (
-    options: Parameters<typeof valueOf$.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>
-  ) => {
+export const useValueOf$Mutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>,
+    options?: Parameters<typeof valueOf$.useMutation>[0]
+) => {
     const baseOptions = valueOf$.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useValueOf$InfiniteQuery = 
-  (
+export const useValueOf$InfiniteQuery = (
     inputs: Parameters<typeof valueOf$.useInfiniteQuery>[0],
-    options: Parameters<typeof valueOf$.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
+    options?: Parameters<typeof valueOf$.useInfiniteQuery>[1]
+) => {
     const baseOptions = valueOf$.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};

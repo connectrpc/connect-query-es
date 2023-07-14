@@ -40,43 +40,40 @@ export const count = createQueryService({
   },
 }).count;
 
-export const useCountQuery = 
-  (
+export const useCountQuery = (
     inputs: Parameters<typeof count.useQuery>[0],
-    options: Parameters<typeof count.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<CountRequest>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<CountRequest>, ConnectError>>,
+    options?: Parameters<typeof count.useQuery>[1]
+) => {
     const baseOptions = count.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useCountMutation = 
-  (
-    options: Parameters<typeof count.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<CountResponse>, ConnectError, PartialMessage<CountRequest>>>
-  ) => {
+export const useCountMutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<CountResponse>, ConnectError, PartialMessage<CountRequest>>>,
+    options?: Parameters<typeof count.useMutation>[0]
+) => {
     const baseOptions = count.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useCountInfiniteQuery = 
-  (
+export const useCountInfiniteQuery = (
     inputs: Parameters<typeof count.useInfiniteQuery>[0],
-    options: Parameters<typeof count.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<CountRequest>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<CountRequest>, ConnectError>>,
+    options?: Parameters<typeof count.useInfiniteQuery>[1]
+) => {
     const baseOptions = count.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};

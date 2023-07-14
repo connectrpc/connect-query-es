@@ -40,43 +40,40 @@ export const work = createQueryService({
   },
 }).work;
 
-export const useWorkQuery = 
-  (
+export const useWorkQuery = (
     inputs: Parameters<typeof work.useQuery>[0],
-    options: Parameters<typeof work.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Nothing>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Nothing>, ConnectError>>,
+    options?: Parameters<typeof work.useQuery>[1]
+) => {
     const baseOptions = work.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useWorkMutation = 
-  (
-    options: Parameters<typeof work.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Nothing>, ConnectError, PartialMessage<Nothing>>>
-  ) => {
+export const useWorkMutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Nothing>, ConnectError, PartialMessage<Nothing>>>,
+    options?: Parameters<typeof work.useMutation>[0]
+) => {
     const baseOptions = work.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useWorkInfiniteQuery = 
-  (
+export const useWorkInfiniteQuery = (
     inputs: Parameters<typeof work.useInfiniteQuery>[0],
-    options: Parameters<typeof work.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Nothing>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Nothing>, ConnectError>>,
+    options?: Parameters<typeof work.useInfiniteQuery>[1]
+) => {
     const baseOptions = work.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};

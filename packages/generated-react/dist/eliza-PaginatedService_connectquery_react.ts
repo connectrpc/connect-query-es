@@ -40,43 +40,40 @@ export const list = createQueryService({
   },
 }).list;
 
-export const useListQuery = 
-  (
+export const useListQuery = (
     inputs: Parameters<typeof list.useQuery>[0],
-    options: Parameters<typeof list.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<ListRequest>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<ListRequest>, ConnectError>>,
+    options?: Parameters<typeof list.useQuery>[1]
+) => {
     const baseOptions = list.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useListMutation = 
-  (
-    options: Parameters<typeof list.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<ListResponse>, ConnectError, PartialMessage<ListRequest>>>
-  ) => {
+export const useListMutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<ListResponse>, ConnectError, PartialMessage<ListRequest>>>,
+    options?: Parameters<typeof list.useMutation>[0]
+) => {
     const baseOptions = list.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useListInfiniteQuery = 
-  (
+export const useListInfiniteQuery = (
     inputs: Parameters<typeof list.useInfiniteQuery>[0],
-    options: Parameters<typeof list.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<ListRequest>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<ListRequest>, ConnectError>>,
+    options?: Parameters<typeof list.useInfiniteQuery>[1]
+) => {
     const baseOptions = list.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};

@@ -43,43 +43,40 @@ export const say = createQueryService({
   },
 }).say;
 
-export const useSayQuery = 
-  (
+export const useSayQuery = (
     inputs: Parameters<typeof say.useQuery>[0],
-    options: Parameters<typeof say.useQuery>[1],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>,
+    options?: Parameters<typeof say.useQuery>[1]
+) => {
     const baseOptions = say.useQuery(inputs, options);
 
     return useQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useSayMutation = 
-  (
-    options: Parameters<typeof say.useMutation>[0],
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>
-  ) => {
+export const useSayMutation = (
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>,
+    options?: Parameters<typeof say.useMutation>[0]
+) => {
     const baseOptions = say.useMutation(options);
 
     return useMutation({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
 
-export const useSayInfiniteQuery = 
-  (
+export const useSayInfiniteQuery = (
     inputs: Parameters<typeof say.useInfiniteQuery>[0],
-    options: Parameters<typeof say.useInfiniteQuery>[1],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>
-  ) => {
+    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>,
+    options?: Parameters<typeof say.useInfiniteQuery>[1]
+) => {
     const baseOptions = say.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
-      ...baseOptions,
-      ...queryOptions,
+        ...baseOptions,
+        ...queryOptions,
     });
-  };
+};
