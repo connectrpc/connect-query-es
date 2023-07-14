@@ -20,16 +20,19 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
+      # Slightly fragile since it runs on the default node version
+      # but until setup-node supports corepack (https://github.com/actions/setup-node/issues/531)
+      # this is our best option
+      - name: Enable core pack
+        run: |
+          corepack enable
+          pnpm --version
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: pnpm
-
-      - name: Enable corepack
-        run: |
-          corepack enable
-          pnpm --version
 
       - name: Install dependencies
         run: pnpm install
