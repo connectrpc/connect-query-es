@@ -18,6 +18,14 @@ const config: Config = {
   preset: '../../jest-preset.js',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/**/*.test.ts?(x)'],
+  coverageThreshold: {
+    global: {
+      branches: 85.71,
+      functions: 100,
+      statements: 98.93,
+      lines: 98.92
+    }
+  }
 };
 
 export default config;
