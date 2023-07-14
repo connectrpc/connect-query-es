@@ -80,10 +80,3 @@ export const useCountInfiniteQuery =
       ...queryOptions,
     });
   };
-
-
-  useCountMutation({
-
-  }, {
-    
-  })
