@@ -28,7 +28,8 @@
     "tanstack",
     "todos",
     "tsdoc",
-    "tsup"
+    "tsup",
+    "corepack"
   ],
   "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw"]
 }

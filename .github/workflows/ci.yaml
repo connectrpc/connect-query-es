@@ -20,11 +20,13 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 7
-          run_install: false
+      # Slightly fragile since it runs on the default node version
+      # but until setup-node supports corepack (https://github.com/actions/setup-node/issues/531)
+      # this is our best option
+      - name: Enable core pack
+        run: |
+          corepack enable
+          pnpm --version
 
       - name: Setup Node
         uses: actions/setup-node@v3

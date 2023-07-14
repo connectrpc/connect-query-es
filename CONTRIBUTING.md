@@ -1,5 +1,17 @@
 # Contributing
 
+## Making sure your on the right pnpm version
+
+Ensure that you've got corepack enabled:
+
+```console
+corepack enable
+```
+
+This should only be necessary once.
+
+Verify that `pnpm --version` matches the `packageManager` version in `package.json`.
+
 ## Updating dependencies
 
 You can update all dependencies in this project with a single command:
