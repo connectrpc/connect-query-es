@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import { createQueryService } from "@bufbuild/connect-query";
-import { MethodKind } from "@bufbuild/protobuf";
+import { MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
 import { Empty, Todo, Todos } from "./example_pb.js";
 
 export const typeName = "buf.connect.demo.example.v1.TodoService";
@@ -22,6 +22,7 @@ export const getTodos = createQueryService({
         kind: MethodKind.Unary,
         I: Empty,
         O: Todos,
+        idempotency: MethodIdempotency.NoSideEffects,
       },
     },
     typeName: "buf.connect.demo.example.v1.TodoService",

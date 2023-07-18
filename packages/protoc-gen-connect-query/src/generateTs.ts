@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import type { DescFile, DescService } from '@bufbuild/protobuf';
-import { codegenInfo, MethodKind } from '@bufbuild/protobuf';
+import { codegenInfo, MethodIdempotency, MethodKind } from '@bufbuild/protobuf';
 import type { Schema } from '@bufbuild/protoplugin';
 import {
   literalString,
@@ -25,6 +25,7 @@ import type { PluginInit } from './utils';
 
 const { safeIdentifier } = codegenInfo;
 
+// prettier-ignore
 /**
  * Handles generating a source code file for a given Schema, DescFile (protobuf definition) and protobuf Service.
  *
@@ -41,7 +42,8 @@ const generateServiceFile =
     f.print(`export const typeName = ${literalString(service.typeName)};`);
     f.print();
 
-    const { MethodKind: rtMethodKind } = schema.runtime;
+    const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
+      schema.runtime;
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
@@ -55,18 +57,22 @@ const generateServiceFile =
         f.print(`    methods: {`);
         f.print(`      ${localName(method)}: {`);
         f.print(`        name: ${literalString(method.name)},`);
-        f.print(
-          `        kind: `,
-          rtMethodKind,
-          `.${MethodKind[method.methodKind]},`,
-        );
+        f.print(`        kind: `, rtMethodKind, `.${MethodKind[method.methodKind]},`);
         f.print(`        I: `, method.input, `,`);
         f.print(`        O: `, method.output, `,`);
+        if (method.idempotency) {
+            f.print(`        idempotency: `, rtMethodIdempotency, `.${MethodIdempotency[method.idempotency]},`);
+        }
         f.print(`      },`);
         f.print(`    },`);
         f.print(`    typeName: ${literalString(service.typeName)},`);
+        // In case we start supporting options, we have to surface them here
         f.print(`  },`);
-        f.print(`}).${localName(method)};`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
+        // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a
+        // TSDoc to be attached to the exported variable. Also, it's nice that each method has its own atomic section
+        // that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one
+        // contiguous set of lines).
+        f.print(`}).${localName(method)};`);
 
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {

@@ -40,7 +40,7 @@ const getFileDescriptorSet = () => {
 export const generate = (target: Target) => (filename: string) => {
   const codeGeneratorRequest = new CodeGeneratorRequest({
     parameter: `target=${target}`,
-    fileToGenerate: ['eliza.proto'],
+    fileToGenerate: ['eliza.proto', 'example.proto'],
     protoFile: getFileDescriptorSet().file,
   });
 

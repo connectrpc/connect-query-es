@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import { Empty, Todo, Todos } from "./example_pb.js";
-import { MethodKind } from "@bufbuild/protobuf";
+import { MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
 
 /**
  * @generated from service buf.connect.demo.example.v1.TodoService
@@ -22,6 +22,7 @@ export const TodoService = {
       I: Empty,
       O: Todos,
       kind: MethodKind.Unary,
+      idempotency: MethodIdempotency.NoSideEffects,
     },
     /**
      * @generated from rpc buf.connect.demo.example.v1.TodoService.AddTodo
