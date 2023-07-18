@@ -21,7 +21,9 @@ message Todos {
 
 service TodoService {
   // A helpful RPC to get all current Todos
-  rpc GetTodos(Empty) returns (Todos);
+  rpc GetTodos(Empty) returns (Todos) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
   rpc AddTodo(Todo) returns (Todos);
   
   // this RPC exists to test how JavaScript reserved keywords are translated
