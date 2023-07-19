@@ -24,6 +24,7 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [`UnaryHooks.useQuery`](#unaryhooksusequery)
   - [`ConnectQueryKey`](#connectquerykey)
   - [`ConnectPartialQueryKey`](#connectpartialquerykey)
+- [Experimental plugin](#experimental-plugin)
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [How do I pass other TanStack Query options?](#how-do-i-pass-other-tanstack-query-options)
   - [Is this ready for production?](#is-this-ready-for-production)
@@ -413,6 +414,20 @@ For example, a partial query key might look like this:
   "GetTodos",
 ]
 ```
+
+# Experimental plugin
+
+There is an alternate plugin (`@bufbuild/protoc-gen-connect-query-react`) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid).
+
+```tsx
+import { useExampleQuery } from 'your-generated-code/example-ExampleService_connectquery';
+
+export const Example: FC = () => {
+  const { data } = useExampleQuery({});
+  return <div>{data}</div>;
+};
+```
+
 
 # Frequently Asked Questions
 
