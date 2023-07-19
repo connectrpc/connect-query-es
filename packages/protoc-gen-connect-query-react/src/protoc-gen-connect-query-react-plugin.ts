@@ -15,6 +15,7 @@
 import { createEcmaScriptPlugin } from '@bufbuild/protoplugin';
 
 import { version } from '../package.json';
+import { generateDts } from './generateDts';
 import { generateTs } from './generateTs';
 
 export const protocGenConnectQueryReact = createEcmaScriptPlugin({
@@ -34,4 +35,5 @@ export const protocGenConnectQueryReact = createEcmaScriptPlugin({
 
     throw new Error(`invalid option "${key}"`);
   },
+  generateDts,
 });

@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import { createQueryService } from "@bufbuild/connect-query";
-import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
+import { MethodIdempotency, MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { Empty, Todo, Todos } from "./example_pb.js";
 import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
@@ -22,6 +22,7 @@ export const getTodos = createQueryService({
         kind: MethodKind.Unary,
         I: Empty,
         O: Todos,
+        idempotency: MethodIdempotency.NoSideEffects,
       },
     },
     typeName: "buf.connect.demo.example.v1.TodoService",
@@ -140,7 +141,7 @@ export const delete$ = createQueryService({
   },
 }).delete;
 
-export const useDelete$Query = (
+export const useDeleteQuery = (
     inputs: Parameters<typeof delete$.useQuery>[0],
     queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
     options?: Parameters<typeof delete$.useQuery>[1]
@@ -153,7 +154,7 @@ export const useDelete$Query = (
     });
 };
 
-export const useDelete$Mutation = (
+export const useDeleteMutation = (
     queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>,
     options?: Parameters<typeof delete$.useMutation>[0]
 ) => {
@@ -165,7 +166,7 @@ export const useDelete$Mutation = (
     });
 };
 
-export const useDelete$InfiniteQuery = (
+export const useDeleteInfiniteQuery = (
     inputs: Parameters<typeof delete$.useInfiniteQuery>[0],
     queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
     options?: Parameters<typeof delete$.useInfiniteQuery>[1]
