@@ -2,12 +2,6 @@
 
 **This is an experimental plugin, based on the [protoc-gen-connect-query](../protoc-gen-connect-query/README.md) plugin. This plugin provides better DX while sacrificing some flexibility.**
 
-What used to be:
-
-```tsx
-
-```
-
 - [@bufbuild/protoc-gen-connect-query-react](#bufbuildprotoc-gen-connect-query-react)
   - [Installation](#installation)
   - [Generating Code](#generating-code)
