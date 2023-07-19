@@ -1,0 +1,46 @@
+{
+  "name": "@bufbuild/protoc-gen-connect-query-react",
+  "version": "0.0.1",
+  "description": "Code generator for connect-query",
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bufbuild/connect-query.git",
+    "directory": "packages/protoc-gen-connect-query-react"
+  },
+  "files": [
+    "dist/**"
+  ],
+  "bin": {
+    "protoc-gen-connect-query-react": "bin/protoc-gen-connect-query-react"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "build": "pnpm clean && tsc --project tsconfig.build.json"
+  },
+  "preferUnplugged": true,
+  "devDependencies": {
+    "@bufbuild/protoc-gen-connect-es": "^0.9.0",
+    "@bufbuild/protoc-gen-connect-query": "workspace:*",
+    "@bufbuild/protoc-gen-es": "^1.2.0",
+    "generated-react": "workspace:*",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^1.2.0",
+    "@bufbuild/protoplugin": "^1.2.0"
+  },
+  "peerDependencies": {
+    "@bufbuild/protoc-gen-es": "1.x"
+  },
+  "peerDependenciesMeta": {
+    "@bufbuild/protoc-gen-es": {
+      "optional": true
+    }
+  }
+}
