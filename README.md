@@ -428,7 +428,6 @@ export const Example: FC = () => {
 };
 ```
 
-
 # Frequently Asked Questions
 
 ## How do I pass other TanStack Query options?
