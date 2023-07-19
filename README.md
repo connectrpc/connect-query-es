@@ -417,7 +417,7 @@ For example, a partial query key might look like this:
 
 # Experimental plugin
 
-There is an alternate plugin (`@bufbuild/protoc-gen-connect-query-react`) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.
+There is an alternate plugin [`@bufbuild/protoc-gen-connect-query-react`](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query-react) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.
 
 ```tsx
 import { useExampleQuery } from 'your-generated-code/example-ExampleService_connectquery_react';
