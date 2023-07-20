@@ -44,7 +44,7 @@ export const generate =
       parameter: `target=${target}${
         importHookFrom ? `,${importHookFrom}` : ''
       }`,
-      fileToGenerate: ['eliza.proto'],
+      fileToGenerate: ['eliza.proto', 'example.proto'],
       protoFile: getFileDescriptorSet().file,
     });
 

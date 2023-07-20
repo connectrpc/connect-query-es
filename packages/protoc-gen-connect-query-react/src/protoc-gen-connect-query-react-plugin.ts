@@ -15,23 +15,21 @@
 import { createEcmaScriptPlugin } from '@bufbuild/protoplugin';
 
 import { version } from '../package.json';
+import { generateDts } from './generateDts';
 import { generateTs } from './generateTs';
 
 export const protocGenConnectQueryReact = createEcmaScriptPlugin({
   name: 'protoc-gen-connect-query-react',
   version: `v${String(version)}`,
   generateTs,
+  generateDts,
 
   // The generated TypeScript output is completely valid JavaScript since all the types are inferred
   generateJs: generateTs,
 
-  parseOption: (key, value) => {
-    if (key === 'import-hook-from') {
-      return {
-        [key]: value,
-      };
+  parseOption: (key) => {
+    if (key !== 'import-hook-from') {
+      throw new Error(`invalid option "${key}"`);
     }
-
-    throw new Error(`invalid option "${key}"`);
   },
 });

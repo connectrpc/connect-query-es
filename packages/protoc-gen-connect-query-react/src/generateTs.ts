@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import type { DescFile, DescService } from '@bufbuild/protobuf';
-import { codegenInfo, MethodKind } from '@bufbuild/protobuf';
+import { codegenInfo, MethodIdempotency, MethodKind } from '@bufbuild/protobuf';
 import type { Schema } from '@bufbuild/protoplugin';
 import {
   literalString,
@@ -22,9 +22,11 @@ import {
 } from '@bufbuild/protoplugin/ecmascript';
 
 import type { PluginInit } from './utils';
+import { getImportHookFromOption, reactHookName } from './utils';
 
 const { safeIdentifier } = codegenInfo;
 
+// prettier-ignore
 /**
  * Handles generating a source code file for a given Schema, DescFile (protobuf definition) and protobuf Service.
  *
@@ -33,29 +35,16 @@ const { safeIdentifier } = codegenInfo;
 const generateServiceFile =
   (schema: Schema, protoFile: DescFile, extension: 'js' | 'ts') =>
   (service: DescService) => {
-    const parameter = schema.proto.parameter
-      ?.split(',')
-      .reduce<object>((acc, curr) => {
-        const [key, value] = curr.split('=');
 
-        acc = Object.assign(acc, { [key]: value });
-
-        return acc;
-      }, {});
-
-    const importHookFrom =
-      parameter &&
-      'import-hook-from' in parameter &&
-      typeof parameter['import-hook-from'] == 'string'
-        ? parameter['import-hook-from']
-        : '@tanstack/react-query';
-
-    const f = schema.generateFile(
-      `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
-    );
+      const f = schema.generateFile(
+          `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
+      );
     f.preamble(protoFile);
 
-    const { MethodKind: rtMethodKind } = schema.runtime;
+    const importHookFrom = getImportHookFromOption(schema);
+
+    const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
+      schema.runtime;
 
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
@@ -77,23 +66,18 @@ const generateServiceFile =
         f.print(`    methods: {`);
         f.print(`      ${localName(method)}: {`);
         f.print(`        name: ${literalString(method.name)},`);
-        f.print(
-          `        kind: `,
-          rtMethodKind,
-          `.${MethodKind[method.methodKind]},`,
-        );
+        f.print(`        kind: `, rtMethodKind, `.${MethodKind[method.methodKind]},`);
         f.print(`        I: `, method.input, `,`);
         f.print(`        O: `, method.output, `,`);
+        if (method.idempotency) {
+          f.print(`        idempotency: `, rtMethodIdempotency,`.${MethodIdempotency[method.idempotency]},`);
+        }
         f.print(`      },`);
         f.print(`    },`);
         f.print(`    typeName: ${literalString(service.typeName)},`);
         f.print(`  },`);
         f.print(`}).${localName(method)};`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
         f.print(``);
-
-        // convert serviceName to first letter uppercase
-        const serviceNameFirstLetterUppercase =
-          serviceName.charAt(0).toUpperCase() + serviceName.slice(1);
 
         // useQuery
         const useQuery = f.import('useQuery', importHookFrom);
@@ -102,38 +86,12 @@ const generateServiceFile =
           importHookFrom,
         );
 
-        f.print(
-          `export const use`,
-          serviceNameFirstLetterUppercase,
-          'Query = (',
-        ); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
-        f.print(
-          `    inputs: Parameters<typeof `,
-          serviceName,
-          `.useQuery>[0],`,
-        );
-        f.print(
-          `    queryOptions?: Partial<`,
-          useBaseQueryOptions,
-          `<`,
-          partialMessage,
-          `<`,
-          method.input,
-          `>, `,
-          connectError,
-          `>>,`,
-        );
-        f.print(
-          `    options?: Parameters<typeof `,
-          serviceName,
-          `.useQuery>[1]`,
-        );
+        f.print(`export const `, reactHookName(method, 'Query'), ' = (');
+        f.print(`    inputs: Parameters<typeof `,serviceName, `.useQuery>[0],`);
+        f.print(`    queryOptions?: Partial<`, useBaseQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
+        f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1]`,);
         f.print(`) => {`);
-        f.print(
-          `    const baseOptions = `,
-          serviceName,
-          `.useQuery(inputs, options);`,
-        );
+        f.print(`    const baseOptions = `, serviceName, `.useQuery(inputs, options);`);
         f.print(``);
         f.print(`    return `, useQuery, `({`);
         f.print(`        ...baseOptions,`);
@@ -149,37 +107,11 @@ const generateServiceFile =
           importHookFrom,
         );
 
-        f.print(
-          `export const use`,
-          serviceNameFirstLetterUppercase,
-          'Mutation = (',
-        );
-        f.print(
-          `    queryOptions?: Partial<`,
-          useMutationOptions,
-          `<`,
-          partialMessage,
-          `<`,
-          method.output,
-          `>, `,
-          connectError,
-          `, `,
-          partialMessage,
-          `<`,
-          method.input,
-          `>>>,`,
-        );
-        f.print(
-          `    options?: Parameters<typeof `,
-          serviceName,
-          `.useMutation>[0]`,
-        );
+        f.print(`export const `, reactHookName(method, 'Mutation'), ' = (');
+        f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>,`);
+        f.print(`    options?: Parameters<typeof `, serviceName, `.useMutation>[0]`);
         f.print(`) => {`);
-        f.print(
-          `    const baseOptions = `,
-          serviceName,
-          `.useMutation(options);`,
-        );
+        f.print(`    const baseOptions = `, serviceName, `.useMutation(options);`);
         f.print(``);
         f.print(`    return `, useMutation, `({`);
         f.print(`        ...baseOptions,`);
@@ -195,38 +127,12 @@ const generateServiceFile =
           importHookFrom,
         );
 
-        f.print(
-          `export const use`,
-          serviceNameFirstLetterUppercase,
-          'InfiniteQuery = (',
-        );
-        f.print(
-          `    inputs: Parameters<typeof `,
-          serviceName,
-          `.useInfiniteQuery>[0],`,
-        );
-        f.print(
-          `    queryOptions?: Partial<`,
-          useInfiniteQueryOptions,
-          `<`,
-          partialMessage,
-          `<`,
-          method.input,
-          `>, `,
-          connectError,
-          `>>,`,
-        );
-        f.print(
-          `    options?: Parameters<typeof `,
-          serviceName,
-          `.useInfiniteQuery>[1]`,
-        );
+        f.print(`export const `, reactHookName(method, 'InfiniteQuery'), ' = (');
+        f.print(`    inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
+        f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
+        f.print(`    options?: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1]`);
         f.print(`) => {`);
-        f.print(
-          `    const baseOptions = `,
-          serviceName,
-          `.useInfiniteQuery(inputs, options);`,
-        );
+        f.print(`    const baseOptions = `, serviceName, `.useInfiniteQuery(inputs, options);`);
         f.print(``);
         f.print(`    return `, useInfiniteQuery, `({`);
         f.print(`        ...baseOptions,`);
