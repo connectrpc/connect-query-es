@@ -22,6 +22,7 @@ import {
 } from '@bufbuild/protoplugin/ecmascript';
 
 import type { PluginInit } from './utils';
+import { getImportHookFromOption, reactHookName } from './utils';
 
 const { safeIdentifier } = codegenInfo;
 
@@ -34,27 +35,13 @@ const { safeIdentifier } = codegenInfo;
 const generateServiceFile =
   (schema: Schema, protoFile: DescFile, extension: 'js' | 'ts') =>
   (service: DescService) => {
-    const parameter = schema.proto.parameter
-      ?.split(',')
-      .reduce<object>((acc, curr) => {
-        const [key, value] = curr.split('=');
 
-        acc = Object.assign(acc, { [key]: value });
-
-        return acc;
-      }, {});
-
-    const importHookFrom =
-      parameter &&
-      'import-hook-from' in parameter &&
-      typeof parameter['import-hook-from'] == 'string'
-        ? parameter['import-hook-from']
-        : '@tanstack/react-query';
-
-    const f = schema.generateFile(
-      `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
-    );
+      const f = schema.generateFile(
+          `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
+      );
     f.preamble(protoFile);
+
+    const importHookFrom = getImportHookFromOption(schema);
 
     const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
       schema.runtime;
@@ -92,10 +79,6 @@ const generateServiceFile =
         f.print(`}).${localName(method)};`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
         f.print(``);
 
-        // convert serviceName to first letter uppercase
-        const serviceNameFirstLetterUppercase =
-          localName(method).charAt(0).toUpperCase() + localName(method).slice(1);
-
         // useQuery
         const useQuery = f.import('useQuery', importHookFrom);
         const useBaseQueryOptions = f.import(
@@ -103,7 +86,7 @@ const generateServiceFile =
           importHookFrom,
         );
 
-        f.print(`export const use`, serviceNameFirstLetterUppercase, 'Query = (');
+        f.print(`export const `, reactHookName(method, 'Query'), ' = (');
         f.print(`    inputs: Parameters<typeof `,serviceName, `.useQuery>[0],`);
         f.print(`    queryOptions?: Partial<`, useBaseQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
         f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1]`,);
@@ -124,7 +107,7 @@ const generateServiceFile =
           importHookFrom,
         );
 
-        f.print(`export const use`, serviceNameFirstLetterUppercase, 'Mutation = (');
+        f.print(`export const `, reactHookName(method, 'Mutation'), ' = (');
         f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>,`);
         f.print(`    options?: Parameters<typeof `, serviceName, `.useMutation>[0]`);
         f.print(`) => {`);
@@ -144,7 +127,7 @@ const generateServiceFile =
           importHookFrom,
         );
 
-        f.print(`export const use`, serviceNameFirstLetterUppercase, 'InfiniteQuery = (');
+        f.print(`export const `, reactHookName(method, 'InfiniteQuery'), ' = (');
         f.print(`    inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
         f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
         f.print(`    options?: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1]`);

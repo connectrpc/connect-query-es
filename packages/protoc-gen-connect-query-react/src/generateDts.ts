@@ -18,6 +18,7 @@ import type { Schema } from '@bufbuild/protoplugin';
 import { localName } from '@bufbuild/protoplugin/ecmascript';
 
 import type { PluginInit } from './utils';
+import { getImportHookFromOption, reactHookName } from './utils';
 
 const { safeIdentifier } = codegenInfo;
 
@@ -26,30 +27,15 @@ const { safeIdentifier } = codegenInfo;
  * Handles generating a TypeScript Declaration file for a given Schema, DescFile (protobuf definition) and protobuf Service.
  */
 const generateServiceFile =
-  (schema: Schema, protoFile: DescFile) => (service: DescService) => {    
-    const parameter = schema.proto.parameter
-      ?.split(',')
-      .reduce<object>((acc, curr) => {
-        const [key, value] = curr.split('=');
+  (schema: Schema, protoFile: DescFile) => (service: DescService) => {
 
-        acc = Object.assign(acc, { [key]: value });
-
-        return acc;
-      }, {});
-    const importHookFrom =
-      parameter &&
-      'import-hook-from' in parameter &&
-      typeof parameter['import-hook-from'] == 'string'
-        ? parameter['import-hook-from']
-        : '@tanstack/react-query';
-    
     const f = schema.generateFile(
-      `${protoFile.name}-${localName(service)}_connectquery_react.d.ts`,
+        `${protoFile.name}-${localName(service)}_connectquery_react.d.ts`,
     );
-
     f.preamble(protoFile);
 
-    
+    const importHookFrom = getImportHookFromOption(schema);
+
     service.methods.forEach((method) => {
       switch (method.methodKind) {
         case MethodKind.Unary:
@@ -70,10 +56,6 @@ const generateServiceFile =
               `>;`,
             );
 
-            const serviceNameFirstLetterUppercase =
-              localName(method).charAt(0).toUpperCase() + localName(method).slice(1);
-
-
             // useQuery
             const useBaseQueryOptions = f.import(
               'UseBaseQueryOptions',
@@ -83,8 +65,8 @@ const generateServiceFile =
                 'UseQueryResult',
                 importHookFrom,
             );
-            
-            f.print(`export declare const use`, serviceNameFirstLetterUppercase, 'Query: (');
+
+            f.print(`export declare const `, reactHookName(method, 'Query'), ': (');
             f.print(`    inputs: Parameters<typeof `,serviceName, `.useQuery>[0],`);
             f.print(`    queryOptions?: Partial<`, useBaseQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
             f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1]`,);
@@ -101,7 +83,7 @@ const generateServiceFile =
                 importHookFrom,
             );
 
-            f.print(`export const use`, serviceNameFirstLetterUppercase, 'Mutation: (');
+            f.print(`export declare const `, reactHookName(method, 'Mutation'), ': (');
             f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>,`);
             f.print(`    options?: Parameters<typeof `, serviceName, `.useMutation>[0]`);
             f.print(`) => `, useMutationResult, `<`, method.output, `,`, connectError, ',', partialMessage, `<`, method.input, '>',`, unknown>;`);
@@ -117,7 +99,7 @@ const generateServiceFile =
                 importHookFrom,
             );
 
-            f.print(`export const use`, serviceNameFirstLetterUppercase, 'InfiniteQuery: (');
+            f.print(`export declare const `, reactHookName(method, 'InfiniteQuery'), ': (');
             f.print(`    inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
             f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
             f.print(`    options?: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1]`);

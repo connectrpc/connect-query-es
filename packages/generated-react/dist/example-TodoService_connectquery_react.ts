@@ -198,7 +198,7 @@ export const valueOf$ = createQueryService({
   },
 }).valueOf$;
 
-export const useValueOf$Query = (
+export const useValueOfQuery = (
     inputs: Parameters<typeof valueOf$.useQuery>[0],
     queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
     options?: Parameters<typeof valueOf$.useQuery>[1]
@@ -211,7 +211,7 @@ export const useValueOf$Query = (
     });
 };
 
-export const useValueOf$Mutation = (
+export const useValueOfMutation = (
     queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>,
     options?: Parameters<typeof valueOf$.useMutation>[0]
 ) => {
@@ -223,7 +223,7 @@ export const useValueOf$Mutation = (
     });
 };
 
-export const useValueOf$InfiniteQuery = (
+export const useValueOfInfiniteQuery = (
     inputs: Parameters<typeof valueOf$.useInfiniteQuery>[0],
     queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
     options?: Parameters<typeof valueOf$.useInfiniteQuery>[1]
