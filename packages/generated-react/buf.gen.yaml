@@ -25,5 +25,6 @@ plugins:
     path: ../protoc-gen-connect-query-react/bin/protoc-gen-connect-query-react
     opt:
       - target=ts
+      - import_extension=none
       - import-hook-from=@tanstack/react-query
     out: dist
