@@ -135,7 +135,7 @@ const generateServiceFile =
         f.print(`) => {`);
         f.print(`    const baseOptions = `, serviceName, `.useInfiniteQuery(inputs, options);`);
         f.print(``);
-        f.print(`    return `, useInfiniteQuery, `({`);
+        f.print(`    return `, useInfiniteQuery, `<`, method.output, `, `, connectError, `, `, method.output, `, keyof typeof inputs extends never ? any : `, connectQueryKey, `<`, method.input, `>>({`);
         f.print(`        ...baseOptions,`);
         f.print(`        ...queryOptions,`);
         f.print(`    });`);

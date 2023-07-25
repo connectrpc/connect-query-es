@@ -72,7 +72,7 @@ export const useWorkInfiniteQuery = (
 ) => {
     const baseOptions = work.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<Nothing, ConnectError, Nothing, keyof typeof inputs extends never ? any : ConnectQueryKey<Nothing>>({
         ...baseOptions,
         ...queryOptions,
     });

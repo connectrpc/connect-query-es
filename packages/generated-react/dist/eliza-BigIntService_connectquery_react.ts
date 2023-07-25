@@ -72,7 +72,7 @@ export const useCountInfiniteQuery = (
 ) => {
     const baseOptions = count.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<CountResponse, ConnectError, CountResponse, keyof typeof inputs extends never ? any : ConnectQueryKey<CountRequest>>({
         ...baseOptions,
         ...queryOptions,
     });

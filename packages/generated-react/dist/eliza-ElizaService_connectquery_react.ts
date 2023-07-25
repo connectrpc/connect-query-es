@@ -75,7 +75,7 @@ export const useSayInfiniteQuery = (
 ) => {
     const baseOptions = say.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<SayResponse, ConnectError, SayResponse, keyof typeof inputs extends never ? any : ConnectQueryKey<SayRequest>>({
         ...baseOptions,
         ...queryOptions,
     });
@@ -133,7 +133,7 @@ export const useSayAgainInfiniteQuery = (
 ) => {
     const baseOptions = sayAgain.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<SayResponse, ConnectError, SayResponse, keyof typeof inputs extends never ? any : ConnectQueryKey<SayRequest>>({
         ...baseOptions,
         ...queryOptions,
     });

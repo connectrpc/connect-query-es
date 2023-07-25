@@ -72,7 +72,7 @@ export const useListInfiniteQuery = (
 ) => {
     const baseOptions = list.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<ListResponse, ConnectError, ListResponse, keyof typeof inputs extends never ? any : ConnectQueryKey<ListRequest>>({
         ...baseOptions,
         ...queryOptions,
     });
