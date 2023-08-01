@@ -19,44 +19,23 @@
 
 import { createQueryService } from "@bufbuild/connect-query";
 import { MethodKind } from "@bufbuild/protobuf";
-import { SayRequest, SayResponse } from "./eliza_pb.js";
+import { ListRequest, ListResponse } from "./eliza_pb.js";
 
-export const typeName = "connectrpc.eliza.v1.ElizaService";
-
-/**
- * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
- *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
- */
-export const say = createQueryService({
-  service: {
-    methods: {
-      say: {
-        name: "Say",
-        kind: MethodKind.Unary,
-        I: SayRequest,
-        O: SayResponse,
-      },
-    },
-    typeName: "connectrpc.eliza.v1.ElizaService",
-  },
-}).say;
+export const typeName = "connectrpc.eliza.v1.PaginatedService";
 
 /**
- * SayAgain is a unary RPC. Eliza responds to the prompt with a single sentence.
- *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.SayAgain
+ * @generated from rpc connectrpc.eliza.v1.PaginatedService.List
  */
-export const sayAgain = createQueryService({
+export const list = createQueryService({
   service: {
     methods: {
-      sayAgain: {
-        name: "SayAgain",
+      list: {
+        name: "List",
         kind: MethodKind.Unary,
-        I: SayRequest,
-        O: SayResponse,
+        I: ListRequest,
+        O: ListResponse,
       },
     },
-    typeName: "connectrpc.eliza.v1.ElizaService",
+    typeName: "connectrpc.eliza.v1.PaginatedService",
   },
-}).sayAgain;
+}).list;

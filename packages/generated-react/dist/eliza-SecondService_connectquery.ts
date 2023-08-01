@@ -21,12 +21,12 @@ import { createQueryService } from "@bufbuild/connect-query";
 import { MethodKind } from "@bufbuild/protobuf";
 import { SayRequest, SayResponse } from "./eliza_pb.js";
 
-export const typeName = "connectrpc.eliza.v1.ElizaService";
+export const typeName = "connectrpc.eliza.v1.SecondService";
 
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
+ * @generated from rpc connectrpc.eliza.v1.SecondService.Say
  */
 export const say = createQueryService({
   service: {
@@ -38,25 +38,6 @@ export const say = createQueryService({
         O: SayResponse,
       },
     },
-    typeName: "connectrpc.eliza.v1.ElizaService",
+    typeName: "connectrpc.eliza.v1.SecondService",
   },
 }).say;
-
-/**
- * SayAgain is a unary RPC. Eliza responds to the prompt with a single sentence.
- *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.SayAgain
- */
-export const sayAgain = createQueryService({
-  service: {
-    methods: {
-      sayAgain: {
-        name: "SayAgain",
-        kind: MethodKind.Unary,
-        I: SayRequest,
-        O: SayResponse,
-      },
-    },
-    typeName: "connectrpc.eliza.v1.ElizaService",
-  },
-}).sayAgain;

@@ -26,7 +26,7 @@ import { ConnectError } from "@bufbuild/connect";
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
+ * @generated from rpc connectrpc.eliza.v1.SecondService.Say
  */
 export const say = createQueryService({
   service: {
@@ -38,7 +38,7 @@ export const say = createQueryService({
         O: SayResponse,
       },
     },
-    typeName: "connectrpc.eliza.v1.ElizaService",
+    typeName: "connectrpc.eliza.v1.SecondService",
   },
 }).say;
 
@@ -73,63 +73,6 @@ export const useSayInfiniteQuery = (
     options?: Parameters<typeof say.useInfiniteQuery>[1]
 ) => {
     const baseOptions = say.useInfiniteQuery(inputs, options);
-
-    return useInfiniteQuery({
-        ...baseOptions,
-        ...queryOptions,
-    });
-};
-
-/**
- * SayAgain is a unary RPC. Eliza responds to the prompt with a single sentence.
- *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.SayAgain
- */
-export const sayAgain = createQueryService({
-  service: {
-    methods: {
-      sayAgain: {
-        name: "SayAgain",
-        kind: MethodKind.Unary,
-        I: SayRequest,
-        O: SayResponse,
-      },
-    },
-    typeName: "connectrpc.eliza.v1.ElizaService",
-  },
-}).sayAgain;
-
-export const useSayAgainQuery = (
-    inputs: Parameters<typeof sayAgain.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>,
-    options?: Parameters<typeof sayAgain.useQuery>[1]
-) => {
-    const baseOptions = sayAgain.useQuery(inputs, options);
-
-    return useQuery({
-        ...baseOptions,
-        ...queryOptions,
-    });
-};
-
-export const useSayAgainMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>,
-    options?: Parameters<typeof sayAgain.useMutation>[0]
-) => {
-    const baseOptions = sayAgain.useMutation(options);
-
-    return useMutation({
-        ...baseOptions,
-        ...queryOptions,
-    });
-};
-
-export const useSayAgainInfiniteQuery = (
-    inputs: Parameters<typeof sayAgain.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>,
-    options?: Parameters<typeof sayAgain.useInfiniteQuery>[1]
-) => {
-    const baseOptions = sayAgain.useInfiniteQuery(inputs, options);
 
     return useInfiniteQuery({
         ...baseOptions,
