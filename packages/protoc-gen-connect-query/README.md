@@ -15,7 +15,7 @@
     - [`keep_empty_files=true`](#keep_empty_filestrue)
   - [Example Generated Code](#example-generated-code)
 
-The code generator for Connect-Query, a expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), that enables effortless communication with servers that speak the [Connect Protocol](https://connect.build/docs/protocol).
+The code generator for Connect-Query, a expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), that enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 
 Learn more about Connect-Query at [github.com/bufbuild/connect-query](https://github.com/bufbuild/connect-query).
 
@@ -42,7 +42,7 @@ For these examples, consider the following example proto file `example.proto`:
 ```protobuf
 syntax = "proto3";
 
-package buf.connect.demo.example.v1;
+package example.v1;
 
 message Nothing {}
 
@@ -92,7 +92,7 @@ To use the [buf CLI](https://docs.buf.build/generate/usage#run-generate) to gene
 npx @bufbuild/buf generate
 ```
 
-> Note that `buf` can generate from various [inputs](https://docs.buf.build/reference/inputs), not just local protobuf files. For example, `npm run generate buf.build/bufbuild/eliza` generates code for the module [bufbuild/eliza](https://buf.build/bufbuild/eliza) on the Buf Schema Registry.
+> Note that `buf` can generate from various [inputs](https://docs.buf.build/reference/inputs), not just local protobuf files. For example, `npm run generate buf.build/connectrpc/eliza` generates code for the module [connectrpc/eliza](https://buf.build/connectrpc/eliza) on the Buf Schema Registry.
 
 ### With `protoc`
 

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package buf.connect.demo.example.v1;
+package example.v1;
 
 message Empty {}
 
@@ -25,10 +25,10 @@ service TodoService {
     option idempotency_level = NO_SIDE_EFFECTS;
   }
   rpc AddTodo(Todo) returns (Todos);
-  
+
   // this RPC exists to test how JavaScript reserved keywords are translated
   rpc Delete(Empty) returns (Empty);
-  
+
   // this RPC exists to test how JavaScript reserved object properties are translated
   rpc ValueOf(Empty) returns (Empty);
 }

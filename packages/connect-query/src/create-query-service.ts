@@ -41,7 +41,7 @@ const servicesToHooks = new Map<ServiceType, QueryHooks<ServiceType>>();
  *         O: SayResponse,
  *       },
  *     },
- *     typeName: "buf.connect.demo.eliza.v1.ElizaService",
+ *     typeName: "connectrpc.eliza.v1.ElizaService",
  *   },
  * });
  *
