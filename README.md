@@ -4,7 +4,7 @@
 <!-- omit in toc -->
 # Connect-Query
 
-Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested.  It enables effortless communication with servers that speak the [Connect Protocol](https://connect.build/docs/protocol).
+Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested.  It enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 
 - [Quickstart](#quickstart)
   - [Generated Code](#generated-code)
@@ -150,7 +150,7 @@ export const { say } = createQueryService({
         O: SayResponse,
       },
     },
-    typeName: "buf.connect.demo.eliza.v1.ElizaService",
+    typeName: "connectrpc.eliza.v1.ElizaService",
   },
 });
 
@@ -171,12 +171,12 @@ const TransportProvider: FC<PropsWithChildren<{
 
 Broadly speaking, "transport" joins two concepts:
 
-  1. The protocol of communication.  For this there are two options: the [Connect Protocol](https://connect.build/docs/protocol/), or the [gRPC-Web Protocol](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md).
+  1. The protocol of communication.  For this there are two options: the [Connect Protocol](https://connectrpc.com/docs/protocol/), or the [gRPC-Web Protocol](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md).
   1. The protocol options.  The primary important piece of information here is the `baseUrl`, but there are also other potentially critical options like request credentials and binary wire format encoding options.
 
 With these two pieces of information in hand, the transport provides the critical mechanism by which your app can make network requests.
 
-To learn more about the two modes of transport, take a look at the Connect-Web documentation on [choosing a protocol](https://connect.build/docs/web/choosing-a-protocol/).
+To learn more about the two modes of transport, take a look at the Connect-Web documentation on [choosing a protocol](https://connectrpc.com/docs/web/choosing-a-protocol/).
 
 To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@bufbuild/connect-web`](https://www.npmjs.com/package/@bufbuild/connect-web)) and pass it to the provider.
 
@@ -389,7 +389,7 @@ For example, a query key might look like this:
 
 ```ts
 [
-  "buf.connect.demo.example.v1.ExampleService",
+  "example.v1.ExampleService",
   "GetTodos",
   { id: "0fdf2ebe-9a0c-4366-9772-cfb21346c3f9" },
 ]
@@ -410,7 +410,7 @@ For example, a partial query key might look like this:
 
 ```ts
 [
-  "buf.connect.demo.example.v1.ExampleService",
+  "example.v1.ExampleService",
   "GetTodos",
 ]
 ```
@@ -491,7 +491,7 @@ Your Protobuf files serve as the primary input to the code generators `protoc-ge
 
 ## What is `Transport`
 
-`Transport` is a regular JavaScript object with two methods, `unary` and `stream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.  Read more about Transport on the [connect docs](https://connect.build/docs/web/choosing-a-protocol).
+`Transport` is a regular JavaScript object with two methods, `unary` and `stream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.  Read more about Transport on the [connect docs](https://connectrpc.com/docs/web/choosing-a-protocol).
 
 ## What if I already use Connect-Web?
 
@@ -501,7 +501,7 @@ You can use Connect-Web and Connect-Query together if you like!
 
 Connect-Query also supports gRPC-web!  All you need to do is make sure you call `createGrpcWebTransport` instead of `createConnectTransport`.
 
-That said, we encourage you to check out the [Connect protocol](https://connect.build/docs/protocol/), a simple, POST-only protocol that works over HTTP/1.1 or HTTP/2. It supports server-streaming methods just like gRPC-Web, but is easy to debug in the network inspector.
+That said, we encourage you to check out the [Connect protocol](https://connectrpc.com/docs/protocol/), a simple, POST-only protocol that works over HTTP/1.1 or HTTP/2. It supports server-streaming methods just like gRPC-Web, but is easy to debug in the network inspector.
 
 ## Do I have to use a code generator?
 

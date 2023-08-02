@@ -31,7 +31,7 @@ import { disableQuery } from './utils';
  *
  * @example
  * [
- *   "buf.connect.demo.eliza.v1.ElizaService",
+ *   "connectrpc.eliza.v1.ElizaService",
  *   "Say",
  *   { sentence: "hello there" },
  * ]

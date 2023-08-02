@@ -235,7 +235,7 @@ describe('unaryHooks', () => {
 
     it('returns a partial query key', () => {
       expect(genSay.getPartialQueryKey()).toStrictEqual([
-        'buf.connect.demo.eliza.v1.ElizaService',
+        'connectrpc.eliza.v1.ElizaService',
         'Say',
       ]);
     });
@@ -254,7 +254,7 @@ describe('unaryHooks', () => {
     it('returns a simple query key with an input', () => {
       const sentence = { sentence: 'ziltoid' };
       expect(genSay.getQueryKey(sentence)).toStrictEqual([
-        'buf.connect.demo.eliza.v1.ElizaService',
+        'connectrpc.eliza.v1.ElizaService',
         'Say',
         sentence,
       ]);
@@ -262,7 +262,7 @@ describe('unaryHooks', () => {
 
     it('returns handles disableQuery', () => {
       expect(genSay.getQueryKey(disableQuery)).toStrictEqual([
-        'buf.connect.demo.eliza.v1.ElizaService',
+        'connectrpc.eliza.v1.ElizaService',
         'Say',
         {},
       ]);
@@ -270,18 +270,18 @@ describe('unaryHooks', () => {
 
     it('returns handles no input', () => {
       expect(genSay.getQueryKey()).toStrictEqual([
-        'buf.connect.demo.eliza.v1.ElizaService',
+        'connectrpc.eliza.v1.ElizaService',
         'Say',
         {},
       ]);
       expect(genSay.getQueryKey(undefined)).toStrictEqual([
-        'buf.connect.demo.eliza.v1.ElizaService',
+        'connectrpc.eliza.v1.ElizaService',
         'Say',
         {},
       ]);
       // @ts-expect-error(2345) intentionally incorrect
       expect(genSay.getQueryKey(null)).toStrictEqual([
-        'buf.connect.demo.eliza.v1.ElizaService',
+        'connectrpc.eliza.v1.ElizaService',
         'Say',
         {},
       ]);
@@ -313,7 +313,7 @@ describe('unaryHooks', () => {
           Equal<typeof queryKey, ConnectPartialQueryKey>
         >;
         expect(queryKey).toStrictEqual([
-          'buf.connect.demo.eliza.v1.BigIntService',
+          'connectrpc.eliza.v1.BigIntService',
           'Count',
         ]);
       });
@@ -351,7 +351,7 @@ describe('unaryHooks', () => {
           Equal<typeof queryKey, ConnectQueryKey<CountRequest>>
         >;
         expect(queryKey).toStrictEqual([
-          'buf.connect.demo.eliza.v1.BigIntService',
+          'connectrpc.eliza.v1.BigIntService',
           'Count',
           request,
         ]);
@@ -759,7 +759,7 @@ describe('unaryHooks', () => {
       );
 
       expect(result.current.queryKey).toStrictEqual([
-        'buf.connect.demo.eliza.v1.PaginatedService',
+        'connectrpc.eliza.v1.PaginatedService',
         'List',
         {
           page: undefined,
@@ -796,7 +796,7 @@ describe('unaryHooks', () => {
       );
 
       expect(result.current.queryKey).toStrictEqual([
-        'buf.connect.demo.eliza.v1.PaginatedService',
+        'connectrpc.eliza.v1.PaginatedService',
         'List',
         {
           page: undefined,
