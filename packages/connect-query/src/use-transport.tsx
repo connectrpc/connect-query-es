@@ -18,7 +18,7 @@ import type { FC, PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
 const fallbackTransportError = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connect.build/docs/web/getting-started for more info.",
+  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
 );
 
 export const fallbackTransport: Transport = {
@@ -42,7 +42,7 @@ export const useTransport = () => useContext(transportContext);
  *
  * Broadly speaking, "transport" joins two concepts:
  *
- *   1. The protocol of communication.  For this there are two options: the {@link https://connect.build/docs/protocol/ Connect Protocol}, or the {@link https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md gRPC-Web Protocol}.
+ *   1. The protocol of communication.  For this there are two options: the {@link https://connectrpc.com/docs/protocol/ Connect Protocol}, or the {@link https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md gRPC-Web Protocol}.
  *   1. The protocol options.  The primary important piece of information here is the `baseUrl`, but there are also other potentially critical options like request credentials and binary wire format encoding options.
  *
  * With these two pieces of information in hand, the transport provides the critical mechanism by which your app can make network requests.

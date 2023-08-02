@@ -35,7 +35,7 @@ import { TransportProvider } from '../use-transport';
 export const wrapper = (
   config?: QueryClientConfig,
   transport = createConnectTransport({
-    baseUrl: 'https://demo.connect.build',
+    baseUrl: 'https://demo.connectrpc.com',
   }),
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;

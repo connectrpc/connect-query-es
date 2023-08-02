@@ -18,7 +18,7 @@ const config: Config = {
   preset: '../../jest-preset.js',
   testEnvironment: '<rootDir>/jest-environment-jsdom.js',
   moduleNameMapper: {
-    '(.+)\\.js': '$1', // https://connect.build/docs/web/supported-browsers-and-frameworks/#jest
+    '(.+)\\.js': '$1', // https://connectrpc.com/docs/web/supported-browsers-and-frameworks/#jest
   },
   testMatch: ['<rootDir>/**/*.test.ts?(x)'],
 };

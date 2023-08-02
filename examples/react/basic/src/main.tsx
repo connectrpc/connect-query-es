@@ -29,7 +29,7 @@ const queryClient = new QueryClient();
  */
 export default function App() {
   const transport = createConnectTransport({
-    baseUrl: 'https://demo.connect.build',
+    baseUrl: 'https://demo.connectrpc.com',
   });
   return (
     <TransportProvider transport={transport}>
