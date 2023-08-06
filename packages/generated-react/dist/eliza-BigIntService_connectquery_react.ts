@@ -17,10 +17,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from "@bufbuild/connect-query";
+import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { CountRequest, CountResponse } from "./eliza_pb.js";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
@@ -42,8 +42,8 @@ export const count = createQueryService({
 
 export const useCountQuery = (
     inputs: Parameters<typeof count.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<CountRequest>, ConnectError>>,
-    options?: Parameters<typeof count.useQuery>[1]
+    options?: Parameters<typeof count.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<CountResponse, ConnectError, CountResponse, ConnectQueryKey<CountRequest>>>
 ) => {
     const baseOptions = count.useQuery(inputs, options);
 
@@ -54,8 +54,8 @@ export const useCountQuery = (
 };
 
 export const useCountMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<CountResponse>, ConnectError, PartialMessage<CountRequest>>>,
-    options?: Parameters<typeof count.useMutation>[0]
+    options?: Parameters<typeof count.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<CountResponse>, ConnectError, PartialMessage<CountRequest>>>
 ) => {
     const baseOptions = count.useMutation(options);
 
@@ -67,12 +67,12 @@ export const useCountMutation = (
 
 export const useCountInfiniteQuery = (
     inputs: Parameters<typeof count.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<CountRequest>, ConnectError>>,
-    options?: Parameters<typeof count.useInfiniteQuery>[1]
+    options: Parameters<typeof count.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<CountResponse, ConnectError, CountResponse, CountResponse, ConnectQueryKey<CountRequest>>>
 ) => {
     const baseOptions = count.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<CountResponse, ConnectError, CountResponse, keyof typeof inputs extends never ? any : ConnectQueryKey<CountRequest>>({
         ...baseOptions,
         ...queryOptions,
     });

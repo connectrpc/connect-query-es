@@ -17,10 +17,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from "@bufbuild/connect-query";
+import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { SayRequest, SayResponse } from "./eliza_pb.js";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
@@ -44,8 +44,8 @@ export const say = createQueryService({
 
 export const useSayQuery = (
     inputs: Parameters<typeof say.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<SayRequest>, ConnectError>>,
-    options?: Parameters<typeof say.useQuery>[1]
+    options?: Parameters<typeof say.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<SayResponse, ConnectError, SayResponse, ConnectQueryKey<SayRequest>>>
 ) => {
     const baseOptions = say.useQuery(inputs, options);
 
@@ -56,8 +56,8 @@ export const useSayQuery = (
 };
 
 export const useSayMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>,
-    options?: Parameters<typeof say.useMutation>[0]
+    options?: Parameters<typeof say.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<SayResponse>, ConnectError, PartialMessage<SayRequest>>>
 ) => {
     const baseOptions = say.useMutation(options);
 
@@ -69,12 +69,12 @@ export const useSayMutation = (
 
 export const useSayInfiniteQuery = (
     inputs: Parameters<typeof say.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<SayRequest>, ConnectError>>,
-    options?: Parameters<typeof say.useInfiniteQuery>[1]
+    options: Parameters<typeof say.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<SayResponse, ConnectError, SayResponse, SayResponse, ConnectQueryKey<SayRequest>>>
 ) => {
     const baseOptions = say.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<SayResponse, ConnectError, SayResponse, keyof typeof inputs extends never ? any : ConnectQueryKey<SayRequest>>({
         ...baseOptions,
         ...queryOptions,
     });

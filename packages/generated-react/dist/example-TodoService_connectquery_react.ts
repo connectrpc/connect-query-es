@@ -3,10 +3,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from "@bufbuild/connect-query";
+import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";
 import { MethodIdempotency, MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { Empty, Todo, Todos } from "./example_pb.js";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
@@ -31,8 +31,8 @@ export const getTodos = createQueryService({
 
 export const useGetTodosQuery = (
     inputs: Parameters<typeof getTodos.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
-    options?: Parameters<typeof getTodos.useQuery>[1]
+    options?: Parameters<typeof getTodos.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<Todos, ConnectError, Todos, ConnectQueryKey<Empty>>>
 ) => {
     const baseOptions = getTodos.useQuery(inputs, options);
 
@@ -43,8 +43,8 @@ export const useGetTodosQuery = (
 };
 
 export const useGetTodosMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Empty>>>,
-    options?: Parameters<typeof getTodos.useMutation>[0]
+    options?: Parameters<typeof getTodos.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Empty>>>
 ) => {
     const baseOptions = getTodos.useMutation(options);
 
@@ -56,12 +56,12 @@ export const useGetTodosMutation = (
 
 export const useGetTodosInfiniteQuery = (
     inputs: Parameters<typeof getTodos.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
-    options?: Parameters<typeof getTodos.useInfiniteQuery>[1]
+    options: Parameters<typeof getTodos.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<Todos, ConnectError, Todos, Todos, ConnectQueryKey<Empty>>>
 ) => {
     const baseOptions = getTodos.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<Todos, ConnectError, Todos, keyof typeof inputs extends never ? any : ConnectQueryKey<Empty>>({
         ...baseOptions,
         ...queryOptions,
     });
@@ -86,8 +86,8 @@ export const addTodo = createQueryService({
 
 export const useAddTodoQuery = (
     inputs: Parameters<typeof addTodo.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Todo>, ConnectError>>,
-    options?: Parameters<typeof addTodo.useQuery>[1]
+    options?: Parameters<typeof addTodo.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<Todos, ConnectError, Todos, ConnectQueryKey<Todo>>>
 ) => {
     const baseOptions = addTodo.useQuery(inputs, options);
 
@@ -98,8 +98,8 @@ export const useAddTodoQuery = (
 };
 
 export const useAddTodoMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Todo>>>,
-    options?: Parameters<typeof addTodo.useMutation>[0]
+    options?: Parameters<typeof addTodo.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Todos>, ConnectError, PartialMessage<Todo>>>
 ) => {
     const baseOptions = addTodo.useMutation(options);
 
@@ -111,12 +111,12 @@ export const useAddTodoMutation = (
 
 export const useAddTodoInfiniteQuery = (
     inputs: Parameters<typeof addTodo.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Todo>, ConnectError>>,
-    options?: Parameters<typeof addTodo.useInfiniteQuery>[1]
+    options: Parameters<typeof addTodo.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<Todos, ConnectError, Todos, Todos, ConnectQueryKey<Todo>>>
 ) => {
     const baseOptions = addTodo.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<Todos, ConnectError, Todos, keyof typeof inputs extends never ? any : ConnectQueryKey<Todo>>({
         ...baseOptions,
         ...queryOptions,
     });
@@ -143,8 +143,8 @@ export const delete$ = createQueryService({
 
 export const useDeleteQuery = (
     inputs: Parameters<typeof delete$.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
-    options?: Parameters<typeof delete$.useQuery>[1]
+    options?: Parameters<typeof delete$.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<Empty, ConnectError, Empty, ConnectQueryKey<Empty>>>
 ) => {
     const baseOptions = delete$.useQuery(inputs, options);
 
@@ -155,8 +155,8 @@ export const useDeleteQuery = (
 };
 
 export const useDeleteMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>,
-    options?: Parameters<typeof delete$.useMutation>[0]
+    options?: Parameters<typeof delete$.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>
 ) => {
     const baseOptions = delete$.useMutation(options);
 
@@ -168,12 +168,12 @@ export const useDeleteMutation = (
 
 export const useDeleteInfiniteQuery = (
     inputs: Parameters<typeof delete$.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
-    options?: Parameters<typeof delete$.useInfiniteQuery>[1]
+    options: Parameters<typeof delete$.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<Empty, ConnectError, Empty, Empty, ConnectQueryKey<Empty>>>
 ) => {
     const baseOptions = delete$.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<Empty, ConnectError, Empty, keyof typeof inputs extends never ? any : ConnectQueryKey<Empty>>({
         ...baseOptions,
         ...queryOptions,
     });
@@ -200,8 +200,8 @@ export const valueOf$ = createQueryService({
 
 export const useValueOfQuery = (
     inputs: Parameters<typeof valueOf$.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Empty>, ConnectError>>,
-    options?: Parameters<typeof valueOf$.useQuery>[1]
+    options?: Parameters<typeof valueOf$.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<Empty, ConnectError, Empty, ConnectQueryKey<Empty>>>
 ) => {
     const baseOptions = valueOf$.useQuery(inputs, options);
 
@@ -212,8 +212,8 @@ export const useValueOfQuery = (
 };
 
 export const useValueOfMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>,
-    options?: Parameters<typeof valueOf$.useMutation>[0]
+    options?: Parameters<typeof valueOf$.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Empty>, ConnectError, PartialMessage<Empty>>>
 ) => {
     const baseOptions = valueOf$.useMutation(options);
 
@@ -225,12 +225,12 @@ export const useValueOfMutation = (
 
 export const useValueOfInfiniteQuery = (
     inputs: Parameters<typeof valueOf$.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Empty>, ConnectError>>,
-    options?: Parameters<typeof valueOf$.useInfiniteQuery>[1]
+    options: Parameters<typeof valueOf$.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<Empty, ConnectError, Empty, Empty, ConnectQueryKey<Empty>>>
 ) => {
     const baseOptions = valueOf$.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<Empty, ConnectError, Empty, keyof typeof inputs extends never ? any : ConnectQueryKey<Empty>>({
         ...baseOptions,
         ...queryOptions,
     });

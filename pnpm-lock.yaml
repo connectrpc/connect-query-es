@@ -4,6 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -91,7 +95,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -143,7 +147,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -236,6 +240,9 @@ importers:
       '@bufbuild/buf':
         specifier: 1.19.0-1
         version: 1.19.0-1
+      '@bufbuild/connect':
+        specifier: 0.9.0
+        version: 0.9.0(@bufbuild/protobuf@1.2.0)
       '@bufbuild/connect-query':
         specifier: workspace:*
         version: link:../connect-query
@@ -244,7 +251,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../protoc-gen-connect-query
@@ -254,6 +261,9 @@ importers:
       '@bufbuild/protoc-gen-es':
         specifier: ^1.2.0
         version: 1.2.0(@bufbuild/protobuf@1.2.0)
+      '@tanstack/react-query':
+        specifier: ^4.29.7
+        version: 4.29.7(react-dom@18.2.0)(react@18.2.0)
 
   packages/protoc-gen-connect-query:
     dependencies:
@@ -266,7 +276,7 @@ importers:
     devDependencies:
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-es':
         specifier: ^1.2.0
         version: 1.2.0(@bufbuild/protobuf@1.2.0)
@@ -288,7 +298,7 @@ importers:
     devDependencies:
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../protoc-gen-connect-query
@@ -764,7 +774,6 @@ packages:
       '@bufbuild/protobuf': ^1.2.0
     dependencies:
       '@bufbuild/protobuf': 1.2.0
-    dev: false
 
   /@bufbuild/connect@0.9.1(@bufbuild/protobuf@1.2.0):
     resolution: {integrity: sha512-4O/PSMLWd3oQkwBuJBGBzFtPsnFC5dTRPGHFNFODna9wZJ6r45ccsOWsA4qXBL7gW2EKw93zRa0KVuge2dCOQQ==}
@@ -777,7 +786,7 @@ packages:
   /@bufbuild/protobuf@1.2.0:
     resolution: {integrity: sha512-MBVuQMOBHxgGnZ9XCUIi8WOy5O/T4ma3TduCRhRvndv3UDbG9cHgd8h6nOYSGyBYPEvXf1z9nTwhp8mVIDbq2g==}
 
-  /@bufbuild/protoc-gen-connect-es@0.9.0(@bufbuild/protoc-gen-es@1.2.0):
+  /@bufbuild/protoc-gen-connect-es@0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0):
     resolution: {integrity: sha512-PiLmuti2hbHiZ0u/frUExq9o+RFHnOOnkgPbFZ0JJd0X4bug7q/LWOPWhGwuLKwiZjO+D7XkdApzvvRXchUlwA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -790,6 +799,7 @@ packages:
       '@bufbuild/protoc-gen-es':
         optional: true
     dependencies:
+      '@bufbuild/connect': 0.9.0(@bufbuild/protobuf@1.2.0)
       '@bufbuild/protobuf': 1.2.0
       '@bufbuild/protoc-gen-es': 1.2.0(@bufbuild/protobuf@1.2.0)
       '@bufbuild/protoplugin': 1.2.0

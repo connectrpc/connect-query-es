@@ -17,10 +17,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from "@bufbuild/connect-query";
+import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { ListRequest, ListResponse } from "./eliza_pb.js";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
@@ -42,8 +42,8 @@ export const list = createQueryService({
 
 export const useListQuery = (
     inputs: Parameters<typeof list.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<ListRequest>, ConnectError>>,
-    options?: Parameters<typeof list.useQuery>[1]
+    options?: Parameters<typeof list.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<ListResponse, ConnectError, ListResponse, ConnectQueryKey<ListRequest>>>
 ) => {
     const baseOptions = list.useQuery(inputs, options);
 
@@ -54,8 +54,8 @@ export const useListQuery = (
 };
 
 export const useListMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<ListResponse>, ConnectError, PartialMessage<ListRequest>>>,
-    options?: Parameters<typeof list.useMutation>[0]
+    options?: Parameters<typeof list.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<ListResponse>, ConnectError, PartialMessage<ListRequest>>>
 ) => {
     const baseOptions = list.useMutation(options);
 
@@ -67,12 +67,12 @@ export const useListMutation = (
 
 export const useListInfiniteQuery = (
     inputs: Parameters<typeof list.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<ListRequest>, ConnectError>>,
-    options?: Parameters<typeof list.useInfiniteQuery>[1]
+    options: Parameters<typeof list.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<ListResponse, ConnectError, ListResponse, ListResponse, ConnectQueryKey<ListRequest>>>
 ) => {
     const baseOptions = list.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<ListResponse, ConnectError, ListResponse, keyof typeof inputs extends never ? any : ConnectQueryKey<ListRequest>>({
         ...baseOptions,
         ...queryOptions,
     });

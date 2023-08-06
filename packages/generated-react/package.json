@@ -24,12 +24,14 @@
   },
   "dependencies": {
     "@bufbuild/buf": "1.19.0-1",
+    "@bufbuild/connect": "0.9.0",
     "@bufbuild/connect-query": "workspace:*",
     "@bufbuild/protobuf": "^1.2.0",
     "@bufbuild/protoc-gen-connect-query": "workspace:*",
     "@bufbuild/protoc-gen-connect-query-react": "workspace:*",
     "@bufbuild/protoc-gen-connect-es": "^0.9.0",
-    "@bufbuild/protoc-gen-es": "^1.2.0"
+    "@bufbuild/protoc-gen-es": "^1.2.0",
+    "@tanstack/react-query": "^4.29.7"
   },
   "preferUnplugged": true
 }

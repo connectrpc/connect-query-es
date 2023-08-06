@@ -17,10 +17,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from "@bufbuild/connect-query";
+import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { Nothing } from "./eliza_pb.js";
-import { UseBaseQueryOptions, useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { ConnectError } from "@bufbuild/connect";
 
 /**
@@ -42,8 +42,8 @@ export const work = createQueryService({
 
 export const useWorkQuery = (
     inputs: Parameters<typeof work.useQuery>[0],
-    queryOptions?: Partial<UseBaseQueryOptions<PartialMessage<Nothing>, ConnectError>>,
-    options?: Parameters<typeof work.useQuery>[1]
+    options?: Parameters<typeof work.useQuery>[1],
+    queryOptions?: Partial<UseQueryOptions<Nothing, ConnectError, Nothing, ConnectQueryKey<Nothing>>>
 ) => {
     const baseOptions = work.useQuery(inputs, options);
 
@@ -54,8 +54,8 @@ export const useWorkQuery = (
 };
 
 export const useWorkMutation = (
-    queryOptions?: Partial<UseMutationOptions<PartialMessage<Nothing>, ConnectError, PartialMessage<Nothing>>>,
-    options?: Parameters<typeof work.useMutation>[0]
+    options?: Parameters<typeof work.useMutation>[0],
+    queryOptions?: Partial<UseMutationOptions<PartialMessage<Nothing>, ConnectError, PartialMessage<Nothing>>>
 ) => {
     const baseOptions = work.useMutation(options);
 
@@ -67,12 +67,12 @@ export const useWorkMutation = (
 
 export const useWorkInfiniteQuery = (
     inputs: Parameters<typeof work.useInfiniteQuery>[0],
-    queryOptions?: Partial<UseInfiniteQueryOptions<PartialMessage<Nothing>, ConnectError>>,
-    options?: Parameters<typeof work.useInfiniteQuery>[1]
+    options: Parameters<typeof work.useInfiniteQuery>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<Nothing, ConnectError, Nothing, Nothing, ConnectQueryKey<Nothing>>>
 ) => {
     const baseOptions = work.useInfiniteQuery(inputs, options);
 
-    return useInfiniteQuery({
+    return useInfiniteQuery<Nothing, ConnectError, Nothing, keyof typeof inputs extends never ? any : ConnectQueryKey<Nothing>>({
         ...baseOptions,
         ...queryOptions,
     });

@@ -43,6 +43,7 @@ const generateServiceFile =
             const serviceName = safeIdentifier(localName(method));
             const partialMessage = f.import('PartialMessage', '@bufbuild/protobuf');
             const connectError = f.import('ConnectError', '@bufbuild/connect');
+            const connectQueryKey = f.import("ConnectQueryKey", "@bufbuild/connect-query");
 
             f.print(
               `export const `,
@@ -57,8 +58,8 @@ const generateServiceFile =
             );
 
             // useQuery
-            const useBaseQueryOptions = f.import(
-              'UseBaseQueryOptions',
+            const useQueryOptions = f.import(
+              'UseQueryOptions',
               importHookFrom,
             );
             const useQueryResult = f.import(
@@ -68,8 +69,9 @@ const generateServiceFile =
 
             f.print(`export declare const `, reactHookName(method, 'Query'), ': (');
             f.print(`    inputs: Parameters<typeof `,serviceName, `.useQuery>[0],`);
-            f.print(`    queryOptions?: Partial<`, useBaseQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
-            f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1]`,);
+            f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1],`,);
+            f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
+
             f.print(`) => `, useQueryResult, `<`, method.output, `,`, connectError, `>;`);
             f.print(``);
 
@@ -84,8 +86,8 @@ const generateServiceFile =
             );
 
             f.print(`export declare const `, reactHookName(method, 'Mutation'), ': (');
-            f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>,`);
-            f.print(`    options?: Parameters<typeof `, serviceName, `.useMutation>[0]`);
+            f.print(`    options?: Parameters<typeof `, serviceName, `.useMutation>[0],`);
+            f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`);
             f.print(`) => `, useMutationResult, `<`, method.output, `,`, connectError, ',', partialMessage, `<`, method.input, '>',`, unknown>;`);
             f.print(``);
 
@@ -101,8 +103,8 @@ const generateServiceFile =
 
             f.print(`export declare const `, reactHookName(method, 'InfiniteQuery'), ': (');
             f.print(`    inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
-            f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, partialMessage, `<`, method.input, `>, `, connectError, `>>,`);
-            f.print(`    options?: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1]`);
+            f.print(`    options: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1],`);
+            f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
             f.print(`) => `, useInfiniteQueryResult, `<`, method.output, `,`, connectError, `>;`);
             f.print(``);
           }
