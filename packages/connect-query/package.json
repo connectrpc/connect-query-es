@@ -28,29 +28,29 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@bufbuild/connect": "^0.9.1",
+    "@bufbuild/connect-web": "^0.9.1",
+    "@bufbuild/protobuf": "^1.2.0",
     "@bufbuild/protoc-gen-es": "^1.2.0",
     "@tanstack/react-query": "^4.29.7",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "generated-react": "workspace:*",
-    "jest-environment-jsdom": "^29.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tsup": "^6.7.0",
-    "typescript": "^5.0.4",
-    "@bufbuild/protobuf": "^1.2.0",
-    "@bufbuild/connect-web": "^0.9.1",
-    "@bufbuild/connect": "^0.9.1"
+    "typescript": "^5.0.4"
   },
   "peerDependencies": {
+    "@bufbuild/connect": ">=0.9.1",
+    "@bufbuild/protobuf": ">=1.2.0",
     "@tanstack/react-query": "^4.20.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@bufbuild/protobuf": ">=1.2.0",
-    "@bufbuild/connect": ">=0.9.1"
+    "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@bufbuild/jest-environment-jsdom": "^0.1.0",
     "stable-hash": "^0.0.3"
   }
 }
