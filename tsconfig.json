@@ -9,7 +9,8 @@
     "**/*.tsx",
     "**/*.test.tsx",
     ".eslintrc.js",
-    "jest-preset.js"
+    "jest-preset.js",
+    "**/jest-environment-jsdom.js"
   ],
   "exclude": ["**/dist"]
 }

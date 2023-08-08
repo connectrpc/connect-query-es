@@ -16,7 +16,7 @@ import type { Config } from 'jest';
 
 const config: Config = {
   preset: '../../jest-preset.js',
-  testEnvironment: '@bufbuild/jest-environment-jsdom',
+  testEnvironment: '<rootDir>/jest-environment-jsdom.js',
   moduleNameMapper: {
     '(.+)\\.js': '$1', // https://connectrpc.com/docs/web/supported-browsers-and-frameworks/#jest
   },
