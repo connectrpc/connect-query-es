@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -95,7 +91,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -147,7 +143,7 @@ importers:
         version: 1.2.0
       '@bufbuild/protoc-gen-connect-es':
         specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        version: 0.9.0(@bufbuild/protoc-gen-es@1.2.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -193,17 +189,17 @@ importers:
         version: 0.0.3
     devDependencies:
       '@bufbuild/connect':
-        specifier: ^0.9.1
-        version: 0.9.1(@bufbuild/protobuf@1.2.0)
+        specifier: ^0.12.0
+        version: 0.12.0(@bufbuild/protobuf@1.3.0)
       '@bufbuild/connect-web':
-        specifier: ^0.9.1
-        version: 0.9.1(@bufbuild/protobuf@1.2.0)
+        specifier: ^0.12.0
+        version: 0.12.0(@bufbuild/protobuf@1.3.0)
       '@bufbuild/protobuf':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.2.0
-        version: 1.2.0(@bufbuild/protobuf@1.2.0)
+        specifier: ^1.3.0
+        version: 1.3.0(@bufbuild/protobuf@1.3.0)
       '@tanstack/react-query':
         specifier: ^4.29.7
         version: 4.29.7(react-dom@18.2.0)(react@18.2.0)
@@ -238,20 +234,20 @@ importers:
   packages/generated-react:
     dependencies:
       '@bufbuild/buf':
-        specifier: 1.19.0-1
-        version: 1.19.0-1
+        specifier: 1.25.1
+        version: 1.25.1
       '@bufbuild/connect':
-        specifier: 0.9.0
-        version: 0.9.0(@bufbuild/protobuf@1.2.0)
+        specifier: 0.12.0
+        version: 0.12.0(@bufbuild/protobuf@1.3.0)
       '@bufbuild/connect-query':
         specifier: workspace:*
         version: link:../connect-query
       '@bufbuild/protobuf':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
       '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        specifier: ^0.12.0
+        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../protoc-gen-connect-query
@@ -259,8 +255,8 @@ importers:
         specifier: workspace:*
         version: link:../protoc-gen-connect-query-react
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.2.0
-        version: 1.2.0(@bufbuild/protobuf@1.2.0)
+        specifier: ^1.3.0
+        version: 1.3.0(@bufbuild/protobuf@1.3.0)
       '@tanstack/react-query':
         specifier: ^4.29.7
         version: 4.29.7(react-dom@18.2.0)(react@18.2.0)
@@ -268,18 +264,18 @@ importers:
   packages/protoc-gen-connect-query:
     dependencies:
       '@bufbuild/protobuf':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
       '@bufbuild/protoplugin':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
     devDependencies:
       '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        specifier: ^0.12.0
+        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.2.0
-        version: 1.2.0(@bufbuild/protobuf@1.2.0)
+        specifier: ^1.3.0
+        version: 1.3.0(@bufbuild/protobuf@1.3.0)
       generated-react:
         specifier: workspace:*
         version: link:../generated-react
@@ -290,21 +286,21 @@ importers:
   packages/protoc-gen-connect-query-react:
     dependencies:
       '@bufbuild/protobuf':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
       '@bufbuild/protoplugin':
-        specifier: ^1.2.0
-        version: 1.2.0
+        specifier: ^1.3.0
+        version: 1.3.0
     devDependencies:
       '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.9.0
-        version: 0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0)
+        specifier: ^0.12.0
+        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
       '@bufbuild/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../protoc-gen-connect-query
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.2.0
-        version: 1.2.0(@bufbuild/protobuf@1.2.0)
+        specifier: ^1.3.0
+        version: 1.3.0(@bufbuild/protobuf@1.3.0)
       generated-react:
         specifier: workspace:*
         version: link:../generated-react
@@ -682,8 +678,8 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@bufbuild/buf-darwin-arm64@1.19.0-1:
-    resolution: {integrity: sha512-HsWPii21wm3QSyuxrNq9+Yf8iAgpnC4rNCy4x3d6P1fd/LmgE1NPzQW0ghEZvl9dgAQKkL/4S5bKhlm7kbUdmQ==}
+  /@bufbuild/buf-darwin-arm64@1.25.1:
+    resolution: {integrity: sha512-1EjF4swCjxj8A7snyIFCnl0l81idYyrLLhQurAcGYJXtHl/VdF+qE+zuGI+ehuc4uSTTGp1X2BelprOnW17ZDQ==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [darwin]
@@ -691,8 +687,8 @@ packages:
     dev: false
     optional: true
 
-  /@bufbuild/buf-darwin-x64@1.19.0-1:
-    resolution: {integrity: sha512-2+Ig7ylYpVh4kms/OeJJVY+X0KX4awPA6hYr7L7aZOIcHwZEM8lWtSTO/se5pQc7dc8FXNiC4YUqHC8yfxxX6Q==}
+  /@bufbuild/buf-darwin-x64@1.25.1:
+    resolution: {integrity: sha512-LSNTqQFF9vrx/CUE2TxNhxb7VwEYmUxA2YXznbElxV6PqWaNt1McrbxCvUF7oYEKXXwps9gPkUi4rzjCOliCsQ==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [darwin]
@@ -700,8 +696,8 @@ packages:
     dev: false
     optional: true
 
-  /@bufbuild/buf-linux-aarch64@1.19.0-1:
-    resolution: {integrity: sha512-g/Vxg3WiBr3nhsxsRr2Q81xXJD+0ktHIO3ZJggTG2Sbbl3dh8kyg1iKM6MjJiMP7su5RKCylLigzoEJzVTShyA==}
+  /@bufbuild/buf-linux-aarch64@1.25.1:
+    resolution: {integrity: sha512-Qwy+xos8bnyjCKSCw1l+VG9aIoZHo4CXp3A7bLtYWUZMn18WZ1xtRPFvw/ntdGoZhcoP+yYNbiVi22m4r/zVbQ==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [linux]
@@ -709,8 +705,8 @@ packages:
     dev: false
     optional: true
 
-  /@bufbuild/buf-linux-x64@1.19.0-1:
-    resolution: {integrity: sha512-anYuGx8k/2kp8GPX3eHNUf3IY/01Zpnyw0HaLPXK1Btqyy6XkapVywrDqg7YUzMd1ySFEp1wD9UqRNdEFNCQ4A==}
+  /@bufbuild/buf-linux-x64@1.25.1:
+    resolution: {integrity: sha512-i8EGo8dqotGdxO+UayEGqwZ4FUg7ejw0XOTgTlwH79yUV1IEuWb1+zItPeWthJHhrNT6gQEsESie/pygDtmhaA==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [linux]
@@ -718,8 +714,8 @@ packages:
     dev: false
     optional: true
 
-  /@bufbuild/buf-win32-arm64@1.19.0-1:
-    resolution: {integrity: sha512-xXgF1qYnCfRKbGx1FqvPbpZ6ajh4ddxpXhSxI3VCeb3MsMBuIbiLqX4fQAL3ls/Zwz8tVIITuSwOhYmSEGcpBA==}
+  /@bufbuild/buf-win32-arm64@1.25.1:
+    resolution: {integrity: sha512-ut8hRAy8GQZnNKaPlwiu9cN9bCX0XWvdsPezXFsdMynuYXBgssvJ7dGbzLWDSmOm8evhsJ+ZPmrLYyk+7OD2Ng==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [win32]
@@ -727,8 +723,8 @@ packages:
     dev: false
     optional: true
 
-  /@bufbuild/buf-win32-x64@1.19.0-1:
-    resolution: {integrity: sha512-futmqgpMQCR1lcAzZJEGjPr7ECw1gYTPIV8crm5SY+iCJ7sOeStOBNt7q5hV4LKmmeWmvm03XIMZPjhQzjH5NQ==}
+  /@bufbuild/buf-win32-x64@1.25.1:
+    resolution: {integrity: sha512-g4npaZs7aqXlTETaDhKh7E4LcSTCDEehUGV7Y+xiTB5r4VyCU8gzykuE7sNHxUsQ+X5lV/pFkFGz+449Pf/tww==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
@@ -736,19 +732,28 @@ packages:
     dev: false
     optional: true
 
-  /@bufbuild/buf@1.19.0-1:
-    resolution: {integrity: sha512-TIsLTTQUntr/Xq/IMSULv3dlC3/ZsVwQtWgxmJ++IzSuOW79TFQfq59vFeTWrPa6+QXFMz5t6jkMyD4ghzO5nw==}
+  /@bufbuild/buf@1.25.1:
+    resolution: {integrity: sha512-Of9mH1xzhi/8EnndGx3uOV/umjGkCSnBnN01pm5O6xUD2aAdqDPjxWrFY09oR0NIHmePpgGQn6az7Ku42mlFPQ==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@bufbuild/buf-darwin-arm64': 1.19.0-1
-      '@bufbuild/buf-darwin-x64': 1.19.0-1
-      '@bufbuild/buf-linux-aarch64': 1.19.0-1
-      '@bufbuild/buf-linux-x64': 1.19.0-1
-      '@bufbuild/buf-win32-arm64': 1.19.0-1
-      '@bufbuild/buf-win32-x64': 1.19.0-1
+      '@bufbuild/buf-darwin-arm64': 1.25.1
+      '@bufbuild/buf-darwin-x64': 1.25.1
+      '@bufbuild/buf-linux-aarch64': 1.25.1
+      '@bufbuild/buf-linux-x64': 1.25.1
+      '@bufbuild/buf-win32-arm64': 1.25.1
+      '@bufbuild/buf-win32-x64': 1.25.1
     dev: false
+
+  /@bufbuild/connect-web@0.12.0(@bufbuild/protobuf@1.3.0):
+    resolution: {integrity: sha512-bw5E6aIs0q3ab5oyIB263ShRg8DhUMsewMHsl/9lUxJFkmzxvHoPIlNFrSWOUUcyudJrahfhDveXF94bi9C5cA==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.2.1
+    dependencies:
+      '@bufbuild/connect': 0.12.0(@bufbuild/protobuf@1.3.0)
+      '@bufbuild/protobuf': 1.3.0
+    dev: true
 
   /@bufbuild/connect-web@0.9.0(@bufbuild/protobuf@1.2.0):
     resolution: {integrity: sha512-WyYWjPRWceUc/1d5n8oA1NcCni2ND6qj8iXd1Hqy6qkCyo2n/FUSSe3oQuoXYZ9KCUI+5qexHz46n2jtzmFDiQ==}
@@ -759,14 +764,12 @@ packages:
       '@bufbuild/protobuf': 1.2.0
     dev: false
 
-  /@bufbuild/connect-web@0.9.1(@bufbuild/protobuf@1.2.0):
-    resolution: {integrity: sha512-rQU2Aob68F9Olk5udbNO8qGdh49Iv374WJjjAYatqVDXhKIKIL0+2nUoYadjOnKS0D/hYETMotNuMvCuoLfgVQ==}
+  /@bufbuild/connect@0.12.0(@bufbuild/protobuf@1.3.0):
+    resolution: {integrity: sha512-rYn3Akp7teOkvqxguLbf6QKizH37Yeo33lseV+JHDZC19CsAV9wrrZM17Sa+LNEBj/hrYtQF7EIcllgGxhv9aw==}
     peerDependencies:
-      '@bufbuild/protobuf': ^1.2.0
+      '@bufbuild/protobuf': ^1.2.1
     dependencies:
-      '@bufbuild/connect': 0.9.1(@bufbuild/protobuf@1.2.0)
-      '@bufbuild/protobuf': 1.2.0
-    dev: true
+      '@bufbuild/protobuf': 1.3.0
 
   /@bufbuild/connect@0.9.0(@bufbuild/protobuf@1.2.0):
     resolution: {integrity: sha512-UGOapHlbdbXW9Os08plEuR2k3ZwFWni3BnYVSEPITDTjgEqTagbm6lNWurXM53FDPvueSYYTTJF3Rivhp03xbQ==}
@@ -774,19 +777,36 @@ packages:
       '@bufbuild/protobuf': ^1.2.0
     dependencies:
       '@bufbuild/protobuf': 1.2.0
-
-  /@bufbuild/connect@0.9.1(@bufbuild/protobuf@1.2.0):
-    resolution: {integrity: sha512-4O/PSMLWd3oQkwBuJBGBzFtPsnFC5dTRPGHFNFODna9wZJ6r45ccsOWsA4qXBL7gW2EKw93zRa0KVuge2dCOQQ==}
-    peerDependencies:
-      '@bufbuild/protobuf': ^1.2.0
-    dependencies:
-      '@bufbuild/protobuf': 1.2.0
-    dev: true
+    dev: false
 
   /@bufbuild/protobuf@1.2.0:
     resolution: {integrity: sha512-MBVuQMOBHxgGnZ9XCUIi8WOy5O/T4ma3TduCRhRvndv3UDbG9cHgd8h6nOYSGyBYPEvXf1z9nTwhp8mVIDbq2g==}
+    dev: false
 
-  /@bufbuild/protoc-gen-connect-es@0.9.0(@bufbuild/connect@0.9.0)(@bufbuild/protoc-gen-es@1.2.0):
+  /@bufbuild/protobuf@1.3.0:
+    resolution: {integrity: sha512-G372ods0pLt46yxVRsnP/e2btVPuuzArcMPFpIDeIwiGPuuglEs9y75iG0HMvZgncsj5TvbYRWqbVyOe3PLCWQ==}
+
+  /@bufbuild/protoc-gen-connect-es@0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0):
+    resolution: {integrity: sha512-J7/9oF/ByAQrZmEZkhNRnzo56PK+KOUMNJGxQGhF9Mjrrr7q/eCkd5tuao4Yk+A2biDWLk84+L6Zl8uHiBMK3w==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@bufbuild/connect': 0.12.0
+      '@bufbuild/protoc-gen-es': ^1.2.1
+    peerDependenciesMeta:
+      '@bufbuild/connect':
+        optional: true
+      '@bufbuild/protoc-gen-es':
+        optional: true
+    dependencies:
+      '@bufbuild/connect': 0.12.0(@bufbuild/protobuf@1.3.0)
+      '@bufbuild/protobuf': 1.3.0
+      '@bufbuild/protoc-gen-es': 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@bufbuild/protoplugin': 1.3.0
+    transitivePeerDependencies:
+      - supports-color
+
+  /@bufbuild/protoc-gen-connect-es@0.9.0(@bufbuild/protoc-gen-es@1.2.0):
     resolution: {integrity: sha512-PiLmuti2hbHiZ0u/frUExq9o+RFHnOOnkgPbFZ0JJd0X4bug7q/LWOPWhGwuLKwiZjO+D7XkdApzvvRXchUlwA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -799,12 +819,12 @@ packages:
       '@bufbuild/protoc-gen-es':
         optional: true
     dependencies:
-      '@bufbuild/connect': 0.9.0(@bufbuild/protobuf@1.2.0)
       '@bufbuild/protobuf': 1.2.0
       '@bufbuild/protoc-gen-es': 1.2.0(@bufbuild/protobuf@1.2.0)
       '@bufbuild/protoplugin': 1.2.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@bufbuild/protoc-gen-es@1.2.0(@bufbuild/protobuf@1.2.0):
     resolution: {integrity: sha512-rdg2+Co4H+cImZ81EEzHLEi9bmzmMnS/bsf7XLHKtWYskj1PZVIalfquQejcSV6eWbdmVGKa29JwI5zEkSmkCQ==}
@@ -820,11 +840,37 @@ packages:
       '@bufbuild/protoplugin': 1.2.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@bufbuild/protoc-gen-es@1.3.0(@bufbuild/protobuf@1.3.0):
+    resolution: {integrity: sha512-XxGZwpXMYlwoSyJwCTFb7SZ2xKmv2iCRM022t1wszhY3kNL7rjpyj+3GbpCOjaM1T7NAoLnW0Hyb/M0b0XDb3Q==}
+    engines: {node: '>=14'}
+    hasBin: true
+    peerDependencies:
+      '@bufbuild/protobuf': 1.3.0
+    peerDependenciesMeta:
+      '@bufbuild/protobuf':
+        optional: true
+    dependencies:
+      '@bufbuild/protobuf': 1.3.0
+      '@bufbuild/protoplugin': 1.3.0
+    transitivePeerDependencies:
+      - supports-color
 
   /@bufbuild/protoplugin@1.2.0:
     resolution: {integrity: sha512-TX0mEk+LdIbpK2xr5RqeUswR8jGZs6uCX6Cq8azADj8hhiUr7Xty8agEOU/zR+J71D4dV5SnyEPYyw0nGJ6dGQ==}
     dependencies:
       '@bufbuild/protobuf': 1.2.0
+      '@typescript/vfs': 1.4.0
+      typescript: 4.5.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@bufbuild/protoplugin@1.3.0:
+    resolution: {integrity: sha512-zye8CfJb9VWzaHR/f1qcEkddaRh9De+u6fORsj92Ten8EJUcyhiY5BivET+RMTissAKXKrp/f2zSBCV0dlFxPw==}
+    dependencies:
+      '@bufbuild/protobuf': 1.3.0
       '@typescript/vfs': 1.4.0
       typescript: 4.5.2
     transitivePeerDependencies:
@@ -5027,7 +5073,7 @@ packages:
       levn: 0.3.0
       prelude-ls: 1.1.2
       type-check: 0.3.2
-      word-wrap: 1.2.3
+      word-wrap: 1.2.4
     dev: true
 
   /optionator@0.9.1:
@@ -6144,11 +6190,6 @@ packages:
     hasBin: true
     dependencies:
       isexe: 2.0.0
-    dev: true
-
-  /word-wrap@1.2.3:
-    resolution: {integrity: sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==}
-    engines: {node: '>=0.10.0'}
     dev: true
 
   /word-wrap@1.2.4:
