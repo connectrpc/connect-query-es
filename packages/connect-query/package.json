@@ -37,7 +37,7 @@
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "generated-react": "workspace:*",
-    "jest-environment-jsdom": "^29.5.0",
+    "jest-environment-jsdom": "^29.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tsup": "^6.7.0",
