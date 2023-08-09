@@ -34,7 +34,7 @@
     "@bufbuild/protoc-gen-es": "^1.3.0",
     "@tanstack/react-query": "^4.29.7",
     "@testing-library/react": "^14.0.0",
-    "@types/react": "^18.2.6",
+    "@types/react": "^18.2.19",
     "@types/react-dom": "^18.2.4",
     "generated-react": "workspace:*",
     "jest-environment-jsdom": "^29.5.0",
