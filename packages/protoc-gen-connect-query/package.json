@@ -28,7 +28,7 @@
     "@bufbuild/protoc-gen-connect-es": "^0.12.0",
     "@bufbuild/protoc-gen-es": "^1.3.0",
     "generated-react": "workspace:*",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^1.3.0",

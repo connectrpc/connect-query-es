@@ -139,11 +139,14 @@ describe('unaryHooks', () => {
     const input = { sentence: 'ziltoid' } satisfies PartialMessage<SayRequest>;
     const transport = mockEliza();
 
-    const { result } = renderHook(async () => {
-      const { queryFn } = genSay.useQuery(input);
+    const { result } = renderHook(
+      async () => {
+        const { queryFn } = genSay.useQuery(input);
 
-      return queryFn();
-    }, wrapper({}, transport));
+        return queryFn();
+      },
+      wrapper({}, transport),
+    );
 
     const response = await result.current;
 
@@ -170,7 +173,7 @@ describe('unaryHooks', () => {
       type ExpectType_CreateUserQueryOptionsParams0 = Expect<
         Equal<
           Parameters<typeof genCount.createUseQueryOptions>[0],
-          DisableQuery | PartialMessage<Message<CountRequest>> | undefined
+          DisableQuery | PartialMessage<CountRequest> | undefined
         >
       >;
       type ExpectType_CreateUserQueryOptionsParams1 = Expect<
