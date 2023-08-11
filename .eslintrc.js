@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/** @type { import('@typescript-eslint/utils').TSESLint.Linter.Config } */
+/** @type { import('@typescript-eslint/utils/dist/index').TSESLint.Linter.Config } */
 const config = {
   env: {
     browser: true,

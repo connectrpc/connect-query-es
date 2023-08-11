@@ -70,7 +70,7 @@ const generateServiceFile =
         f.print(`        kind: `, rtMethodKind, `.${MethodKind[method.methodKind]},`);
         f.print(`        I: `, method.input, `,`);
         f.print(`        O: `, method.output, `,`);
-        if (method.idempotency) {
+        if (method.idempotency != null) {
           f.print(`        idempotency: `, rtMethodIdempotency,`.${MethodIdempotency[method.idempotency]},`);
         }
         f.print(`      },`);
