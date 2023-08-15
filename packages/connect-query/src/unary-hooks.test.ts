@@ -139,11 +139,14 @@ describe('unaryHooks', () => {
     const input = { sentence: 'ziltoid' } satisfies PartialMessage<SayRequest>;
     const transport = mockEliza();
 
-    const { result } = renderHook(async () => {
-      const { queryFn } = genSay.useQuery(input);
+    const { result } = renderHook(
+      async () => {
+        const { queryFn } = genSay.useQuery(input);
 
-      return queryFn();
-    }, wrapper({}, transport));
+        return queryFn();
+      },
+      wrapper({}, transport),
+    );
 
     const response = await result.current;
 
