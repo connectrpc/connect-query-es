@@ -579,7 +579,6 @@ This project is a beta: we rely on it in production, but we may make a few
 changes as we gather feedback from early adopters. Join us on [Slack](https://buf.build/links/slack)
 to stay updated on future releases.
 
-
 ## Legal
 
 Offered under the [Apache 2 license](/LICENSE).

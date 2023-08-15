@@ -61,8 +61,5 @@ export const makeConnectQueryKeyGetter =
   (typeName: ServiceType['typeName'], methodInfoName: MethodInfo['name']) =>
   <I extends Message<I>>(
     input?: DisableQuery | PartialMessage<I> | undefined,
-  ): ConnectQueryKey<I> => [
-    typeName,
-    methodInfoName,
-    input === disableQuery || !input ? {} : input,
-  ];
+  ): ConnectQueryKey<I> =>
+    [typeName, methodInfoName, input === disableQuery || !input ? {} : input];
