@@ -3,6 +3,9 @@
 
 <!-- omit in toc -->
 # Connect-Query
+============
+
+[![License](https://img.shields.io/github/license/connectrpc/connect-query-es?color=blue)](./LICENSE) [![Build](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml) [![NPM Version](https://img.shields.io/npm/v/@bufbuild/connect-query/latest?color=green&label=%40bufbuild%2Fconnect-query)](https://www.npmjs.com/package/@bufbuild/connect-query) [![NPM Version](https://img.shields.io/npm/v/@bufbuild/protoc-gen-connect-query/latest?color=green&label=%40bufbuild%2Fprotoc-gen-connect-query)](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query)
 
 Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested.  It enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 
@@ -573,12 +576,12 @@ If you're not yet at the point of creating an example project, feel free to open
 
 Your input and ideas are crucial in shaping the future development of Connect-Query.  We appreciate your input and look forward to hearing from you.
 
-## Status
+# Status
 
 This project is a beta: we rely on it in production, but we may make a few
 changes as we gather feedback from early adopters. Join us on [Slack](https://buf.build/links/slack)
 to stay updated on future releases.
 
-## Legal
+# Legal
 
 Offered under the [Apache 2 license](/LICENSE).
