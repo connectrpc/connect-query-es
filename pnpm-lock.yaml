@@ -194,6 +194,9 @@ importers:
       '@bufbuild/connect-web':
         specifier: ^0.12.0
         version: 0.12.0(@bufbuild/protobuf@1.3.0)
+      '@bufbuild/jest-environment-jsdom':
+        specifier: ^0.1.1
+        version: 0.1.1(jest-environment-jsdom@29.6.2)
       '@bufbuild/protobuf':
         specifier: ^1.3.0
         version: 1.3.0
@@ -215,9 +218,6 @@ importers:
       generated-react:
         specifier: workspace:*
         version: link:../generated-react
-      jest-environment-jsdom:
-        specifier: ^29.6.2
-        version: 29.6.2
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -761,6 +761,14 @@ packages:
       '@bufbuild/protobuf': ^1.2.1
     dependencies:
       '@bufbuild/protobuf': 1.3.0
+
+  /@bufbuild/jest-environment-jsdom@0.1.1(jest-environment-jsdom@29.6.2):
+    resolution: {integrity: sha512-lO4dke+l/LQAUT8CLmh0SKtY37gmax63eD7YSBQu48sqwAx4hgu1hRmoheRysaqR4bO6Vudhf6+nkBm0TbctvA==}
+    peerDependencies:
+      jest-environment-jsdom: ^29.5.0
+    dependencies:
+      jest-environment-jsdom: 29.6.2
+    dev: true
 
   /@bufbuild/protobuf@1.3.0:
     resolution: {integrity: sha512-G372ods0pLt46yxVRsnP/e2btVPuuzArcMPFpIDeIwiGPuuglEs9y75iG0HMvZgncsj5TvbYRWqbVyOe3PLCWQ==}
