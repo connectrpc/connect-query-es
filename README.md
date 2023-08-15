@@ -572,3 +572,14 @@ To get started, we invite you to open a pull request with an example project in 
 If you're not yet at the point of creating an example project, feel free to open an issue in the repository and describe your use case. We'll follow up with questions to better understand your needs.
 
 Your input and ideas are crucial in shaping the future development of Connect-Query.  We appreciate your input and look forward to hearing from you.
+
+## Status
+
+This project is a beta: we rely on it in production, but we may make a few
+changes as we gather feedback from early adopters. Join us on [Slack](https://buf.build/links/slack)
+to stay up to date on releases.
+
+
+## Legal
+
+Offered under the [Apache 2 license](/LICENSE).
