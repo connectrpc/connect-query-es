@@ -3,7 +3,6 @@
 
 <!-- omit in toc -->
 # Connect-Query
-============
 
 [![License](https://img.shields.io/github/license/connectrpc/connect-query-es?color=blue)](./LICENSE) [![Build](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml) [![NPM Version](https://img.shields.io/npm/v/@bufbuild/connect-query/latest?color=green&label=%40bufbuild%2Fconnect-query)](https://www.npmjs.com/package/@bufbuild/connect-query) [![NPM Version](https://img.shields.io/npm/v/@bufbuild/protoc-gen-connect-query/latest?color=green&label=%40bufbuild%2Fprotoc-gen-connect-query)](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query)
 
