@@ -260,7 +260,7 @@ const getQueryKey: (input?: DisableQuery | PartialMessage<I>) => ConnectQueryKey
 
 This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query.  This function has no side effects.
 
-## `UnaryHooks.methodInfo`
+### `UnaryHooks.methodInfo`
 
 ```ts
 const methodInfo: MethodInfoUnary<I, O>;
