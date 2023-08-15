@@ -22,7 +22,7 @@
     "@types/node": "^20.5.0",
     "@typescript-eslint/eslint-plugin": "6.3.0",
     "@typescript-eslint/parser": "6.3.0",
-    "@typescript-eslint/utils": "6.3.0",
+    "@typescript-eslint/utils": "6.4.0",
     "cspell": "7.0.0",
     "eslint": "8.47.0",
     "eslint-config-prettier": "9.0.0",
