@@ -6,4 +6,4 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
 
 The procedures are defined in a [Protocol Buffer](https://developers.google.com/protocol-buffers) schema implemented by your backend, and Connect-Query generates the clients and related types to access the backend with TanStack Query. The clients support two protocols: gRPC-web, and Connect's own protocol.
 
-To get started, head over to the [docs](https://connectrpc.com/docs/query/getting-started) for a tutorial, or take a look at [our examples](https://github.com/bufbuild/connect-query/examples) for integration with various frameworks.
+To get started, head over to the [docs](https://connectrpc.com/docs/query/getting-started) for a tutorial, or take a look at [our examples](https://github.com/connectrpc/connect-query-es/examples) for integration with various frameworks.

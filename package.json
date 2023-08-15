@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "root",
-  "repository": "git@github.com:bufbuild/connect-query.git",
+  "repository": "git@github.com:connectrpc/connect-query-es.git",
   "scripts": {
     "build": "pnpm --recursive build",
     "generate": "pnpm --recursive generate",

@@ -178,7 +178,7 @@ With these two pieces of information in hand, the transport provides the critica
 
 To learn more about the two modes of transport, take a look at the Connect-Web documentation on [choosing a protocol](https://connectrpc.com/docs/web/choosing-a-protocol/).
 
-To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@bufbuild/connect-web`](https://www.npmjs.com/package/@bufbuild/connect-web)) and pass it to the provider.
+To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@bufbuild/connect-web`](https://www.npmjs.com/package/@bufbuild/connect-web)) and pass it to the provider.
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -491,7 +491,7 @@ Your Protobuf files serve as the primary input to the code generators `protoc-ge
 
 ## What is `Transport`
 
-`Transport` is a regular JavaScript object with two methods, `unary` and `stream`.  See the definition in the Connect-Web codebase [here](https://github.com/bufbuild/connect-web/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.  Read more about Transport on the [connect docs](https://connectrpc.com/docs/web/choosing-a-protocol).
+`Transport` is a regular JavaScript object with two methods, `unary` and `stream`.  See the definition in the Connect-Web codebase [here](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/transport.ts).  `Transport` defines the mechanism by which the browser can call a gRPC-web or Connect backend.  Read more about Transport on the [connect docs](https://connectrpc.com/docs/web/choosing-a-protocol).
 
 ## What if I already use Connect-Web?
 

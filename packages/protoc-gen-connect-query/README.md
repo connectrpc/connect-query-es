@@ -17,7 +17,7 @@
 
 The code generator for Connect-Query, a expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), that enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 
-Learn more about Connect-Query at [github.com/bufbuild/connect-query](https://github.com/bufbuild/connect-query).
+Learn more about Connect-Query at [github.com/connectrpc/connect-query-es](https://github.com/connectrpc/connect-query-es).
 
 ## Installation
 
@@ -200,4 +200,4 @@ This option exists for other plugins but is not applicable to `protoc-gen-connec
 
 ## Example Generated Code
 
-See [`example.proto`](https://github.com/bufbuild/connect-query/blob/main/packages/generated-react/example.proto) and [`eliza.proto`](https://github.com/bufbuild/connect-query/blob/main/packages/generated-react/eliza.proto) for example inputs, and look [here](https://github.com/bufbuild/connect-query/blob/main/packages/generated-react/dist) to see the outputs those files generate.
+See [`example.proto`](https://github.com/connectrpc/connect-query-es/blob/main/packages/generated-react/example.proto) and [`eliza.proto`](https://github.com/connectrpc/connect-query-es/blob/main/packages/generated-react/eliza.proto) for example inputs, and look [here](https://github.com/connectrpc/connect-query-es/blob/main/packages/generated-react/dist) to see the outputs those files generate.
