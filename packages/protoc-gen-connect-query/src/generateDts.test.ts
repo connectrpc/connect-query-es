@@ -40,7 +40,7 @@ describe('generateDts', () => {
       '/* eslint-disable */',
       '// @ts-nocheck',
       '',
-      'import { UnaryHooks } from "@bufbuild/connect-query";',
+      'import { UnaryHooks } from "@connectrpc/connect-query";',
       'import { SayRequest, SayResponse } from "./eliza_pb.js";',
       '',
       'export const say: UnaryHooks<SayRequest, SayResponse>;',

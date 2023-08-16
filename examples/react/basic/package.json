@@ -1,5 +1,5 @@
 {
-  "name": "@bufbuild/connect-query-example-react-basic",
+  "name": "@connectrpc/connect-query-example-react-basic",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,11 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@bufbuild/connect-query": "workspace:*",
-    "@bufbuild/connect-web": "^0.12.0",
+    "@connectrpc/connect-query": "workspace:*",
+    "@connectrpc/connect-web": "^0.12.0",
     "@bufbuild/protobuf": "^1.3.0",
-    "@bufbuild/protoc-gen-connect-es": "^0.12.0",
-    "@bufbuild/protoc-gen-connect-query": "workspace:*",
+    "@connectrpc/protoc-gen-connect-es": "^0.12.0",
+    "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@bufbuild/protoc-gen-es": "^1.3.0",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-devtools": "^4.32.6",

@@ -17,11 +17,11 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";
+import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { ListRequest, ListResponse } from "./eliza_pb.js";
 import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { ConnectError } from "@bufbuild/connect";
+import { ConnectError } from "@connectrpc/connect";
 
 /**
  * @generated from rpc connectrpc.eliza.v1.PaginatedService.List

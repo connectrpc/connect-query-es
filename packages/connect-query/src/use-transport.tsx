@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@bufbuild/connect';
-import { ConnectError } from '@bufbuild/connect';
+import type { Transport } from '@connectrpc/connect';
+import { ConnectError } from '@connectrpc/connect';
 import type { FC, PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
 const fallbackTransportError = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
+  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
 );
 
 export const fallbackTransport: Transport = {
@@ -47,13 +47,13 @@ export const useTransport = () => useContext(transportContext);
  *
  * With these two pieces of information in hand, the transport provides the critical mechanism by which your app can make network requests.
  *
- * To learn more about the two modes of transport, take a look at the npm package `@bufbuild/connect-web`.
+ * To learn more about the two modes of transport, take a look at the npm package `@connectrpc/connect-web`.
  *
- * To get started with Connect-Query, simply import a transport (either `createConnectTransport` or `createGrpcWebTransport` from `@bufbuild/connect-web`) and pass it to the provider.
+ * To get started with Connect-Query, simply import a transport (either `createConnectTransport` or `createGrpcWebTransport` from `@connectrpc/connect-web`) and pass it to the provider.
  *
  * @example
  * import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
- * import { TransportProvider } from "@bufbuild/connect-query";
+ * import { TransportProvider } from "@connectrpc/connect-query";
  *
  * const queryClient = new QueryClient();
  *

@@ -50,7 +50,7 @@ const generateServiceFile =
         f.print(makeJsDoc(method));
         f.print(
           `export const ${safeIdentifier(localName(method))} = `,
-          f.import('createQueryService', '@bufbuild/connect-query'),
+          f.import('createQueryService', '@connectrpc/connect-query'),
           `({`,
         );
         f.print(`  service: {`);

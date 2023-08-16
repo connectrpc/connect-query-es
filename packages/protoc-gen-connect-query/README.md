@@ -1,6 +1,6 @@
-# @bufbuild/protoc-gen-connect-query
+# @connectrpc/protoc-gen-connect-query
 
-- [@bufbuild/protoc-gen-connect-query](#bufbuildprotoc-gen-connect-query)
+- [@connectrpc/protoc-gen-connect-query](#connectrpcprotoc-gen-connect-query)
   - [Installation](#installation)
   - [Generating Code](#generating-code)
     - [`example.proto`](#exampleproto)
@@ -27,7 +27,7 @@ Learn more about Connect-Query at [github.com/connectrpc/connect-query-es](https
 To install the plugins and their runtime libraries, run:
 
 ```shell
-npm install --save-dev @bufbuild/protoc-gen-connect-query @bufbuild/protoc-gen-es
+npm install --save-dev @connectrpc/protoc-gen-connect-query @bufbuild/protoc-gen-es
 npm install @bufbuild/connect-query @bufbuild/protobuf
 ```
 
@@ -185,7 +185,7 @@ By default, we generate JavaScript and TypeScript declaration files, which produ
 
 ### `import_extension=.js`
 
-By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) uses a `.js` file extensions in import paths, even in TypeScript files.
+By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) uses a `.js` file extensions in import paths, even in TypeScript files.
 
 This is unintuitive, but necessary for [ECMAScript modules in Node.js](https://www.typescriptlang.org/docs/handbook/esm-node.html).
 

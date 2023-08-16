@@ -43,10 +43,10 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
 ## Install
 
 ```sh
-npm install @bufbuild/connect-query
+npm install @connectrpc/connect-query
 ```
 
-Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf` and `@bufbuild/connect` installed.
+Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf` and `@connectrpc/connect` installed.
 
 ## Usage
 
@@ -92,7 +92,7 @@ One of the best features of this library is that once you write your schema in P
 This example shows the best developer experience using code generation.  Here's what that generated code looks like:
 
 ```ts title="your-generated-code/example-ExampleService_connectquery"
-import { createQueryService } from "@bufbuild/connect-query";
+import { createQueryService } from "@connectrpc/connect-query";
 import { MethodKind } from "@bufbuild/protobuf";
 import { ExampleRequest, ExampleResponse } from "./example_pb.js";
 
@@ -131,9 +131,9 @@ const createQueryService: <Service extends ServiceType>({
 
 `createQueryService` is the main entrypoint for Connect-Query.
 
-Pass in a service and you will receive an object with properties for each of your services and values that provide hooks for those services that you can then give to Tanstack Query.  The `ServiceType` TypeScript interface is provided by Protobuf-ES (`@bufbuild/protobuf`) while generated service definitions are provided by Connect-Web (`@bufbuild/connect-web`).
+Pass in a service and you will receive an object with properties for each of your services and values that provide hooks for those services that you can then give to Tanstack Query.  The `ServiceType` TypeScript interface is provided by Protobuf-ES (`@bufbuild/protobuf`) while generated service definitions are provided by Connect-Web (`@connectrpc/connect-web`).
 
-`Transport` refers to the mechanism by which your client will make the actual network calls.  If you want to use a custom transport, you can optionally provide one with a call to `useTransport`, which Connect-Query exports.  Otherwise, the default transport from React context will be used.  This default transport is placed on React context by the `TransportProvider`. Whether you pass a custom transport or you use `TransportProvider`, in both cases you'll need to use one of `@bufbuild/connect-web`'s exports `createConnectTransport` or `createGrpcWebTransport`.
+`Transport` refers to the mechanism by which your client will make the actual network calls.  If you want to use a custom transport, you can optionally provide one with a call to `useTransport`, which Connect-Query exports.  Otherwise, the default transport from React context will be used.  This default transport is placed on React context by the `TransportProvider`. Whether you pass a custom transport or you use `TransportProvider`, in both cases you'll need to use one of `@connectrpc/connect-web`'s exports `createConnectTransport` or `createGrpcWebTransport`.
 
 Note that the most memory performant approach is to use the transport on React Context by using the `TransportProvider` because that provider is memoized by React, but also that any calls to `createQueryService` with the same service is cached by this function.
 
@@ -178,11 +178,11 @@ With these two pieces of information in hand, the transport provides the critica
 
 To learn more about the two modes of transport, take a look at the Connect-Web documentation on [choosing a protocol](https://connectrpc.com/docs/web/choosing-a-protocol/).
 
-To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@bufbuild/connect-web`](https://www.npmjs.com/package/@bufbuild/connect-web)) and pass it to the provider.
+To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@connectrpc/connect-web`](https://www.npmjs.com/package/@connectrpc/connect-web)) and pass it to the provider.
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { TransportProvider } from "@bufbuild/connect-query";
+import { TransportProvider } from "@connectrpc/connect-query";
 
 const queryClient = new QueryClient();
 
@@ -417,7 +417,7 @@ For example, a partial query key might look like this:
 
 # Experimental plugin
 
-There is an alternate plugin [`@bufbuild/protoc-gen-connect-query-react`](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query-react) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.
+There is an alternate plugin [`@connectrpc/protoc-gen-connect-query-react`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query-react) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.
 
 ```tsx
 import { useExampleQuery } from 'your-generated-code/example-ExampleService_connectquery_react';

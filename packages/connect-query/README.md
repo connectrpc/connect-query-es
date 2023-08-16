@@ -1,6 +1,6 @@
-# @bufbuild/connect-query
+# @connectrpc/connect-query
 
-This is the runtime library package for Connect-Query.  You'll find its code generator at [@bufbuild/protoc-gen-connect-query](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query).
+This is the runtime library package for Connect-Query.  You'll find its code generator at [@connectrpc/protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query).
 
 Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested.  It enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 

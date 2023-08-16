@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { createQueryService } from "@bufbuild/connect-query";
+import { createQueryService } from "@connectrpc/connect-query";
 import { MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
 import { Empty, Todo, Todos } from "./example_pb.js";
 

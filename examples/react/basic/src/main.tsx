@@ -14,8 +14,8 @@
 
 import './index.css';
 
-import { TransportProvider } from '@bufbuild/connect-query';
-import { createConnectTransport } from '@bufbuild/connect-web';
+import { TransportProvider } from '@connectrpc/connect-query';
+import { createConnectTransport } from '@connectrpc/connect-web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import * as ReactDOM from 'react-dom/client';

@@ -40,7 +40,7 @@ describe('generateTs', () => {
       '/* eslint-disable */',
       '// @ts-nocheck',
       '',
-      'import { createQueryService } from "@bufbuild/connect-query";',
+      'import { createQueryService } from "@connectrpc/connect-query";',
       'import { MethodKind } from "@bufbuild/protobuf";',
       'import { SayRequest, SayResponse } from "./eliza_pb.js";',
       '',

@@ -1,6 +1,6 @@
-# @bufbuild/protoc-gen-connect-query-react
+# @connectrpc/protoc-gen-connect-query-react
 
-**This is an experimental plugin, based on the [protoc-gen-connect-query](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query) plugin. This plugin provides better DX while sacrificing some flexibility.**
+**This is an experimental plugin, based on the [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) plugin. This plugin provides better DX while sacrificing some flexibility.**
 
 Instead of generating a single entry point per method:
 
@@ -27,7 +27,7 @@ const Component = () => {
 }
 ```
 
-- [@bufbuild/protoc-gen-connect-query-react](#bufbuildprotoc-gen-connect-query-react)
+- [@connectrpc/protoc-gen-connect-query-react](#connectrpcprotoc-gen-connect-query-react)
   - [Installation](#installation)
   - [Generating Code](#generating-code)
     - [`example.proto`](#exampleproto)
@@ -55,7 +55,7 @@ Learn more about Connect-Query at [github.com/connectrpc/connect-query-es](https
 To install the plugins and their runtime libraries, run:
 
 ```shell
-npm install --save-dev @bufbuild/protoc-gen-connect-query-react @bufbuild/protoc-gen-es
+npm install --save-dev @connectrpc/protoc-gen-connect-query-react @bufbuild/protoc-gen-es
 npm install @bufbuild/connect-query @bufbuild/protobuf
 ```
 
@@ -218,7 +218,7 @@ By default, we generate JavaScript and TypeScript declaration files, which produ
 
 ### `import_extension=.js`
 
-By default, [protoc-gen-connect-query-react](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query-react) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) uses a `.js` file extensions in import paths, even in TypeScript files.
+By default, [protoc-gen-connect-query-react](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query-react) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) uses a `.js` file extensions in import paths, even in TypeScript files.
 
 This is unintuitive, but necessary for [ECMAScript modules in Node.js](https://www.typescriptlang.org/docs/handbook/esm-node.html).
 

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { CallOptions } from '@bufbuild/connect';
-import { createRouterTransport } from '@bufbuild/connect';
-import { createConnectTransport } from '@bufbuild/connect-web';
 import type { PartialMessage } from '@bufbuild/protobuf';
+import type { CallOptions } from '@connectrpc/connect';
+import { createRouterTransport } from '@connectrpc/connect';
+import { createConnectTransport } from '@connectrpc/connect-web';
 import type { QueryClientConfig } from '@tanstack/react-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
