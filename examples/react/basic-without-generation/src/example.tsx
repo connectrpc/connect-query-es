@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createQueryService } from '@bufbuild/connect-query';
+import { createQueryService } from '@connectrpc/connect-query';
 import { useQuery } from '@tanstack/react-query';
 import { ElizaService } from 'generated-react/dist/eliza_connect';
 import type { FC } from 'react';

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ConnectError } from '@bufbuild/connect';
+import { ConnectError } from '@connectrpc/connect';
 import { describe, expect, it } from '@jest/globals';
 import { useQuery } from '@tanstack/react-query';
 import { renderHook } from '@testing-library/react';
@@ -24,7 +24,7 @@ import { unaryHooks } from './unary-hooks';
 import { fallbackTransport } from './use-transport';
 
 const error = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@bufbuild/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
+  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
 );
 
 describe('fallbackTransport', () => {

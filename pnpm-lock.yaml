@@ -80,24 +80,24 @@ importers:
 
   examples/react/basic:
     dependencies:
-      '@bufbuild/connect-query':
-        specifier: workspace:*
-        version: link:../../../packages/connect-query
-      '@bufbuild/connect-web':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/protobuf@1.3.0)
       '@bufbuild/protobuf':
         specifier: ^1.3.0
         version: 1.3.0
-      '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
-      '@bufbuild/protoc-gen-connect-query':
-        specifier: workspace:*
-        version: link:../../../packages/protoc-gen-connect-query
       '@bufbuild/protoc-gen-es':
         specifier: ^1.3.0
         version: 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/connect-query':
+        specifier: workspace:*
+        version: link:../../../packages/connect-query
+      '@connectrpc/connect-web':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/protoc-gen-connect-es':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protoc-gen-es@1.3.0)(@connectrpc/connect@0.13.1)
+      '@connectrpc/protoc-gen-connect-query':
+        specifier: workspace:*
+        version: link:../../../packages/protoc-gen-connect-query
       '@tanstack/react-query':
         specifier: ^4.32.6
         version: 4.32.6(react-dom@18.2.0)(react@18.2.0)
@@ -132,24 +132,24 @@ importers:
 
   examples/react/basic-without-generation:
     dependencies:
-      '@bufbuild/connect-query':
-        specifier: workspace:*
-        version: link:../../../packages/connect-query
-      '@bufbuild/connect-web':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/protobuf@1.3.0)
       '@bufbuild/protobuf':
         specifier: ^1.3.0
         version: 1.3.0
-      '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
-      '@bufbuild/protoc-gen-connect-query':
-        specifier: workspace:*
-        version: link:../../../packages/protoc-gen-connect-query
       '@bufbuild/protoc-gen-es':
         specifier: ^1.3.0
         version: 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/connect-query':
+        specifier: workspace:*
+        version: link:../../../packages/connect-query
+      '@connectrpc/connect-web':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/protoc-gen-connect-es':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protoc-gen-es@1.3.0)(@connectrpc/connect@0.13.1)
+      '@connectrpc/protoc-gen-connect-query':
+        specifier: workspace:*
+        version: link:../../../packages/protoc-gen-connect-query
       '@tanstack/react-query':
         specifier: ^4.32.6
         version: 4.32.6(react-dom@18.2.0)(react@18.2.0)
@@ -188,12 +188,6 @@ importers:
         specifier: ^0.0.3
         version: 0.0.3
     devDependencies:
-      '@bufbuild/connect':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/protobuf@1.3.0)
-      '@bufbuild/connect-web':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/protobuf@1.3.0)
       '@bufbuild/jest-environment-jsdom':
         specifier: ^0.1.1
         version: 0.1.1(jest-environment-jsdom@29.6.2)
@@ -203,6 +197,12 @@ importers:
       '@bufbuild/protoc-gen-es':
         specifier: ^1.3.0
         version: 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/connect':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/connect-web':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protobuf@1.3.0)
       '@tanstack/react-query':
         specifier: ^4.32.6
         version: 4.32.6(react-dom@18.2.0)(react@18.2.0)
@@ -236,27 +236,27 @@ importers:
       '@bufbuild/buf':
         specifier: 1.26.1
         version: 1.26.1
-      '@bufbuild/connect':
-        specifier: 0.12.0
-        version: 0.12.0(@bufbuild/protobuf@1.3.0)
-      '@bufbuild/connect-query':
-        specifier: workspace:*
-        version: link:../connect-query
       '@bufbuild/protobuf':
         specifier: ^1.3.0
         version: 1.3.0
-      '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
-      '@bufbuild/protoc-gen-connect-query':
-        specifier: workspace:*
-        version: link:../protoc-gen-connect-query
-      '@bufbuild/protoc-gen-connect-query-react':
-        specifier: workspace:*
-        version: link:../protoc-gen-connect-query-react
       '@bufbuild/protoc-gen-es':
         specifier: ^1.3.0
         version: 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/connect':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/connect-query':
+        specifier: workspace:*
+        version: link:../connect-query
+      '@connectrpc/protoc-gen-connect-es':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protoc-gen-es@1.3.0)(@connectrpc/connect@0.13.1)
+      '@connectrpc/protoc-gen-connect-query':
+        specifier: workspace:*
+        version: link:../protoc-gen-connect-query
+      '@connectrpc/protoc-gen-connect-query-react':
+        specifier: workspace:*
+        version: link:../protoc-gen-connect-query-react
       '@tanstack/react-query':
         specifier: ^4.32.6
         version: 4.32.6(react-dom@18.2.0)(react@18.2.0)
@@ -270,12 +270,12 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0
     devDependencies:
-      '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
       '@bufbuild/protoc-gen-es':
         specifier: ^1.3.0
         version: 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/protoc-gen-connect-es':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protoc-gen-es@1.3.0)(@connectrpc/connect@0.13.1)
       generated-react:
         specifier: workspace:*
         version: link:../generated-react
@@ -292,15 +292,15 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0
     devDependencies:
-      '@bufbuild/protoc-gen-connect-es':
-        specifier: ^0.12.0
-        version: 0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0)
-      '@bufbuild/protoc-gen-connect-query':
-        specifier: workspace:*
-        version: link:../protoc-gen-connect-query
       '@bufbuild/protoc-gen-es':
         specifier: ^1.3.0
         version: 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@connectrpc/protoc-gen-connect-es':
+        specifier: ^0.13.1
+        version: 0.13.1(@bufbuild/protoc-gen-es@1.3.0)(@connectrpc/connect@0.13.1)
+      '@connectrpc/protoc-gen-connect-query':
+        specifier: workspace:*
+        version: link:../protoc-gen-connect-query
       generated-react:
         specifier: workspace:*
         version: link:../generated-react
@@ -747,21 +747,6 @@ packages:
       '@bufbuild/buf-win32-x64': 1.26.1
     dev: false
 
-  /@bufbuild/connect-web@0.12.0(@bufbuild/protobuf@1.3.0):
-    resolution: {integrity: sha512-bw5E6aIs0q3ab5oyIB263ShRg8DhUMsewMHsl/9lUxJFkmzxvHoPIlNFrSWOUUcyudJrahfhDveXF94bi9C5cA==}
-    peerDependencies:
-      '@bufbuild/protobuf': ^1.2.1
-    dependencies:
-      '@bufbuild/connect': 0.12.0(@bufbuild/protobuf@1.3.0)
-      '@bufbuild/protobuf': 1.3.0
-
-  /@bufbuild/connect@0.12.0(@bufbuild/protobuf@1.3.0):
-    resolution: {integrity: sha512-rYn3Akp7teOkvqxguLbf6QKizH37Yeo33lseV+JHDZC19CsAV9wrrZM17Sa+LNEBj/hrYtQF7EIcllgGxhv9aw==}
-    peerDependencies:
-      '@bufbuild/protobuf': ^1.2.1
-    dependencies:
-      '@bufbuild/protobuf': 1.3.0
-
   /@bufbuild/jest-environment-jsdom@0.1.1(jest-environment-jsdom@29.6.2):
     resolution: {integrity: sha512-lO4dke+l/LQAUT8CLmh0SKtY37gmax63eD7YSBQu48sqwAx4hgu1hRmoheRysaqR4bO6Vudhf6+nkBm0TbctvA==}
     peerDependencies:
@@ -772,26 +757,6 @@ packages:
 
   /@bufbuild/protobuf@1.3.0:
     resolution: {integrity: sha512-G372ods0pLt46yxVRsnP/e2btVPuuzArcMPFpIDeIwiGPuuglEs9y75iG0HMvZgncsj5TvbYRWqbVyOe3PLCWQ==}
-
-  /@bufbuild/protoc-gen-connect-es@0.12.0(@bufbuild/connect@0.12.0)(@bufbuild/protoc-gen-es@1.3.0):
-    resolution: {integrity: sha512-J7/9oF/ByAQrZmEZkhNRnzo56PK+KOUMNJGxQGhF9Mjrrr7q/eCkd5tuao4Yk+A2biDWLk84+L6Zl8uHiBMK3w==}
-    engines: {node: '>=16.0.0'}
-    hasBin: true
-    peerDependencies:
-      '@bufbuild/connect': 0.12.0
-      '@bufbuild/protoc-gen-es': ^1.2.1
-    peerDependenciesMeta:
-      '@bufbuild/connect':
-        optional: true
-      '@bufbuild/protoc-gen-es':
-        optional: true
-    dependencies:
-      '@bufbuild/connect': 0.12.0(@bufbuild/protobuf@1.3.0)
-      '@bufbuild/protobuf': 1.3.0
-      '@bufbuild/protoc-gen-es': 1.3.0(@bufbuild/protobuf@1.3.0)
-      '@bufbuild/protoplugin': 1.3.0
-    transitivePeerDependencies:
-      - supports-color
 
   /@bufbuild/protoc-gen-es@1.3.0(@bufbuild/protobuf@1.3.0):
     resolution: {integrity: sha512-XxGZwpXMYlwoSyJwCTFb7SZ2xKmv2iCRM022t1wszhY3kNL7rjpyj+3GbpCOjaM1T7NAoLnW0Hyb/M0b0XDb3Q==}
@@ -814,6 +779,41 @@ packages:
       '@bufbuild/protobuf': 1.3.0
       '@typescript/vfs': 1.5.0
       typescript: 4.5.2
+    transitivePeerDependencies:
+      - supports-color
+
+  /@connectrpc/connect-web@0.13.1(@bufbuild/protobuf@1.3.0):
+    resolution: {integrity: sha512-9RbraYunDORgjSBhuidLviYSmgym5cwgEdQIBcgXsdINKK9UElhStMi/LBo7MG0271CH0zZQhbiX1J//HG5QvA==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.2.1
+    dependencies:
+      '@bufbuild/protobuf': 1.3.0
+      '@connectrpc/connect': 0.13.1(@bufbuild/protobuf@1.3.0)
+
+  /@connectrpc/connect@0.13.1(@bufbuild/protobuf@1.3.0):
+    resolution: {integrity: sha512-o4QY48x2FjnzDAEIee5yZOJGMSWFp7HS1a+MuonpVFmkLJctCWTWuiY/hFknztGYAQ5DMQtb17nDcEiT2vgpBQ==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.2.1
+    dependencies:
+      '@bufbuild/protobuf': 1.3.0
+
+  /@connectrpc/protoc-gen-connect-es@0.13.1(@bufbuild/protoc-gen-es@1.3.0)(@connectrpc/connect@0.13.1):
+    resolution: {integrity: sha512-WHj/anx3W4QWjgS3gykXQmBYtwedNzyd7N7Vo7+gh4iAGqJ46VeKIigJqs0GkGrU0eKbF6X0JNuhlB2/366BVA==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@bufbuild/protoc-gen-es': ^1.2.1
+      '@connectrpc/connect': 0.13.1
+    peerDependenciesMeta:
+      '@bufbuild/protoc-gen-es':
+        optional: true
+      '@connectrpc/connect':
+        optional: true
+    dependencies:
+      '@bufbuild/protobuf': 1.3.0
+      '@bufbuild/protoc-gen-es': 1.3.0(@bufbuild/protobuf@1.3.0)
+      '@bufbuild/protoplugin': 1.3.0
+      '@connectrpc/connect': 0.13.1(@bufbuild/protobuf@1.3.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -1822,7 +1822,7 @@ packages:
   /@types/jsdom@20.0.1:
     resolution: {integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==}
     dependencies:
-      '@types/node': 20.5.0
+      '@types/node': 20.5.1
       '@types/tough-cookie': 4.0.2
       parse5: 7.1.2
     dev: true
@@ -1837,6 +1837,10 @@ packages:
 
   /@types/node@20.5.0:
     resolution: {integrity: sha512-Mgq7eCtoTjT89FqNoTzzXg2XvCi5VMhRV6+I2aYanc6kQCBImeNaAYRs/DyoVqk1YEUJK5gN9VO7HRIdz4Wo3Q==}
+    dev: true
+
+  /@types/node@20.5.1:
+    resolution: {integrity: sha512-4tT2UrL5LBqDwoed9wZ6N3umC4Yhz3W3FloMmiiG4JwmUJWpie0c7lcnUNd4gtMKuDEO4wRVS8B6Xa0uMRsMKg==}
     dev: true
 
   /@types/prop-types@15.7.5:
@@ -4294,7 +4298,7 @@ packages:
       '@jest/fake-timers': 29.6.2
       '@jest/types': 29.6.1
       '@types/jsdom': 20.0.1
-      '@types/node': 20.5.0
+      '@types/node': 20.5.1
       jest-mock: 29.6.2
       jest-util: 29.6.2
       jsdom: 20.0.3

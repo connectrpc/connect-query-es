@@ -40,7 +40,7 @@ const generateServiceFile =
               `export const `,
               safeIdentifier(localName(method)),
               `: `,
-              f.import('UnaryHooks', '@bufbuild/connect-query'),
+              f.import('UnaryHooks', '@connectrpc/connect-query'),
               `<`,
               method.input,
               `, `,

@@ -1,6 +1,6 @@
-# @bufbuild/protoc-gen-connect-query-react
+# @connectrpc/protoc-gen-connect-query-react
 
-**This is an experimental plugin, based on the [protoc-gen-connect-query](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query) plugin. This plugin provides better DX while sacrificing some flexibility.**
+**This is an experimental plugin, based on the [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) plugin. This plugin provides better DX while sacrificing some flexibility.**
 
 Instead of generating a single entry point per method:
 
@@ -27,7 +27,7 @@ const Component = () => {
 }
 ```
 
-- [@bufbuild/protoc-gen-connect-query-react](#bufbuildprotoc-gen-connect-query-react)
+- [@connectrpc/protoc-gen-connect-query-react](#connectrpcprotoc-gen-connect-query-react)
   - [Installation](#installation)
   - [Generating Code](#generating-code)
     - [`example.proto`](#exampleproto)
@@ -50,13 +50,13 @@ Learn more about Connect-Query at [github.com/connectrpc/connect-query-es](https
 ## Installation
 
 `protoc-gen-connect-query-react` is a code generator plugin for Protocol Buffer compilers like [buf](https://github.com/bufbuild/buf) and [protoc](https://github.com/protocolbuffers/protobuf/releases).  It generates clients from your Protocol Buffer schema, and works in tandem with
-[@bufbuild/protoc-gen-es](https://www.npmjs.com/package/@bufbuild/protoc-gen-es), the code generator plugin for all Protocol Buffer base types.  The code those two plugins generate requires the runtime libraries [@bufbuild/connect-query](https://www.npmjs.com/package/@bufbuild/connect-query), and [@bufbuild/protobuf](https://www.npmjs.com/package/@bufbuild/protobuf).
+[@bufbuild/protoc-gen-es](https://www.npmjs.com/package/@bufbuild/protoc-gen-es), the code generator plugin for all Protocol Buffer base types.  The code those two plugins generate requires the runtime libraries [@connectrpc/connect-query](https://www.npmjs.com/package/@connectrpc/connect-query), and [@bufbuild/protobuf](https://www.npmjs.com/package/@bufbuild/protobuf).
 
 To install the plugins and their runtime libraries, run:
 
 ```shell
-npm install --save-dev @bufbuild/protoc-gen-connect-query-react @bufbuild/protoc-gen-es
-npm install @bufbuild/connect-query @bufbuild/protobuf
+npm install --save-dev @connectrpc/protoc-gen-connect-query-react @bufbuild/protoc-gen-es
+npm install @connectrpc/connect-query @bufbuild/protobuf
 ```
 
 We use peer dependencies to ensure that code generator and runtime library are compatible with each other. Note that yarn and pnpm only emit a warning in this case.
@@ -218,7 +218,7 @@ By default, we generate JavaScript and TypeScript declaration files, which produ
 
 ### `import_extension=.js`
 
-By default, [protoc-gen-connect-query-react](https://www.npmjs.com/package/@bufbuild/protoc-gen-connect-query-react) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) uses a `.js` file extensions in import paths, even in TypeScript files.
+By default, [protoc-gen-connect-query-react](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query-react) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) uses a `.js` file extensions in import paths, even in TypeScript files.
 
 This is unintuitive, but necessary for [ECMAScript modules in Node.js](https://www.typescriptlang.org/docs/handbook/esm-node.html).
 

@@ -42,14 +42,14 @@ const generateServiceFile =
           {
             const serviceName = safeIdentifier(localName(method));
             const partialMessage = f.import('PartialMessage', '@bufbuild/protobuf');
-            const connectError = f.import('ConnectError', '@bufbuild/connect');
-            const connectQueryKey = f.import("ConnectQueryKey", "@bufbuild/connect-query");
+            const connectError = f.import('ConnectError', '@connectrpc/connect');
+            const connectQueryKey = f.import("ConnectQueryKey", "@connectrpc/connect-query");
 
             f.print(
               `export const `,
               serviceName,
               `: `,
-              f.import('UnaryHooks', '@bufbuild/connect-query'),
+              f.import('UnaryHooks', '@connectrpc/connect-query'),
               `<`,
               method.input,
               `, `,

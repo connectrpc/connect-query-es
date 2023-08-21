@@ -3,11 +3,11 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";
+import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
 import { MethodIdempotency, MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { Empty, Todo, Todos } from "./example_pb.js";
 import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { ConnectError } from "@bufbuild/connect";
+import { ConnectError } from "@connectrpc/connect";
 
 /**
  * A helpful RPC to get all current Todos

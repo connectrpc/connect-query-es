@@ -44,13 +44,13 @@ describe('generateTs', () => {
       '/* eslint-disable */',
       '// @ts-nocheck',
       '',
-      'import { ConnectQueryKey, createQueryService } from "@bufbuild/connect-query";',
+      'import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";',
       'import { MethodKind, PartialMessage } from "@bufbuild/protobuf";',
       'import { SayRequest, SayResponse } from "./eliza_pb.js";',
       `import { useInfiniteQuery, UseInfiniteQueryOptions, useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "${
         importHookFrom || '@tanstack/react-query'
       }";`,
-      'import { ConnectError } from "@bufbuild/connect";',
+      'import { ConnectError } from "@connectrpc/connect";',
       '',
       '/**',
       ' * Say is a unary RPC. Eliza responds to the prompt with a single sentence.',
