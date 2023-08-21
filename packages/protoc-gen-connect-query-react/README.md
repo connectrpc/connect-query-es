@@ -50,13 +50,13 @@ Learn more about Connect-Query at [github.com/connectrpc/connect-query-es](https
 ## Installation
 
 `protoc-gen-connect-query-react` is a code generator plugin for Protocol Buffer compilers like [buf](https://github.com/bufbuild/buf) and [protoc](https://github.com/protocolbuffers/protobuf/releases).  It generates clients from your Protocol Buffer schema, and works in tandem with
-[@bufbuild/protoc-gen-es](https://www.npmjs.com/package/@bufbuild/protoc-gen-es), the code generator plugin for all Protocol Buffer base types.  The code those two plugins generate requires the runtime libraries [@bufbuild/connect-query](https://www.npmjs.com/package/@bufbuild/connect-query), and [@bufbuild/protobuf](https://www.npmjs.com/package/@bufbuild/protobuf).
+[@bufbuild/protoc-gen-es](https://www.npmjs.com/package/@bufbuild/protoc-gen-es), the code generator plugin for all Protocol Buffer base types.  The code those two plugins generate requires the runtime libraries [@connectrpc/connect-query](https://www.npmjs.com/package/@connectrpc/connect-query), and [@bufbuild/protobuf](https://www.npmjs.com/package/@bufbuild/protobuf).
 
 To install the plugins and their runtime libraries, run:
 
 ```shell
 npm install --save-dev @connectrpc/protoc-gen-connect-query-react @bufbuild/protoc-gen-es
-npm install @bufbuild/connect-query @bufbuild/protobuf
+npm install @connectrpc/connect-query @bufbuild/protobuf
 ```
 
 We use peer dependencies to ensure that code generator and runtime library are compatible with each other. Note that yarn and pnpm only emit a warning in this case.
