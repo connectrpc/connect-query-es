@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/connect-query",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "license": "Apache-2.0",
   "sideEffects": false,
   "files": [
