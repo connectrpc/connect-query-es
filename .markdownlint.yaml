@@ -19,11 +19,6 @@ MD013: false
 # Although this rule is great in spirit, the rendered on markdown for such a large root readme simply (visually) requires multiple `h1`s as to decrease one level of nesting so horizontal dividers are easier to see and headings are larger.
 MD025: false
 
-# MD029 - Ordered list item prefix
-# Plain and simple, markdown parsers do not respect the numbering you use for ordered lists.  It only leads to confusion and misconception to allow otherwise.
-MD029:
-  style: one
-
 # MD033 - Inline HTML
 MD033:
   allowed_elements:
