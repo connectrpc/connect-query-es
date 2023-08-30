@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { FC, ReactNode } from 'react';
+import { type FC, type ReactNode, useId } from 'react';
 
 import {
   border,
@@ -33,6 +33,7 @@ interface DatumProps {
  * A single data point
  */
 export const Datum: FC<DatumProps> = ({ datum, label }) => {
+  const id = useId();
   return (
     <div
       style={{
@@ -44,20 +45,22 @@ export const Datum: FC<DatumProps> = ({ datum, label }) => {
         boxShadow,
       }}
     >
-      <div
+      <label
         style={{
           padding: padding * 2,
           backgroundColor: lightBlue,
         }}
+        id={id}
       >
         {label}
-      </div>
+      </label>
 
       <div
         style={{
           padding: padding * 2,
           backgroundColor: white,
         }}
+        aria-labelledby={id}
       >
         {datum}
       </div>
