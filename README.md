@@ -423,8 +423,6 @@ Connect-query (along with all other javascript based connect packages) can be te
 
 For playwright, you can see a sample test [here](https://github.com/connectrpc/connect-playwright-es/blob/main/packages/connect-playwright-example/tests/simple.spec.ts).
 
-```ts
-
 ## Experimental plugin
 
 There is an alternate plugin [`@connectrpc/protoc-gen-connect-query-react`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query-react) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.
