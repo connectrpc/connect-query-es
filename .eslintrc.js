@@ -1,4 +1,4 @@
-// Copyright 2021-2022 Buf Technologies, Inc.
+// Copyright 2021-2023 Buf Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ const config = {
   plugins: [
     '@typescript-eslint',
     'jsdoc',
-    'notice',
     'jest',
     'import',
     'simple-import-sort',
@@ -79,13 +78,6 @@ const config = {
     '@typescript-eslint/ban-ts-comment': [
       'error',
       { 'ts-expect-error': { descriptionFormat: '^\\(\\d+\\) .+$' } },
-    ],
-
-    'notice/notice': [
-      'error',
-      {
-        templateFile: 'assets/license-header',
-      },
     ],
 
     'jsdoc/require-jsdoc': [
