@@ -31,7 +31,6 @@ const config = {
   plugins: [
     '@typescript-eslint',
     'jsdoc',
-    'notice',
     'jest',
     'import',
     'simple-import-sort',
@@ -79,13 +78,6 @@ const config = {
     '@typescript-eslint/ban-ts-comment': [
       'error',
       { 'ts-expect-error': { descriptionFormat: '^\\(\\d+\\) .+$' } },
-    ],
-
-    'notice/notice': [
-      'error',
-      {
-        templateFile: 'assets/license-header',
-      },
     ],
 
     'jsdoc/require-jsdoc': [

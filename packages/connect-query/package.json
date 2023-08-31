@@ -25,7 +25,8 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "tsup",
-    "test": "jest"
+    "test": "jest",
+    "license-header": "license-header --ignore 'dist/**'"
   },
   "devDependencies": {
     "@connectrpc/connect": "^0.13.1",

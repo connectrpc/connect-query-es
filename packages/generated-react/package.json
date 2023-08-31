@@ -20,7 +20,8 @@
     "clean": "rm -rf dist",
     "generate": "pnpm run clean && pnpm run generate:code && pnpm run generate:descriptorset",
     "generate:code": "pnpm buf generate --path eliza.proto --path example.proto",
-    "generate:descriptorset": "pnpm buf build --path eliza.proto --path example.proto --output dist/descriptorset.bin"
+    "generate:descriptorset": "pnpm buf build --path eliza.proto --path example.proto --output dist/descriptorset.bin",
+    "license-header": "license-header"
   },
   "dependencies": {
     "@bufbuild/buf": "1.26.1",

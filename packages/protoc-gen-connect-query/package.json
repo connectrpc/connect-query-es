@@ -21,7 +21,8 @@
   "scripts": {
     "clean": "rm -rf dist",
     "test": "jest",
-    "build": "pnpm clean && tsc --project tsconfig.build.json"
+    "build": "pnpm clean && tsc --project tsconfig.build.json",
+    "license-header": "license-header --ignore 'dist/**' --ignore 'coverage/**'"
   },
   "preferUnplugged": true,
   "devDependencies": {

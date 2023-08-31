@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf src/eliza",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "license-header": "license-header"
   },
   "dependencies": {
     "@connectrpc/connect-query": "workspace:*",
