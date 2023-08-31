@@ -21,7 +21,7 @@ describe('generateDts', () => {
   it('generates a full d.ts file', () => {
     const result = generate('dts')('eliza-ElizaService_connectquery.d.ts');
     expect(result).toStrictEqual([
-      '// Copyright 2021-2022 Buf Technologies, Inc.',
+      '// Copyright 2021-2023 Buf Technologies, Inc.',
       '//',
       '// Licensed under the Apache License, Version 2.0 (the "License");',
       '// you may not use this file except in compliance with the License.',
