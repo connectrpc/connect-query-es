@@ -7,6 +7,7 @@
     "dev": "vite",
     "clean": "rm -rf src/eliza",
     "preview": "vite preview",
+    "test": "jest",
     "license-header": "license-header"
   },
   "dependencies": {
@@ -23,6 +24,9 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@connectrpc/connect": "0.13.1",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.1.2",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.4",

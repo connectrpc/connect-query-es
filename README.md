@@ -417,6 +417,12 @@ For example, a partial query key might look like this:
 ]
 ```
 
+## Testing
+
+Connect-query (along with all other javascript based connect packages) can be tested with the `createRouterTransport` function from `@connectrpc/connect`.  This function allows you to create a transport that can be used to test your application without needing to make any network requests. We also have a dedicated package, [@connectrpc/connect-playwright](https://github.com/connectrpc/connect-playwright-es) for testing within [playwright](https://playwright.dev/).
+
+For playwright, you can see a sample test [here](https://github.com/connectrpc/connect-playwright-es/blob/main/packages/connect-playwright-example/tests/simple.spec.ts).
+
 ## Experimental plugin
 
 There is an alternate plugin [`@connectrpc/protoc-gen-connect-query-react`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query-react) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.

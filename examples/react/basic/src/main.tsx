@@ -14,6 +14,7 @@
 
 import './index.css';
 
+import type { Transport } from '@connectrpc/connect';
 import { TransportProvider } from '@connectrpc/connect-query';
 import { createConnectTransport } from '@connectrpc/connect-web';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -27,12 +28,14 @@ const queryClient = new QueryClient();
 /**
  * The application root
  */
-export default function App() {
-  const transport = createConnectTransport({
-    baseUrl: 'https://demo.connectrpc.com',
-  });
+export default function App({ transport }: { transport?: Transport }) {
+  const finalTransport =
+    transport ??
+    createConnectTransport({
+      baseUrl: 'https://demo.connectrpc.com',
+    });
   return (
-    <TransportProvider transport={transport}>
+    <TransportProvider transport={finalTransport}>
       <QueryClientProvider client={queryClient}>
         <Example />
         <ReactQueryDevtools initialIsOpen />
