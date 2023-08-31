@@ -20,7 +20,7 @@ import { ElizaService } from 'generated-react/dist/eliza_connect';
 
 import Main from './main';
 
-describe('Applcation', () => {
+describe('Application', () => {
   it('should show success status and response data', async () => {
     const transport = createRouterTransport(({ service }) => {
       service(ElizaService, {
