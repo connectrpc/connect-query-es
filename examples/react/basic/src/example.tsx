@@ -36,18 +36,17 @@ export const Example: FC = () => {
 
   return (
     <Page>
+      Status: {status}
       <Indicators label="queryStatus">
         <Indicator label="loading" parent={status} />
         <Indicator label="success" parent={status} />
         <Indicator label="error" parent={status} />
       </Indicators>
-
       <Indicators label="fetchStatus">
         <Indicator label="fetching" parent={fetchStatus} />
         <Indicator label="idle" parent={fetchStatus} />
         <Indicator label="paused" parent={fetchStatus} />
       </Indicators>
-
       <Data>
         <Datum label="data" datum={JSON.stringify(data)} />
         <Datum label="error" datum={JSON.stringify(error)} />
