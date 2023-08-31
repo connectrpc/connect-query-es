@@ -46,13 +46,5 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
-      - name: Update license
-        run: pnpm run license-header
-
       - name: Test
         run: pnpm run test
-
-      - name: Check Diff
-        id: checkdiff
-        run: |
-          [[ -z $(git status --porcelain | tee /dev/stderr) ]] || exit 1

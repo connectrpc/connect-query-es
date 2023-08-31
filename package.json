@@ -11,11 +11,10 @@
     "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\"",
     "lint:markdown:fix": "markdownlint-cli2-fix \"**/*.md\" \"#**/node_modules\"",
     "lint:spelling": "cspell \"**\" --gitignore",
-    "lint:code": "eslint . && prettier . --check",
-    "lint:code:fix": "eslint . --fix && prettier . --write",
+    "lint:code": "eslint . && prettier . --check && license-header --check",
+    "lint:code:fix": "eslint . --fix && prettier . --write && license-header",
     "all": "pnpm run build && pnpm run generate && pnpm run lint:fix && pnpm run test",
-    "update-all": "pnpm outdated --recursive || pnpm update --recursive --latest && pnpm outdated --recursive",
-    "license-header": "pnpm --recursive --parallel license-header"
+    "update-all": "pnpm outdated --recursive || pnpm update --recursive --latest && pnpm outdated --recursive"
   },
   "license": "Apache-2.0",
   "licenseHeader": {
@@ -24,7 +23,7 @@
     "copyrightHolder": "Buf Technologies, Inc."
   },
   "devDependencies": {
-    "@bufbuild/license-header": "^0.0.1",
+    "@bufbuild/license-header": "^0.0.3",
     "@jest/globals": "29.6.2",
     "@types/jest": "^29.5.4",
     "@types/node": "^20.5.0",

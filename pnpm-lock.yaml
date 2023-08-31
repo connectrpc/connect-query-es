@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@bufbuild/license-header':
-        specifier: ^0.0.1
-        version: 0.0.1
+        specifier: ^0.0.3
+        version: 0.0.3
       '@jest/globals':
         specifier: 29.6.2
         version: 29.6.2
@@ -771,8 +771,8 @@ packages:
       jest-environment-jsdom: 29.6.2
     dev: true
 
-  /@bufbuild/license-header@0.0.1:
-    resolution: {integrity: sha512-VGPmngg/+V+bIiFDRwSrOMlBjyEfwMU9kqIXnBxaQIiJvhxY4fsGQ4YdXrHir1hWv5JXbjbhNyQmjkrQoa2gkQ==}
+  /@bufbuild/license-header@0.0.3:
+    resolution: {integrity: sha512-Q2Vgq8ldXa5woi5fNR5jQPWygIc4rZheHXx463yn1kadyJoeXhirJrjCNzMwpDk7sKN5O+aJUDpq4D8Ve7MR2Q==}
     hasBin: true
     dependencies:
       picomatch: 2.3.1
