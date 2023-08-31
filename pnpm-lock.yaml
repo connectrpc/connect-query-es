@@ -53,9 +53,6 @@ importers:
       eslint-plugin-jsdoc:
         specifier: 46.4.6
         version: 46.4.6(eslint@8.47.0)
-      eslint-plugin-notice:
-        specifier: 0.9.10
-        version: 0.9.10(eslint@8.47.0)
       eslint-plugin-react-hooks:
         specifier: ^4.6.0
         version: 4.6.0(eslint@8.47.0)
@@ -3365,17 +3362,6 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-notice@0.9.10(eslint@8.47.0):
-    resolution: {integrity: sha512-rF79EuqdJKu9hhTmwUkNeSvLmmq03m/NXq/NHwUENHbdJ0wtoyOjxZBhW4QCug8v5xYE6cGe3AWkGqSIe9KUbQ==}
-    peerDependencies:
-      eslint: '>=3.0.0'
-    dependencies:
-      eslint: 8.47.0
-      find-root: 1.1.0
-      lodash: 4.17.21
-      metric-lcs: 0.1.2
-    dev: true
-
   /eslint-plugin-react-hooks@4.6.0(eslint@8.47.0):
     resolution: {integrity: sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==}
     engines: {node: '>=10'}
@@ -3592,10 +3578,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       to-regex-range: 5.0.1
-    dev: true
-
-  /find-root@1.1.0:
-    resolution: {integrity: sha512-NKfW6bec6GfKc0SGx1e07QZY9PE99u0Bft/0rzSD5k3sO/vwkVUpDUKVm5Gpp5Ue3YfShPFTX2070tDs5kB9Ng==}
     dev: true
 
   /find-up@4.1.0:
@@ -4978,10 +4960,6 @@ packages:
   /merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
-    dev: true
-
-  /metric-lcs@0.1.2:
-    resolution: {integrity: sha512-+TZ5dUDPKPJaU/rscTzxyN8ZkX7eAVLAiQU/e+YINleXPv03SCmJShaMT1If1liTH8OcmWXZs0CmzCBRBLcMpA==}
     dev: true
 
   /micromatch@4.0.5:
