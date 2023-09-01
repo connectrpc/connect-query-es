@@ -51,8 +51,8 @@ importers:
         specifier: 27.2.3
         version: 27.2.3(@typescript-eslint/eslint-plugin@6.4.0)(eslint@8.47.0)(jest@29.6.2)(typescript@5.1.6)
       eslint-plugin-jsdoc:
-        specifier: 46.4.6
-        version: 46.4.6(eslint@8.47.0)
+        specifier: 46.5.1
+        version: 46.5.1(eslint@8.47.0)
       eslint-plugin-react-hooks:
         specifier: ^4.6.0
         version: 4.6.0(eslint@8.47.0)
@@ -3342,8 +3342,8 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-jsdoc@46.4.6(eslint@8.47.0):
-    resolution: {integrity: sha512-z4SWYnJfOqftZI+b3RM9AtWL1vF/sLWE/LlO9yOKDof9yN2+n3zOdOJTGX/pRE/xnPsooOLG2Rq6e4d+XW3lNw==}
+  /eslint-plugin-jsdoc@46.5.1(eslint@8.47.0):
+    resolution: {integrity: sha512-CPbvKprmEuJYoxMj5g8gXfPqUGgcqMM6jpH06Kp4pn5Uy5MrPkFKzoD7UFp2E4RBzfXbJz1+TeuEivwFVMkXBg==}
     engines: {node: '>=16'}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
