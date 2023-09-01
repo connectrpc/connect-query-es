@@ -16,7 +16,7 @@
     "@connectrpc/protoc-gen-connect-es": "^0.13.1",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@bufbuild/protoc-gen-es": "^1.3.0",
-    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query": "^4.33.0",
     "@tanstack/react-query-devtools": "^4.32.6",
     "generated-react": "workspace:*",
     "react": "^18.2.0",

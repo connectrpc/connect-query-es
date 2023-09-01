@@ -32,7 +32,7 @@
     "@connectrpc/connect-web": "^0.13.1",
     "@bufbuild/protobuf": "^1.3.0",
     "@bufbuild/protoc-gen-es": "^1.3.0",
-    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query": "^4.33.0",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
