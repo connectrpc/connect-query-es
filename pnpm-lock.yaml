@@ -63,8 +63,8 @@ importers:
         specifier: 29.6.2
         version: 29.6.2(@types/node@20.5.0)(ts-node@10.9.1)
       jest-mock:
-        specifier: 29.6.2
-        version: 29.6.2
+        specifier: 29.6.3
+        version: 29.6.3
       markdownlint-cli2:
         specifier: 0.8.1
         version: 0.8.1
@@ -1469,8 +1469,8 @@ packages:
     dependencies:
       '@jest/fake-timers': 29.6.2
       '@jest/types': 29.6.1
-      '@types/node': 20.5.0
-      jest-mock: 29.6.2
+      '@types/node': 20.5.1
+      jest-mock: 29.6.3
     dev: true
 
   /@jest/expect-utils@29.6.2:
@@ -1498,7 +1498,7 @@ packages:
       '@sinonjs/fake-timers': 10.3.0
       '@types/node': 20.5.1
       jest-message-util: 29.6.2
-      jest-mock: 29.6.2
+      jest-mock: 29.6.3
       jest-util: 29.6.2
     dev: true
 
@@ -1509,7 +1509,7 @@ packages:
       '@jest/environment': 29.6.2
       '@jest/expect': 29.6.2
       '@jest/types': 29.6.1
-      jest-mock: 29.6.2
+      jest-mock: 29.6.3
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1553,6 +1553,13 @@ packages:
 
   /@jest/schemas@29.6.0:
     resolution: {integrity: sha512-rxLjXyJBTL4LQeJW3aKo0M/+GkCOXsO+8i9Iu7eDb6KwtP65ayoDsitrdPBtujxQ88k4wI2FNYfa6TOGwSn6cQ==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@sinclair/typebox': 0.27.8
+    dev: true
+
+  /@jest/schemas@29.6.3:
+    resolution: {integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@sinclair/typebox': 0.27.8
@@ -1617,7 +1624,19 @@ packages:
       '@jest/schemas': 29.6.0
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
-      '@types/node': 20.5.0
+      '@types/node': 20.5.1
+      '@types/yargs': 17.0.24
+      chalk: 4.1.2
+    dev: true
+
+  /@jest/types@29.6.3:
+    resolution: {integrity: sha512-u3UPsIilWKOM3F9CXtrG8LEJmNxwoCQC/XVj4IKYXvvpx7QIi/Kg1LI5uDmDpKlac62NUtX7eLjRh+jVZcLOzw==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@jest/schemas': 29.6.3
+      '@types/istanbul-lib-coverage': 2.0.4
+      '@types/istanbul-reports': 3.0.1
+      '@types/node': 20.5.1
       '@types/yargs': 17.0.24
       chalk: 4.1.2
     dev: true
@@ -4420,7 +4439,7 @@ packages:
       '@jest/fake-timers': 29.6.2
       '@jest/types': 29.6.1
       '@types/node': 20.5.1
-      jest-mock: 29.6.2
+      jest-mock: 29.6.3
       jest-util: 29.6.2
     dev: true
 
@@ -4486,8 +4505,17 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': 29.6.1
-      '@types/node': 20.5.0
+      '@types/node': 20.5.1
       jest-util: 29.6.2
+    dev: true
+
+  /jest-mock@29.6.3:
+    resolution: {integrity: sha512-Z7Gs/mOyTSR4yPsaZ72a/MtuK6RnC3JYqWONe48oLaoEcYwEDxqvbXz85G4SJrm2Z5Ar9zp6MiHF4AlFlRM4Pg==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@jest/types': 29.6.3
+      '@types/node': 20.5.1
+      jest-util: 29.6.3
     dev: true
 
   /jest-pnp-resolver@1.2.3(jest-resolve@29.6.2):
@@ -4580,7 +4608,7 @@ packages:
       graceful-fs: 4.2.11
       jest-haste-map: 29.6.2
       jest-message-util: 29.6.2
-      jest-mock: 29.6.2
+      jest-mock: 29.6.3
       jest-regex-util: 29.4.3
       jest-resolve: 29.6.2
       jest-snapshot: 29.6.2
@@ -4624,6 +4652,18 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/types': 29.6.1
+      '@types/node': 20.5.1
+      chalk: 4.1.2
+      ci-info: 3.8.0
+      graceful-fs: 4.2.11
+      picomatch: 2.3.1
+    dev: true
+
+  /jest-util@29.6.3:
+    resolution: {integrity: sha512-QUjna/xSy4B32fzcKTSz1w7YYzgiHrjjJjevdRf61HYk998R5vVMMNmrHESYZVDS5DSWs+1srPLPKxXPkeSDOA==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@jest/types': 29.6.3
       '@types/node': 20.5.1
       chalk: 4.1.2
       ci-info: 3.8.0
