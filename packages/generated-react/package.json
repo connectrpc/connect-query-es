@@ -25,14 +25,14 @@
   },
   "dependencies": {
     "@bufbuild/buf": "1.26.1",
-    "@connectrpc/connect": "^0.13.1",
+    "@bufbuild/protobuf": "^1.3.1",
+    "@bufbuild/protoc-gen-es": "^1.3.1",
+    "@connectrpc/connect": "^0.13.2",
     "@connectrpc/connect-query": "workspace:*",
-    "@bufbuild/protobuf": "^1.3.0",
-    "@connectrpc/protoc-gen-connect-es": "^0.13.1",
+    "@connectrpc/protoc-gen-connect-es": "^0.13.2",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@connectrpc/protoc-gen-connect-query-react": "workspace:*",
-    "@bufbuild/protoc-gen-es": "^1.3.0",
-    "@tanstack/react-query": "^4.32.6"
+    "@tanstack/react-query": "^4.33.0"
   },
   "preferUnplugged": true
 }
