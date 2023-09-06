@@ -36,9 +36,9 @@ const generateServiceFile =
   (schema: Schema, protoFile: DescFile, extension: 'js' | 'ts') =>
   (service: DescService) => {
 
-      const f = schema.generateFile(
-          `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
-      );
+    const f = schema.generateFile(
+        `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
+    );
     f.preamble(protoFile);
 
     const importHookFrom = getImportHookFromOption(schema);
