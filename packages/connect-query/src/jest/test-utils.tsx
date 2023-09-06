@@ -24,7 +24,11 @@ import {
   PaginatedService,
 } from 'generated-react/dist/eliza_connect';
 import type { CountRequest, SayRequest } from 'generated-react/dist/eliza_pb';
-import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
+import {
+  CountResponse,
+  IntroduceResponse,
+  SayResponse,
+} from 'generated-react/dist/eliza_pb';
 import type { JSXElementConstructor, PropsWithChildren } from 'react';
 
 import { TransportProvider } from '../use-transport';
@@ -113,9 +117,26 @@ export const mockEliza = (override?: PartialMessage<SayRequest>) =>
     service(ElizaService, {
       say: (input: SayRequest) =>
         new SayResponse(override ?? { sentence: `Hello ${input.sentence}` }),
+      async *introduce() {
+        yield new IntroduceResponse({ sentence: 'Hello' });
+        await sleep(100);
+        yield new IntroduceResponse({ sentence: 'World' });
+      },
     });
   });
 
+/**
+ * A transport that merely errors on say
+ */
+export const mockElizaIntroduceError = () =>
+  createRouterTransport(({ service }) => {
+    service(ElizaService, {
+      // eslint-disable-next-line @typescript-eslint/require-await, require-yield -- This is an error
+      async *introduce() {
+        throw new Error(`Generic error`);
+      },
+    });
+  });
 /**
  * a stateless mock for BigIntService
  */
@@ -157,6 +178,19 @@ export const mockPaginatedTransport = () =>
           ],
         };
         return result;
+      },
+      streamingList: async function* (request) {
+        const base = (request.page - 1n) * 3n;
+        const result = {
+          page: request.page,
+          items: [`${base + 1n} Item`, `${base + 2n} Item`],
+        };
+        yield result;
+        await sleep(100);
+        yield {
+          page: request.page,
+          items: [`${base + 3n} Item`],
+        };
       },
     });
   });

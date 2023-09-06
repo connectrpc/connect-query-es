@@ -16,6 +16,7 @@ import type {
   Message,
   MessageType,
   MethodInfo,
+  MethodInfoServerStreaming,
   MethodInfoUnary,
   PartialMessage,
 } from '@bufbuild/protobuf';
@@ -67,6 +68,17 @@ export const isAbortController = (input: unknown): input is AbortController => {
 export const isUnaryMethod = <I extends Message<I>, O extends Message<O>>(
   methodInfo: MethodInfo<I, O>,
 ): methodInfo is MethodInfoUnary<I, O> => methodInfo.kind === MethodKind.Unary;
+
+/**
+ * Type guards that the given method is a server streaming method
+ */
+export const isServerStreamingMethod = <
+  I extends Message<I>,
+  O extends Message<O>,
+>(
+  methodInfo: MethodInfo<I, O>,
+): methodInfo is MethodInfoServerStreaming<I, O> =>
+  methodInfo.kind === MethodKind.ServerStreaming;
 
 /**
  * Creates (but does not throw) an error to assert that a provided case is unreachable.

@@ -32,3 +32,8 @@ export type { UnaryHooks } from './unary-hooks';
 export { unaryHooks } from './unary-hooks';
 export { disableQuery } from './utils';
 export { useTransport, TransportProvider } from './use-transport';
+export type {
+  ServerStreamingHooks,
+  StreamResponseMessage,
+} from './server-streaming-hooks';
+export { serverStreamingHooks } from './server-streaming-hooks';

@@ -45,7 +45,7 @@ const generateServiceFile =
     const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
       schema.runtime;
     service.methods
-      .filter((method) => method.methodKind === MethodKind.Unary)
+      .filter((method) => method.methodKind === MethodKind.Unary || method.methodKind === MethodKind.ServerStreaming)
       .forEach((method, index, filteredMethods) => {
         f.print(makeJsDoc(method));
         f.print(

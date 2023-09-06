@@ -15,12 +15,17 @@
 import type {
   Message,
   MethodInfo,
+  MethodInfoServerStreaming,
   MethodInfoUnary,
   ServiceType,
 } from '@bufbuild/protobuf';
 import { MethodKind } from '@bufbuild/protobuf';
 import type { Transport } from '@connectrpc/connect';
 
+import {
+  type ServerStreamingHooks,
+  serverStreamingHooks,
+} from './server-streaming-hooks';
 import type { UnaryHooks } from './unary-hooks';
 import { unaryHooks } from './unary-hooks';
 import { unreachableCase } from './utils';
@@ -28,12 +33,17 @@ import { unreachableCase } from './utils';
 /**
  * This is an array of supported `MethodKind`s
  */
-export const supportedMethodKinds = [MethodKind.Unary];
+export const supportedMethodKinds = [
+  MethodKind.Unary,
+  MethodKind.ServerStreaming,
+];
 
 /**
  * This is a convenience type that returns the `MethodKind`s that are supported by Connect-Query
  */
-export type SupportedMethodKinds = MethodKind.Unary;
+export type SupportedMethodKinds =
+  | MethodKind.ServerStreaming
+  | MethodKind.Unary;
 
 /**
  * This predicate returns true if the service is a kind that's supported by Connect-Query.
@@ -49,10 +59,9 @@ export const isSupportedMethod = <I extends Message<I>, O extends Message<O>>(
 /**
  * A Convenience TypeScript type that validates that a given MethodInfo is supported
  */
-export type IsSupportedMethod<
-  I extends Message<I>,
-  O extends Message<O>,
-> = MethodInfoUnary<I, O>;
+export type IsSupportedMethod<I extends Message<I>, O extends Message<O>> =
+  | MethodInfoServerStreaming<I, O>
+  | MethodInfoUnary<I, O>;
 
 /** This explicitly states the `MethodKind`s that are supported by Connect-Query and provides a means to convert those kinds into the Hooks types (e.g. UnaryHooks) */
 export interface SupportedMethodInfo<MI extends MethodInfo> {
@@ -62,6 +71,13 @@ export interface SupportedMethodInfo<MI extends MethodInfo> {
   /** this is a mapping from a unary method kind to the hooks a unary method supports */
   [MethodKind.Unary]: MI extends MethodInfoUnary<infer I, infer O>
     ? UnaryHooks<I, O>
+    : never;
+  /** this is a mapping from a serverstreamin method kind to the hooks a server streaming method supports */
+  [MethodKind.ServerStreaming]: MI extends MethodInfoServerStreaming<
+    infer I,
+    infer O
+  >
+    ? ServerStreamingHooks<I, O>
     : never;
 }
 
@@ -123,7 +139,14 @@ export const createQueryHooks = <Service extends ServiceType>({
 
         case MethodKind.ServerStreaming:
           // not implemented
-          return accumulator;
+          return {
+            ...accumulator,
+            [localName]: serverStreamingHooks({
+              methodInfo,
+              typeName,
+              transport,
+            }),
+          };
 
         default:
           console.error(

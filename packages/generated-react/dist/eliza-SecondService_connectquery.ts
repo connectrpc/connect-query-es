@@ -19,7 +19,7 @@
 
 import { createQueryService } from "@connectrpc/connect-query";
 import { MethodKind } from "@bufbuild/protobuf";
-import { SayRequest, SayResponse } from "./eliza_pb.js";
+import { IntroduceRequest, IntroduceResponse, SayRequest, SayResponse } from "./eliza_pb.js";
 
 export const typeName = "connectrpc.eliza.v1.SecondService";
 
@@ -41,3 +41,23 @@ export const say = createQueryService({
     typeName: "connectrpc.eliza.v1.SecondService",
   },
 }).say;
+
+/**
+ * Introduce is a server streaming RPC. Given the caller's name, Eliza
+ * returns a stream of sentences to introduce itself.
+ *
+ * @generated from rpc connectrpc.eliza.v1.SecondService.Introduce
+ */
+export const introduce = createQueryService({
+  service: {
+    methods: {
+      introduce: {
+        name: "Introduce",
+        kind: MethodKind.ServerStreaming,
+        I: IntroduceRequest,
+        O: IntroduceResponse,
+      },
+    },
+    typeName: "connectrpc.eliza.v1.SecondService",
+  },
+}).introduce;

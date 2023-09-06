@@ -20,10 +20,10 @@ import { ElizaService } from 'generated-react/dist/eliza_connect';
 import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
 
 import type { ConnectQueryKey } from './connect-query-key';
+import { isSupportedMethod } from './create-query-hooks';
 import { createQueryService } from './create-query-service';
 import type { Equal, Expect } from './jest/test-utils';
 import { mockEliza, wrapper } from './jest/test-utils';
-import { isUnaryMethod } from './utils';
 
 describe('createQueryService', () => {
   const service = ElizaService;
@@ -48,12 +48,12 @@ describe('createQueryService', () => {
   it('contains the right options', () => {
     const hook = createQueryService({ service });
 
-    const unaryMethods = Object.keys(service.methods).filter((key) =>
-      isUnaryMethod(
+    const supportedMethods = Object.keys(service.methods).filter((key) =>
+      isSupportedMethod(
         service.methods[key as keyof typeof service.methods] as MethodInfo,
       ),
     );
-    expect(Object.keys(hook)).toHaveLength(unaryMethods.length);
+    expect(Object.keys(hook)).toHaveLength(supportedMethods.length);
 
     expect(hook).toHaveProperty(
       methodName,

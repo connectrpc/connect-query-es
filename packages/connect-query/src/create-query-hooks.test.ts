@@ -35,7 +35,7 @@ describe('isSupportedMethod', () => {
     kind,
   });
 
-  it('allows Unary methods', () => {
+  it('allows Unary or ServerStreaming methods', () => {
     const method = patch(MethodKind.Unary);
     const isSupported = isSupportedMethod(method);
     expect(isSupported).toBeTruthy();
@@ -46,20 +46,21 @@ describe('isSupportedMethod', () => {
       return; // returning is necessary for TypeScript inference below
     }
 
-    type ExpectType_Kind = Expect<Equal<typeof method.kind, MethodKind.Unary>>;
+    type ExpectType_Kind = Expect<
+      Equal<typeof method.kind, MethodKind.ServerStreaming | MethodKind.Unary>
+    >;
   });
 
   it('rejects all other methods', () => {
     expect(isSupportedMethod(patch(MethodKind.BiDiStreaming))).toBeFalsy();
     expect(isSupportedMethod(patch(MethodKind.ClientStreaming))).toBeFalsy();
-    expect(isSupportedMethod(patch(MethodKind.ServerStreaming))).toBeFalsy();
   });
 });
 
 describe('createQueryHooks', () => {
   const service = ElizaService;
 
-  it('creates hooks for unary methods', () => {
+  it('creates hooks for unary or serverStreaming methods', () => {
     const hooks = createQueryHooks({
       service: {
         ...service,
@@ -77,9 +78,9 @@ describe('createQueryHooks', () => {
     >;
 
     type ExpectType_HooksKeys = Expect<
-      Equal<[keyof typeof hooks], ['say' | 'sayAgain']>
+      Equal<[keyof typeof hooks], ['introduce' | 'say' | 'sayAgain']>
     >;
-    expect(Object.keys(hooks)).toStrictEqual(['say', 'sayAgain']);
+    expect(Object.keys(hooks)).toStrictEqual(['say', 'sayAgain', 'introduce']);
 
     type ExpectType_Converse = ExpectFalse<
       Alike<keyof typeof hooks, 'converse'>
@@ -130,7 +131,7 @@ describe('createQueryHooks', () => {
 
     const hooks = createQueryHooks({ service: customService });
 
-    expect(Object.keys(hooks)).toStrictEqual(['Unary']);
+    expect(Object.keys(hooks)).toStrictEqual(['ServerStreaming', 'Unary']);
   });
 
   it('skips unrecognized or missing method kinds', () => {

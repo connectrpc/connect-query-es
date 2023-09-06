@@ -49,6 +49,21 @@ const generateServiceFile =
             );
           }
           break;
+        case MethodKind.ServerStreaming:
+          {
+            f.print(
+              `export const `,
+              safeIdentifier(localName(method)),
+              `: `,
+              f.import('SeverStreamingHooks', '@connectrpc/connect-query'),
+              `<`,
+              method.input,
+              `, `,
+              method.output,
+              `>;`,
+            );
+          }
+          break;
 
         default:
           return;

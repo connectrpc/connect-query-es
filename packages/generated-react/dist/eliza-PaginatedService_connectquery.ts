@@ -39,3 +39,20 @@ export const list = createQueryService({
     typeName: "connectrpc.eliza.v1.PaginatedService",
   },
 }).list;
+
+/**
+ * @generated from rpc connectrpc.eliza.v1.PaginatedService.StreamingList
+ */
+export const streamingList = createQueryService({
+  service: {
+    methods: {
+      streamingList: {
+        name: "StreamingList",
+        kind: MethodKind.ServerStreaming,
+        I: ListRequest,
+        O: ListResponse,
+      },
+    },
+    typeName: "connectrpc.eliza.v1.PaginatedService",
+  },
+}).streamingList;

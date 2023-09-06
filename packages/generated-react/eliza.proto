@@ -114,4 +114,5 @@ message ListResponse {
 
 service PaginatedService {
   rpc List(ListRequest) returns (ListResponse);
+  rpc StreamingList(ListRequest) returns (stream ListResponse) {}
 }

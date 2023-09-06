@@ -20,7 +20,6 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "test": "jest",
     "build": "pnpm clean && tsc --project tsconfig.build.json"
   },
   "preferUnplugged": true,

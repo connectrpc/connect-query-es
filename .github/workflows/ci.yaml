@@ -48,3 +48,7 @@ jobs:
 
       - name: Test
         run: pnpm run test
+
+      - name: Check changed files
+        run: |
+          test -z "$$(git status --porcelain | tee /dev/stderr)"

@@ -199,6 +199,15 @@ export const PaginatedService = {
       O: ListResponse,
       kind: MethodKind.Unary,
     },
+    /**
+     * @generated from rpc connectrpc.eliza.v1.PaginatedService.StreamingList
+     */
+    streamingList: {
+      name: "StreamingList",
+      I: ListRequest,
+      O: ListResponse,
+      kind: MethodKind.ServerStreaming,
+    },
   }
 } as const;
 

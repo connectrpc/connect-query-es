@@ -22,6 +22,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import * as ReactDOM from 'react-dom/client';
 
 import { Example } from './example';
+import { StreamingExample } from './streaming-example';
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ export default function App({ transport }: { transport?: Transport }) {
     <TransportProvider transport={finalTransport}>
       <QueryClientProvider client={queryClient}>
         <Example />
+        <StreamingExample />
         <ReactQueryDevtools initialIsOpen />
       </QueryClientProvider>
     </TransportProvider>
