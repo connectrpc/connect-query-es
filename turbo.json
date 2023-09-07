@@ -15,9 +15,8 @@
       "dependsOn": ["generate"],
       "cache": false
     },
-    "format": {},
-    "lint": {
-      "dependsOn": ["format", "^build"]
+    "//#format:all": {
+      "dependsOn": ["^generate"]
     }
   }
 }
