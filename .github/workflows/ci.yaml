@@ -51,4 +51,5 @@ jobs:
 
       - name: Check changed files
         run: |
+          git status --porcelain
           test -z "$$(git status --porcelain | tee /dev/stderr)"
