@@ -24,7 +24,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@connectrpc/connect": "0.13.1",
+    "@connectrpc/connect": "0.13.2",
     "@testing-library/react": "^14.0.0",
     "@testing-library/jest-dom": "^6.1.2",
     "@types/react": "^18.2.20",
