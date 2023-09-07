@@ -50,6 +50,11 @@ jobs:
         run: pnpm run test
 
       - name: Check changed files
+        id: check_changed_files
         run: |
           git status --porcelain
           test -z "$$(git status --porcelain | tee /dev/stderr)"
+
+      - name: Report errors
+        if: steps.check_changed_files.conclusion == 'failure'
+        run: echo "::error::Formatting errors found. Please run 'pnpm run format' and commit the changes."
