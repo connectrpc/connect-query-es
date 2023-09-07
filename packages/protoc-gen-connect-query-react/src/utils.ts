@@ -26,7 +26,7 @@ export type PluginInit = Required<Parameters<typeof createEcmaScriptPlugin>[0]>;
  */
 export function reactHookName(
   method: DescMethod,
-  kind: "InfiniteQuery" | "Mutation" | "Query",
+  kind: "InfiniteQuery" | "InvalidateQueries" | "Mutation" | "Query",
 ) {
   const protoRpcName = method.proto.name ?? /* istanbul ignore next */ "";
   // By convention, RPC names start with uppercase, but for good measure, we make sure

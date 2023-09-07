@@ -67,6 +67,14 @@ const generateServiceFile =
     f.print("} as const;");
     f.print();
 
+    f.print(
+      `const queryService = `,
+      f.import('createQueryService', '@connectrpc/connect-query'),
+      `({`,
+    );
+    f.print(`  service: `, localName(service), `,`);
+    f.print(`})`);
+
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
@@ -80,12 +88,7 @@ const generateServiceFile =
 
         // createQueryService
         f.print(
-          `export const ${serviceName} = `,
-          f.import('createQueryService', '@connectrpc/connect-query'),
-          `({`,
-        );
-        f.print(`  service: `, localName(service), `,`);
-        f.print(`}).${localName(method)};`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
+          `export const ${serviceName} = queryService.${localName(method)};`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
         f.print(``);
 
 
@@ -97,11 +100,11 @@ const generateServiceFile =
         );
 
         f.print(`export const `, reactHookName(method, 'Query'), ' = (');
-        f.print(`    inputs: Parameters<typeof `,serviceName, `.useQuery>[0],`);
+        f.print(`    input?: Parameters<typeof `,serviceName, `.useQuery>[0],`);
         f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1],`,);
         f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, serviceName, `.useQuery(inputs, options);`);
+        f.print(`    const baseOptions = `, serviceName, `.useQuery(input, options);`);
         f.print(``);
         f.print(`    return `, useQuery, `({`);
         f.print(`        ...baseOptions,`);
@@ -137,17 +140,34 @@ const generateServiceFile =
           importHookFrom,
         );
         f.print(`export const `, reactHookName(method, 'InfiniteQuery'), ' = (');
-        f.print(`    inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
+        f.print(`    input: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
         f.print(`    options: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1],`);
         f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, serviceName, `.useInfiniteQuery(inputs, options);`);
+        f.print(`    const baseOptions = `, serviceName, `.useInfiniteQuery(input, options);`);
         f.print(``);
-        f.print(`    return `, useInfiniteQuery, `<`, method.output, `, `, connectError, `, `, method.output, `, keyof typeof inputs extends never ? any : `, connectQueryKey, `<`, method.input, `>>({`);
+        f.print(`    return `, useInfiniteQuery, `<`, method.output, `, `, connectError, `, `, method.output, `, keyof typeof input extends never ? any : `, connectQueryKey, `<`, method.input, `>>({`);
         f.print(`        ...baseOptions,`);
         f.print(`        ...queryOptions,`);
         f.print(`    });`);
         f.print(`};`);
+        f.print(``);
+
+        // invalidateQueries
+        const useQueryClient = f.import('useQueryClient', importHookFrom);
+        const queryClient = f.import('QueryClient', importHookFrom);
+        f.print(`export function `, reactHookName(method, 'InvalidateQueries'), '() {');
+        f.print(`    const queryClient = `, useQueryClient, `();`);
+        f.print(``);
+        f.print(`    return (`);
+        f.print(`      input?: Parameters<typeof `, serviceName, `.getQueryKey>[0],`);
+        f.print(`      filters?: Parameters<`, queryClient ,`["invalidateQueries"]>[1],`);
+        f.print(`      options?: Parameters<`, queryClient ,`["invalidateQueries"]>[2]`);
+        f.print(`    ) => {`);
+        f.print(``);
+        f.print(`      return queryClient.invalidateQueries(`, serviceName, `.getQueryKey(input), filters, options);`);
+        f.print(`    };`);
+        f.print(`}`);
 
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {

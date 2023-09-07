@@ -17,7 +17,7 @@ import "@testing-library/jest-dom";
 import { createRouterTransport } from "@connectrpc/connect";
 import { render, screen } from "@testing-library/react";
 
-import { ElizaService } from "./gen/eliza-ElizaService_connectquery";
+import { ElizaService } from "./gen/eliza-ElizaService_connectquery_react";
 import Main from "./main";
 
 describe("Application", () => {

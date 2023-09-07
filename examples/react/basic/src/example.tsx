@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import type { FC } from "react";
 
 import { Data, Datum } from "./datum";
-import { say } from "./gen/eliza-ElizaService_connectquery";
+import {
+  useSayInvalidateQueries,
+  useSayQuery,
+} from "./gen/eliza-ElizaService_connectquery_react";
 import { Indicator, Indicators } from "./indicator";
 import { Page } from "./page";
 
@@ -31,9 +34,10 @@ export const Example: FC = () => {
     //^? const error: ConnectError | null
     data,
     //^? const data: SayResponse | undefined
-  } = useQuery(say.useQuery({}));
+  } = useSayQuery({});
   //           ^? const say: UnaryHooks<SayRequest, SayResponse>
-
+  const invalidate = useSayInvalidateQueries();
+  const queryClient = useQueryClient();
   return (
     <Page>
       Status: {status}
@@ -51,6 +55,19 @@ export const Example: FC = () => {
         <Datum label="data" datum={JSON.stringify(data)} />
         <Datum label="error" datum={JSON.stringify(error)} />
       </Data>
+      <button
+        onClick={() => {
+          void invalidate(
+            {},
+            {
+              exact: true,
+            },
+          );
+          void queryClient.invalidateQueries();
+        }}
+      >
+        Invalidate
+      </button>
     </Page>
   );
 };

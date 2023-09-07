@@ -94,7 +94,7 @@ const generateServiceFile =
             );
 
             f.print(`export declare const `, reactHookName(method, 'Query'), ': (');
-            f.print(`    inputs: Parameters<typeof `,serviceName, `.useQuery>[0],`);
+            f.print(`    input: Parameters<typeof `,serviceName, `.useQuery>[0],`);
             f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1],`,);
             f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
 
@@ -128,7 +128,7 @@ const generateServiceFile =
             );
 
             f.print(`export declare const `, reactHookName(method, 'InfiniteQuery'), ': (');
-            f.print(`    inputs: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
+            f.print(`    input: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
             f.print(`    options: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1],`);
             f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
             f.print(`) => `, useInfiniteQueryResult, `<`, method.output, `,`, connectError, `>;`);

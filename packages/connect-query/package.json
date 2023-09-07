@@ -24,8 +24,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "clean": "rm -rf dist",
-    "generate": "buf generate --path eliza.proto",
+    "clean": "rm -rf dist src/gen",
+    "generate": "pnpm run clean && buf generate --path eliza.proto",
     "test": "jest",
     "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header"
   },

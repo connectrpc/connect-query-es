@@ -32,7 +32,7 @@ describe("makeQueryKey", () => {
     ]);
   });
 
-  it("allows empty inputs", () => {
+  it("allows empty", () => {
     const key = queryKey();
     expect(key).toStrictEqual([
       "service.typeName",
