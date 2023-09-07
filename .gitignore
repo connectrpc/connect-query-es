@@ -2,3 +2,7 @@ node_modules
 /packages/*/dist
 /packages/*/coverage
 *.tsbuildinfo
+.turbo
+
+!/packages/generated-react/dist
+/packages/generated-react/dist/descriptorset.bin

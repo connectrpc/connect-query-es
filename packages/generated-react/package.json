@@ -20,19 +20,18 @@
     "clean": "rm -rf dist",
     "generate": "pnpm run clean && pnpm run generate:code && pnpm run generate:descriptorset",
     "generate:code": "pnpm buf generate --path eliza.proto --path example.proto",
-    "generate:descriptorset": "pnpm buf build --path eliza.proto --path example.proto --output dist/descriptorset.bin",
-    "license-header": "license-header"
+    "generate:descriptorset": "pnpm buf build --path eliza.proto --path example.proto --output dist/descriptorset.bin"
   },
   "dependencies": {
     "@bufbuild/buf": "1.26.1",
-    "@connectrpc/connect": "^0.13.1",
-    "@connectrpc/connect-query": "workspace:*",
-    "@bufbuild/protobuf": "^1.3.0",
     "@connectrpc/protoc-gen-connect-es": "^0.13.1",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
-    "@connectrpc/protoc-gen-connect-query-react": "workspace:*",
-    "@bufbuild/protoc-gen-es": "^1.3.0",
-    "@tanstack/react-query": "^4.32.6"
+    "@connectrpc/protoc-gen-connect-query-react": "workspace:*"
+  },
+  "peerDependencies": {
+    "@connectrpc/connect-query": "*",
+    "@bufbuild/protobuf": "*",
+    "@connectrpc/connect": "*"
   },
   "preferUnplugged": true
 }
