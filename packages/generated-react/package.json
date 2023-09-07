@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@bufbuild/buf": "1.26.1",
-    "@connectrpc/protoc-gen-connect-es": "^0.13.1",
+    "@connectrpc/protoc-gen-connect-es": "^0.13.2",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@connectrpc/protoc-gen-connect-query-react": "workspace:*"
   },
