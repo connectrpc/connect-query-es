@@ -237,4 +237,4 @@ This option allows you to specify the import path for the `useQuery` hook. By de
 
 ## Example Generated Code
 
-See [`example.proto`](https://github.com/connectrpc/connect-query-es/blob/main/packages/generated-react/example.proto) and [`eliza.proto`](https://github.com/connectrpc/connect-query-es/blob/main/packages/generated-react/eliza.proto) for example inputs, and look [here](https://github.com/connectrpc/connect-query-es/blob/main/packages/generated-react/dist) to see the outputs those files generate.
+See [`eliza.proto`](../../examples/react/basic/eliza.proto) for example inputs, and look [here](../../examples/react/basic/src/gen) to see the outputs those files generate.e outputs those files generate.
