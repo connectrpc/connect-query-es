@@ -8,7 +8,7 @@ plugins:
     opt:
       - target=ts
 
-  - name: connect-web
+  - name: connect-es
     path: ./node_modules/.bin/protoc-gen-connect-es
     out: src/gen
     opt:
