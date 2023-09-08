@@ -44,7 +44,16 @@ jobs:
         run: pnpm run generate
 
       - name: Lint
-        run: pnpm run lint
+        run: pnpm run format
 
       - name: Test
         run: pnpm run test
+
+      - name: Check changed files
+        id: check_changed_files
+        run: |
+          git diff --name-only --exit-code
+
+      - name: Report errors
+        if: steps.check_changed_files.conclusion == 'failure'
+        run: echo "::error::Formatting errors found. Please run 'pnpm run format' and commit the changes."

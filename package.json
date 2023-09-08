@@ -3,18 +3,16 @@
   "name": "root",
   "repository": "git@github.com:connectrpc/connect-query-es.git",
   "scripts": {
-    "build": "pnpm --recursive build",
-    "generate": "pnpm --recursive generate",
-    "test": "pnpm --recursive test",
-    "lint": "pnpm run lint:code && pnpm run lint:markdown && pnpm run lint:spelling",
-    "lint:fix": "pnpm run lint:code:fix && pnpm run lint:markdown:fix && pnpm run lint:spelling",
-    "lint:markdown": "markdownlint-cli2 \"**/*.md\" \"#**/node_modules\"",
-    "lint:markdown:fix": "markdownlint-cli2-fix \"**/*.md\" \"#**/node_modules\"",
-    "lint:spelling": "cspell \"**\" --gitignore",
-    "lint:code": "eslint . && prettier . --check && license-header --check",
-    "lint:code:fix": "eslint . --fix && prettier . --write && license-header",
-    "all": "pnpm run build && pnpm run generate && pnpm run lint:fix && pnpm run test",
-    "update-all": "pnpm upgrade --recursive --latest"
+    "build": "turbo run build",
+    "generate": "turbo run generate",
+    "test": "turbo run test",
+    "format": "turbo run format:all",
+    "format:all": "pnpm run format:code && pnpm run format:markdown && pnpm run check:spelling",
+    "format:markdown": "markdownlint-cli2-fix \"**/*.md\" \"#**/node_modules\"",
+    "check:spelling": "cspell \"**\" --gitignore",
+    "format:code": "eslint . --fix && prettier . --write && license-header",
+    "all": "turbo run build generate format:all test",
+    "update-all": "pnpm update --recursive --latest"
   },
   "license": "Apache-2.0",
   "licenseHeader": {
@@ -46,6 +44,7 @@
     "prettier": "3.0.3",
     "ts-jest": "29.1.1",
     "ts-node": "10.9.1",
+    "turbo": "^1.10.13",
     "typescript": "5.2.2"
   },
   "engineStrict": true,

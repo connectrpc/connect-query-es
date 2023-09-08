@@ -20,14 +20,12 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "test": "jest",
     "build": "pnpm clean && tsc --project tsconfig.build.json"
   },
   "preferUnplugged": true,
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^1.3.1",
     "@connectrpc/protoc-gen-connect-es": "^0.13.2",
-    "generated-react": "workspace:*",
     "typescript": "^5.2.2"
   },
   "dependencies": {
