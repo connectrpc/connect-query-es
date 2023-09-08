@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DescMethod } from '@bufbuild/protobuf';
-import { codegenInfo } from '@bufbuild/protobuf';
-import type { createEcmaScriptPlugin, Schema } from '@bufbuild/protoplugin';
+import type { DescMethod } from "@bufbuild/protobuf";
+import { codegenInfo } from "@bufbuild/protobuf";
+import type { createEcmaScriptPlugin, Schema } from "@bufbuild/protoplugin";
 
 /**
  * Extracts the type of PluginInit from @bufbuild/protoplugin
@@ -26,9 +26,9 @@ export type PluginInit = Required<Parameters<typeof createEcmaScriptPlugin>[0]>;
  */
 export function reactHookName(
   method: DescMethod,
-  kind: 'InfiniteQuery' | 'Mutation' | 'Query',
+  kind: "InfiniteQuery" | "Mutation" | "Query",
 ) {
-  const protoRpcName = method.proto.name ?? /* istanbul ignore next */ '';
+  const protoRpcName = method.proto.name ?? /* istanbul ignore next */ "";
   // By convention, RPC names start with uppercase, but for good measure, we make sure
   const rpcNameUpperCase =
     protoRpcName.charAt(0).toUpperCase() + protoRpcName.slice(1);
@@ -42,14 +42,14 @@ export function reactHookName(
  */
 export function getImportHookFromOption(schema: Schema): string {
   const parameter = schema.proto.parameter
-    ?.split(',')
+    ?.split(",")
     .reduce<Record<string, string>>((acc, curr) => {
-      const [key, value] = curr.split('=');
+      const [key, value] = curr.split("=");
       acc = Object.assign(acc, { [key]: value });
       return acc;
     }, {});
-  if (parameter && 'import-hook-from' in parameter) {
-    return parameter['import-hook-from'];
+  if (parameter && "import-hook-from" in parameter) {
+    return parameter["import-hook-from"];
   }
-  return '@tanstack/react-query';
+  return "@tanstack/react-query";
 }

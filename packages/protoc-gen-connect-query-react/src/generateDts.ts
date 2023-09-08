@@ -12,13 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DescFile, DescService } from '@bufbuild/protobuf';
-import { codegenInfo, MethodKind } from '@bufbuild/protobuf';
-import type { Schema } from '@bufbuild/protoplugin';
-import { localName } from '@bufbuild/protoplugin/ecmascript';
+import type { DescFile, DescService } from "@bufbuild/protobuf";
+import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
+import type { Schema } from "@bufbuild/protoplugin";
+import {
+  literalString,
+  localName,
+  makeJsDoc,
+} from "@bufbuild/protoplugin/ecmascript";
 
-import type { PluginInit } from './utils';
-import { getImportHookFromOption, reactHookName } from './utils';
+import type { PluginInit } from "./utils";
+import { getImportHookFromOption, reactHookName } from "./utils";
 
 const { safeIdentifier } = codegenInfo;
 
@@ -28,11 +32,33 @@ const { safeIdentifier } = codegenInfo;
  */
 const generateServiceFile =
   (schema: Schema, protoFile: DescFile) => (service: DescService) => {
+    const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } = schema.runtime;
 
     const f = schema.generateFile(
         `${protoFile.name}-${localName(service)}_connectquery_react.d.ts`,
     );
     f.preamble(protoFile);
+
+    f.print(makeJsDoc(service));
+    f.print("export declare const ", localName(service), ": {");
+    f.print(`  readonly typeName: `, literalString(service.typeName), `,`);
+    f.print("  readonly methods: {");
+    for (const method of service.methods) {
+      f.print(makeJsDoc(method, "    "));
+      f.print("    readonly ", localName(method), ": {");
+      f.print(`      readonly name: `, literalString(method.name), `,`);
+      f.print("      readonly I: typeof ", method.input, ",");
+      f.print("      readonly O: typeof ", method.output, ",");
+      f.print("      readonly kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
+      if (method.idempotency !== undefined) {
+        f.print("      readonly idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
+      }
+      // In case we start supporting options, we have to surface them here
+      f.print("    },");
+    }
+    f.print("  }");
+    f.print("};");
+    f.print();
 
     const importHookFrom = getImportHookFromOption(schema);
 
@@ -119,7 +145,7 @@ const generateServiceFile =
 /**
  * This function generates the TypeScript Definition output files
  */
-export const generateDts: PluginInit['generateDts'] = (schema) => {
+export const generateDts: PluginInit["generateDts"] = (schema) => {
   schema.files.forEach((protoFile) => {
     protoFile.services.forEach(generateServiceFile(schema, protoFile));
   });

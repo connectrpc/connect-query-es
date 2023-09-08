@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { MethodInfo, PartialMessage } from '@bufbuild/protobuf';
-import { describe, expect, it } from '@jest/globals';
-import type { QueryFunctionContext } from '@tanstack/react-query';
-import { renderHook } from '@testing-library/react';
-import { ElizaService } from 'generated-react/dist/eliza_connect';
-import type { SayRequest, SayResponse } from 'generated-react/dist/eliza_pb';
+import type { MethodInfo, PartialMessage } from "@bufbuild/protobuf";
+import { describe, expect, it } from "@jest/globals";
+import type { QueryFunctionContext } from "@tanstack/react-query";
+import { renderHook } from "@testing-library/react";
 
-import type { ConnectQueryKey } from './connect-query-key';
-import { createQueryService } from './create-query-service';
-import type { Equal, Expect } from './jest/test-utils';
-import { mockEliza, wrapper } from './jest/test-utils';
-import { isUnaryMethod } from './utils';
+import type { ConnectQueryKey } from "./connect-query-key";
+import { createQueryService } from "./create-query-service";
+import { ElizaService } from "./gen/eliza_connect";
+import type { SayRequest, SayResponse } from "./gen/eliza_pb";
+import type { Equal, Expect } from "./jest/test-utils";
+import { mockEliza, wrapper } from "./jest/test-utils";
+import { isUnaryMethod } from "./utils";
 
-describe('createQueryService', () => {
+describe("createQueryService", () => {
   const service = ElizaService;
-  const methodName = 'say';
-  const input = { sentence: 'ziltoid' } satisfies PartialMessage<SayResponse>;
+  const methodName = "say";
+  const input = { sentence: "ziltoid" } satisfies PartialMessage<SayResponse>;
 
-  it('uses a custom transport', async () => {
+  it("uses a custom transport", async () => {
     const transport = mockEliza();
     const { result } = renderHook(async () => {
       const { queryFn } = createQueryService({
@@ -45,7 +45,7 @@ describe('createQueryService', () => {
     expect(response.sentence).toEqual(`Hello ${input.sentence}`);
   });
 
-  it('contains the right options', () => {
+  it("contains the right options", () => {
     const hook = createQueryService({ service });
 
     const unaryMethods = Object.keys(service.methods).filter((key) =>
@@ -64,8 +64,8 @@ describe('createQueryService', () => {
     );
   });
 
-  describe('useQuery', () => {
-    it('has the appropriate properties', () => {
+  describe("useQuery", () => {
+    it("has the appropriate properties", () => {
       const {
         result: { current: queryOptions },
       } = renderHook(
@@ -76,12 +76,12 @@ describe('createQueryService', () => {
       type ExpectType_Enabled = Expect<
         Equal<typeof queryOptions.enabled, boolean>
       >;
-      expect(queryOptions).toHaveProperty('enabled', true);
+      expect(queryOptions).toHaveProperty("enabled", true);
 
       type ExpectType_QueryKey = Expect<
         Equal<typeof queryOptions.queryKey, ConnectQueryKey<SayRequest>>
       >;
-      expect(queryOptions).toHaveProperty('queryKey', [
+      expect(queryOptions).toHaveProperty("queryKey", [
         service.typeName,
         service.methods[methodName].name,
         input,
@@ -97,7 +97,7 @@ describe('createQueryService', () => {
           ) => Promise<SayResponse>
         >
       >;
-      expect(queryOptions).toHaveProperty('queryFn', expect.any(Function));
+      expect(queryOptions).toHaveProperty("queryFn", expect.any(Function));
     });
   });
 });

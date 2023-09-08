@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Transport } from '@connectrpc/connect';
-import { ConnectError } from '@connectrpc/connect';
-import type { FC, PropsWithChildren } from 'react';
-import { createContext, useContext } from 'react';
+import type { Transport } from "@connectrpc/connect";
+import { ConnectError } from "@connectrpc/connect";
+import type { FC, PropsWithChildren } from "react";
+import { createContext, useContext } from "react";
 
 const fallbackTransportError = new ConnectError(
   "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",

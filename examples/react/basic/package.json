@@ -1,35 +1,35 @@
 {
   "name": "@connectrpc/connect-query-example-react-basic",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "clean": "rm -rf src/eliza",
+    "dev": "vite",
+    "generate": "buf generate --path eliza.proto",
+    "license-header": "license-header",
     "preview": "vite preview",
     "test": "jest",
-    "license-header": "license-header"
+    "format": "prettier . --write && eslint . --fix && license-header"
   },
   "dependencies": {
+    "@bufbuild/buf": "1.26.1",
     "@bufbuild/protobuf": "^1.3.1",
     "@bufbuild/protoc-gen-es": "^1.3.1",
+    "@connectrpc/connect": "0.13.2",
     "@connectrpc/connect-query": "workspace:*",
     "@connectrpc/connect-web": "^0.13.2",
     "@connectrpc/protoc-gen-connect-es": "^0.13.2",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@tanstack/react-query": "^4.33.0",
     "@tanstack/react-query-devtools": "^4.33.0",
-    "generated-react": "workspace:^0.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@connectrpc/connect": "0.13.2",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9"
   }

@@ -15,8 +15,8 @@
 export const borderRadius = 6;
 export const margin = 6;
 export const padding = 6;
-export const boxShadow = '0px 1px 2px rgba(15, 16, 77, 0.05)';
-export const border = '1px solid #E4E9EF';
+export const boxShadow = "0px 1px 2px rgba(15, 16, 77, 0.05)";
+export const border = "1px solid #E4E9EF";
 
-export const lightBlue = '#C4E8FC';
-export const white = '#FFFFFF';
+export const lightBlue = "#C4E8FC";
+export const white = "#FFFFFF";

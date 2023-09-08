@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Config } from 'jest';
+import type { Config } from "jest";
 
 const config: Config = {
-  preset: '../../jest-preset.js',
-  testEnvironment: '@bufbuild/jest-environment-jsdom',
+  preset: "../../jest-preset.js",
+  testEnvironment: "@bufbuild/jest-environment-jsdom",
   moduleNameMapper: {
-    '(.+)\\.js': '$1', // https://connectrpc.com/docs/web/supported-browsers-and-frameworks/#jest
+    "(.+)\\.js": "$1", // https://connectrpc.com/docs/web/supported-browsers-and-frameworks/#jest
   },
-  testMatch: ['<rootDir>/**/*.test.ts?(x)'],
+  testMatch: ["<rootDir>/**/*.test.ts?(x)"],
 };
 
 export default config;

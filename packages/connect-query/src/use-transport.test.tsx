@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { ConnectError } from '@connectrpc/connect';
-import { describe, expect, it } from '@jest/globals';
-import { useQuery } from '@tanstack/react-query';
-import { renderHook } from '@testing-library/react';
-import { ElizaService } from 'generated-react/dist/eliza_connect';
-import { spyOn } from 'jest-mock';
+import { ConnectError } from "@connectrpc/connect";
+import { describe, expect, it } from "@jest/globals";
+import { useQuery } from "@tanstack/react-query";
+import { renderHook } from "@testing-library/react";
+import { spyOn } from "jest-mock";
 
-import { sleep, wrapper } from './jest/test-utils';
-import { unaryHooks } from './unary-hooks';
-import { fallbackTransport } from './use-transport';
+import { ElizaService } from "./gen/eliza_connect";
+import { sleep, wrapper } from "./jest/test-utils";
+import { unaryHooks } from "./unary-hooks";
+import { fallbackTransport } from "./use-transport";
 
 const error = new ConnectError(
   "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
 );
 
-describe('fallbackTransport', () => {
-  it('throws a helpful error message', async () => {
+describe("fallbackTransport", () => {
+  it("throws a helpful error message", async () => {
     await expect(Promise.reject(fallbackTransport.unary)).rejects.toThrow(
       error,
     );
@@ -38,14 +38,14 @@ describe('fallbackTransport', () => {
   });
 });
 
-describe('useTransport', () => {
-  const consoleErrorSpy = spyOn(console, 'error').mockImplementation(() => {});
+describe("useTransport", () => {
+  const consoleErrorSpy = spyOn(console, "error").mockImplementation(() => {});
   const say = unaryHooks({
     methodInfo: ElizaService.methods.say,
     typeName: ElizaService.typeName,
   });
 
-  it('throws the fallback error', async () => {
+  it("throws the fallback error", async () => {
     const { result, rerender } = renderHook(
       () => useQuery({ ...say.useQuery(), retry: false }),
       wrapper({}, fallbackTransport),
