@@ -21,7 +21,7 @@
     "@connectrpc/connect-web": "^0.13.2",
     "@connectrpc/protoc-gen-connect-es": "^0.13.2",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
-    "@tanstack/react-query": "^4.33.0",
+    "@tanstack/react-query": "^4.35.0",
     "@tanstack/react-query-devtools": "^4.33.0",
     "@testing-library/jest-dom": "^6.1.2",
     "@testing-library/react": "^14.0.0",
