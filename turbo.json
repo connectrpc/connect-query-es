@@ -7,14 +7,14 @@
       "outputs": ["dist/**"]
     },
     "generate": {
-      "dependsOn": ["^build"],
-      "inputs": ["*", "!dist"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^build"]
     },
     "test": {
       "dependsOn": ["generate"],
       "cache": false
     },
-    "//#format:all": {}
+    "format": {
+      "dependsOn": ["generate"]
+    }
   }
 }

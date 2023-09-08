@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DescFile, DescService } from '@bufbuild/protobuf';
-import { codegenInfo, MethodIdempotency, MethodKind } from '@bufbuild/protobuf';
-import type { Schema } from '@bufbuild/protoplugin';
+import type { DescFile, DescService } from "@bufbuild/protobuf";
+import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
+import type { Schema } from "@bufbuild/protoplugin";
 import {
   literalString,
   localName,
   makeJsDoc,
-} from '@bufbuild/protoplugin/ecmascript';
+} from "@bufbuild/protoplugin/ecmascript";
 
-import type { PluginInit } from './utils';
+import type { PluginInit } from "./utils";
 
 const { safeIdentifier } = codegenInfo;
 
@@ -44,6 +44,29 @@ const generateServiceFile =
 
     const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
       schema.runtime;
+
+    f.print(makeJsDoc(service));
+    f.print("export const ", localName(service), " = {");
+    f.print(`  typeName: `, literalString(service.typeName), `,`);
+    f.print("  methods: {");
+    for (const method of service.methods) {
+      f.print(makeJsDoc(method, "    "));
+      f.print("    ", localName(method), ": {");
+      f.print(`      name: `, literalString(method.name), `,`);
+      f.print("      I: ", method.input, ",");
+      f.print("      O: ", method.output, ",");
+      f.print("      kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
+      if (method.idempotency !== undefined) {
+          f.print("      idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
+      }
+      // In case we start supporting options, we have to surface them here
+      f.print("    },");
+    }
+    f.print("  }");
+    f.print("} as const;");
+    f.print();
+
+    
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
@@ -53,21 +76,7 @@ const generateServiceFile =
           f.import('createQueryService', '@connectrpc/connect-query'),
           `({`,
         );
-        f.print(`  service: {`);
-        f.print(`    methods: {`);
-        f.print(`      ${localName(method)}: {`);
-        f.print(`        name: ${literalString(method.name)},`);
-        f.print(`        kind: `, rtMethodKind, `.${MethodKind[method.methodKind]},`);
-        f.print(`        I: `, method.input, `,`);
-        f.print(`        O: `, method.output, `,`);
-        if (method.idempotency != null) {
-            f.print(`        idempotency: `, rtMethodIdempotency, `.${MethodIdempotency[method.idempotency]},`);
-        }
-        f.print(`      },`);
-        f.print(`    },`);
-        f.print(`    typeName: ${literalString(service.typeName)},`);
-        // In case we start supporting options, we have to surface them here
-        f.print(`  },`);
+        f.print(`  service: `, localName(service), `,`);
         // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a
         // TSDoc to be attached to the exported variable. Also, it's nice that each method has its own atomic section
         // that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one
@@ -84,7 +93,7 @@ const generateServiceFile =
 /**
  * This function generates the TypeScript output files
  */
-export const generateTs: PluginInit['generateJs'] & PluginInit['generateTs'] = (
+export const generateTs: PluginInit["generateJs"] & PluginInit["generateTs"] = (
   schema,
   extension,
 ) => {

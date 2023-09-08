@@ -16,7 +16,7 @@
 module.exports = {
   collectCoverage: true,
   coverageReporters: ['json', 'lcov', 'text', 'clover', 'text-summary'],
-  coveragePathIgnorePatterns: ['src/jest'],
+  coveragePathIgnorePatterns: ['src/jest', 'src/gen'],
   coverageThreshold: {
     global: {
       branches: 100,

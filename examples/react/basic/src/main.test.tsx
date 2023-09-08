@@ -12,27 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 
-import { createRouterTransport } from '@connectrpc/connect';
-import { render, screen } from '@testing-library/react';
-import { ElizaService } from 'generated-react/dist/eliza_connect';
+import { createRouterTransport } from "@connectrpc/connect";
+import { render, screen } from "@testing-library/react";
 
-import Main from './main';
+import { ElizaService } from "./gen/eliza-ElizaService_connectquery";
+import Main from "./main";
 
-describe('Application', () => {
-  it('should show success status and response data', async () => {
+describe("Application", () => {
+  it("should show success status and response data", async () => {
     const transport = createRouterTransport(({ service }) => {
       service(ElizaService, {
         say: () => ({
-          sentence: 'Hello, world!',
+          sentence: "Hello, world!",
         }),
       });
     });
     render(<Main transport={transport} />);
-    const text = await screen.findByText('Status: success');
+    const text = await screen.findByText("Status: success");
     expect(text).toBeInTheDocument();
-    const response = await screen.findByLabelText('data');
+    const response = await screen.findByLabelText("data");
     expect(response).toHaveTextContent('{"sentence":"Hello, world!"}');
   });
 });

@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import './index.css';
+import "./index.css";
 
-import type { Transport } from '@connectrpc/connect';
-import { TransportProvider } from '@connectrpc/connect-query';
-import { createConnectTransport } from '@connectrpc/connect-web';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import * as ReactDOM from 'react-dom/client';
+import type { Transport } from "@connectrpc/connect";
+import { TransportProvider } from "@connectrpc/connect-query";
+import { createConnectTransport } from "@connectrpc/connect-web";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import * as ReactDOM from "react-dom/client";
 
-import { Example } from './example';
+import { Example } from "./example";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +32,7 @@ export default function App({ transport }: { transport?: Transport }) {
   const finalTransport =
     transport ??
     createConnectTransport({
-      baseUrl: 'https://demo.connectrpc.com',
+      baseUrl: "https://demo.connectrpc.com",
     });
   return (
     <TransportProvider transport={finalTransport}>
@@ -44,7 +44,7 @@ export default function App({ transport }: { transport?: Transport }) {
   );
 }
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(<App />);
 }

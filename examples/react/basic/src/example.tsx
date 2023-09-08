@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useQuery } from '@tanstack/react-query';
-import { say } from 'generated-react/dist/eliza-ElizaService_connectquery';
-import type { FC } from 'react';
+import { useQuery } from "@tanstack/react-query";
+import type { FC } from "react";
 
-import { Data, Datum } from './datum';
-import { Indicator, Indicators } from './indicator';
-import { Page } from './page';
+import { Data, Datum } from "./datum";
+import { say } from "./gen/eliza-ElizaService_connectquery";
+import { Indicator, Indicators } from "./indicator";
+import { Page } from "./page";
 
 /**
  * This example demonstrates a basic usage of Connect-Query with `useQuery`

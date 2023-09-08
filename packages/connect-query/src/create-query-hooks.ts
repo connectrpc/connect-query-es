@@ -17,13 +17,13 @@ import type {
   MethodInfo,
   MethodInfoUnary,
   ServiceType,
-} from '@bufbuild/protobuf';
-import { MethodKind } from '@bufbuild/protobuf';
-import type { Transport } from '@connectrpc/connect';
+} from "@bufbuild/protobuf";
+import { MethodKind } from "@bufbuild/protobuf";
+import type { Transport } from "@connectrpc/connect";
 
-import type { UnaryHooks } from './unary-hooks';
-import { unaryHooks } from './unary-hooks';
-import { unreachableCase } from './utils';
+import type { UnaryHooks } from "./unary-hooks";
+import { unaryHooks } from "./unary-hooks";
+import { unreachableCase } from "./utils";
 
 /**
  * This is an array of supported `MethodKind`s
@@ -67,8 +67,8 @@ export interface SupportedMethodInfo<MI extends MethodInfo> {
 
 /** This is a helper for `QueryHooks` */
 type SupportedHooks<MI extends MethodInfo> =
-  MI['kind'] extends keyof SupportedMethodInfo<MI>
-    ? SupportedMethodInfo<MI>[MI['kind']]
+  MI["kind"] extends keyof SupportedMethodInfo<MI>
+    ? SupportedMethodInfo<MI>[MI["kind"]]
     : never;
 
 /**
@@ -79,10 +79,10 @@ type SupportedHooks<MI extends MethodInfo> =
  * Note: Today, only Unary method kinds are supported.
  */
 export type QueryHooks<Service extends ServiceType> = {
-  [Method in keyof Service['methods'] as Exclude<
+  [Method in keyof Service["methods"] as Exclude<
     Method,
-    keyof SupportedHooks<Service['methods'][Method]>
-  >]: SupportedHooks<Service['methods'][Method]>;
+    keyof SupportedHooks<Service["methods"][Method]>
+  >]: SupportedHooks<Service["methods"][Method]>;
 };
 
 /**

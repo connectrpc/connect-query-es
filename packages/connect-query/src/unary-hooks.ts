@@ -17,27 +17,27 @@ import type {
   MethodInfoUnary,
   PartialMessage,
   ServiceType,
-} from '@bufbuild/protobuf';
-import type { CallOptions, ConnectError, Transport } from '@connectrpc/connect';
+} from "@bufbuild/protobuf";
+import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
   QueryFunctionContext,
-} from '@tanstack/react-query';
+} from "@tanstack/react-query";
 
 import type {
   ConnectPartialQueryKey,
   ConnectQueryKey,
-} from './connect-query-key';
-import { makeConnectQueryKeyGetter } from './connect-query-key';
-import { useTransport } from './use-transport';
-import type { DisableQuery } from './utils';
+} from "./connect-query-key";
+import { makeConnectQueryKeyGetter } from "./connect-query-key";
+import { useTransport } from "./use-transport";
+import type { DisableQuery } from "./utils";
 import {
   assert,
   disableQuery,
   isUnaryMethod,
   protobufSafeUpdater,
   unreachableCase,
-} from './utils';
+} from "./utils";
 
 type RequireExactlyOne<T, Keys extends keyof T = keyof T> = {
   [K in Keys]-?: Partial<Record<Exclude<Keys, K>, undefined>> &
@@ -194,7 +194,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
   transport: topLevelCustomTransport,
 }: {
   methodInfo: MethodInfoUnary<I, O>;
-  typeName: ServiceType['typeName'];
+  typeName: ServiceType["typeName"];
   transport?: Transport | undefined;
 }): UnaryHooks<I, O> => {
   if (!isUnaryMethod(methodInfo)) {
@@ -208,7 +208,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
   const getQueryKey = makeConnectQueryKeyGetter(typeName, methodInfo.name);
 
-  const createUseQueryOptions: UnaryHooks<I, O>['createUseQueryOptions'] = (
+  const createUseQueryOptions: UnaryHooks<I, O>["createUseQueryOptions"] = (
     input,
     { callOptions, getPlaceholderData, onError, transport },
   ) => {
@@ -216,7 +216,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
     assert(
       transport !== undefined, // eslint-disable-line @typescript-eslint/no-unnecessary-condition -- yes, it's true that according to the types it should not be possible for a user to pass `undefined` for transport, but it's much nicer to catch them here if they do (as in, without TypeScript or in a insufficiently sound TypeScript configuration).
-      'createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.',
+      "createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.",
     );
 
     return {
@@ -235,7 +235,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
         : {}),
 
       queryFn: async (context) => {
-        assert(enabled, 'queryFn does not accept a disabled query');
+        assert(enabled, "queryFn does not accept a disabled query");
         const result = await transport.unary(
           { typeName, methods: {} },
           methodInfo,
@@ -294,7 +294,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
       if (enabled) {
         sanitizedInput =
-          'pageParamKey' in otherOptions &&
+          "pageParamKey" in otherOptions &&
           otherOptions.pageParamKey !== undefined
             ? {
                 ...input,
@@ -311,15 +311,15 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
         queryFn: async (context) => {
           assert(
             input !== disableQuery,
-            'queryFn does not accept a disabled query',
+            "queryFn does not accept a disabled query",
           );
           const valueAtPageParam =
-            'pageParamKey' in otherOptions &&
+            "pageParamKey" in otherOptions &&
             otherOptions.pageParamKey !== undefined
               ? input[otherOptions.pageParamKey]
               : undefined;
           const inputCombinedWithPageParam =
-            'applyPageParam' in otherOptions &&
+            "applyPageParam" in otherOptions &&
             otherOptions.applyPageParam !== undefined
               ? otherOptions.applyPageParam({
                   pageParam: context.pageParam,

@@ -1,6 +1,0 @@
-**/*.md
-pnpm-lock.yaml
-
-/examples/react/*/dist
-/packages/*/dist
-/packages/*/coverage

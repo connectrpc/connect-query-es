@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { createEcmaScriptPlugin } from '@bufbuild/protoplugin';
+import { createEcmaScriptPlugin } from "@bufbuild/protoplugin";
 
-import { version } from '../package.json';
-import { generateDts } from './generateDts';
-import { generateTs } from './generateTs';
+import { version } from "../package.json";
+import { generateDts } from "./generateDts";
+import { generateTs } from "./generateTs";
 
 export const protocGenConnectQueryReact = createEcmaScriptPlugin({
-  name: 'protoc-gen-connect-query-react',
+  name: "protoc-gen-connect-query-react",
   version: `v${String(version)}`,
   generateTs,
   generateDts,
@@ -28,7 +28,7 @@ export const protocGenConnectQueryReact = createEcmaScriptPlugin({
   generateJs: generateTs,
 
   parseOption: (key) => {
-    if (key !== 'import-hook-from') {
+    if (key !== "import-hook-from") {
       throw new Error(`invalid option "${key}"`);
     }
   },

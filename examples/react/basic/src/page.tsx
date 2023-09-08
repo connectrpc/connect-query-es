@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from "react";
 
-import { margin } from './css';
+import { margin } from "./css";
 
 /**
  * The wrapper for the whole page
@@ -24,7 +24,7 @@ export const Page: FC<PropsWithChildren> = ({ children }) => (
     style={{
       margin: margin * 3,
       maxWidth: 800,
-      display: 'flex',
+      display: "flex",
     }}
   >
     {children}

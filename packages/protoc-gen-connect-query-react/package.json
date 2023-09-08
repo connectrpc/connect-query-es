@@ -20,7 +20,8 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "pnpm clean && tsc --project tsconfig.build.json"
+    "build": "pnpm clean && tsc --project tsconfig.build.json",
+    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header"
   },
   "preferUnplugged": true,
   "devDependencies": {

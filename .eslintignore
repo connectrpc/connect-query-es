@@ -1,6 +1,0 @@
-pnpm-lock.yaml
-
-examples/react/*/dist
-examples/react/*/__mocks__
-packages/*/dist
-packages/*/coverage

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { type FC, type ReactNode, useId } from 'react';
+import { type FC, type ReactNode, useId } from "react";
 
 import {
   border,
@@ -22,7 +22,7 @@ import {
   margin,
   padding,
   white,
-} from './css';
+} from "./css";
 
 interface DatumProps {
   datum: string;
@@ -40,7 +40,7 @@ export const Datum: FC<DatumProps> = ({ datum, label }) => {
         borderRadius,
         border,
         margin,
-        overflow: 'hidden',
+        overflow: "hidden",
         zIndex: 1,
         boxShadow,
       }}
@@ -76,8 +76,8 @@ export const Data: FC<{
 }> = ({ children }) => (
   <div
     style={{
-      display: 'flex',
-      flexDirection: 'column',
+      display: "flex",
+      flexDirection: "column",
       margin,
     }}
   >

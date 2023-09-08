@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
 export default defineConfig({
-  tsconfig: 'tsconfig.build.json',
-  entry: ['src/index.ts'],
+  tsconfig: "tsconfig.build.json",
+  entry: ["src/index.ts"],
   dts: true,
   clean: true,
   sourcemap: true,
-  format: ['cjs', 'esm'],
+  format: ["cjs", "esm"],
 });

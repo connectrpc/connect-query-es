@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { PartialMessage } from '@bufbuild/protobuf';
-import type { CallOptions } from '@connectrpc/connect';
-import { createRouterTransport } from '@connectrpc/connect';
-import { createConnectTransport } from '@connectrpc/connect-web';
-import type { QueryClientConfig } from '@tanstack/react-query';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { PartialMessage } from "@bufbuild/protobuf";
+import type { CallOptions } from "@connectrpc/connect";
+import { createRouterTransport } from "@connectrpc/connect";
+import { createConnectTransport } from "@connectrpc/connect-web";
+import type { QueryClientConfig } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { JSXElementConstructor, PropsWithChildren } from "react";
+
 import {
   BigIntService,
   ElizaService,
   PaginatedService,
-} from 'generated-react/dist/eliza_connect';
-import type { CountRequest, SayRequest } from 'generated-react/dist/eliza_pb';
-import { CountResponse, SayResponse } from 'generated-react/dist/eliza_pb';
-import type { JSXElementConstructor, PropsWithChildren } from 'react';
-
-import { TransportProvider } from '../use-transport';
+} from "../gen/eliza_connect";
+import type { CountRequest, SayRequest } from "../gen/eliza_pb";
+import { CountResponse, SayResponse } from "../gen/eliza_pb";
+import { TransportProvider } from "../use-transport";
 
 /**
  * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-Query's `TransportProvider`.
@@ -35,7 +35,7 @@ import { TransportProvider } from '../use-transport';
 export const wrapper = (
   config?: QueryClientConfig,
   transport = createConnectTransport({
-    baseUrl: 'https://demo.connectrpc.com',
+    baseUrl: "https://demo.connectrpc.com",
   }),
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;
@@ -165,6 +165,6 @@ export const mockCallOptions = {
   signal: new AbortController().signal,
   timeoutMs: 9000,
   headers: new Headers({
-    'Content-Type': 'application/x-shockwave-flash; version="1"',
+    "Content-Type": 'application/x-shockwave-flash; version="1"',
   }),
 } satisfies CallOptions;

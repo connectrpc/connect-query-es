@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { ServiceType } from '@bufbuild/protobuf';
-import type { Transport } from '@connectrpc/connect';
+import type { ServiceType } from "@bufbuild/protobuf";
+import type { Transport } from "@connectrpc/connect";
 
-import type { QueryHooks } from './create-query-hooks';
-import { createQueryHooks } from './create-query-hooks';
+import type { QueryHooks } from "./create-query-hooks";
+import { createQueryHooks } from "./create-query-hooks";
 
 const servicesToHooks = new Map<ServiceType, QueryHooks<ServiceType>>();
 
