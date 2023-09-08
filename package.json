@@ -26,7 +26,7 @@
     "@types/jest": "^29.5.4",
     "@types/node": "^20.5.7",
     "@typescript-eslint/eslint-plugin": "6.5.0",
-    "@typescript-eslint/parser": "6.5.0",
+    "@typescript-eslint/parser": "6.6.0",
     "@typescript-eslint/utils": "6.5.0",
     "cspell": "7.3.2",
     "eslint": "8.48.0",
