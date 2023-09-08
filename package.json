@@ -6,11 +6,11 @@
     "build": "turbo run build",
     "generate": "turbo run generate",
     "test": "turbo run test",
-    "format": "turbo run format:all",
+    "format": "pnpm generate && turbo run format:all",
     "format:all": "pnpm run format:code && pnpm run format:markdown && pnpm run check:spelling",
     "format:markdown": "markdownlint-cli2-fix \"**/*.md\" \"#**/node_modules\"",
     "check:spelling": "cspell \"**\" --gitignore",
-    "format:code": "eslint . --fix && prettier . --write && license-header",
+    "format:code": "prettier . --write && eslint . --fix && license-header",
     "all": "turbo run build generate format:all test",
     "update-all": "pnpm update --recursive --latest"
   },

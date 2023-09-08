@@ -15,8 +15,6 @@
       "dependsOn": ["generate"],
       "cache": false
     },
-    "//#format:all": {
-      "dependsOn": ["^generate"]
-    }
+    "//#format:all": {}
   }
 }
