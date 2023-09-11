@@ -14,3 +14,9 @@ plugins:
     opt:
       - target=ts
       - import_extension=
+  - name: connect-query
+    path: ./node_modules/.bin/protoc-gen-connect-query-react
+    out: src/gen
+    opt:
+      - target=dts
+      - import_extension=

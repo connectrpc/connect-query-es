@@ -133,6 +133,15 @@ const generateServiceFile =
             f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
             f.print(`) => `, useInfiniteQueryResult, `<`, method.output, `,`, connectError, `>;`);
             f.print(``);
+
+            // invalidateQueries
+            const queryClient = f.import('QueryClient', importHookFrom);
+
+            f.print(`export declare function `, reactHookName(method, 'InvalidateQueries'), '(): (');
+            f.print(`  input?: Parameters<typeof `, serviceName, `.getQueryKey>[0],`);
+            f.print(`  filters?: Parameters<`, queryClient ,`["invalidateQueries"]>[1],`);
+            f.print(`  options?: Parameters<`, queryClient ,`["invalidateQueries"]>[2]`);
+            f.print(') => Promise<void>');f.print(``);
           }
           break;
 

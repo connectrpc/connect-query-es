@@ -4,6 +4,7 @@
   },
   "extends": "./tsconfig.base.json",
   "include": [
+    "**/*.d.ts",
     "**/*.ts",
     "**/*.test.ts",
     "**/*.tsx",
