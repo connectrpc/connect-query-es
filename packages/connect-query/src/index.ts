@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import type { Message } from "@bufbuild/protobuf";
+
+import type { UnaryHooks } from "./create-hooks";
+import type { UnaryFunctions } from "./create-unary-functions";
+
 export { createQueryService } from "./create-query-service";
 export type {
   QueryFunctions,
@@ -32,3 +37,13 @@ export type { UnaryFunctions } from "./create-unary-functions";
 export { createUnaryFunctions } from "./create-unary-functions";
 export { disableQuery } from "./utils";
 export { useTransport, TransportProvider } from "./use-transport";
+export type { UnaryHooks } from "./create-hooks";
+export { createHooks } from "./create-hooks";
+
+/**
+ * Combined type of all the functions generated for a service.
+ */
+export type UnaryFunctionsWithHooks<
+  I extends Message<I>,
+  O extends Message<O>,
+> = UnaryFunctions<I, O> & UnaryHooks<I, O, UnaryFunctions<I, O>>;

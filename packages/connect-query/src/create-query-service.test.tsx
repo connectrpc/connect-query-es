@@ -36,7 +36,7 @@ describe("createQueryService", () => {
       const { queryFn } = createQueryService({
         service,
         transport,
-      }).say.useQuery(input);
+      }).say.createUseQueryOptions(input, { transport });
       return queryFn();
     }, wrapper());
 
@@ -59,17 +59,20 @@ describe("createQueryService", () => {
       methodName,
       expect.objectContaining({
         methodInfo: service.methods[methodName],
-        useQuery: expect.any(Function),
+        createUseQueryOptions: expect.any(Function),
       }),
     );
   });
 
-  describe("useQuery", () => {
+  describe("createUseQueryOptions", () => {
     it("has the appropriate properties", () => {
       const {
         result: { current: queryOptions },
       } = renderHook(
-        () => createQueryService({ service }).say.useQuery(input),
+        () =>
+          createQueryService({ service }).say.createUseQueryOptions(input, {
+            transport: mockEliza(),
+          }),
         wrapper(),
       );
 

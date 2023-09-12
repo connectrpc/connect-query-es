@@ -19,7 +19,7 @@
 
 import { Nothing } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createQueryService } from "@connectrpc/connect-query";
+import { createHooks, createQueryService } from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.Slouch";
 
@@ -41,9 +41,9 @@ export const Slouch = {
   },
 } as const;
 
+const queryService = createQueryService({ service: Slouch });
+
 /**
  * @generated from rpc connectrpc.eliza.v1.Slouch.Work
  */
-export const work = createQueryService({
-  service: Slouch,
-}).work;
+export const work = { ...queryService.work, ...createHooks(queryService.work) };

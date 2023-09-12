@@ -26,7 +26,7 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, UnaryHooks } from "@connectrpc/connect-query";
+import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
 import {
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
@@ -89,10 +89,10 @@ export declare const ElizaService: {
   };
 };
 
-export const say: UnaryHooks<SayRequest, SayResponse>;
+export const say: UnaryFunctions<SayRequest, SayResponse>;
 export declare const useSayQuery: (
-  inputs: Parameters<typeof say.useQuery>[0],
-  options?: Parameters<typeof say.useQuery>[1],
+  input: Parameters<typeof say.createUseQueryOptions>[0],
+  options?: Parameters<typeof say.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       SayResponse,
@@ -104,13 +104,9 @@ export declare const useSayQuery: (
 ) => UseQueryResult<SayResponse, ConnectError>;
 
 export declare const useSayMutation: (
-  options?: Parameters<typeof say.useMutation>[0],
+  options?: Parameters<typeof say.createUseMutationOptions>[0],
   queryOptions?: Partial<
-    UseMutationOptions<
-      PartialMessage<SayResponse>,
-      ConnectError,
-      PartialMessage<SayRequest>
-    >
+    UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
   >,
 ) => UseMutationResult<
   SayResponse,
@@ -120,8 +116,8 @@ export declare const useSayMutation: (
 >;
 
 export declare const useSayInfiniteQuery: (
-  inputs: Parameters<typeof say.useInfiniteQuery>[0],
-  options: Parameters<typeof say.useInfiniteQuery>[1],
+  input: Parameters<typeof say.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof say.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       SayResponse,

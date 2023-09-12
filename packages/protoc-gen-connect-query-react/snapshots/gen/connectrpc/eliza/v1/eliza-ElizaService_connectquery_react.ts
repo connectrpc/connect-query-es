@@ -26,7 +26,11 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
+import {
+  ConnectQueryKey,
+  createHooks,
+  createQueryService,
+} from "@connectrpc/connect-query";
 import {
   useInfiniteQuery,
   UseInfiniteQueryOptions,
@@ -89,17 +93,18 @@ export const ElizaService = {
   },
 } as const;
 
+const queryService = createQueryService({
+  service: ElizaService,
+});
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say = createQueryService({
-  service: ElizaService,
-}).say;
+export const say = createHooks(queryService.say);
 
 export const useSayQuery = (
-  inputs: Parameters<typeof say.useQuery>[0],
+  input?: Parameters<typeof say.useQuery>[0],
   options?: Parameters<typeof say.useQuery>[1],
   queryOptions?: Partial<
     UseQueryOptions<
@@ -110,7 +115,7 @@ export const useSayQuery = (
     >
   >,
 ) => {
-  const baseOptions = say.useQuery(inputs, options);
+  const baseOptions = say.useQuery(input, options);
 
   return useQuery({
     ...baseOptions,
@@ -121,11 +126,7 @@ export const useSayQuery = (
 export const useSayMutation = (
   options?: Parameters<typeof say.useMutation>[0],
   queryOptions?: Partial<
-    UseMutationOptions<
-      PartialMessage<SayResponse>,
-      ConnectError,
-      PartialMessage<SayRequest>
-    >
+    UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
   >,
 ) => {
   const baseOptions = say.useMutation(options);
@@ -137,7 +138,7 @@ export const useSayMutation = (
 };
 
 export const useSayInfiniteQuery = (
-  inputs: Parameters<typeof say.useInfiniteQuery>[0],
+  input: Parameters<typeof say.useInfiniteQuery>[0],
   options: Parameters<typeof say.useInfiniteQuery>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
@@ -149,13 +150,13 @@ export const useSayInfiniteQuery = (
     >
   >,
 ) => {
-  const baseOptions = say.useInfiniteQuery(inputs, options);
+  const baseOptions = say.useInfiniteQuery(input, options);
 
   return useInfiniteQuery<
     SayResponse,
     ConnectError,
     SayResponse,
-    keyof typeof inputs extends never ? any : ConnectQueryKey<SayRequest>
+    keyof typeof input extends never ? any : ConnectQueryKey<SayRequest>
   >({
     ...baseOptions,
     ...queryOptions,

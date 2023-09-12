@@ -19,7 +19,7 @@
 
 import { Nothing } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createQueryService } from "@connectrpc/connect-query";
+import { createHooks, createQueryService } from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.Haberdasher";
 
@@ -41,9 +41,9 @@ export const Haberdasher = {
   },
 } as const;
 
+const queryService = createQueryService({ service: Haberdasher });
+
 /**
  * @generated from rpc connectrpc.eliza.v1.Haberdasher.Work
  */
-export const work = createQueryService({
-  service: Haberdasher,
-}).work;
+export const work = { ...queryService.work, ...createHooks(queryService.work) };

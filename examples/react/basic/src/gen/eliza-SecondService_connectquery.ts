@@ -26,7 +26,7 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createQueryService } from "@connectrpc/connect-query";
+import { createHooks, createQueryService } from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.SecondService";
 
@@ -77,11 +77,11 @@ export const SecondService = {
   },
 } as const;
 
+const queryService = createQueryService({ service: SecondService });
+
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
  * @generated from rpc connectrpc.eliza.v1.SecondService.Say
  */
-export const say = createQueryService({
-  service: SecondService,
-}).say;
+export const say = { ...queryService.say, ...createHooks(queryService.say) };

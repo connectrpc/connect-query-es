@@ -20,20 +20,24 @@ import { spyOn } from "jest-mock";
 
 import { createUnaryFunctions } from "./create-unary-functions";
 import { ElizaService } from "./gen/eliza_connect";
-import { sleep, wrapper } from "./jest/test-utils";
-import { fallbackTransport } from "./use-transport";
+import { mockBigInt, sleep, wrapper } from "./jest/test-utils";
+import {
+  fallbackTransport,
+  TransportProvider,
+  useTransport,
+} from "./use-transport";
 
 const error = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info."
+  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
 );
 
 describe("fallbackTransport", () => {
   it("throws a helpful error message", async () => {
     await expect(Promise.reject(fallbackTransport.unary)).rejects.toThrow(
-      error
+      error,
     );
     await expect(Promise.reject(fallbackTransport.stream)).rejects.toThrow(
-      error
+      error,
     );
   });
 });
@@ -47,8 +51,14 @@ describe("useTransport", () => {
 
   it("throws the fallback error", async () => {
     const { result, rerender } = renderHook(
-      () => useQuery({ ...say.useQuery(), retry: false }),
-      wrapper({}, fallbackTransport)
+      () =>
+        useQuery({
+          ...say.createUseQueryOptions(undefined, {
+            transport: fallbackTransport,
+          }),
+          retry: false,
+        }),
+      wrapper(),
     );
     rerender();
 
@@ -61,5 +71,17 @@ describe("useTransport", () => {
     expect(result.current.error).toEqual(error);
     expect(result.current.isError).toStrictEqual(true);
     expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+  });
+});
+
+describe("TransportProvider", () => {
+  it("provides a custom transport to the useTransport hook", () => {
+    const transport = mockBigInt();
+    const { result } = renderHook(() => useTransport(), {
+      wrapper: ({ children }) => (
+        <TransportProvider transport={transport}>{children}</TransportProvider>
+      ),
+    });
+    expect(result.current).toBe(transport);
   });
 });

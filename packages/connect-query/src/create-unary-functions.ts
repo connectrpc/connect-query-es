@@ -29,7 +29,6 @@ import type {
   ConnectQueryKey,
 } from "./connect-query-key";
 import { makeConnectQueryKeyGetter } from "./connect-query-key";
-import { useTransport } from "./use-transport";
 import type { DisableQuery } from "./utils";
 import {
   assert,
@@ -76,12 +75,12 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
    * The caveat being that if you go the route of using `createUseQueryOptions` you must provide transport.  You can get transport from the `useTransport` export.  If you cannot use hooks to retrieve transport, then look at the documentation for `TransportProvider` to learn more about how to use Connect-Web's createConnectTransport` or `createGrpcWebTransport`APIs.
    */
   createUseQueryOptions: (
-    input: DisableQuery | PartialMessage<I> | undefined,
-    options: {
+    input?: DisableQuery | PartialMessage<I> | undefined,
+    options?: {
       getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
 
       onError?: (error: ConnectError) => void;
-      transport: Transport;
+      transport?: Transport | undefined;
       callOptions?: CallOptions | undefined;
     },
   ) => {
@@ -126,7 +125,7 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
   /**
    * This helper is intended to be used with `QueryClient`s `useInfiniteQuery` function.
    */
-  useInfiniteQuery: <ParamKey extends keyof PartialMessage<I>>(
+  createUseInfiniteQueryOptions: <ParamKey extends keyof PartialMessage<I>>(
     input: DisableQuery | PartialMessage<I>,
     options: BaseInfiniteQueryOptions<I, O, ParamKey> &
       RequireExactlyOne<{
@@ -152,7 +151,7 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
   /**
    * This function is intended to be used with TanStack Query's `useMutation` API.
    */
-  useMutation: (options?: {
+  createUseMutationOptions: (options?: {
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
@@ -161,26 +160,6 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
       input: PartialMessage<I>,
       context?: QueryFunctionContext<ConnectQueryKey<I>>,
     ) => Promise<O>;
-    onError?: (error: ConnectError) => void;
-  };
-
-  /**
-   * This function is intended to be used with Tanstack Query's `useQuery` API.
-   */
-  useQuery: (
-    input?: DisableQuery | PartialMessage<I>,
-    options?: {
-      getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
-
-      onError?: (error: ConnectError) => void;
-      transport?: Transport | undefined;
-      callOptions?: CallOptions | undefined;
-    },
-  ) => {
-    enabled: boolean;
-    queryKey: ConnectQueryKey<I>;
-    queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-    placeholderData?: () => O | undefined;
     onError?: (error: ConnectError) => void;
   };
 }
@@ -213,12 +192,13 @@ export const createUnaryFunctions = <
 
   const createUseQueryOptions: UnaryFunctions<I, O>["createUseQueryOptions"] = (
     input,
-    { callOptions, getPlaceholderData, onError, transport },
+    // istanbul ignore next
+    { callOptions, getPlaceholderData, onError, transport } = {},
   ) => {
     const enabled = input !== disableQuery;
 
     assert(
-      transport !== undefined, // eslint-disable-line @typescript-eslint/no-unnecessary-condition -- yes, it's true that according to the types it should not be possible for a user to pass `undefined` for transport, but it's much nicer to catch them here if they do (as in, without TypeScript or in a insufficiently sound TypeScript configuration).
+      transport !== undefined,
       "createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.",
     );
 
@@ -277,7 +257,7 @@ export const createUnaryFunctions = <
       protobufSafeUpdater(updater, methodInfo.O),
     ],
 
-    useInfiniteQuery: (
+    createUseInfiniteQueryOptions: (
       input,
       {
         transport: optionsTransport,
@@ -288,9 +268,11 @@ export const createUnaryFunctions = <
         ...otherOptions
       },
     ) => {
-      const contextTransport = useTransport();
-      const transport =
-        optionsTransport ?? topLevelCustomTransport ?? contextTransport;
+      const transport = optionsTransport ?? topLevelCustomTransport;
+
+      if (transport === undefined) {
+        throw new Error("Transport must be provided");
+      }
 
       const enabled = input !== disableQuery;
       let sanitizedInput = input;
@@ -351,14 +333,16 @@ export const createUnaryFunctions = <
       };
     },
 
-    useMutation: ({
+    createUseMutationOptions: ({
       transport: optionsTransport,
       callOptions,
       onError,
     } = {}) => {
-      const contextTransport = useTransport();
-      const transport =
-        optionsTransport ?? topLevelCustomTransport ?? contextTransport;
+      const transport = optionsTransport ?? topLevelCustomTransport;
+
+      if (transport === undefined) {
+        throw new Error("Transport must be provided");
+      }
 
       return {
         mutationFn: async (input, context) => {
@@ -374,17 +358,6 @@ export const createUnaryFunctions = <
         },
         ...(onError ? { onError } : {}),
       };
-    },
-
-    useQuery: (input, options = {}) => {
-      const contextTransport = useTransport();
-      const transport =
-        options.transport ?? topLevelCustomTransport ?? contextTransport;
-
-      return createUseQueryOptions(input, {
-        ...options,
-        transport,
-      });
     },
   };
 };

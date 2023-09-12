@@ -19,7 +19,7 @@
 
 import { ListRequest, ListResponse } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createQueryService } from "@connectrpc/connect-query";
+import { createHooks, createQueryService } from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.PaginatedService";
 
@@ -41,9 +41,9 @@ export const PaginatedService = {
   },
 } as const;
 
+const queryService = createQueryService({ service: PaginatedService });
+
 /**
  * @generated from rpc connectrpc.eliza.v1.PaginatedService.List
  */
-export const list = createQueryService({
-  service: PaginatedService,
-}).list;
+export const list = { ...queryService.list, ...createHooks(queryService.list) };
