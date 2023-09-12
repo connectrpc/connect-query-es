@@ -75,7 +75,7 @@ const generateServiceFile =
               `export const `,
               serviceName,
               `: `,
-              f.import('UnaryHooks', '@connectrpc/connect-query'),
+              f.import('UnaryFunctions', '@connectrpc/connect-query'),
               `<`,
               method.input,
               `, `,

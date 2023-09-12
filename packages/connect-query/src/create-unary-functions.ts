@@ -64,7 +64,7 @@ interface BaseInfiniteQueryOptions<
 /**
  * The set of data and hooks that a unary method supports.
  */
-export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
+export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
   /**
    * Use this to create a data object that can be used as `placeholderData` or `initialData`.
    */
@@ -188,7 +188,10 @@ export interface UnaryHooks<I extends Message<I>, O extends Message<O>> {
 /**
  * A helper function that will configure the set of hooks a Unary method supports.
  */
-export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
+export const createUnaryFunctions = <
+  I extends Message<I>,
+  O extends Message<O>,
+>({
   methodInfo,
   typeName,
   transport: topLevelCustomTransport,
@@ -196,11 +199,11 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
   methodInfo: MethodInfoUnary<I, O>;
   typeName: ServiceType["typeName"];
   transport?: Transport | undefined;
-}): UnaryHooks<I, O> => {
+}): UnaryFunctions<I, O> => {
   if (!isUnaryMethod(methodInfo)) {
     throw unreachableCase(
       methodInfo,
-      `unaryHooks was passed a non unary method, ${
+      `createUnaryFunctions was passed a non unary method, ${
         (methodInfo as { name: string }).name
       }`,
     );
@@ -208,7 +211,7 @@ export const unaryHooks = <I extends Message<I>, O extends Message<O>>({
 
   const getQueryKey = makeConnectQueryKeyGetter(typeName, methodInfo.name);
 
-  const createUseQueryOptions: UnaryHooks<I, O>["createUseQueryOptions"] = (
+  const createUseQueryOptions: UnaryFunctions<I, O>["createUseQueryOptions"] = (
     input,
     { callOptions, getPlaceholderData, onError, transport },
   ) => {

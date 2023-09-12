@@ -14,21 +14,21 @@
 
 export { createQueryService } from "./create-query-service";
 export type {
-  QueryHooks,
+  QueryFunctions as QueryHooks,
   SupportedMethodInfo,
   IsSupportedMethod,
   SupportedMethodKinds,
-} from "./create-query-hooks";
+} from "./create-query-functions";
 export {
-  createQueryHooks,
+  createQueryFunctions as createQueryHooks,
   supportedMethodKinds,
   isSupportedMethod,
-} from "./create-query-hooks";
+} from "./create-query-functions";
 export type {
   ConnectQueryKey,
   ConnectPartialQueryKey,
 } from "./connect-query-key";
-export type { UnaryHooks } from "./unary-hooks";
-export { unaryHooks } from "./unary-hooks";
+export type { UnaryFunctions } from "./create-unary-functions";
+export { createUnaryFunctions } from "./create-unary-functions";
 export { disableQuery } from "./utils";
 export { useTransport, TransportProvider } from "./use-transport";

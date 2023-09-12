@@ -40,6 +40,7 @@ import type {
   ConnectPartialQueryKey,
   ConnectQueryKey,
 } from "./connect-query-key";
+import { createUnaryFunctions } from "./create-unary-functions";
 import { defaultOptions } from "./default-options";
 import {
   BigIntService,
@@ -58,28 +59,27 @@ import {
   sleep,
   wrapper,
 } from "./jest/test-utils";
-import { unaryHooks } from "./unary-hooks";
 import type { DisableQuery } from "./utils";
 import { disableQuery } from "./utils";
 
 const consoleErrorSpy = spyOn(console, "error").mockImplementation(() => {});
 
-const genCount = unaryHooks({
+const genCount = createUnaryFunctions({
   methodInfo: BigIntService.methods.count,
   typeName: BigIntService.typeName,
 });
 
-const genSay = unaryHooks({
+const genSay = createUnaryFunctions({
   methodInfo: ElizaService.methods.say,
   typeName: ElizaService.typeName,
 });
 
-const genPaginated = unaryHooks({
+const genPaginated = createUnaryFunctions({
   methodInfo: PaginatedService.methods.list,
   typeName: PaginatedService.typeName,
 });
 
-describe("unaryHooks", () => {
+describe("createUnaryFunctions", () => {
   it("produces the intended API surface", () => {
     type ExpectType_sayKeys = Expect<
       Equal<
@@ -120,7 +120,7 @@ describe("unaryHooks", () => {
 
   it("throws when provided non unary services", () => {
     expect(() => {
-      unaryHooks({
+      createUnaryFunctions({
         methodInfo: {
           ...ElizaService.methods.say,
           // @ts-expect-error(2322) intentionally incorrect
@@ -128,7 +128,7 @@ describe("unaryHooks", () => {
         },
         service: ElizaService,
       });
-    }).toThrow("unaryHooks was passed a non unary method, Say");
+    }).toThrow("createUnaryFunctions was passed a non unary method, Say");
   });
 
   it("uses a custom transport", async () => {
@@ -469,7 +469,7 @@ describe("unaryHooks", () => {
         const mockTransportOption = mockEliza({
           sentence: "override",
         });
-        const customSay = unaryHooks({
+        const customSay = createUnaryFunctions({
           methodInfo: ElizaService.methods.say,
           typeName: ElizaService.typeName,
           transport: mockTransportTopLevel,
@@ -854,7 +854,7 @@ describe("unaryHooks", () => {
         sentence: "mockTransportOption",
       });
 
-      const customSay = unaryHooks({
+      const customSay = createUnaryFunctions({
         methodInfo: ElizaService.methods.say,
         typeName: ElizaService.typeName,
         transport: mockTransportTopLevel,
