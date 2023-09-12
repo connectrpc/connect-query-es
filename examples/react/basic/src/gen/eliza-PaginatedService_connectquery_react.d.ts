@@ -19,7 +19,7 @@
 
 import { ListRequest, ListResponse } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, UnaryHooks } from "@connectrpc/connect-query";
+import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
 import {
   QueryClient,
   UseInfiniteQueryOptions,
@@ -49,7 +49,7 @@ export declare const PaginatedService: {
   };
 };
 
-export const list: UnaryHooks<ListRequest, ListResponse>;
+export const list: UnaryFunctions<ListRequest, ListResponse>;
 export declare const useListQuery: (
   input: Parameters<typeof list.createUseQueryOptions>[0],
   options?: Parameters<typeof list.createUseQueryOptions>[1],

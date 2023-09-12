@@ -19,7 +19,7 @@
 
 import { Nothing } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, UnaryHooks } from "@connectrpc/connect-query";
+import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
 import {
   QueryClient,
   UseInfiniteQueryOptions,
@@ -49,7 +49,7 @@ export declare const Slouch: {
   };
 };
 
-export const work: UnaryHooks<Nothing, Nothing>;
+export const work: UnaryFunctions<Nothing, Nothing>;
 export declare const useWorkQuery: (
   input: Parameters<typeof work.createUseQueryOptions>[0],
   options?: Parameters<typeof work.createUseQueryOptions>[1],

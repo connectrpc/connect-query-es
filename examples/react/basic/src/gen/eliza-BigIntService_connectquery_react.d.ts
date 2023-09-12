@@ -19,7 +19,7 @@
 
 import { CountRequest, CountResponse } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, UnaryHooks } from "@connectrpc/connect-query";
+import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
 import {
   QueryClient,
   UseInfiniteQueryOptions,
@@ -49,7 +49,7 @@ export declare const BigIntService: {
   };
 };
 
-export const count: UnaryHooks<CountRequest, CountResponse>;
+export const count: UnaryFunctions<CountRequest, CountResponse>;
 export declare const useCountQuery: (
   input: Parameters<typeof count.createUseQueryOptions>[0],
   options?: Parameters<typeof count.createUseQueryOptions>[1],

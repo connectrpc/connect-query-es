@@ -26,7 +26,7 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, UnaryHooks } from "@connectrpc/connect-query";
+import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
 import {
   QueryClient,
   UseInfiniteQueryOptions,
@@ -101,7 +101,7 @@ export declare const ElizaService: {
   };
 };
 
-export const say: UnaryHooks<SayRequest, SayResponse>;
+export const say: UnaryFunctions<SayRequest, SayResponse>;
 export declare const useSayQuery: (
   input: Parameters<typeof say.createUseQueryOptions>[0],
   options?: Parameters<typeof say.createUseQueryOptions>[1],
@@ -151,7 +151,7 @@ export declare function useSayInvalidateQueries(): (
   options?: Parameters<QueryClient["invalidateQueries"]>[2],
 ) => Promise<void>;
 
-export const sayAgain: UnaryHooks<SayRequest, SayResponse>;
+export const sayAgain: UnaryFunctions<SayRequest, SayResponse>;
 export declare const useSayAgainQuery: (
   input: Parameters<typeof sayAgain.createUseQueryOptions>[0],
   options?: Parameters<typeof sayAgain.createUseQueryOptions>[1],

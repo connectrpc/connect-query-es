@@ -18,9 +18,9 @@ import { useQuery } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
 import { spyOn } from "jest-mock";
 
+import { createUnaryFunctions } from "./create-unary-functions";
 import { ElizaService } from "./gen/eliza_connect";
 import { mockBigInt, sleep, wrapper } from "./jest/test-utils";
-import { unaryHooks } from "./unary-hooks";
 import {
   fallbackTransport,
   TransportProvider,
@@ -44,7 +44,7 @@ describe("fallbackTransport", () => {
 
 describe("useTransport", () => {
   const consoleErrorSpy = spyOn(console, "error").mockImplementation(() => {});
-  const say = unaryHooks({
+  const say = createUnaryFunctions({
     methodInfo: ElizaService.methods.say,
     typeName: ElizaService.typeName,
   });
