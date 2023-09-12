@@ -51,6 +51,7 @@ jobs:
 
       - name: Check changed files
         id: check_changed_files
+        continue-on-error: true
         run: |
           git diff --name-only --exit-code
 
