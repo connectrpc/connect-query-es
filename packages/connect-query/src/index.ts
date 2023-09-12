@@ -14,7 +14,7 @@
 
 export { createQueryService } from "./create-query-service";
 export type {
-  QueryFunctions as QueryHooks,
+  QueryFunctions,
   SupportedMethodInfo,
   IsSupportedMethod,
   SupportedMethodKinds,
