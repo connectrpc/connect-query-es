@@ -20,7 +20,7 @@ export type {
   SupportedMethodKinds,
 } from "./create-query-functions";
 export {
-  createQueryFunctions as createQueryHooks,
+  createQueryFunctions,
   supportedMethodKinds,
   isSupportedMethod,
 } from "./create-query-functions";
