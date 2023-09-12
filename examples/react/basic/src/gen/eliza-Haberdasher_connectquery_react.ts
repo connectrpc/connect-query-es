@@ -84,11 +84,7 @@ export const useWorkQuery = (
 export const useWorkMutation = (
   options?: Parameters<typeof work.createUseMutationOptions>[0],
   queryOptions?: Partial<
-    UseMutationOptions<
-      PartialMessage<Nothing>,
-      ConnectError,
-      PartialMessage<Nothing>
-    >
+    UseMutationOptions<Nothing, ConnectError, PartialMessage<Nothing>>
   >,
 ) => {
   const transport = useTransport();

@@ -127,11 +127,7 @@ export const useSayQuery = (
 export const useSayMutation = (
   options?: Parameters<typeof say.createUseMutationOptions>[0],
   queryOptions?: Partial<
-    UseMutationOptions<
-      PartialMessage<SayResponse>,
-      ConnectError,
-      PartialMessage<SayRequest>
-    >
+    UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
   >,
 ) => {
   const transport = useTransport();

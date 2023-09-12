@@ -61,11 +61,7 @@ export declare const useWorkQuery: (
 export declare const useWorkMutation: (
   options?: Parameters<typeof work.createUseMutationOptions>[0],
   queryOptions?: Partial<
-    UseMutationOptions<
-      PartialMessage<Nothing>,
-      ConnectError,
-      PartialMessage<Nothing>
-    >
+    UseMutationOptions<Nothing, ConnectError, PartialMessage<Nothing>>
   >,
 ) => UseMutationResult<Nothing, ConnectError, PartialMessage<Nothing>, unknown>;
 

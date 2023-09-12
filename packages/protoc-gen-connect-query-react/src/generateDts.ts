@@ -113,7 +113,7 @@ const generateServiceFile =
 
             f.print(`export declare const `, reactHookName(method, 'Mutation'), ': (');
             f.print(`    options?: Parameters<typeof `, serviceName, `.createUseMutationOptions>[0],`);
-            f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`);
+            f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, method.output, `, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`);
             f.print(`) => `, useMutationResult, `<`, method.output, `,`, connectError, ',', partialMessage, `<`, method.input, '>',`, unknown>;`);
             f.print(``);
 

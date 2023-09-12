@@ -102,11 +102,7 @@ export declare const useSayQuery: (
 export declare const useSayMutation: (
   options?: Parameters<typeof say.createUseMutationOptions>[0],
   queryOptions?: Partial<
-    UseMutationOptions<
-      PartialMessage<SayResponse>,
-      ConnectError,
-      PartialMessage<SayRequest>
-    >
+    UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
   >,
 ) => UseMutationResult<
   SayResponse,

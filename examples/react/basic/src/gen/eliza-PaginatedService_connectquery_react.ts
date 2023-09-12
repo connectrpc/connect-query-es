@@ -89,11 +89,7 @@ export const useListQuery = (
 export const useListMutation = (
   options?: Parameters<typeof list.createUseMutationOptions>[0],
   queryOptions?: Partial<
-    UseMutationOptions<
-      PartialMessage<ListResponse>,
-      ConnectError,
-      PartialMessage<ListRequest>
-    >
+    UseMutationOptions<ListResponse, ConnectError, PartialMessage<ListRequest>>
   >,
 ) => {
   const transport = useTransport();

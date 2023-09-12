@@ -67,7 +67,7 @@ export declare const useCountMutation: (
   options?: Parameters<typeof count.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
-      PartialMessage<CountResponse>,
+      CountResponse,
       ConnectError,
       PartialMessage<CountRequest>
     >
