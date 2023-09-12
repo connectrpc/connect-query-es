@@ -51,15 +51,15 @@ export declare const Slouch: {
 
 export const work: UnaryHooks<Nothing, Nothing>;
 export declare const useWorkQuery: (
-  input: Parameters<typeof work.useQuery>[0],
-  options?: Parameters<typeof work.useQuery>[1],
+  input: Parameters<typeof work.createUseQueryOptions>[0],
+  options?: Parameters<typeof work.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<Nothing, ConnectError, Nothing, ConnectQueryKey<Nothing>>
   >,
 ) => UseQueryResult<Nothing, ConnectError>;
 
 export declare const useWorkMutation: (
-  options?: Parameters<typeof work.useMutation>[0],
+  options?: Parameters<typeof work.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<Nothing>,
@@ -70,8 +70,8 @@ export declare const useWorkMutation: (
 ) => UseMutationResult<Nothing, ConnectError, PartialMessage<Nothing>, unknown>;
 
 export declare const useWorkInfiniteQuery: (
-  input: Parameters<typeof work.useInfiniteQuery>[0],
-  options: Parameters<typeof work.useInfiniteQuery>[1],
+  input: Parameters<typeof work.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof work.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       Nothing,

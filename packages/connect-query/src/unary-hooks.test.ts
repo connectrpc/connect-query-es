@@ -85,15 +85,14 @@ describe("unaryHooks", () => {
       Equal<
         keyof typeof genSay,
         | "createData"
+        | "createUseInfiniteQueryOptions"
+        | "createUseMutationOptions"
         | "createUseQueryOptions"
         | "getPartialQueryKey"
         | "getQueryKey"
         | "methodInfo"
         | "setQueriesData"
         | "setQueryData"
-        | "useInfiniteQuery"
-        | "useMutation"
-        | "useQuery"
       >
     >;
 
@@ -105,9 +104,8 @@ describe("unaryHooks", () => {
       methodInfo: expect.objectContaining(ElizaService.methods.say),
       setQueriesData: expect.any(Function),
       setQueryData: expect.any(Function),
-      useInfiniteQuery: expect.any(Function),
-      useQuery: expect.any(Function),
-      useMutation: expect.any(Function),
+      createUseInfiniteQueryOptions: expect.any(Function),
+      createUseMutationOptions: expect.any(Function),
     };
 
     const sorter = (a: string, b: string) => a.localeCompare(b);
@@ -135,14 +133,11 @@ describe("unaryHooks", () => {
     const input = { sentence: "ziltoid" } satisfies PartialMessage<SayRequest>;
     const transport = mockEliza();
 
-    const { result } = renderHook(
-      async () => {
-        const { queryFn } = genSay.useQuery(input);
+    const { result } = renderHook(async () => {
+      const { queryFn } = genSay.createUseQueryOptions(input, { transport });
 
-        return queryFn();
-      },
-      wrapper({}, transport),
-    );
+      return queryFn();
+    });
 
     const response = await result.current;
 
@@ -157,133 +152,6 @@ describe("unaryHooks", () => {
       const expected = new BigIntService.methods.count.O(partial);
 
       expect(genCount.createData(partial)).toStrictEqual(expected);
-    });
-  });
-
-  // note: the bulk of this helper is tested via the API's main entry point: `useQuery`, which simply calls this function with automatic inference of transport.
-  describe("createUseQueryOptions", () => {
-    it("has the intended API surface", () => {
-      type ExpectType_CreateUserQueryOptionsParams = Expect<
-        Equal<Parameters<typeof genCount.createUseQueryOptions>["length"], 2>
-      >;
-      type ExpectType_CreateUserQueryOptionsParams0 = Expect<
-        Equal<
-          Parameters<typeof genCount.createUseQueryOptions>[0],
-          DisableQuery | PartialMessage<CountRequest> | undefined
-        >
-      >;
-      type ExpectType_CreateUserQueryOptionsParams1 = Expect<
-        Equal<
-          Parameters<typeof genCount.createUseQueryOptions>[1],
-          {
-            getPlaceholderData?: (
-              enabled: boolean,
-            ) => PartialMessage<CountResponse> | undefined;
-            onError?: (error: ConnectError) => void;
-            transport: Transport;
-            callOptions?: CallOptions | undefined;
-          }
-        >
-      >;
-      type ExpectType_CreateUserQueryOptionsReturn = Expect<
-        Equal<
-          ReturnType<typeof genCount.createUseQueryOptions>,
-          {
-            enabled: boolean;
-            queryKey: ConnectQueryKey<CountRequest>;
-            queryFn: (
-              context?:
-                | QueryFunctionContext<ConnectQueryKey<CountRequest>>
-                | undefined,
-            ) => Promise<CountResponse>;
-            placeholderData?: () => CountResponse | undefined;
-            onError?: (error: ConnectError) => void;
-          }
-        >
-      >;
-
-      expect.assertions(0);
-    });
-
-    it("requires transport", () => {
-      const message =
-        "createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.";
-      expect(() =>
-        genCount.createUseQueryOptions(
-          {},
-          {
-            // @ts-expect-error(2322) intentionally incorrect
-            transport: undefined,
-          },
-        ),
-      ).toThrow(`Invalid assertion: ${message}`);
-      expect(() =>
-        genCount.createUseQueryOptions(
-          {},
-          // @ts-expect-error(2322) intentionally incorrect
-          {},
-        ),
-      ).toThrow(`Invalid assertion: ${message}`);
-    });
-  });
-
-  describe("getPartialQueryKey", () => {
-    type ExpectType_GetQuery = Expect<
-      Equal<typeof genSay.getPartialQueryKey, () => ConnectPartialQueryKey>
-    >;
-
-    it("returns a partial query key", () => {
-      expect(genSay.getPartialQueryKey()).toStrictEqual([
-        "connectrpc.eliza.v1.ElizaService",
-        "Say",
-      ]);
-    });
-  });
-
-  describe("getQueryKey", () => {
-    type ExpectType_GetQuery = Expect<
-      Equal<
-        typeof genSay.getQueryKey,
-        (
-          input?: DisableQuery | PartialMessage<SayRequest>,
-        ) => ConnectQueryKey<SayRequest>
-      >
-    >;
-
-    it("returns a simple query key with an input", () => {
-      const sentence = { sentence: "ziltoid" };
-      expect(genSay.getQueryKey(sentence)).toStrictEqual([
-        "connectrpc.eliza.v1.ElizaService",
-        "Say",
-        sentence,
-      ]);
-    });
-
-    it("returns handles disableQuery", () => {
-      expect(genSay.getQueryKey(disableQuery)).toStrictEqual([
-        "connectrpc.eliza.v1.ElizaService",
-        "Say",
-        {},
-      ]);
-    });
-
-    it("returns handles no input", () => {
-      expect(genSay.getQueryKey()).toStrictEqual([
-        "connectrpc.eliza.v1.ElizaService",
-        "Say",
-        {},
-      ]);
-      expect(genSay.getQueryKey(undefined)).toStrictEqual([
-        "connectrpc.eliza.v1.ElizaService",
-        "Say",
-        {},
-      ]);
-      // @ts-expect-error(2345) intentionally incorrect
-      expect(genSay.getQueryKey(null)).toStrictEqual([
-        "connectrpc.eliza.v1.ElizaService",
-        "Say",
-        {},
-      ]);
     });
   });
 
@@ -322,7 +190,8 @@ describe("unaryHooks", () => {
         const { queryClient, ...rest } = wrapper({ defaultOptions });
 
         const { result, rerender } = renderHook(
-          () => useQuery(genCount.useQuery(request, { transport })),
+          () =>
+            useQuery(genCount.createUseQueryOptions(request, { transport })),
           rest,
         );
         type ExpectType_Data = Expect<
@@ -357,13 +226,15 @@ describe("unaryHooks", () => {
       });
 
       it("allows a partial message updater", async () => {
-        const { queryClient, ...rest } = wrapper(
-          { defaultOptions },
-          mockBigInt(),
-        );
+        const { queryClient, ...rest } = wrapper({ defaultOptions });
 
         const { result, rerender } = renderHook(
-          () => useQuery(genCount.useQuery(request)),
+          () =>
+            useQuery(
+              genCount.createUseQueryOptions(request, {
+                transport: mockBigInt(),
+              }),
+            ),
           rest,
         );
 
@@ -391,12 +262,14 @@ describe("unaryHooks", () => {
             count: count + 1n,
           });
 
-        const { queryClient, ...rest } = wrapper(
-          { defaultOptions },
-          mockBigInt(),
-        );
+        const { queryClient, ...rest } = wrapper({ defaultOptions });
         const { result, rerender } = renderHook(
-          () => useQuery(genCount.useQuery(request)),
+          () =>
+            useQuery(
+              genCount.createUseQueryOptions(request, {
+                transport: mockBigInt(),
+              }),
+            ),
           rest,
         );
 
@@ -423,7 +296,7 @@ describe("unaryHooks", () => {
 
   describe("useInfiniteQuery", () => {
     it("has the intended API surface", () => {
-      type params = Parameters<typeof genCount.useInfiniteQuery>;
+      type params = Parameters<typeof genCount.createUseInfiniteQueryOptions>;
       type ExpectType_UseInfiniteQueryParamsLength = Expect<
         Equal<params["length"], 2>
       >;
@@ -432,7 +305,9 @@ describe("unaryHooks", () => {
         Equal<params[0], DisableQuery | PartialMessage<CountRequest>>
       >;
 
-      type returnType = ReturnType<typeof genCount.useInfiniteQuery>;
+      type returnType = ReturnType<
+        typeof genCount.createUseInfiniteQueryOptions
+      >;
 
       type ExpectType_UseInfiniteQueryReturnKeys = Expect<
         Equal<
@@ -478,7 +353,7 @@ describe("unaryHooks", () => {
         const { result } = renderHook(
           () =>
             useInfiniteQuery(
-              customSay.useInfiniteQuery(
+              customSay.createUseInfiniteQueryOptions(
                 { sentence: "Infinity" },
                 {
                   pageParamKey: "sentence",
@@ -498,6 +373,18 @@ describe("unaryHooks", () => {
           "override",
         );
       });
+
+      it("requires a transport", () => {
+        expect(() => {
+          genCount.createUseInfiniteQueryOptions(
+            {},
+            {
+              getNextPageParam: (lastPage) => lastPage.count + 1n,
+              pageParamKey: "add",
+            },
+          );
+        }).toThrow("Transport must be provided");
+      });
     });
 
     it("integrates with `useInfiniteQuery`", async () => {
@@ -506,12 +393,13 @@ describe("unaryHooks", () => {
       const { result, rerender } = renderHook(
         () =>
           useInfiniteQuery(
-            genPaginated.useInfiniteQuery(input, {
+            genPaginated.createUseInfiniteQueryOptions(input, {
               pageParamKey: "page",
               getNextPageParam: (lastPage) => lastPage.page + 1n,
+              transport: mockPaginatedTransport(),
             }),
           ),
-        wrapper({ defaultOptions }, mockPaginatedTransport()),
+        wrapper({ defaultOptions }),
       );
 
       expect(result.current.data).toStrictEqual(undefined);
@@ -565,9 +453,10 @@ describe("unaryHooks", () => {
     it("is disabled when input matches the `disableQuery` symbol", async () => {
       const { result } = renderHook(
         () =>
-          genCount.useInfiniteQuery(disableQuery, {
+          genCount.createUseInfiniteQueryOptions(disableQuery, {
             pageParamKey: "add",
             getNextPageParam: (lastPage) => lastPage.count,
+            transport: mockEliza(),
           }),
         wrapper(),
       );
@@ -584,7 +473,7 @@ describe("unaryHooks", () => {
       const getNextPageParam = (lastPage: CountResponse) => lastPage.count;
       const { result } = renderHook(
         () =>
-          genCount.useInfiniteQuery(input, {
+          genCount.createUseInfiniteQueryOptions(input, {
             pageParamKey: "add",
             getNextPageParam,
             transport: mockBigInt(),
@@ -611,11 +500,12 @@ describe("unaryHooks", () => {
       it("doesn't use onError if it isn't passed", () => {
         const { result } = renderHook(
           () =>
-            genCount.useInfiniteQuery(
+            genCount.createUseInfiniteQueryOptions(
               {},
               {
                 pageParamKey: "add",
                 getNextPageParam: (lastPage) => lastPage.count,
+                transport: mockEliza(),
               },
             ),
           wrapper(),
@@ -629,15 +519,15 @@ describe("unaryHooks", () => {
         const { result, rerender } = renderHook(
           () =>
             useQuery({
-              ...genCount.useInfiniteQuery(
+              ...genCount.createUseInfiniteQueryOptions(
                 // @ts-expect-error(2345) intentionally invalid input
                 { nope: "nope nope" },
-                { onError, pageParamKey: "add" },
+                { onError, pageParamKey: "add", transport: mockEliza() },
               ),
               queryFn: async () => Promise.reject("error"),
               retry: false,
             }),
-          wrapper(),
+          wrapper(undefined, mockBigInt()),
         );
         rerender();
 
@@ -661,7 +551,7 @@ describe("unaryHooks", () => {
       renderHook(
         () =>
           useInfiniteQuery(
-            genCount.useInfiniteQuery(
+            genCount.createUseInfiniteQueryOptions(
               { add: 1n },
               {
                 pageParamKey: "add",
@@ -690,7 +580,7 @@ describe("unaryHooks", () => {
       renderHook(
         () =>
           useInfiniteQuery(
-            genPaginated.useInfiniteQuery(
+            genPaginated.createUseInfiniteQueryOptions(
               { page: 1n },
               {
                 pageParamKey: "page",
@@ -721,7 +611,7 @@ describe("unaryHooks", () => {
       renderHook(
         () =>
           useInfiniteQuery(
-            genPaginated.useInfiniteQuery(
+            genPaginated.createUseInfiniteQueryOptions(
               { page: 1n },
               // @ts-expect-error(2345) intentionally invalid applyPageParam + pageParamKey
               {
@@ -745,7 +635,7 @@ describe("unaryHooks", () => {
       const transport = mockPaginatedTransport();
       const { result } = renderHook(
         () =>
-          genPaginated.useInfiniteQuery(
+          genPaginated.createUseInfiniteQueryOptions(
             { page: 1n },
             {
               pageParamKey: "page",
@@ -770,7 +660,7 @@ describe("unaryHooks", () => {
       const transport = mockPaginatedTransport();
       const { result } = renderHook(
         () =>
-          genPaginated.useInfiniteQuery(
+          genPaginated.createUseInfiniteQueryOptions(
             { page: 1n },
             {
               applyPageParam: ({ pageParam, input }) => {
@@ -809,7 +699,7 @@ describe("unaryHooks", () => {
       renderHook(
         () =>
           useInfiniteQuery(
-            genPaginated.useInfiniteQuery(
+            genPaginated.createUseInfiniteQueryOptions(
               { page: 1n },
               {
                 applyPageParam: ({ pageParam, input }) => {
@@ -862,7 +752,9 @@ describe("unaryHooks", () => {
       const { result } = renderHook(
         () =>
           useMutation(
-            customSay.useMutation({ transport: mockTransportOption }),
+            customSay.createUseMutationOptions({
+              transport: mockTransportOption,
+            }),
           ),
         wrapper({}, mockTransportContext),
       );
@@ -878,8 +770,14 @@ describe("unaryHooks", () => {
       });
     });
 
+    it("requires a transport", () => {
+      expect(() => {
+        genCount.createUseMutationOptions();
+      }).toThrow("Transport must be provided");
+    });
+
     it("has the intended API surface", () => {
-      type params = Parameters<typeof genCount.useMutation>;
+      type params = Parameters<typeof genCount.createUseMutationOptions>;
 
       type ExpectType_UseMutationParamsLength = Expect<
         Equal<params["length"], 0 | 1>
@@ -899,7 +797,7 @@ describe("unaryHooks", () => {
 
       type ExpectType_UseMutationReturn = Expect<
         Equal<
-          ReturnType<typeof genCount.useMutation>,
+          ReturnType<typeof genCount.createUseMutationOptions>,
           {
             mutationFn: (
               input: PartialMessage<CountRequest>,
@@ -912,7 +810,13 @@ describe("unaryHooks", () => {
         >
       >;
 
-      const { result } = renderHook(() => genCount.useMutation(), wrapper());
+      const { result } = renderHook(
+        () =>
+          genCount.createUseMutationOptions({
+            transport: mockBigInt(),
+          }),
+        wrapper(),
+      );
 
       expect(
         Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
@@ -926,11 +830,14 @@ describe("unaryHooks", () => {
       const { result, rerender } = renderHook(
         () =>
           useMutation({
-            ...genCount.useMutation({ onError }),
+            ...genCount.createUseMutationOptions({
+              onError,
+              transport: mockBigInt(),
+            }),
             mutationFn: async () => Promise.reject("error"),
             mutationKey: genCount.getQueryKey(),
           }),
-        wrapper({ defaultOptions }, mockBigInt()),
+        wrapper({ defaultOptions }),
       );
 
       rerender();
@@ -958,15 +865,16 @@ describe("unaryHooks", () => {
       /** this input will add one to the total count */
       const input = { add: 2n };
 
-      const { queryClient, ...rest } = wrapper(
+      const { queryClient, transport, ...rest } = wrapper(
         { defaultOptions },
         mockStatefulBigIntTransport(),
       );
-
       const { result } = renderHook(
         () => ({
           mut: useMutation({
-            ...genCount.useMutation(),
+            ...genCount.createUseMutationOptions({
+              transport,
+            }),
             mutationKey: genCount.getQueryKey(input),
             onSuccess: () => {
               const queryKey = genCount.getQueryKey(input);
@@ -978,7 +886,11 @@ describe("unaryHooks", () => {
               );
             },
           }),
-          get: useQuery(genCount.useQuery(input)),
+          get: useQuery(
+            genCount.createUseQueryOptions(input, {
+              transport,
+            }),
+          ),
         }),
         rest,
       );
@@ -1021,7 +933,7 @@ describe("unaryHooks", () => {
       const { result } = renderHook(
         () =>
           useMutation({
-            ...genCount.useMutation({
+            ...genCount.createUseMutationOptions({
               callOptions: mockCallOptions,
               transport,
             }),
@@ -1047,9 +959,9 @@ describe("unaryHooks", () => {
     });
   });
 
-  describe("useQuery", () => {
+  describe("createUseQueryOptions", () => {
     it("has the intended API surface", () => {
-      type params = Parameters<typeof genSay.useQuery>;
+      type params = Parameters<typeof genSay.createUseQueryOptions>;
       type ExpectType_UseQueryParams0 = Expect<
         Equal<
           params[0],
@@ -1078,7 +990,7 @@ describe("unaryHooks", () => {
 
       type ExpectType_UseQueryK = Expect<
         Equal<
-          ReturnType<typeof genSay.useQuery>,
+          ReturnType<typeof genSay.createUseQueryOptions>,
           {
             enabled: boolean;
             queryKey: ConnectQueryKey<SayRequest>;
@@ -1091,17 +1003,14 @@ describe("unaryHooks", () => {
         >
       >;
 
-      const { result } = renderHook(
-        () =>
-          genSay.useQuery(undefined, {
-            onError: jest.fn(),
-            getPlaceholderData: jest.fn(() => new SayResponse()),
-          }),
-        wrapper(),
-      );
+      const result = genSay.createUseQueryOptions(undefined, {
+        onError: jest.fn(),
+        getPlaceholderData: jest.fn(() => new SayResponse()),
+        transport: mockEliza(),
+      });
 
       expect(
-        Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
+        Object.keys(result).sort((a, b) => a.localeCompare(b)),
       ).toStrictEqual([
         "enabled",
         "onError",
@@ -1111,63 +1020,43 @@ describe("unaryHooks", () => {
       ]);
     });
 
-    describe("transport", () => {
-      it("prioritizes option transport", async () => {
-        const mockTransportContext = mockEliza();
-        const mockTransportTopLevel = mockEliza();
-        const mockTransportOption = mockEliza({
-          sentence: "override",
-        });
-        const input = { sentence: "useQuery" };
-        const customSay = unaryHooks({
-          methodInfo: ElizaService.methods.say,
-          typeName: ElizaService.typeName,
-          transport: mockTransportTopLevel,
-        });
-        const { result } = renderHook(
-          () =>
-            useQuery(
-              customSay.useQuery(input, { transport: mockTransportOption }),
-            ),
-          wrapper({}, mockTransportContext),
-        );
-
-        await waitFor(() => {
-          expect(result.current.isSuccess).toBeTruthy();
-        });
-
-        expect(result.current.data?.sentence).toStrictEqual("override");
-      });
-    });
-
     describe("enabled", () => {
       it("has the correct type", () => {
         expect.assertions(0);
-        const { result } = renderHook(() => genSay.useQuery({}), wrapper());
-        type ExpectType_Expect = Expect<
-          Equal<typeof result.current.enabled, boolean>
-        >;
+        const result = genSay.createUseQueryOptions(
+          {},
+          {
+            transport: mockEliza(),
+          },
+        );
+        type ExpectType_Expect = Expect<Equal<typeof result.enabled, boolean>>;
       });
 
       it("is enabled when input does not match the `disableQuery` symbol", () => {
-        const { result } = renderHook(() => genSay.useQuery({}), wrapper());
+        const result = genSay.createUseQueryOptions(
+          {},
+          {
+            transport: mockEliza(),
+          },
+        );
 
-        expect(result.current).toHaveProperty("enabled", true);
+        expect(result).toHaveProperty("enabled", true);
       });
 
       it("is enabled with an empty input", () => {
-        const { result } = renderHook(() => genSay.useQuery(), wrapper());
+        const result = genSay.createUseQueryOptions(undefined, {
+          transport: mockEliza(),
+        });
 
-        expect(result.current).toHaveProperty("enabled", true);
+        expect(result).toHaveProperty("enabled", true);
       });
 
       it("is disabled when input matches the `disableQuery` symbol", () => {
-        const { result } = renderHook(
-          () => genSay.useQuery(disableQuery),
-          wrapper(),
-        );
+        const result = genSay.createUseQueryOptions(disableQuery, {
+          transport: mockEliza(),
+        });
 
-        expect(result.current).toHaveProperty("enabled", false);
+        expect(result).toHaveProperty("enabled", false);
       });
     });
 
@@ -1180,10 +1069,12 @@ describe("unaryHooks", () => {
 
       it("has the correct type", () => {
         expect.assertions(0);
-        const { result } = renderHook(() => genSay.useQuery(), wrapper());
+        const result = genSay.createUseQueryOptions(undefined, {
+          transport: mockEliza(),
+        });
         type ExpectType_GetPlaceholderData = Expect<
           Equal<
-            typeof result.current.placeholderData,
+            typeof result.placeholderData,
             (() => SayResponse | undefined) | undefined
           >
         >;
@@ -1191,19 +1082,16 @@ describe("unaryHooks", () => {
 
       it("passes through getPlaceholderData, when provided", () => {
         const getPlaceholderData = jest.fn(() => placeholderSentence);
-        const { result } = renderHook(
-          () => genSay.useQuery(input, { getPlaceholderData }),
-          wrapper(),
-        );
+        const result = genSay.createUseQueryOptions(input, {
+          getPlaceholderData,
+          transport: mockEliza(),
+        });
 
-        expect(result.current).toHaveProperty(
-          "placeholderData",
-          expect.any(Function),
-        );
+        expect(result).toHaveProperty("placeholderData", expect.any(Function));
         expect(getPlaceholderData).not.toHaveBeenCalled();
 
         const response = (
-          result.current.placeholderData as () => Message<SayResponse>
+          result.placeholderData as () => Message<SayResponse>
         )();
 
         expect(getPlaceholderData).toHaveBeenCalledWith(true);
@@ -1212,9 +1100,11 @@ describe("unaryHooks", () => {
       });
 
       it("does not pass through getPlaceholderData if not provided", () => {
-        const { result } = renderHook(() => genSay.useQuery(input), wrapper());
+        const result = genSay.createUseQueryOptions(input, {
+          transport: mockEliza(),
+        });
 
-        expect(result.current).not.toHaveProperty("getPlaceholderData");
+        expect(result).not.toHaveProperty("getPlaceholderData");
       });
 
       it("will use pass the value of `enabled` to the getPlaceholderData callback", () => {
@@ -1224,7 +1114,13 @@ describe("unaryHooks", () => {
           ) => PartialMessage<SayResponse> | undefined
         >(() => ({}));
         const { result } = renderHook(
-          () => useQuery(genSay.useQuery(disableQuery, { getPlaceholderData })),
+          () =>
+            useQuery(
+              genSay.createUseQueryOptions(disableQuery, {
+                getPlaceholderData,
+                transport: mockEliza(),
+              }),
+            ),
           wrapper(),
         );
 
@@ -1239,7 +1135,13 @@ describe("unaryHooks", () => {
           ) => PartialMessage<SayResponse> | undefined
         >(() => undefined);
         const { result } = renderHook(
-          () => useQuery(genSay.useQuery(disableQuery, { getPlaceholderData })),
+          () =>
+            useQuery(
+              genSay.createUseQueryOptions(disableQuery, {
+                getPlaceholderData,
+                transport: mockEliza(),
+              }),
+            ),
           wrapper(),
         );
 
@@ -1257,8 +1159,10 @@ describe("unaryHooks", () => {
       });
 
       it("doesn't use onError if it isn't passed", () => {
-        const { result } = renderHook(() => genSay.useQuery(), wrapper());
-        expect(result.current.onError).toBeUndefined();
+        const result = genSay.createUseQueryOptions(undefined, {
+          transport: mockEliza(),
+        });
+        expect(result.onError).toBeUndefined();
       });
 
       it("allows for a passthrough onError", async () => {
@@ -1266,8 +1170,11 @@ describe("unaryHooks", () => {
         const { result, rerender } = renderHook(
           () =>
             useQuery({
-              // @ts-expect-error(2345) intentionally invalid input
-              ...genSay.useQuery({ nope: "nope nope" }, { onError }),
+              ...genSay.createUseQueryOptions(
+                // @ts-expect-error(2345) intentionally invalid input
+                { nope: "nope nope" },
+                { onError, transport: mockEliza() },
+              ),
               queryFn: async () => Promise.reject("error"),
               retry: false,
             }),
@@ -1294,10 +1201,12 @@ describe("unaryHooks", () => {
 
       it("has the correct type", () => {
         expect.assertions(0);
-        const { result } = renderHook(() => genSay.useQuery(), wrapper());
+        const result = genSay.createUseQueryOptions(undefined, {
+          transport: mockEliza(),
+        });
         type ExpectType_QueryFn = Expect<
           Equal<
-            typeof result.current.queryFn,
+            typeof result.queryFn,
             (
               context?:
                 | QueryFunctionContext<ConnectQueryKey<SayRequest>>
@@ -1308,18 +1217,19 @@ describe("unaryHooks", () => {
       });
 
       it("generates a query function", () => {
-        const { result } = renderHook(() => genSay.useQuery(input), wrapper());
+        const result = genSay.createUseQueryOptions(input, {
+          transport: mockEliza(),
+        });
 
-        expect(result.current).toHaveProperty("queryFn", expect.any(Function));
+        expect(result).toHaveProperty("queryFn", expect.any(Function));
       });
 
       it("throws when the `queryFn` is passed `disabledQuery` symbol as an input", async () => {
-        const { result } = renderHook(
-          () => genSay.useQuery(disableQuery),
-          wrapper(),
-        );
+        const result = genSay.createUseQueryOptions(disableQuery, {
+          transport: mockEliza(),
+        });
 
-        await expect(result.current.queryFn).rejects.toStrictEqual(
+        await expect(result.queryFn).rejects.toStrictEqual(
           new Error(
             "Invalid assertion: queryFn does not accept a disabled query",
           ),
@@ -1332,7 +1242,7 @@ describe("unaryHooks", () => {
         renderHook(
           () =>
             useQuery(
-              genSay.useQuery(
+              genSay.createUseQueryOptions(
                 {},
                 {
                   transport,
@@ -1359,24 +1269,44 @@ describe("unaryHooks", () => {
 
       it("has the correct type", () => {
         expect.assertions(0);
-        const { result } = renderHook(() => genSay.useQuery(), wrapper());
+        const result = genSay.createUseQueryOptions(undefined, {
+          transport: mockEliza(),
+        });
+
         type ExpectType_QueryKey = Expect<
           Equal<
-            typeof result.current.queryKey,
+            typeof result.queryKey,
             [string, string, PartialMessage<SayRequest>]
           >
         >;
       });
 
       it("generates a query key", () => {
-        const { result } = renderHook(() => genSay.useQuery(input), wrapper());
+        const result = genSay.createUseQueryOptions(input, {
+          transport: mockEliza(),
+        });
 
-        expect(result.current).toHaveProperty("queryKey", [
+        expect(result).toHaveProperty("queryKey", [
           ElizaService.typeName,
           ElizaService.methods.say.name,
           { sentence: "ziltoid" },
         ]);
       });
+    });
+  });
+
+  describe("getPartialQueryKey", () => {
+    it("has the return type and value", () => {
+      const key = genSay.getPartialQueryKey();
+
+      type ExpectType_GetPartialQueryKey = Expect<
+        Equal<typeof key, [string, string]>
+      >;
+
+      expect(key).toStrictEqual([
+        ElizaService.typeName,
+        ElizaService.methods.say.name,
+      ]);
     });
   });
 });

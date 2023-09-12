@@ -83,6 +83,7 @@ const generateServiceFile =
         const partialMessage = f.import('PartialMessage', '@bufbuild/protobuf');
         const connectError = f.import('ConnectError', '@connectrpc/connect');
         const connectQueryKey = f.import("ConnectQueryKey", "@connectrpc/connect-query");
+        const useTransport = f.import('useTransport', "@connectrpc/connect-query");
 
         f.print(makeJsDoc(method));
 
@@ -90,7 +91,6 @@ const generateServiceFile =
         f.print(
           `export const ${serviceName} = queryService.${localName(method)};`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
         f.print(``);
-
 
         // useQuery
         const useQuery = f.import('useQuery', importHookFrom);
@@ -100,11 +100,12 @@ const generateServiceFile =
         );
 
         f.print(`export const `, reactHookName(method, 'Query'), ' = (');
-        f.print(`    input?: Parameters<typeof `,serviceName, `.useQuery>[0],`);
-        f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1],`,);
+        f.print(`    input?: Parameters<typeof `,serviceName, `.createUseQueryOptions>[0],`);
+        f.print(`    options?: Parameters<typeof `, serviceName, `.createUseQueryOptions>[1],`,);
         f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, serviceName, `.useQuery(input, options);`);
+        f.print(`    const transport = `, useTransport, `();`);
+        f.print(`    const baseOptions = `, serviceName, `.createUseQueryOptions(input, { transport, ...options });`);
         f.print(``);
         f.print(`    return `, useQuery, `({`);
         f.print(`        ...baseOptions,`);
@@ -121,10 +122,11 @@ const generateServiceFile =
         );
 
         f.print(`export const `, reactHookName(method, 'Mutation'), ' = (');
-        f.print(`    options?: Parameters<typeof `, serviceName, `.useMutation>[0],`);
+        f.print(`    options?: Parameters<typeof `, serviceName, `.createUseMutationOptions>[0],`);
         f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, serviceName, `.useMutation(options);`);
+        f.print(`    const transport = `, useTransport, `();`);
+        f.print(`    const baseOptions = `, serviceName, `.createUseMutationOptions({ transport, ...options });`);
         f.print(``);
         f.print(`    return `, useMutation, `({`);
         f.print(`        ...baseOptions,`);
@@ -140,11 +142,12 @@ const generateServiceFile =
           importHookFrom,
         );
         f.print(`export const `, reactHookName(method, 'InfiniteQuery'), ' = (');
-        f.print(`    input: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
-        f.print(`    options: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1],`);
+        f.print(`    input: Parameters<typeof `, serviceName, `.createUseInfiniteQueryOptions>[0],`);
+        f.print(`    options: Parameters<typeof `, serviceName, `.createUseInfiniteQueryOptions>[1],`);
         f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, serviceName, `.useInfiniteQuery(input, options);`);
+        f.print(`    const transport = `, useTransport, `();`);
+        f.print(`    const baseOptions = `, serviceName, `.createUseInfiniteQueryOptions(input, { transport, ...options });`);
         f.print(``);
         f.print(`    return `, useInfiniteQuery, `<`, method.output, `, `, connectError, `, `, method.output, `, keyof typeof input extends never ? any : `, connectQueryKey, `<`, method.input, `>>({`);
         f.print(`        ...baseOptions,`);

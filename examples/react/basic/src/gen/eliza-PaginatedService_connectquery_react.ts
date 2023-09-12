@@ -19,7 +19,11 @@
 
 import { ListRequest, ListResponse } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
+import {
+  ConnectQueryKey,
+  createQueryService,
+  useTransport,
+} from "@connectrpc/connect-query";
 import {
   QueryClient,
   useInfiniteQuery,
@@ -59,8 +63,8 @@ const queryService = createQueryService({
 export const list = queryService.list;
 
 export const useListQuery = (
-  input?: Parameters<typeof list.useQuery>[0],
-  options?: Parameters<typeof list.useQuery>[1],
+  input?: Parameters<typeof list.createUseQueryOptions>[0],
+  options?: Parameters<typeof list.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       ListResponse,
@@ -70,7 +74,11 @@ export const useListQuery = (
     >
   >,
 ) => {
-  const baseOptions = list.useQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = list.createUseQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useQuery({
     ...baseOptions,
@@ -79,7 +87,7 @@ export const useListQuery = (
 };
 
 export const useListMutation = (
-  options?: Parameters<typeof list.useMutation>[0],
+  options?: Parameters<typeof list.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<ListResponse>,
@@ -88,7 +96,8 @@ export const useListMutation = (
     >
   >,
 ) => {
-  const baseOptions = list.useMutation(options);
+  const transport = useTransport();
+  const baseOptions = list.createUseMutationOptions({ transport, ...options });
 
   return useMutation({
     ...baseOptions,
@@ -97,8 +106,8 @@ export const useListMutation = (
 };
 
 export const useListInfiniteQuery = (
-  input: Parameters<typeof list.useInfiniteQuery>[0],
-  options: Parameters<typeof list.useInfiniteQuery>[1],
+  input: Parameters<typeof list.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof list.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       ListResponse,
@@ -109,7 +118,11 @@ export const useListInfiniteQuery = (
     >
   >,
 ) => {
-  const baseOptions = list.useInfiniteQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = list.createUseInfiniteQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useInfiniteQuery<
     ListResponse,

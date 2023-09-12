@@ -51,8 +51,8 @@ export declare const PaginatedService: {
 
 export const list: UnaryHooks<ListRequest, ListResponse>;
 export declare const useListQuery: (
-  input: Parameters<typeof list.useQuery>[0],
-  options?: Parameters<typeof list.useQuery>[1],
+  input: Parameters<typeof list.createUseQueryOptions>[0],
+  options?: Parameters<typeof list.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       ListResponse,
@@ -64,7 +64,7 @@ export declare const useListQuery: (
 ) => UseQueryResult<ListResponse, ConnectError>;
 
 export declare const useListMutation: (
-  options?: Parameters<typeof list.useMutation>[0],
+  options?: Parameters<typeof list.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<ListResponse>,
@@ -80,8 +80,8 @@ export declare const useListMutation: (
 >;
 
 export declare const useListInfiniteQuery: (
-  input: Parameters<typeof list.useInfiniteQuery>[0],
-  options: Parameters<typeof list.useInfiniteQuery>[1],
+  input: Parameters<typeof list.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof list.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       ListResponse,

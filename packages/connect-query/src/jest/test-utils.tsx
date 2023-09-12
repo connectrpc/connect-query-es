@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import type { PartialMessage } from "@bufbuild/protobuf";
-import type { CallOptions } from "@connectrpc/connect";
+import type { CallOptions, Transport } from "@connectrpc/connect";
 import { createRouterTransport } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import type { QueryClientConfig } from "@tanstack/react-query";
@@ -40,6 +40,7 @@ export const wrapper = (
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;
   queryClient: QueryClient;
+  transport: Transport;
 } => {
   const queryClient = new QueryClient(config);
   return {
@@ -51,6 +52,7 @@ export const wrapper = (
       </TransportProvider>
     ),
     queryClient,
+    transport,
   };
 };
 

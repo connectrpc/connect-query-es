@@ -94,8 +94,8 @@ const generateServiceFile =
             );
 
             f.print(`export declare const `, reactHookName(method, 'Query'), ': (');
-            f.print(`    input: Parameters<typeof `,serviceName, `.useQuery>[0],`);
-            f.print(`    options?: Parameters<typeof `, serviceName, `.useQuery>[1],`,);
+            f.print(`    input: Parameters<typeof `,serviceName, `.createUseQueryOptions>[0],`);
+            f.print(`    options?: Parameters<typeof `, serviceName, `.createUseQueryOptions>[1],`,);
             f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
 
             f.print(`) => `, useQueryResult, `<`, method.output, `,`, connectError, `>;`);
@@ -112,7 +112,7 @@ const generateServiceFile =
             );
 
             f.print(`export declare const `, reactHookName(method, 'Mutation'), ': (');
-            f.print(`    options?: Parameters<typeof `, serviceName, `.useMutation>[0],`);
+            f.print(`    options?: Parameters<typeof `, serviceName, `.createUseMutationOptions>[0],`);
             f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, partialMessage, `<`, method.output, `>, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`);
             f.print(`) => `, useMutationResult, `<`, method.output, `,`, connectError, ',', partialMessage, `<`, method.input, '>',`, unknown>;`);
             f.print(``);
@@ -128,8 +128,8 @@ const generateServiceFile =
             );
 
             f.print(`export declare const `, reactHookName(method, 'InfiniteQuery'), ': (');
-            f.print(`    input: Parameters<typeof `, serviceName, `.useInfiniteQuery>[0],`);
-            f.print(`    options: Parameters<typeof `, serviceName, `.useInfiniteQuery>[1],`);
+            f.print(`    input: Parameters<typeof `, serviceName, `.createUseInfiniteQueryOptions>[0],`);
+            f.print(`    options: Parameters<typeof `, serviceName, `.createUseInfiniteQueryOptions>[1],`);
             f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
             f.print(`) => `, useInfiniteQueryResult, `<`, method.output, `,`, connectError, `>;`);
             f.print(``);

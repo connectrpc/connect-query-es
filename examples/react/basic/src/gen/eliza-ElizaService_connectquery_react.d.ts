@@ -103,8 +103,8 @@ export declare const ElizaService: {
 
 export const say: UnaryHooks<SayRequest, SayResponse>;
 export declare const useSayQuery: (
-  input: Parameters<typeof say.useQuery>[0],
-  options?: Parameters<typeof say.useQuery>[1],
+  input: Parameters<typeof say.createUseQueryOptions>[0],
+  options?: Parameters<typeof say.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       SayResponse,
@@ -116,7 +116,7 @@ export declare const useSayQuery: (
 ) => UseQueryResult<SayResponse, ConnectError>;
 
 export declare const useSayMutation: (
-  options?: Parameters<typeof say.useMutation>[0],
+  options?: Parameters<typeof say.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<SayResponse>,
@@ -132,8 +132,8 @@ export declare const useSayMutation: (
 >;
 
 export declare const useSayInfiniteQuery: (
-  input: Parameters<typeof say.useInfiniteQuery>[0],
-  options: Parameters<typeof say.useInfiniteQuery>[1],
+  input: Parameters<typeof say.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof say.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       SayResponse,
@@ -153,8 +153,8 @@ export declare function useSayInvalidateQueries(): (
 
 export const sayAgain: UnaryHooks<SayRequest, SayResponse>;
 export declare const useSayAgainQuery: (
-  input: Parameters<typeof sayAgain.useQuery>[0],
-  options?: Parameters<typeof sayAgain.useQuery>[1],
+  input: Parameters<typeof sayAgain.createUseQueryOptions>[0],
+  options?: Parameters<typeof sayAgain.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       SayResponse,
@@ -166,7 +166,7 @@ export declare const useSayAgainQuery: (
 ) => UseQueryResult<SayResponse, ConnectError>;
 
 export declare const useSayAgainMutation: (
-  options?: Parameters<typeof sayAgain.useMutation>[0],
+  options?: Parameters<typeof sayAgain.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<SayResponse>,
@@ -182,8 +182,8 @@ export declare const useSayAgainMutation: (
 >;
 
 export declare const useSayAgainInfiniteQuery: (
-  input: Parameters<typeof sayAgain.useInfiniteQuery>[0],
-  options: Parameters<typeof sayAgain.useInfiniteQuery>[1],
+  input: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       SayResponse,

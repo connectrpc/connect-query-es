@@ -51,8 +51,8 @@ export declare const BigIntService: {
 
 export const count: UnaryHooks<CountRequest, CountResponse>;
 export declare const useCountQuery: (
-  input: Parameters<typeof count.useQuery>[0],
-  options?: Parameters<typeof count.useQuery>[1],
+  input: Parameters<typeof count.createUseQueryOptions>[0],
+  options?: Parameters<typeof count.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       CountResponse,
@@ -64,7 +64,7 @@ export declare const useCountQuery: (
 ) => UseQueryResult<CountResponse, ConnectError>;
 
 export declare const useCountMutation: (
-  options?: Parameters<typeof count.useMutation>[0],
+  options?: Parameters<typeof count.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<CountResponse>,
@@ -80,8 +80,8 @@ export declare const useCountMutation: (
 >;
 
 export declare const useCountInfiniteQuery: (
-  input: Parameters<typeof count.useInfiniteQuery>[0],
-  options: Parameters<typeof count.useInfiniteQuery>[1],
+  input: Parameters<typeof count.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof count.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       CountResponse,

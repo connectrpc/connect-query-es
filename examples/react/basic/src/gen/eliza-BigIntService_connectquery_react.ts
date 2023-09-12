@@ -19,7 +19,11 @@
 
 import { CountRequest, CountResponse } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
+import {
+  ConnectQueryKey,
+  createQueryService,
+  useTransport,
+} from "@connectrpc/connect-query";
 import {
   QueryClient,
   useInfiniteQuery,
@@ -59,8 +63,8 @@ const queryService = createQueryService({
 export const count = queryService.count;
 
 export const useCountQuery = (
-  input?: Parameters<typeof count.useQuery>[0],
-  options?: Parameters<typeof count.useQuery>[1],
+  input?: Parameters<typeof count.createUseQueryOptions>[0],
+  options?: Parameters<typeof count.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       CountResponse,
@@ -70,7 +74,11 @@ export const useCountQuery = (
     >
   >,
 ) => {
-  const baseOptions = count.useQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = count.createUseQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useQuery({
     ...baseOptions,
@@ -79,7 +87,7 @@ export const useCountQuery = (
 };
 
 export const useCountMutation = (
-  options?: Parameters<typeof count.useMutation>[0],
+  options?: Parameters<typeof count.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<CountResponse>,
@@ -88,7 +96,8 @@ export const useCountMutation = (
     >
   >,
 ) => {
-  const baseOptions = count.useMutation(options);
+  const transport = useTransport();
+  const baseOptions = count.createUseMutationOptions({ transport, ...options });
 
   return useMutation({
     ...baseOptions,
@@ -97,8 +106,8 @@ export const useCountMutation = (
 };
 
 export const useCountInfiniteQuery = (
-  input: Parameters<typeof count.useInfiniteQuery>[0],
-  options: Parameters<typeof count.useInfiniteQuery>[1],
+  input: Parameters<typeof count.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof count.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       CountResponse,
@@ -109,7 +118,11 @@ export const useCountInfiniteQuery = (
     >
   >,
 ) => {
-  const baseOptions = count.useInfiniteQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = count.createUseInfiniteQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useInfiniteQuery<
     CountResponse,

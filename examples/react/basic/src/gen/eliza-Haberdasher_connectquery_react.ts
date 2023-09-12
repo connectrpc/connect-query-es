@@ -19,7 +19,11 @@
 
 import { Nothing } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
+import {
+  ConnectQueryKey,
+  createQueryService,
+  useTransport,
+} from "@connectrpc/connect-query";
 import {
   QueryClient,
   useInfiniteQuery,
@@ -59,13 +63,17 @@ const queryService = createQueryService({
 export const work = queryService.work;
 
 export const useWorkQuery = (
-  input?: Parameters<typeof work.useQuery>[0],
-  options?: Parameters<typeof work.useQuery>[1],
+  input?: Parameters<typeof work.createUseQueryOptions>[0],
+  options?: Parameters<typeof work.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<Nothing, ConnectError, Nothing, ConnectQueryKey<Nothing>>
   >,
 ) => {
-  const baseOptions = work.useQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = work.createUseQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useQuery({
     ...baseOptions,
@@ -74,7 +82,7 @@ export const useWorkQuery = (
 };
 
 export const useWorkMutation = (
-  options?: Parameters<typeof work.useMutation>[0],
+  options?: Parameters<typeof work.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<Nothing>,
@@ -83,7 +91,8 @@ export const useWorkMutation = (
     >
   >,
 ) => {
-  const baseOptions = work.useMutation(options);
+  const transport = useTransport();
+  const baseOptions = work.createUseMutationOptions({ transport, ...options });
 
   return useMutation({
     ...baseOptions,
@@ -92,8 +101,8 @@ export const useWorkMutation = (
 };
 
 export const useWorkInfiniteQuery = (
-  input: Parameters<typeof work.useInfiniteQuery>[0],
-  options: Parameters<typeof work.useInfiniteQuery>[1],
+  input: Parameters<typeof work.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof work.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       Nothing,
@@ -104,7 +113,11 @@ export const useWorkInfiniteQuery = (
     >
   >,
 ) => {
-  const baseOptions = work.useInfiniteQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = work.createUseInfiniteQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useInfiniteQuery<
     Nothing,

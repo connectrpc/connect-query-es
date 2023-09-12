@@ -26,7 +26,11 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
+import {
+  ConnectQueryKey,
+  createQueryService,
+  useTransport,
+} from "@connectrpc/connect-query";
 import {
   QueryClient,
   useInfiniteQuery,
@@ -113,8 +117,8 @@ const queryService = createQueryService({
 export const say = queryService.say;
 
 export const useSayQuery = (
-  input?: Parameters<typeof say.useQuery>[0],
-  options?: Parameters<typeof say.useQuery>[1],
+  input?: Parameters<typeof say.createUseQueryOptions>[0],
+  options?: Parameters<typeof say.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       SayResponse,
@@ -124,7 +128,11 @@ export const useSayQuery = (
     >
   >,
 ) => {
-  const baseOptions = say.useQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = say.createUseQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useQuery({
     ...baseOptions,
@@ -133,7 +141,7 @@ export const useSayQuery = (
 };
 
 export const useSayMutation = (
-  options?: Parameters<typeof say.useMutation>[0],
+  options?: Parameters<typeof say.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<SayResponse>,
@@ -142,7 +150,8 @@ export const useSayMutation = (
     >
   >,
 ) => {
-  const baseOptions = say.useMutation(options);
+  const transport = useTransport();
+  const baseOptions = say.createUseMutationOptions({ transport, ...options });
 
   return useMutation({
     ...baseOptions,
@@ -151,8 +160,8 @@ export const useSayMutation = (
 };
 
 export const useSayInfiniteQuery = (
-  input: Parameters<typeof say.useInfiniteQuery>[0],
-  options: Parameters<typeof say.useInfiniteQuery>[1],
+  input: Parameters<typeof say.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof say.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       SayResponse,
@@ -163,7 +172,11 @@ export const useSayInfiniteQuery = (
     >
   >,
 ) => {
-  const baseOptions = say.useInfiniteQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = say.createUseInfiniteQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useInfiniteQuery<
     SayResponse,
@@ -200,8 +213,8 @@ export function useSayInvalidateQueries() {
 export const sayAgain = queryService.sayAgain;
 
 export const useSayAgainQuery = (
-  input?: Parameters<typeof sayAgain.useQuery>[0],
-  options?: Parameters<typeof sayAgain.useQuery>[1],
+  input?: Parameters<typeof sayAgain.createUseQueryOptions>[0],
+  options?: Parameters<typeof sayAgain.createUseQueryOptions>[1],
   queryOptions?: Partial<
     UseQueryOptions<
       SayResponse,
@@ -211,7 +224,11 @@ export const useSayAgainQuery = (
     >
   >,
 ) => {
-  const baseOptions = sayAgain.useQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = sayAgain.createUseQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useQuery({
     ...baseOptions,
@@ -220,7 +237,7 @@ export const useSayAgainQuery = (
 };
 
 export const useSayAgainMutation = (
-  options?: Parameters<typeof sayAgain.useMutation>[0],
+  options?: Parameters<typeof sayAgain.createUseMutationOptions>[0],
   queryOptions?: Partial<
     UseMutationOptions<
       PartialMessage<SayResponse>,
@@ -229,7 +246,11 @@ export const useSayAgainMutation = (
     >
   >,
 ) => {
-  const baseOptions = sayAgain.useMutation(options);
+  const transport = useTransport();
+  const baseOptions = sayAgain.createUseMutationOptions({
+    transport,
+    ...options,
+  });
 
   return useMutation({
     ...baseOptions,
@@ -238,8 +259,8 @@ export const useSayAgainMutation = (
 };
 
 export const useSayAgainInfiniteQuery = (
-  input: Parameters<typeof sayAgain.useInfiniteQuery>[0],
-  options: Parameters<typeof sayAgain.useInfiniteQuery>[1],
+  input: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[0],
+  options: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[1],
   queryOptions?: Partial<
     UseInfiniteQueryOptions<
       SayResponse,
@@ -250,7 +271,11 @@ export const useSayAgainInfiniteQuery = (
     >
   >,
 ) => {
-  const baseOptions = sayAgain.useInfiniteQuery(input, options);
+  const transport = useTransport();
+  const baseOptions = sayAgain.createUseInfiniteQueryOptions(input, {
+    transport,
+    ...options,
+  });
 
   return useInfiniteQuery<
     SayResponse,

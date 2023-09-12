@@ -102,7 +102,10 @@ describe("createQueryHooks", () => {
     >;
     expect(hooks.say).toHaveProperty("methodInfo", service.methods.say);
 
-    expect(hooks.say).toHaveProperty("useQuery", expect.any(Function));
+    expect(hooks.say).toHaveProperty(
+      "createUseQueryOptions",
+      expect.any(Function),
+    );
   });
 
   it("filters out non-unary methods", () => {
