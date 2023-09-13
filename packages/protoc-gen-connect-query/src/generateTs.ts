@@ -63,7 +63,7 @@ const generateServiceFile =
       f.print("    },");
     }
     f.print("  }");
-    f.print("}", extension === "ts" ? " as const;" : "");
+    f.print("}", extension === "ts" ? " as const" : "", ";");
     f.print();
 
     
