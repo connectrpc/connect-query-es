@@ -20,81 +20,48 @@
 import { CountRequest, CountResponse } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
-import {
-  QueryClient,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { QueryClient, UseInfiniteQueryOptions, UseInfiniteQueryResult, UseMutationOptions, UseMutationResult, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { ConnectError } from "@connectrpc/connect";
 
 /**
  * @generated from service connectrpc.eliza.v1.BigIntService
  */
 export declare const BigIntService: {
-  readonly typeName: "connectrpc.eliza.v1.BigIntService";
+  readonly typeName: "connectrpc.eliza.v1.BigIntService",
   readonly methods: {
     /**
      * @generated from rpc connectrpc.eliza.v1.BigIntService.Count
      */
     readonly count: {
-      readonly name: "Count";
-      readonly I: typeof CountRequest;
-      readonly O: typeof CountResponse;
-      readonly kind: MethodKind.Unary;
-    };
-  };
+      readonly name: "Count",
+      readonly I: typeof CountRequest,
+      readonly O: typeof CountResponse,
+      readonly kind: MethodKind.Unary,
+    },
+  }
 };
 
 export const count: UnaryFunctions<CountRequest, CountResponse>;
 export declare const useCountQuery: (
-  input: Parameters<typeof count.createUseQueryOptions>[0],
-  options?: Parameters<typeof count.createUseQueryOptions>[1],
-  queryOptions?: Partial<
-    UseQueryOptions<
-      CountResponse,
-      ConnectError,
-      CountResponse,
-      ConnectQueryKey<CountRequest>
-    >
-  >,
-) => UseQueryResult<CountResponse, ConnectError>;
+    input: Parameters<typeof count.createUseQueryOptions>[0],
+    options?: Parameters<typeof count.createUseQueryOptions>[1],
+    queryOptions?: Partial<UseQueryOptions<CountResponse, ConnectError, CountResponse, ConnectQueryKey<CountRequest>>>
+) => UseQueryResult<CountResponse,ConnectError>;
 
 export declare const useCountMutation: (
-  options?: Parameters<typeof count.createUseMutationOptions>[0],
-  queryOptions?: Partial<
-    UseMutationOptions<
-      CountResponse,
-      ConnectError,
-      PartialMessage<CountRequest>
-    >
-  >,
-) => UseMutationResult<
-  CountResponse,
-  ConnectError,
-  PartialMessage<CountRequest>,
-  unknown
->;
+    options?: Parameters<typeof count.createUseMutationOptions>[0],
+    queryOptions?: Partial<UseMutationOptions<CountResponse, ConnectError, PartialMessage<CountRequest>>>
+) => UseMutationResult<CountResponse,ConnectError,PartialMessage<CountRequest>, unknown>;
 
 export declare const useCountInfiniteQuery: (
-  input: Parameters<typeof count.createUseInfiniteQueryOptions>[0],
-  options: Parameters<typeof count.createUseInfiniteQueryOptions>[1],
-  queryOptions?: Partial<
-    UseInfiniteQueryOptions<
-      CountResponse,
-      ConnectError,
-      CountResponse,
-      CountResponse,
-      ConnectQueryKey<CountRequest>
-    >
-  >,
-) => UseInfiniteQueryResult<CountResponse, ConnectError>;
+    input: Parameters<typeof count.createUseInfiniteQueryOptions>[0],
+    options: Parameters<typeof count.createUseInfiniteQueryOptions>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<CountResponse, ConnectError, CountResponse, CountResponse, ConnectQueryKey<CountRequest>>>
+) => UseInfiniteQueryResult<CountResponse,ConnectError>;
 
 export declare function useCountInvalidateQueries(): (
   input?: Parameters<typeof count.getQueryKey>[0],
   filters?: Parameters<QueryClient["invalidateQueries"]>[1],
-  options?: Parameters<QueryClient["invalidateQueries"]>[2],
-) => Promise<void>;
+  options?: Parameters<QueryClient["invalidateQueries"]>[2]
+) => Promise<void>
+

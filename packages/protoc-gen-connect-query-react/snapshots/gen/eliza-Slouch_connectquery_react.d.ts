@@ -20,67 +20,48 @@
 import { Nothing } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
-import {
-  QueryClient,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { QueryClient, UseInfiniteQueryOptions, UseInfiniteQueryResult, UseMutationOptions, UseMutationResult, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { ConnectError } from "@connectrpc/connect";
 
 /**
  * @generated from service connectrpc.eliza.v1.Slouch
  */
 export declare const Slouch: {
-  readonly typeName: "connectrpc.eliza.v1.Slouch";
+  readonly typeName: "connectrpc.eliza.v1.Slouch",
   readonly methods: {
     /**
      * @generated from rpc connectrpc.eliza.v1.Slouch.Work
      */
     readonly work: {
-      readonly name: "Work";
-      readonly I: typeof Nothing;
-      readonly O: typeof Nothing;
-      readonly kind: MethodKind.Unary;
-    };
-  };
+      readonly name: "Work",
+      readonly I: typeof Nothing,
+      readonly O: typeof Nothing,
+      readonly kind: MethodKind.Unary,
+    },
+  }
 };
 
 export const work: UnaryFunctions<Nothing, Nothing>;
 export declare const useWorkQuery: (
-  input: Parameters<typeof work.createUseQueryOptions>[0],
-  options?: Parameters<typeof work.createUseQueryOptions>[1],
-  queryOptions?: Partial<
-    UseQueryOptions<Nothing, ConnectError, Nothing, ConnectQueryKey<Nothing>>
-  >,
-) => UseQueryResult<Nothing, ConnectError>;
+    input: Parameters<typeof work.createUseQueryOptions>[0],
+    options?: Parameters<typeof work.createUseQueryOptions>[1],
+    queryOptions?: Partial<UseQueryOptions<Nothing, ConnectError, Nothing, ConnectQueryKey<Nothing>>>
+) => UseQueryResult<Nothing,ConnectError>;
 
 export declare const useWorkMutation: (
-  options?: Parameters<typeof work.createUseMutationOptions>[0],
-  queryOptions?: Partial<
-    UseMutationOptions<Nothing, ConnectError, PartialMessage<Nothing>>
-  >,
-) => UseMutationResult<Nothing, ConnectError, PartialMessage<Nothing>, unknown>;
+    options?: Parameters<typeof work.createUseMutationOptions>[0],
+    queryOptions?: Partial<UseMutationOptions<Nothing, ConnectError, PartialMessage<Nothing>>>
+) => UseMutationResult<Nothing,ConnectError,PartialMessage<Nothing>, unknown>;
 
 export declare const useWorkInfiniteQuery: (
-  input: Parameters<typeof work.createUseInfiniteQueryOptions>[0],
-  options: Parameters<typeof work.createUseInfiniteQueryOptions>[1],
-  queryOptions?: Partial<
-    UseInfiniteQueryOptions<
-      Nothing,
-      ConnectError,
-      Nothing,
-      Nothing,
-      ConnectQueryKey<Nothing>
-    >
-  >,
-) => UseInfiniteQueryResult<Nothing, ConnectError>;
+    input: Parameters<typeof work.createUseInfiniteQueryOptions>[0],
+    options: Parameters<typeof work.createUseInfiniteQueryOptions>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<Nothing, ConnectError, Nothing, Nothing, ConnectQueryKey<Nothing>>>
+) => UseInfiniteQueryResult<Nothing,ConnectError>;
 
 export declare function useWorkInvalidateQueries(): (
   input?: Parameters<typeof work.getQueryKey>[0],
   filters?: Parameters<QueryClient["invalidateQueries"]>[1],
-  options?: Parameters<QueryClient["invalidateQueries"]>[2],
-) => Promise<void>;
+  options?: Parameters<QueryClient["invalidateQueries"]>[2]
+) => Promise<void>
+

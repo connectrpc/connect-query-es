@@ -17,25 +17,10 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {
-  ConverseRequest,
-  ConverseResponse,
-  IntroduceRequest,
-  IntroduceResponse,
-  SayRequest,
-  SayResponse,
-} from "./eliza_pb";
+import { ConverseRequest, ConverseResponse, IntroduceRequest, IntroduceResponse, SayRequest, SayResponse } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import { ConnectQueryKey, UnaryFunctions } from "@connectrpc/connect-query";
-import {
-  QueryClient,
-  UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { QueryClient, UseInfiniteQueryOptions, UseInfiniteQueryResult, UseMutationOptions, UseMutationResult, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { ConnectError } from "@connectrpc/connect";
 
 /**
@@ -49,7 +34,7 @@ import { ConnectError } from "@connectrpc/connect";
  * @generated from service connectrpc.eliza.v1.ElizaService
  */
 export declare const ElizaService: {
-  readonly typeName: "connectrpc.eliza.v1.ElizaService";
+  readonly typeName: "connectrpc.eliza.v1.ElizaService",
   readonly methods: {
     /**
      * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
@@ -57,22 +42,22 @@ export declare const ElizaService: {
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
      */
     readonly say: {
-      readonly name: "Say";
-      readonly I: typeof SayRequest;
-      readonly O: typeof SayResponse;
-      readonly kind: MethodKind.Unary;
-    };
+      readonly name: "Say",
+      readonly I: typeof SayRequest,
+      readonly O: typeof SayResponse,
+      readonly kind: MethodKind.Unary,
+    },
     /**
      * SayAgain is a unary RPC. Eliza responds to the prompt with a single sentence.
      *
      * @generated from rpc connectrpc.eliza.v1.ElizaService.SayAgain
      */
     readonly sayAgain: {
-      readonly name: "SayAgain";
-      readonly I: typeof SayRequest;
-      readonly O: typeof SayResponse;
-      readonly kind: MethodKind.Unary;
-    };
+      readonly name: "SayAgain",
+      readonly I: typeof SayRequest,
+      readonly O: typeof SayResponse,
+      readonly kind: MethodKind.Unary,
+    },
     /**
      * Converse is a bidirectional RPC. The caller may exchange multiple
      * back-and-forth messages with Eliza over a long-lived connection. Eliza
@@ -81,11 +66,11 @@ export declare const ElizaService: {
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Converse
      */
     readonly converse: {
-      readonly name: "Converse";
-      readonly I: typeof ConverseRequest;
-      readonly O: typeof ConverseResponse;
-      readonly kind: MethodKind.BiDiStreaming;
-    };
+      readonly name: "Converse",
+      readonly I: typeof ConverseRequest,
+      readonly O: typeof ConverseResponse,
+      readonly kind: MethodKind.BiDiStreaming,
+    },
     /**
      * Introduce is a server streaming RPC. Given the caller's name, Eliza
      * returns a stream of sentences to introduce itself.
@@ -93,102 +78,59 @@ export declare const ElizaService: {
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Introduce
      */
     readonly introduce: {
-      readonly name: "Introduce";
-      readonly I: typeof IntroduceRequest;
-      readonly O: typeof IntroduceResponse;
-      readonly kind: MethodKind.ServerStreaming;
-    };
-  };
+      readonly name: "Introduce",
+      readonly I: typeof IntroduceRequest,
+      readonly O: typeof IntroduceResponse,
+      readonly kind: MethodKind.ServerStreaming,
+    },
+  }
 };
 
 export const say: UnaryFunctions<SayRequest, SayResponse>;
 export declare const useSayQuery: (
-  input: Parameters<typeof say.createUseQueryOptions>[0],
-  options?: Parameters<typeof say.createUseQueryOptions>[1],
-  queryOptions?: Partial<
-    UseQueryOptions<
-      SayResponse,
-      ConnectError,
-      SayResponse,
-      ConnectQueryKey<SayRequest>
-    >
-  >,
-) => UseQueryResult<SayResponse, ConnectError>;
+    input: Parameters<typeof say.createUseQueryOptions>[0],
+    options?: Parameters<typeof say.createUseQueryOptions>[1],
+    queryOptions?: Partial<UseQueryOptions<SayResponse, ConnectError, SayResponse, ConnectQueryKey<SayRequest>>>
+) => UseQueryResult<SayResponse,ConnectError>;
 
 export declare const useSayMutation: (
-  options?: Parameters<typeof say.createUseMutationOptions>[0],
-  queryOptions?: Partial<
-    UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
-  >,
-) => UseMutationResult<
-  SayResponse,
-  ConnectError,
-  PartialMessage<SayRequest>,
-  unknown
->;
+    options?: Parameters<typeof say.createUseMutationOptions>[0],
+    queryOptions?: Partial<UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>>
+) => UseMutationResult<SayResponse,ConnectError,PartialMessage<SayRequest>, unknown>;
 
 export declare const useSayInfiniteQuery: (
-  input: Parameters<typeof say.createUseInfiniteQueryOptions>[0],
-  options: Parameters<typeof say.createUseInfiniteQueryOptions>[1],
-  queryOptions?: Partial<
-    UseInfiniteQueryOptions<
-      SayResponse,
-      ConnectError,
-      SayResponse,
-      SayResponse,
-      ConnectQueryKey<SayRequest>
-    >
-  >,
-) => UseInfiniteQueryResult<SayResponse, ConnectError>;
+    input: Parameters<typeof say.createUseInfiniteQueryOptions>[0],
+    options: Parameters<typeof say.createUseInfiniteQueryOptions>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<SayResponse, ConnectError, SayResponse, SayResponse, ConnectQueryKey<SayRequest>>>
+) => UseInfiniteQueryResult<SayResponse,ConnectError>;
 
 export declare function useSayInvalidateQueries(): (
   input?: Parameters<typeof say.getQueryKey>[0],
   filters?: Parameters<QueryClient["invalidateQueries"]>[1],
-  options?: Parameters<QueryClient["invalidateQueries"]>[2],
-) => Promise<void>;
+  options?: Parameters<QueryClient["invalidateQueries"]>[2]
+) => Promise<void>
 
 export const sayAgain: UnaryFunctions<SayRequest, SayResponse>;
 export declare const useSayAgainQuery: (
-  input: Parameters<typeof sayAgain.createUseQueryOptions>[0],
-  options?: Parameters<typeof sayAgain.createUseQueryOptions>[1],
-  queryOptions?: Partial<
-    UseQueryOptions<
-      SayResponse,
-      ConnectError,
-      SayResponse,
-      ConnectQueryKey<SayRequest>
-    >
-  >,
-) => UseQueryResult<SayResponse, ConnectError>;
+    input: Parameters<typeof sayAgain.createUseQueryOptions>[0],
+    options?: Parameters<typeof sayAgain.createUseQueryOptions>[1],
+    queryOptions?: Partial<UseQueryOptions<SayResponse, ConnectError, SayResponse, ConnectQueryKey<SayRequest>>>
+) => UseQueryResult<SayResponse,ConnectError>;
 
 export declare const useSayAgainMutation: (
-  options?: Parameters<typeof sayAgain.createUseMutationOptions>[0],
-  queryOptions?: Partial<
-    UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
-  >,
-) => UseMutationResult<
-  SayResponse,
-  ConnectError,
-  PartialMessage<SayRequest>,
-  unknown
->;
+    options?: Parameters<typeof sayAgain.createUseMutationOptions>[0],
+    queryOptions?: Partial<UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>>
+) => UseMutationResult<SayResponse,ConnectError,PartialMessage<SayRequest>, unknown>;
 
 export declare const useSayAgainInfiniteQuery: (
-  input: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[0],
-  options: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[1],
-  queryOptions?: Partial<
-    UseInfiniteQueryOptions<
-      SayResponse,
-      ConnectError,
-      SayResponse,
-      SayResponse,
-      ConnectQueryKey<SayRequest>
-    >
-  >,
-) => UseInfiniteQueryResult<SayResponse, ConnectError>;
+    input: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[0],
+    options: Parameters<typeof sayAgain.createUseInfiniteQueryOptions>[1],
+    queryOptions?: Partial<UseInfiniteQueryOptions<SayResponse, ConnectError, SayResponse, SayResponse, ConnectQueryKey<SayRequest>>>
+) => UseInfiniteQueryResult<SayResponse,ConnectError>;
 
 export declare function useSayAgainInvalidateQueries(): (
   input?: Parameters<typeof sayAgain.getQueryKey>[0],
   filters?: Parameters<QueryClient["invalidateQueries"]>[1],
-  options?: Parameters<QueryClient["invalidateQueries"]>[2],
-) => Promise<void>;
+  options?: Parameters<QueryClient["invalidateQueries"]>[2]
+) => Promise<void>
+
