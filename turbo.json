@@ -7,7 +7,7 @@
       "outputs": ["dist/**"]
     },
     "generate": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "build"]
     },
     "test": {
       "dependsOn": ["generate"],

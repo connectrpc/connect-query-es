@@ -52,7 +52,7 @@ jobs:
       - name: Check changed files
         id: check_changed_files
         run: |
-          git diff --name-only --exit-code
+          [[ -z $(git status --porcelain | tee /dev/stderr) ]] || exit 1
 
       - name: Report errors
         if: steps.check_changed_files.conclusion == 'failure'
