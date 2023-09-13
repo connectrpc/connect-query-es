@@ -3,7 +3,6 @@
 version: v1
 plugins:
   - name: es
-    path: ../node_modules/.bin/protoc-gen-es
     out: gen
     opt:
       - target=ts
@@ -12,11 +11,5 @@ plugins:
     path: ../bin/protoc-gen-connect-query-react
     out: gen
     opt:
-      - target=ts
-      - import_extension=
-  - name: connect-query-defs
-    path: ../bin/protoc-gen-connect-query-react
-    out: gen
-    opt:
-      - target=dts
+      - target=ts+dts
       - import_extension=
