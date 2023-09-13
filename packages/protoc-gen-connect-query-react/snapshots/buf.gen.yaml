@@ -2,12 +2,12 @@
 # For details, see https://docs.buf.build/configuration/v1/buf-gen-yaml
 version: v1
 plugins:
-  - name: es
+  - plugin: es
     out: gen
     opt:
       - target=ts
 
-  - name: connect-query
+  - plugin: connect-query
     path: ../bin/protoc-gen-connect-query-react
     out: gen
     opt:

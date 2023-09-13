@@ -2,12 +2,12 @@
 # For details, see https://docs.buf.build/configuration/v1/buf-gen-yaml
 version: v1
 plugins:
-  - name: es
+  - plugin: es
     out: src/gen
     opt:
       - target=ts
 
-  - name: connect-es
+  - plugin: connect-es
     out: src/gen
     opt:
       - target=ts
