@@ -16,7 +16,7 @@
   "licenseHeader": {
     "licenseType": "apache",
     "yearRange": "2021-2023",
-    "copyrightHolder": "Buf Technologies, Inc."
+    "copyrightHolder": "The Connect Authors"
   },
   "devDependencies": {
     "@bufbuild/license-header": "^0.0.3",
