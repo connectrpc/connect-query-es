@@ -63,7 +63,7 @@ const generateServiceFile =
       f.print("    },");
     }
     f.print("  }");
-    f.print("} as const;");
+    f.print("}", extension === "ts" ? " as const;" : "");
     f.print();
 
     
@@ -95,11 +95,11 @@ const generateServiceFile =
  */
 export const generateTs: PluginInit["generateJs"] & PluginInit["generateTs"] = (
   schema,
-  extension,
+  extension
 ) => {
   schema.files.forEach((protoFile) => {
     protoFile.services.forEach(
-      generateServiceFile(schema, protoFile, extension),
+      generateServiceFile(schema, protoFile, extension)
     );
   });
 };
