@@ -44,7 +44,7 @@ jobs:
         run: pnpm run generate
 
       - name: Lint
-        run: pnpm run format
+        run: pnpm run format --force
 
       - name: Test
         run: pnpm run test
