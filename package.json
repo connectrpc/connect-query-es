@@ -10,7 +10,7 @@
     "check:spelling": "cspell \"**\" --gitignore",
     "all": "turbo run build generate format test",
     "update-all": "pnpm update --recursive --latest",
-    "format:root": "pnpm run check:spelling && prettier \"*.js\" \"*.ts\" --write --no-error-on-unmatched-pattern"
+    "format:root": "pnpm run check:spelling && prettier \"*.js\" \"*.ts\" \"README.md\" --write --no-error-on-unmatched-pattern"
   },
   "license": "Apache-2.0",
   "licenseHeader": {
