@@ -12,4 +12,4 @@ plugins:
     out: gen
     opt:
       - target=ts+dts+js
-      - import_extension=
+      - import_extension=none
