@@ -51,10 +51,10 @@ jobs:
 
       - name: Check changed files
         id: check_changed_files
-        continue-on-error: true
         run: |
-          [[ -z $(git status --porcelain | tee /dev/stderr) ]] || exit 1
-
-      - name: Report errors
-        if: steps.check_changed_files.conclusion == 'failure'
-        run: echo "::error::Formatting errors found. Please merge with base branch (probably main), run 'pnpm format', and commit the changes."
+          if [[ -z $(git status --porcelain | tee /dev/stderr) ]]; then
+            echo "No changed files detected."
+          else
+            echo "::error::Formatting errors found. Please merge with base branch (probably main), run 'pnpm format', and commit the changes."
+            exit 1
+          fi
