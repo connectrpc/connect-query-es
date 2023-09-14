@@ -15,8 +15,8 @@
 /** @type {import('jest').Config} */
 module.exports = {
   collectCoverage: true,
-  coverageReporters: ['json', 'lcov', 'text', 'clover', 'text-summary'],
-  coveragePathIgnorePatterns: ['src/jest', 'src/gen'],
+  coverageReporters: ["json", "lcov", "text", "clover", "text-summary"],
+  coveragePathIgnorePatterns: ["src/jest", "src/gen"],
   coverageThreshold: {
     global: {
       branches: 100,
@@ -32,8 +32,8 @@ module.exports = {
   },
   workerThreads: true, // Enabled so jest would stop complaining about serializing BigInt.  See https://github.com/jestjs/jest/issues/11617#issuecomment-1458155552 for details
   transform: {
-    '^.+\\.(ts|tsx)$': [
-      'ts-jest',
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
       {
         isolatedModules: false,
         diagnostics: {

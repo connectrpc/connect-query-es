@@ -6,10 +6,11 @@
     "build": "turbo run build",
     "generate": "turbo run generate",
     "test": "turbo run test",
-    "format": "pnpm run check:spelling && turbo run format",
+    "format": "pnpm run format:root && turbo run format",
     "check:spelling": "cspell \"**\" --gitignore",
     "all": "turbo run build generate format test",
-    "update-all": "pnpm update --recursive --latest"
+    "update-all": "pnpm update --recursive --latest",
+    "format:root": "pnpm run check:spelling && prettier \"*.js\" \"*.ts\" --write --no-error-on-unmatched-pattern"
   },
   "license": "Apache-2.0",
   "licenseHeader": {

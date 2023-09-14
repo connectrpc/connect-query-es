@@ -52,8 +52,9 @@ jobs:
       - name: Check changed files
         id: check_changed_files
         run: |
-          git diff --name-only --exit-code
-
-      - name: Report errors
-        if: steps.check_changed_files.conclusion == 'failure'
-        run: echo "::error::Formatting errors found. Please run 'pnpm run format' and commit the changes."
+          if [[ -z $(git status --porcelain | tee /dev/stderr) ]]; then
+            echo "No changed files detected."
+          else
+            echo "::error::Formatting resulted in changed files. Please make sure this branch is up to date and run 'pnpm format'. Verify the changes are what you want and commit them."
+            exit 1
+          fi

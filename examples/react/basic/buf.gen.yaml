@@ -13,4 +13,4 @@ plugins:
     out: src/gen
     opt:
       - target=ts
-      - import_extension=
+      - import_extension=none

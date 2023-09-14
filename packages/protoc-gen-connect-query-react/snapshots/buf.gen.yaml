@@ -3,11 +3,13 @@
 version: v1
 plugins:
   - plugin: es
-    out: src/gen
+    out: gen
     opt:
       - target=ts
 
-  - plugin: connect-es
-    out: src/gen
+  - plugin: connect-query
+    path: ../bin/protoc-gen-connect-query-react
+    out: gen
     opt:
-      - target=ts
+      - target=ts+dts
+      - import_extension=none
