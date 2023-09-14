@@ -55,6 +55,6 @@ jobs:
           if [[ -z $(git status --porcelain | tee /dev/stderr) ]]; then
             echo "No changed files detected."
           else
-            echo "::error::Formatting errors found. Please merge with base branch (probably main), run 'pnpm format', and commit the changes."
+            echo "::error::Formatting resulted in changed files. Please make sure this branch is up to date and run 'pnpm format'. Verify the changes are what you want and commit them."
             exit 1
           fi
