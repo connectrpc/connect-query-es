@@ -82,7 +82,7 @@ const generateServiceFile =
         f.print(
           `export const ${safeIdentifier(localName(method))} = { `,
           `  ...queryService.${localName(method)},`,
-          `  ...`, f.import('createHooks', '@connectrpc/connect-query'),`(queryService.${localName(method)})`,
+          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`(queryService.${localName(method)})`,
           `};`
         );
 

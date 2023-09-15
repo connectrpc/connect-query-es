@@ -28,8 +28,8 @@ import {
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
 import {
   ConnectQueryKey,
-  createHooks,
   createQueryService,
+  createUnaryHooks,
 } from "@connectrpc/connect-query";
 import {
   useInfiniteQuery,
@@ -101,7 +101,7 @@ const queryService = createQueryService({
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say = createHooks(queryService.say);
+export const say = createUnaryHooks(queryService.say);
 
 export const useSayQuery = (
   input?: Parameters<typeof say.useQuery>[0],

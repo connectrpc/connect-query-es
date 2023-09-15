@@ -83,12 +83,12 @@ const generateServiceFile =
         const partialMessage = f.import('PartialMessage', '@bufbuild/protobuf');
         const connectError = f.import('ConnectError', '@connectrpc/connect');
         const connectQueryKey = f.import("ConnectQueryKey", "@connectrpc/connect-query");
-        const createHooks = f.import('createHooks', '@connectrpc/connect-query');
+        const createUnaryHooks = f.import('createUnaryHooks', '@connectrpc/connect-query');
 
         f.print(makeJsDoc(method));
 
         f.print(
-          `export const ${methodName} = `, createHooks, `(queryService.${localName(method)});`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
+          `export const ${methodName} = `, createUnaryHooks, `(queryService.${localName(method)});`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
         f.print(``);
 
         // useQuery

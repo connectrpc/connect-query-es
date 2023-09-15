@@ -26,7 +26,10 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createHooks, createQueryService } from "@connectrpc/connect-query";
+import {
+  createQueryService,
+  createUnaryHooks,
+} from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.SecondService";
 
@@ -84,4 +87,7 @@ const queryService = createQueryService({ service: SecondService });
  *
  * @generated from rpc connectrpc.eliza.v1.SecondService.Say
  */
-export const say = { ...queryService.say, ...createHooks(queryService.say) };
+export const say = {
+  ...queryService.say,
+  ...createUnaryHooks(queryService.say),
+};

@@ -37,7 +37,7 @@ export interface UnaryHooks<
  * Creates the hooks for a given set of unary methods.
  */
 export function createUnaryHooks<I extends Message<I>, O extends Message<O>>(
-  unaryMethods: UnaryFunctions<I, O>
+  unaryMethods: UnaryFunctions<I, O>,
 ): UnaryHooks<I, O, UnaryFunctions<I, O>> {
   return {
     useQuery: (input, options) => {

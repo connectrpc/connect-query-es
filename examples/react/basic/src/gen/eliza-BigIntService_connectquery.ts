@@ -19,7 +19,10 @@
 
 import { CountRequest, CountResponse } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { createHooks, createQueryService } from "@connectrpc/connect-query";
+import {
+  createQueryService,
+  createUnaryHooks,
+} from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.BigIntService";
 
@@ -48,5 +51,5 @@ const queryService = createQueryService({ service: BigIntService });
  */
 export const count = {
   ...queryService.count,
-  ...createHooks(queryService.count),
+  ...createUnaryHooks(queryService.count),
 };
