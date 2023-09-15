@@ -14,8 +14,8 @@
 
 import type { Message } from "@bufbuild/protobuf";
 
-import type { UnaryHooks } from "./create-hooks";
 import type { UnaryFunctions } from "./create-unary-functions";
+import type { UnaryHooks } from "./create-unary-hooks";
 
 export { createQueryService } from "./create-query-service";
 export type {
@@ -37,8 +37,8 @@ export type { UnaryFunctions } from "./create-unary-functions";
 export { createUnaryFunctions } from "./create-unary-functions";
 export { disableQuery } from "./utils";
 export { useTransport, TransportProvider } from "./use-transport";
-export type { UnaryHooks } from "./create-hooks";
-export { createHooks } from "./create-hooks";
+export type { UnaryHooks } from "./create-unary-hooks";
+export { createUnaryHooks } from "./create-unary-hooks";
 
 /**
  * Combined type of all the functions generated for a service.
