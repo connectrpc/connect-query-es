@@ -44,12 +44,12 @@ export const PaginatedService = {
   },
 } as const;
 
-const queryService = createQueryService({ service: PaginatedService });
+const $queryService = createQueryService({ service: PaginatedService });
 
 /**
  * @generated from rpc connectrpc.eliza.v1.PaginatedService.List
  */
 export const list = {
-  ...queryService.list,
-  ...createUnaryHooks(queryService.list),
+  ...$queryService.list,
+  ...createUnaryHooks($queryService.list),
 };

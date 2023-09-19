@@ -44,12 +44,12 @@ export const Slouch = {
   },
 } as const;
 
-const queryService = createQueryService({ service: Slouch });
+const $queryService = createQueryService({ service: Slouch });
 
 /**
  * @generated from rpc connectrpc.eliza.v1.Slouch.Work
  */
 export const work = {
-  ...queryService.work,
-  ...createUnaryHooks(queryService.work),
+  ...$queryService.work,
+  ...createUnaryHooks($queryService.work),
 };

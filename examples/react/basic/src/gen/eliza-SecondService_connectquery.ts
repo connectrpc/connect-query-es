@@ -80,7 +80,7 @@ export const SecondService = {
   },
 } as const;
 
-const queryService = createQueryService({ service: SecondService });
+const $queryService = createQueryService({ service: SecondService });
 
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
@@ -88,6 +88,6 @@ const queryService = createQueryService({ service: SecondService });
  * @generated from rpc connectrpc.eliza.v1.SecondService.Say
  */
 export const say = {
-  ...queryService.say,
-  ...createUnaryHooks(queryService.say),
+  ...$queryService.say,
+  ...createUnaryHooks($queryService.say),
 };

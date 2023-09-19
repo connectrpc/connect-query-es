@@ -44,12 +44,12 @@ export const Haberdasher = {
   },
 } as const;
 
-const queryService = createQueryService({ service: Haberdasher });
+const $queryService = createQueryService({ service: Haberdasher });
 
 /**
  * @generated from rpc connectrpc.eliza.v1.Haberdasher.Work
  */
 export const work = {
-  ...queryService.work,
-  ...createUnaryHooks(queryService.work),
+  ...$queryService.work,
+  ...createUnaryHooks($queryService.work),
 };

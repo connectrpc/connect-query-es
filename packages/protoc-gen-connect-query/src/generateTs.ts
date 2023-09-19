@@ -66,7 +66,7 @@ const generateServiceFile =
     f.print("}", extension === "ts" ? " as const" : "", ";");
     f.print();
 
-    f.print(`const queryService = `,
+    f.print(`const $queryService = `,
       f.import('createQueryService', '@connectrpc/connect-query'),
       `({`,
       `  service: `, localName(service), `,`,
@@ -81,8 +81,8 @@ const generateServiceFile =
         f.print(makeJsDoc(method));
         f.print(
           `export const ${safeIdentifier(localName(method))} = { `,
-          `  ...queryService.${localName(method)},`,
-          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`(queryService.${localName(method)})`,
+          `  ...$queryService.${localName(method)},`,
+          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
           `};`
         );
 

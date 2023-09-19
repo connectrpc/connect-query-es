@@ -93,7 +93,7 @@ export const ElizaService = {
   },
 } as const;
 
-const queryService = createQueryService({
+const $queryService = createQueryService({
   service: ElizaService,
 });
 /**
@@ -101,7 +101,7 @@ const queryService = createQueryService({
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say = createUnaryHooks(queryService.say);
+export const say = createUnaryHooks($queryService.say);
 
 export const useSayQuery = (
   input?: Parameters<typeof say.useQuery>[0],

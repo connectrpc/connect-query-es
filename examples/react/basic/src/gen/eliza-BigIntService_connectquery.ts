@@ -44,12 +44,12 @@ export const BigIntService = {
   },
 } as const;
 
-const queryService = createQueryService({ service: BigIntService });
+const $queryService = createQueryService({ service: BigIntService });
 
 /**
  * @generated from rpc connectrpc.eliza.v1.BigIntService.Count
  */
 export const count = {
-  ...queryService.count,
-  ...createUnaryHooks(queryService.count),
+  ...$queryService.count,
+  ...createUnaryHooks($queryService.count),
 };
