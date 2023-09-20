@@ -66,22 +66,25 @@ const generateServiceFile =
     f.print("}", extension === "ts" ? " as const" : "", ";");
     f.print();
 
+    f.print(`const $queryService = `,
+      f.import('createQueryService', '@connectrpc/connect-query'),
+      `({`,
+      `  service: `, localName(service), `,`,
+      `});`
+    );
+    f.print();
+
     
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
         f.print(makeJsDoc(method));
         f.print(
-          `export const ${safeIdentifier(localName(method))} = `,
-          f.import('createQueryService', '@connectrpc/connect-query'),
-          `({`,
+          `export const ${safeIdentifier(localName(method))} = { `,
+          `  ...$queryService.${localName(method)},`,
+          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
+          `};`
         );
-        f.print(`  service: `, localName(service), `,`);
-        // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a
-        // TSDoc to be attached to the exported variable. Also, it's nice that each method has its own atomic section
-        // that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one
-        // contiguous set of lines).
-        f.print(`}).${localName(method)};`);
 
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {

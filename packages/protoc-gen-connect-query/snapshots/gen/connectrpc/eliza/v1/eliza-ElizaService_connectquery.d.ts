@@ -26,7 +26,7 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import { UnaryHooks } from "@connectrpc/connect-query";
+import { UnaryFunctionsWithHooks } from "@connectrpc/connect-query";
 
 /**
  * ElizaService provides a way to talk to Eliza, a port of the DOCTOR script
@@ -80,4 +80,4 @@ export declare const ElizaService: {
   };
 };
 
-export const say: UnaryHooks<SayRequest, SayResponse>;
+export const say: UnaryFunctionsWithHooks<SayRequest, SayResponse>;

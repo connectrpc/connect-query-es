@@ -22,11 +22,14 @@ import { MethodKind } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 
 import type { ConnectQueryKey } from "./connect-query-key";
-import { createQueryHooks, isSupportedMethod } from "./create-query-hooks";
+import {
+  createQueryFunctions,
+  isSupportedMethod,
+} from "./create-query-functions";
+import type { UnaryFunctions } from "./create-unary-functions";
 import { ElizaService } from "./gen/eliza_connect";
 import type { SayRequest, SayResponse } from "./gen/eliza_pb";
 import type { Alike, Equal, Expect, ExpectFalse } from "./jest/test-utils";
-import type { UnaryHooks } from "./unary-hooks";
 import type { DisableQuery } from "./utils";
 
 describe("isSupportedMethod", () => {
@@ -60,7 +63,7 @@ describe("createQueryHooks", () => {
   const service = ElizaService;
 
   it("creates hooks for unary methods", () => {
-    const hooks = createQueryHooks({
+    const hooks = createQueryFunctions({
       service: {
         ...service,
         methods: {
@@ -73,7 +76,7 @@ describe("createQueryHooks", () => {
     });
 
     type ExpectType_Say = Expect<
-      Equal<typeof hooks.say, UnaryHooks<SayRequest, SayResponse>>
+      Equal<typeof hooks.say, UnaryFunctions<SayRequest, SayResponse>>
     >;
 
     type ExpectType_HooksKeys = Expect<
@@ -101,8 +104,6 @@ describe("createQueryHooks", () => {
       >
     >;
     expect(hooks.say).toHaveProperty("methodInfo", service.methods.say);
-
-    expect(hooks.say).toHaveProperty("useQuery", expect.any(Function));
   });
 
   it("filters out non-unary methods", () => {
@@ -128,7 +129,7 @@ describe("createQueryHooks", () => {
       },
     };
 
-    const hooks = createQueryHooks({ service: customService });
+    const hooks = createQueryFunctions({ service: customService });
 
     expect(Object.keys(hooks)).toStrictEqual(["Unary"]);
   });
@@ -153,7 +154,7 @@ describe("createQueryHooks", () => {
       },
     };
 
-    const hooks = createQueryHooks({ service: customService });
+    const hooks = createQueryFunctions({ service: customService });
 
     expect(Object.keys(hooks)).toStrictEqual(["Unary"]);
 

@@ -21,8 +21,8 @@ import type {
 import { MethodKind } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
 
-import type { UnaryHooks } from "./unary-hooks";
-import { unaryHooks } from "./unary-hooks";
+import type { UnaryFunctions } from "./create-unary-functions";
+import { createUnaryFunctions } from "./create-unary-functions";
 import { unreachableCase } from "./utils";
 
 /**
@@ -54,19 +54,19 @@ export type IsSupportedMethod<
   O extends Message<O>,
 > = MethodInfoUnary<I, O>;
 
-/** This explicitly states the `MethodKind`s that are supported by Connect-Query and provides a means to convert those kinds into the Hooks types (e.g. UnaryHooks) */
+/** This explicitly states the `MethodKind`s that are supported by Connect-Query and provides a means to convert those kinds into the Hooks types (e.g. UnaryFunctions) */
 export interface SupportedMethodInfo<MI extends MethodInfo> {
   // in the future, this type is constructed so that new method kinds can be added like this:
   // [MethodKind.BiDiStreaming]: MethodInfoBiDiStreaming<infer I, infer O> ? BiDiStreamingHooks<I, O> : never
 
   /** this is a mapping from a unary method kind to the hooks a unary method supports */
   [MethodKind.Unary]: MI extends MethodInfoUnary<infer I, infer O>
-    ? UnaryHooks<I, O>
+    ? UnaryFunctions<I, O>
     : never;
 }
 
 /** This is a helper for `QueryHooks` */
-type SupportedHooks<MI extends MethodInfo> =
+type SupportedFunctions<MI extends MethodInfo> =
   MI["kind"] extends keyof SupportedMethodInfo<MI>
     ? SupportedMethodInfo<MI>[MI["kind"]]
     : never;
@@ -78,11 +78,11 @@ type SupportedHooks<MI extends MethodInfo> =
  *
  * Note: Today, only Unary method kinds are supported.
  */
-export type QueryHooks<Service extends ServiceType> = {
+export type QueryFunctions<Service extends ServiceType> = {
   [Method in keyof Service["methods"] as Exclude<
     Method,
-    keyof SupportedHooks<Service["methods"][Method]>
-  >]: SupportedHooks<Service["methods"][Method]>;
+    keyof SupportedFunctions<Service["methods"][Method]>
+  >]: SupportedFunctions<Service["methods"][Method]>;
 };
 
 /**
@@ -92,20 +92,20 @@ export type QueryHooks<Service extends ServiceType> = {
  *
  * It does not, however, provide any caching (like `createQueryService` does) which means that each time you call this function it will generate a fresh set of hooks, even if you call with the same service and transport.
  */
-export const createQueryHooks = <Service extends ServiceType>({
+export const createQueryFunctions = <Service extends ServiceType>({
   service: { typeName, methods },
   transport,
 }: {
   service: Service;
   transport?: Transport | undefined;
-}): QueryHooks<Service> =>
+}): QueryFunctions<Service> =>
   Object.entries(methods).reduce(
     (accumulator, [localName, methodInfo]) => {
       switch (methodInfo.kind) {
         case MethodKind.Unary: {
           return {
             ...accumulator,
-            [localName]: unaryHooks({
+            [localName]: createUnaryFunctions({
               methodInfo,
               typeName,
               transport,
@@ -138,5 +138,5 @@ export const createQueryHooks = <Service extends ServiceType>({
       }
     },
     // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter -- making this change causes the wrong overload to be selected
-    {} as QueryHooks<Service>,
+    {} as QueryFunctions<Service>,
   );

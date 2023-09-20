@@ -60,6 +60,8 @@ const generateServiceFile =
     f.print("};");
     f.print();
 
+    const unaryFunctionsWithHooks = f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-query');
+
     service.methods.forEach((method) => {
       switch (method.methodKind) {
         case MethodKind.Unary:
@@ -68,12 +70,13 @@ const generateServiceFile =
               `export const `,
               safeIdentifier(localName(method)),
               `: `,
-              f.import('UnaryHooks', '@connectrpc/connect-query'),
+              unaryFunctionsWithHooks,
               `<`,
-              method.input,
-              `, `,
-              method.output,
-              `>;`,
+                method.input,
+                `, `,
+                method.output,
+              `>`,
+              ';'
             );
           }
           break;

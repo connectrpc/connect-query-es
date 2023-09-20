@@ -15,10 +15,10 @@
 import type { ServiceType } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
 
-import type { QueryHooks } from "./create-query-hooks";
-import { createQueryHooks } from "./create-query-hooks";
+import type { QueryFunctions } from "./create-query-functions";
+import { createQueryFunctions } from "./create-query-functions";
 
-const servicesToHooks = new Map<ServiceType, QueryHooks<ServiceType>>();
+const servicesToHooks = new Map<ServiceType, QueryFunctions<ServiceType>>();
 
 /**
  * `createQueryService` is the main entrypoint for Connect-Query.
@@ -45,7 +45,7 @@ const servicesToHooks = new Map<ServiceType, QueryHooks<ServiceType>>();
  *   },
  * });
  *
- * const { data, isLoading, ...etc } = useQuery(say.useQuery());
+ * const { data, isLoading, ...etc } = useQuery(say.createUseQueryOptions());
  */
 export const createQueryService = <Service extends ServiceType>({
   service,
@@ -53,18 +53,20 @@ export const createQueryService = <Service extends ServiceType>({
 }: {
   service: Service;
   transport?: Transport;
-}): QueryHooks<Service> => {
+}): QueryFunctions<Service> => {
   if (transport) {
     // custom transports are not cached
-    return createQueryHooks({
+    return createQueryFunctions({
       service,
       transport,
     });
   }
 
-  let hooks = servicesToHooks.get(service) as QueryHooks<Service> | undefined;
+  let hooks = servicesToHooks.get(service) as
+    | QueryFunctions<Service>
+    | undefined;
   if (!hooks) {
-    hooks = createQueryHooks({ service });
+    hooks = createQueryFunctions({ service });
     servicesToHooks.set(service, hooks);
   }
 

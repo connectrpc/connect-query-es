@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "rm -rf src/eliza",
+    "clean": "rm -rf src/gen",
     "dev": "vite",
     "generate": "buf generate --path eliza.proto",
     "license-header": "license-header",
