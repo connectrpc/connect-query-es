@@ -72,7 +72,7 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
   /**
    * createUseQueryOptions is intended to be used with `useQuery`, but is not a hook.  Since hooks cannot be called conditionally (or in loops), it can sometimes be helpful to use `createUseQueryOptions` to prepare an input to TanStack's `useQuery` API.
    *
-   * The caveat being that if you go the route of using `createUseQueryOptions` you must provide transport.  You can get transport from the `useTransport` export.  If you cannot use hooks to retrieve transport, then look at the documentation for `TransportProvider` to learn more about how to use Connect-Web's createConnectTransport` or `createGrpcWebTransport`APIs.
+   * The caveat being that if you go the route of using `createUseQueryOptions` you must provide transport.  You can get transport from the `useTransport` export, or make sure these functions were generated with createQueryService() with a transport provided.
    */
   createUseQueryOptions: (
     input?: DisableQuery | PartialMessage<I> | undefined,
@@ -199,7 +199,7 @@ export const createUnaryFunctions = <
 
     assert(
       transport !== undefined,
-      "createUseQueryOptions requires you to provide a Transport.  If you want automatic inference of Transport, try using the useQuery helper.",
+      "createUseQueryOptions requires you to provide a Transport.",
     );
 
     return {
@@ -270,9 +270,10 @@ export const createUnaryFunctions = <
     ) => {
       const transport = optionsTransport ?? topLevelCustomTransport;
 
-      if (transport === undefined) {
-        throw new Error("Transport must be provided");
-      }
+      assert(
+        transport !== undefined,
+        "createUseInfiniteQueryOptions requires you to provide a Transport.",
+      );
 
       const enabled = input !== disableQuery;
       let sanitizedInput = input;
@@ -340,9 +341,10 @@ export const createUnaryFunctions = <
     } = {}) => {
       const transport = optionsTransport ?? topLevelCustomTransport;
 
-      if (transport === undefined) {
-        throw new Error("Transport must be provided");
-      }
+      assert(
+        transport !== undefined,
+        "createUseMutationOptions requires you to provide a Transport.",
+      );
 
       return {
         mutationFn: async (input, context) => {
