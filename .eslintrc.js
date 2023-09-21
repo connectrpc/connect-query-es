@@ -19,6 +19,7 @@ const config = {
     es2021: true,
     node: true,
   },
+  ignorePatterns: ["node_modules/**", "packages/**/coverage"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,
