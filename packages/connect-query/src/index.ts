@@ -14,6 +14,8 @@
 
 import type { Message } from "@bufbuild/protobuf";
 
+import type { ServerStreamingFunctions } from "./create-server-streaming-functions";
+import type { ServerStreamingHooks } from "./create-server-streaming-hooks";
 import type { UnaryFunctions } from "./create-unary-functions";
 import type { UnaryHooks } from "./create-unary-hooks";
 
@@ -35,11 +37,14 @@ export type {
 } from "./connect-query-key";
 export type { UnaryFunctions } from "./create-unary-functions";
 export { createUnaryFunctions } from "./create-unary-functions";
+export type { ServerStreamingFunctions } from "./create-server-streaming-functions";
+export { createServerStreamingFunctions } from "./create-server-streaming-functions";
 export { disableQuery } from "./utils";
 export { useTransport, TransportProvider } from "./use-transport";
 export type { UnaryHooks } from "./create-unary-hooks";
 export { createUnaryHooks } from "./create-unary-hooks";
-
+export type { ServerStreamingHooks } from "./create-server-streaming-hooks";
+export { createServerStreamingHooks } from "./create-server-streaming-hooks";
 /**
  * Combined type of all the functions generated for a service.
  */
@@ -47,3 +52,12 @@ export type UnaryFunctionsWithHooks<
   I extends Message<I>,
   O extends Message<O>,
 > = UnaryFunctions<I, O> & UnaryHooks<I, O, UnaryFunctions<I, O>>;
+
+/**
+ * Combined type of all the functions generated for a service.
+ */
+export type ServerStreamingFunctionsWithHooks<
+  I extends Message<I>,
+  O extends Message<O>,
+> = ServerStreamingFunctions<I, O> &
+  ServerStreamingHooks<I, O, ServerStreamingFunctions<I, O>>;

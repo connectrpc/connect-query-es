@@ -61,16 +61,18 @@ const generateServiceFile =
     f.print();
 
     const unaryFunctionsWithHooks = f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-query');
+    const serverStreamingFunctionsWithHooks = f.import('ServerStreamingFunctionsWithHooks', '@connectrpc/connect-query');
 
     service.methods.forEach((method) => {
       switch (method.methodKind) {
         case MethodKind.Unary:
+        case MethodKind.ServerStreaming: 
           {
             f.print(
               `export const `,
               safeIdentifier(localName(method)),
               `: `,
-              unaryFunctionsWithHooks,
+              method.methodKind == MethodKind.Unary ? unaryFunctionsWithHooks : serverStreamingFunctionsWithHooks,
               `<`,
                 method.input,
                 `, `,
@@ -80,7 +82,6 @@ const generateServiceFile =
             );
           }
           break;
-
         default:
           return;
       }

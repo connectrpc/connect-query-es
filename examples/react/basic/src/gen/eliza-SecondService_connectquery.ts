@@ -28,6 +28,7 @@ import {
 import { MethodKind } from "@bufbuild/protobuf";
 import {
   createQueryService,
+  createServerStreamingHooks,
   createUnaryHooks,
 } from "@connectrpc/connect-query";
 
@@ -90,4 +91,15 @@ const $queryService = createQueryService({ service: SecondService });
 export const say = {
   ...$queryService.say,
   ...createUnaryHooks($queryService.say),
+};
+
+/**
+ * Introduce is a server streaming RPC. Given the caller's name, Eliza
+ * returns a stream of sentences to introduce itself.
+ *
+ * @generated from rpc connectrpc.eliza.v1.SecondService.Introduce
+ */
+export const introduce = {
+  ...$queryService.introduce,
+  ...createServerStreamingHooks($queryService.introduce),
 };

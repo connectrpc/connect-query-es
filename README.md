@@ -58,8 +58,8 @@ Note: If you are using something that doesn't automatically install peerDependen
 Connect-Query will immediately feel familiar to you if you've used TanStack Query. It provides a set of convenient helpers that you can pass to the same TanStack Query functions you're already using:
 
 ```ts
-import { useQuery } from '@tanstack/react-query';
-import { example } from 'your-generated-code/example-ExampleService_connectquery';
+import { useQuery } from "@tanstack/react-query";
+import { example } from "your-generated-code/example-ExampleService_connectquery";
 
 export const Example: FC = () => {
   const { data } = useQuery(example.useQuery({}));
@@ -480,8 +480,8 @@ export const Example: FC = () => {
 Say you have an query that looks something like this:
 
 ```ts
-import { useQuery } from '@tanstack/react-query';
-import { example } from 'your-generated-code/example-ExampleService_connectquery';
+import { useQuery } from "@tanstack/react-query";
+import { example } from "your-generated-code/example-ExampleService_connectquery";
 
 export const Example: FC = () => {
   const { data } = useQuery(example.useQuery({}));

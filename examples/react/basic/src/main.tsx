@@ -19,9 +19,11 @@ import { TransportProvider } from "@connectrpc/connect-query";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useState } from "react";
 import * as ReactDOM from "react-dom/client";
 
-import { Example } from "./example";
+import { ServerStreaming } from "./server-streaming-example";
+import { UnaryExample } from "./unary-example";
 
 const queryClient = new QueryClient();
 
@@ -34,10 +36,27 @@ export default function App({ transport }: { transport?: Transport }) {
     createConnectTransport({
       baseUrl: "https://demo.connectrpc.com",
     });
+  const [exampleShown, setExampleShown] = useState<"serverStreaming" | "unary">(
+    "unary",
+  );
   return (
     <TransportProvider transport={finalTransport}>
       <QueryClientProvider client={queryClient}>
-        <Example />
+        <button
+          onClick={() => {
+            setExampleShown("unary");
+          }}
+        >
+          Show Unary
+        </button>
+        <button
+          onClick={() => {
+            setExampleShown("serverStreaming");
+          }}
+        >
+          Show Server Streaming
+        </button>
+        {exampleShown === "unary" ? <UnaryExample /> : <ServerStreaming />}
         <ReactQueryDevtools initialIsOpen />
       </QueryClientProvider>
     </TransportProvider>

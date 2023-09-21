@@ -23,7 +23,7 @@ import { Page } from "./page";
 /**
  * This example demonstrates a basic usage of Connect-Query with `useQuery`
  */
-export const Example: FC = () => {
+export const UnaryExample: FC = () => {
   const {
     status,
     fetchStatus,

@@ -10,3 +10,11 @@ body {
   margin: 0;
   display: flex;
 }
+
+.box {
+  display: flex;
+}
+
+.box.column {
+  flex-direction: column;
+}

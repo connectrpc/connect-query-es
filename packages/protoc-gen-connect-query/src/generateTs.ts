@@ -76,13 +76,13 @@ const generateServiceFile =
 
     
     service.methods
-      .filter((method) => method.methodKind === MethodKind.Unary)
+      .filter((method) => method.methodKind === MethodKind.Unary || method.methodKind === MethodKind.ServerStreaming)
       .forEach((method, index, filteredMethods) => {
         f.print(makeJsDoc(method));
         f.print(
           `export const ${safeIdentifier(localName(method))} = { `,
           `  ...$queryService.${localName(method)},`,
-          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
+          `  ...`, f.import(method.methodKind === MethodKind.Unary ? 'createUnaryHooks' : 'createServerStreamingHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
           `};`
         );
 

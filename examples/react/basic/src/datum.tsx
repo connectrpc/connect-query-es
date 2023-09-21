@@ -25,7 +25,7 @@ import {
 } from "./css";
 
 interface DatumProps {
-  datum: string;
+  datum: ReactNode;
   label: string;
 }
 

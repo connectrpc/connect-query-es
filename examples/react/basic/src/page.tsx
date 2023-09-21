@@ -23,7 +23,7 @@ export const Page: FC<PropsWithChildren> = ({ children }) => (
   <div
     style={{
       margin: margin * 3,
-      maxWidth: 800,
+      maxWidth: 1200,
       display: "flex",
     }}
   >
