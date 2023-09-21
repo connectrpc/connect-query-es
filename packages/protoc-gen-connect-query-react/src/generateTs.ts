@@ -83,12 +83,12 @@ const generateServiceFile =
         const partialMessage = f.import('PartialMessage', '@bufbuild/protobuf');
         const connectError = f.import('ConnectError', '@connectrpc/connect');
         const connectQueryKey = f.import("ConnectQueryKey", "@connectrpc/connect-query");
-        const createUnaryHooks = f.import('createUnaryHooks', '@connectrpc/connect-query');
 
         f.print(makeJsDoc(method));
 
         f.print(
-          `export const ${methodName} = `, createUnaryHooks, `($queryService.${localName(method)});`); // Note, the reason for dot accessing the method rather than destructuring at the top is that it allows for a TSDoc to be attached to the exported variable.  Also it's nice that each method has its own atomic section that you could independently inspect and debug (i.e. commenting a single method is much easier when it's one contiguous set of lines).
+          `export const ${methodName} = $queryService.${localName(method)},`,
+        );
         f.print(``);
 
         // useQuery
@@ -103,7 +103,7 @@ const generateServiceFile =
         f.print(`    options?: Parameters<typeof `, methodName, `.useQuery>[1],`,);
         f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, methodName, `.useQuery(input, options);`);
+        f.print(`    const baseOptions = `, methodName, `.createUseQueryOptions(input, options);`);
         f.print(``);
         f.print(`    return `, useQuery, `({`);
         f.print(`        ...baseOptions,`);
@@ -123,7 +123,7 @@ const generateServiceFile =
         f.print(`    options?: Parameters<typeof `, methodName, `.useMutation>[0],`);
         f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, method.output, `, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, methodName, `.useMutation(options);`);
+        f.print(`    const baseOptions = `, methodName, `.createUseMutationOptions(options);`);
         f.print(``);
         f.print(`    return `, useMutation, `({`);
         f.print(`        ...baseOptions,`);
@@ -143,7 +143,7 @@ const generateServiceFile =
         f.print(`    options: Parameters<typeof `, methodName, `.useInfiniteQuery>[1],`);
         f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, methodName, `.useInfiniteQuery(input, options);`);
+        f.print(`    const baseOptions = `, methodName, `.createUseInfiniteQueryOptions(input, options);`);
         f.print(``);
         f.print(`    return `, useInfiniteQuery, `<`, method.output, `, `, connectError, `, `, method.output, `, keyof typeof input extends never ? any : `, connectQueryKey, `<`, method.input, `>>({`);
         f.print(`        ...baseOptions,`);
