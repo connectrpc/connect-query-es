@@ -11,5 +11,5 @@ plugins:
     path: ../bin/protoc-gen-connect-query-react
     out: gen
     opt:
-      - target=ts+dts
+      - target=ts+dts+js
       - import_extension=none

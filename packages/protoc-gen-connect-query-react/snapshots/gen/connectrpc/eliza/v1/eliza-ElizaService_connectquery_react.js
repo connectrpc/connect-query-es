@@ -25,21 +25,9 @@ import {
   SayRequest,
   SayResponse,
 } from "./eliza_pb";
-import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import {
-  ConnectQueryKey,
-  createQueryService,
-  useTransport,
-} from "@connectrpc/connect-query";
-import {
-  useInfiniteQuery,
-  UseInfiniteQueryOptions,
-  useMutation,
-  UseMutationOptions,
-  useQuery,
-  UseQueryOptions,
-} from "@tanstack/react-query";
-import { ConnectError } from "@connectrpc/connect";
+import { MethodKind } from "@bufbuild/protobuf";
+import { createQueryService, useTransport } from "@connectrpc/connect-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 
 /**
  * ElizaService provides a way to talk to Eliza, a port of the DOCTOR script
@@ -91,7 +79,7 @@ export const ElizaService = {
       kind: MethodKind.ServerStreaming,
     },
   },
-} as const;
+};
 
 const $queryService = createQueryService({
   service: ElizaService,
@@ -103,18 +91,7 @@ const $queryService = createQueryService({
  */
 export const say = $queryService.say;
 
-export const useSayQuery = (
-  input?: Parameters<typeof say.useQuery>[0],
-  options?: Parameters<typeof say.useQuery>[1],
-  queryOptions?: Partial<
-    UseQueryOptions<
-      SayResponse,
-      ConnectError,
-      SayResponse,
-      ConnectQueryKey<SayRequest>
-    >
-  >,
-) => {
+export const useSayQuery = (input, options, queryOptions) => {
   const transport = useTransport();
   const baseOptions = say.createUseQueryOptions(input, {
     transport,
@@ -127,12 +104,7 @@ export const useSayQuery = (
   });
 };
 
-export const useSayMutation = (
-  options?: Parameters<typeof say.useMutation>[0],
-  queryOptions?: Partial<
-    UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
-  >,
-) => {
+export const useSayMutation = (options, queryOptions) => {
   const transport = useTransport();
   const baseOptions = say.createUseMutationOptions({ transport, ...options });
 
@@ -142,31 +114,14 @@ export const useSayMutation = (
   });
 };
 
-export const useSayInfiniteQuery = (
-  input: Parameters<typeof say.useInfiniteQuery>[0],
-  options: Parameters<typeof say.useInfiniteQuery>[1],
-  queryOptions?: Partial<
-    UseInfiniteQueryOptions<
-      SayResponse,
-      ConnectError,
-      SayResponse,
-      SayResponse,
-      ConnectQueryKey<SayRequest>
-    >
-  >,
-) => {
+export const useSayInfiniteQuery = (input, options, queryOptions) => {
   const transport = useTransport();
   const baseOptions = say.createUseInfiniteQueryOptions(input, {
     transport,
     ...options,
   });
 
-  return useInfiniteQuery<
-    SayResponse,
-    ConnectError,
-    SayResponse,
-    keyof typeof input extends never ? any : ConnectQueryKey<SayRequest>
-  >({
+  return useInfiniteQuery({
     ...baseOptions,
     ...queryOptions,
   });
