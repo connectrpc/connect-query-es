@@ -15,6 +15,7 @@
 import type { DescFile, DescService } from "@bufbuild/protobuf";
 import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
 import type { Schema } from "@bufbuild/protoplugin";
+import type { Printable } from "@bufbuild/protoplugin/ecmascript";
 import {
   literalString,
   localName,
@@ -40,6 +41,33 @@ const generateServiceFile =
         `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
     );
     f.preamble(protoFile);
+
+    /** @returns the printables associated with a param for a function. Handles the case where extension is js so types shouldn't be included.  */
+    function getParamWithTypes(
+      name: string,
+      typeSegments: Printable[],
+      options?: {
+        optional?: boolean,
+      }
+    ): Printable[] {
+      const resultingPrintables: Printable[] = [name];
+      if (extension === "ts") {
+        if (options?.optional === true) {
+          resultingPrintables.push(`?`);
+        }
+        resultingPrintables.push(`:`, ...typeSegments);
+      }
+      resultingPrintables.push(`,`);
+      return resultingPrintables;
+    }
+
+     /** @returns the printables associated with a specific generic type */
+    function getGeneric(...typeSegments: Printable[]): Printable[] {
+      if (extension === "ts") {
+        return [`<`, ...typeSegments, `>`];
+      }
+      return [];
+    }
 
     const importHookFrom = getImportHookFromOption(schema);
 
@@ -87,7 +115,7 @@ const generateServiceFile =
         f.print(makeJsDoc(method));
 
         f.print(
-          `export const ${methodName} = $queryService.${localName(method)},`,
+          `export const ${methodName} = $queryService.${localName(method)};`,
         );
         f.print(``);
 
@@ -97,13 +125,15 @@ const generateServiceFile =
           'UseQueryOptions',
           importHookFrom,
         );
+        const useTransport = f.import('useTransport', "@connectrpc/connect-query");
 
         f.print(`export const `, reactHookName(method, 'Query'), ' = (');
-        f.print(`    input?: Parameters<typeof `,methodName, `.useQuery>[0],`);
-        f.print(`    options?: Parameters<typeof `, methodName, `.useQuery>[1],`,);
-        f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
+        f.print(...getParamWithTypes("input", [`Parameters<typeof `,methodName, `.useQuery>[0]`], { optional: true }));
+        f.print(...getParamWithTypes("options", [`Parameters<typeof `, methodName, `.useQuery>[1]`], { optional: true }));
+        f.print(...getParamWithTypes("queryOptions", [`Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`], { optional: true }));
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, methodName, `.createUseQueryOptions(input, options);`);
+        f.print(`    const transport = `, useTransport, `();`);
+        f.print(`    const baseOptions = `, methodName, `.createUseQueryOptions(input, { transport, ...options });`);
         f.print(``);
         f.print(`    return `, useQuery, `({`);
         f.print(`        ...baseOptions,`);
@@ -120,10 +150,11 @@ const generateServiceFile =
         );
 
         f.print(`export const `, reactHookName(method, 'Mutation'), ' = (');
-        f.print(`    options?: Parameters<typeof `, methodName, `.useMutation>[0],`);
-        f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, method.output, `, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`);
+        f.print(...getParamWithTypes("options", [`Parameters<typeof `,methodName, `.useMutation>[0]`], { optional: true }));
+        f.print(...getParamWithTypes("queryOptions", [`Partial<`, useMutationOptions, `<`, method.output, `, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`], { optional: true }));
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, methodName, `.createUseMutationOptions(options);`);
+        f.print(`    const transport = `, useTransport, `();`);
+        f.print(`    const baseOptions = `, methodName, `.createUseMutationOptions({ transport, ...options });`);
         f.print(``);
         f.print(`    return `, useMutation, `({`);
         f.print(`        ...baseOptions,`);
@@ -139,13 +170,14 @@ const generateServiceFile =
           importHookFrom,
         );
         f.print(`export const `, reactHookName(method, 'InfiniteQuery'), ' = (');
-        f.print(`    input: Parameters<typeof `, methodName, `.useInfiniteQuery>[0],`);
-        f.print(`    options: Parameters<typeof `, methodName, `.useInfiniteQuery>[1],`);
-        f.print(`    queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`);
+        f.print(...getParamWithTypes("input", [`Parameters<typeof `,methodName, `.useInfiniteQuery>[0]`]));
+        f.print(...getParamWithTypes("options", [`Parameters<typeof `,methodName, `.useInfiniteQuery>[1]`]));
+        f.print(...getParamWithTypes("queryOptions", [`Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`], { optional: true }));
         f.print(`) => {`);
-        f.print(`    const baseOptions = `, methodName, `.createUseInfiniteQueryOptions(input, options);`);
+        f.print(`    const transport = `, useTransport, `();`);
+        f.print(`    const baseOptions = `, methodName, `.createUseInfiniteQueryOptions(input, { transport, ...options });`);
         f.print(``);
-        f.print(`    return `, useInfiniteQuery, `<`, method.output, `, `, connectError, `, `, method.output, `, keyof typeof input extends never ? any : `, connectQueryKey, `<`, method.input, `>>({`);
+        f.print(`    return `, useInfiniteQuery, getGeneric(method.output, `, `, connectError, `, `, method.output, `, keyof typeof input extends never ? any : `, connectQueryKey, `<`, method.input, `>`), `({`);
         f.print(`        ...baseOptions,`);
         f.print(`        ...queryOptions,`);
         f.print(`    });`);
