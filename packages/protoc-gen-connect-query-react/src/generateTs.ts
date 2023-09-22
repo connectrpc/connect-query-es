@@ -29,8 +29,6 @@ const { safeIdentifier } = codegenInfo;
 // prettier-ignore
 /**
  * Handles generating a source code file for a given Schema, DescFile (protobuf definition) and protobuf Service.
- *
- * By pure luck, this file happens to be completely valid JavaScript since all the types are inferred.
  */
 const generateServiceFile =
   (schema: Schema, protoFile: DescFile, extension: 'ts') =>
@@ -61,7 +59,6 @@ const generateServiceFile =
       if (method.idempotency !== undefined) {
           f.print("      idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
       }
-      // In case we start supporting options, we have to surface them here
       f.print("    },");
     }
     f.print("  }");
@@ -170,7 +167,7 @@ const generateServiceFile =
 export const generateTs: PluginInit["generateTs"] = (schema, extension) => {
   schema.files.forEach((protoFile) => {
     protoFile.services.forEach(
-      generateServiceFile(schema, protoFile, extension),
+      generateServiceFile(schema, protoFile, extension)
     );
   });
 };

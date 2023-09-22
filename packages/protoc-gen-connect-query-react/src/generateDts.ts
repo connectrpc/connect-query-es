@@ -53,7 +53,6 @@ const generateServiceFile =
       if (method.idempotency !== undefined) {
         f.print("      readonly idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
       }
-      // In case we start supporting options, we have to surface them here
       f.print("    },");
     }
     f.print("  }");
