@@ -26,11 +26,7 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind, PartialMessage } from "@bufbuild/protobuf";
-import {
-  ConnectQueryKey,
-  createQueryService,
-  createUnaryHooks,
-} from "@connectrpc/connect-query";
+import { ConnectQueryKey, createQueryService } from "@connectrpc/connect-query";
 import {
   useInfiniteQuery,
   UseInfiniteQueryOptions,
@@ -101,7 +97,7 @@ const $queryService = createQueryService({
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say = createUnaryHooks($queryService.say);
+export const say = $queryService.say;
 
 export const useSayQuery = (
   input?: Parameters<typeof say.useQuery>[0],
@@ -115,7 +111,7 @@ export const useSayQuery = (
     >
   >,
 ) => {
-  const baseOptions = say.useQuery(input, options);
+  const baseOptions = say.createUseQueryOptions(input, options);
 
   return useQuery({
     ...baseOptions,
@@ -129,7 +125,7 @@ export const useSayMutation = (
     UseMutationOptions<SayResponse, ConnectError, PartialMessage<SayRequest>>
   >,
 ) => {
-  const baseOptions = say.useMutation(options);
+  const baseOptions = say.createUseMutationOptions(options);
 
   return useMutation({
     ...baseOptions,
@@ -150,7 +146,7 @@ export const useSayInfiniteQuery = (
     >
   >,
 ) => {
-  const baseOptions = say.useInfiniteQuery(input, options);
+  const baseOptions = say.createUseInfiniteQueryOptions(input, options);
 
   return useInfiniteQuery<
     SayResponse,
