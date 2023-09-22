@@ -128,8 +128,8 @@ const generateServiceFile =
         const useTransport = f.import('useTransport', "@connectrpc/connect-query");
 
         f.print(`export const `, reactHookName(method, 'Query'), ' = (');
-        f.print(...getParamWithTypes("input", [`Parameters<typeof `,methodName, `.useQuery>[0]`], { optional: true }));
-        f.print(...getParamWithTypes("options", [`Parameters<typeof `, methodName, `.useQuery>[1]`], { optional: true }));
+        f.print(...getParamWithTypes("input", [`Parameters<typeof `,methodName, `.createUseQueryOptions>[0]`], { optional: true }));
+        f.print(...getParamWithTypes("options", [`Parameters<typeof `, methodName, `.createUseQueryOptions>[1]`], { optional: true }));
         f.print(...getParamWithTypes("queryOptions", [`Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`], { optional: true }));
         f.print(`) => {`);
         f.print(`    const transport = `, useTransport, `();`);
@@ -150,7 +150,7 @@ const generateServiceFile =
         );
 
         f.print(`export const `, reactHookName(method, 'Mutation'), ' = (');
-        f.print(...getParamWithTypes("options", [`Parameters<typeof `,methodName, `.useMutation>[0]`], { optional: true }));
+        f.print(...getParamWithTypes("options", [`Parameters<typeof `,methodName, `.createUseMutationOptions>[0]`], { optional: true }));
         f.print(...getParamWithTypes("queryOptions", [`Partial<`, useMutationOptions, `<`, method.output, `, `, connectError, `, `, partialMessage, `<`, method.input, `>>>`], { optional: true }));
         f.print(`) => {`);
         f.print(`    const transport = `, useTransport, `();`);
@@ -170,8 +170,8 @@ const generateServiceFile =
           importHookFrom,
         );
         f.print(`export const `, reactHookName(method, 'InfiniteQuery'), ' = (');
-        f.print(...getParamWithTypes("input", [`Parameters<typeof `,methodName, `.useInfiniteQuery>[0]`]));
-        f.print(...getParamWithTypes("options", [`Parameters<typeof `,methodName, `.useInfiniteQuery>[1]`]));
+        f.print(...getParamWithTypes("input", [`Parameters<typeof `,methodName, `.createUseInfiniteQueryOptions>[0]`]));
+        f.print(...getParamWithTypes("options", [`Parameters<typeof `,methodName, `.createUseInfiniteQueryOptions>[1]`]));
         f.print(...getParamWithTypes("queryOptions", [`Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>`], { optional: true }));
         f.print(`) => {`);
         f.print(`    const transport = `, useTransport, `();`);
