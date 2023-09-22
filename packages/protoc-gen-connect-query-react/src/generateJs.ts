@@ -33,14 +33,13 @@ const { safeIdentifier } = codegenInfo;
  * By pure luck, this file happens to be completely valid JavaScript since all the types are inferred.
  */
 const generateServiceFile =
-  (schema: Schema, protoFile: DescFile, extension: 'ts') =>
+  (schema: Schema, protoFile: DescFile, extension: 'js') =>
   (service: DescService) => {
 
     const f = schema.generateFile(
         `${protoFile.name}-${localName(service)}_connectquery_react.${extension}`,
     );
     f.preamble(protoFile);
-
 
     const importHookFrom = getImportHookFromOption(schema);
 
@@ -65,7 +64,7 @@ const generateServiceFile =
       f.print("    },");
     }
     f.print("  }");
-    f.print("} as const;");
+    f.print("};");
     f.print();
 
     f.print(
@@ -81,10 +80,6 @@ const generateServiceFile =
       .forEach((method, index, filteredMethods) => {
         const methodName = safeIdentifier(localName(method));
 
-        const partialMessage = f.import('PartialMessage', '@bufbuild/protobuf');
-        const connectError = f.import('ConnectError', '@connectrpc/connect');
-        const connectQueryKey = f.import("ConnectQueryKey", "@connectrpc/connect-query");
-
         f.print(makeJsDoc(method));
 
         f.print(
@@ -94,16 +89,13 @@ const generateServiceFile =
 
         // useQuery
         const useQuery = f.import('useQuery', importHookFrom);
-        const useQueryOptions = f.import(
-          'UseQueryOptions',
-          importHookFrom,
-        );
+
         const useTransport = f.import('useTransport', "@connectrpc/connect-query");
 
         f.print(`export const `, reactHookName(method, 'Query'), ' = (');
-        f.print(`    input?: Parameters<typeof `,methodName, `.createUseQueryOptions>[0],`);
-        f.print(`    options?: Parameters<typeof `, methodName, `.createUseQueryOptions>[1],`);
-        f.print(`    queryOptions?: Partial<`, useQueryOptions, `<`,  method.output, `, `, connectError, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>,`);
+        f.print(`  input, `);
+        f.print(`  options, `);
+        f.print(`  queryOptions,`);
         f.print(`) => {`);
         f.print(`    const transport = `, useTransport, `();`);
         f.print(`    const baseOptions = `, methodName, `.createUseQueryOptions(input, { transport, ...options });`);
@@ -117,14 +109,10 @@ const generateServiceFile =
 
         // useMutation
         const useMutation = f.import('useMutation', importHookFrom);
-        const useMutationOptions = f.import(
-          'UseMutationOptions',
-          importHookFrom,
-        );
 
         f.print(`export const `, reactHookName(method, 'Mutation'), ' = (');
-        f.print(`    options?: Parameters<typeof `,methodName, `.createUseMutationOptions>[0],`);
-        f.print(`    queryOptions?: Partial<`, useMutationOptions, `<`, method.output, `, `, connectError, `, `, partialMessage, `<`, method.input, `>>>,`);
+        f.print(`  options, `);
+        f.print(`  queryOptions,`);
         f.print(`) => {`);
         f.print(`    const transport = `, useTransport, `();`);
         f.print(`    const baseOptions = `, methodName, `.createUseMutationOptions({ transport, ...options });`);
@@ -138,19 +126,15 @@ const generateServiceFile =
 
         // useInfiniteQuery
         const useInfiniteQuery = f.import('useInfiniteQuery', importHookFrom);
-        const useInfiniteQueryOptions = f.import(
-          'UseInfiniteQueryOptions',
-          importHookFrom,
-        );
         f.print(`export const `, reactHookName(method, 'InfiniteQuery'), ' = (');
-        f.print(`  input: Parameters<typeof `,methodName, `.createUseInfiniteQueryOptions>[0],`);
-        f.print(`  options: Parameters<typeof `,methodName, `.createUseInfiniteQueryOptions>[1],`);
-        f.print(`  queryOptions?: Partial<`, useInfiniteQueryOptions, `<`, method.output, `, `, connectError, `, `, method.output, `, `, method.output, `, `, connectQueryKey, `<`, method.input, `>>>,`);
+        f.print(`  input, `);
+        f.print(`  options, `);
+        f.print(`  queryOptions,`);
         f.print(`) => {`);
         f.print(`    const transport = `, useTransport, `();`);
         f.print(`    const baseOptions = `, methodName, `.createUseInfiniteQueryOptions(input, { transport, ...options });`);
         f.print(``);
-        f.print(`    return `, useInfiniteQuery, `<`, method.output, `, `, connectError, `, `, method.output, `, keyof typeof input extends never ? any : `, connectQueryKey, `<`, method.input, `>>({`);
+        f.print(`    return `, useInfiniteQuery, `({`);
         f.print(`        ...baseOptions,`);
         f.print(`        ...queryOptions,`);
         f.print(`    });`);
@@ -165,9 +149,9 @@ const generateServiceFile =
   };
 
 /**
- * This function generates the TypeScript output files
+ * This function generates the Javascript output files
  */
-export const generateTs: PluginInit["generateTs"] = (schema, extension) => {
+export const generateJs: PluginInit["generateJs"] = (schema, extension) => {
   schema.files.forEach((protoFile) => {
     protoFile.services.forEach(
       generateServiceFile(schema, protoFile, extension),
