@@ -21,6 +21,7 @@ import type {
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
+  QueryFunction,
   QueryFunctionContext,
 } from "@tanstack/react-query";
 
@@ -49,13 +50,12 @@ interface BaseInfiniteQueryOptions<
   O extends Message<O>,
   ParamKey extends keyof PartialMessage<I>,
 > {
-  getNextPageParam: (lastPage: O, allPages: O[]) => PartialMessage<I>[ParamKey];
+  getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
   /**
    * The option allows you to remove fields or otherwise customize the input used to generate the query key.
    * By default, we will remove the pageParamKey from the input. If this is provided, we will use this result instead.
    */
   sanitizeInputKey?: (input: PartialMessage<I>) => unknown;
-  onError?: (error: ConnectError) => void;
   transport?: Transport | undefined;
   callOptions?: CallOptions | undefined;
 }
@@ -78,8 +78,6 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
     input?: DisableQuery | PartialMessage<I> | undefined,
     options?: {
       getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
-
-      onError?: (error: ConnectError) => void;
       transport?: Transport | undefined;
       callOptions?: CallOptions | undefined;
     },
@@ -88,7 +86,11 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
     queryKey: ConnectQueryKey<I>;
     queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
     placeholderData?: () => O | undefined;
-    onError?: (error: ConnectError) => void;
+    /**
+     * We never actually return a throwOnError, we just use this to allow
+     * @tanstack/query to infer the error types we CAN throw.
+     */
+    throwOnError?: (error: ConnectError) => boolean;
   };
 
   /**
@@ -113,20 +115,24 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
   setQueryData: (
     updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
     input?: PartialMessage<I>,
-  ) => [queryKey: ConnectQueryKey<I>, updater: (prev?: O) => O | undefined];
+  ) => [ConnectQueryKey<I>, (prev?: O) => O | undefined];
 
   /**
    * This helper is intended to be used with `QueryClient`s `setQueriesData` function.
    */
   setQueriesData: (
     updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-  ) => [queryKey: ConnectPartialQueryKey, updater: (prev?: O) => O | undefined];
+  ) => [{ queryKey: ConnectPartialQueryKey }, (prev?: O) => O | undefined];
 
   /**
    * This helper is intended to be used with `QueryClient`s `useInfiniteQuery` function.
    */
-  createUseInfiniteQueryOptions: <ParamKey extends keyof PartialMessage<I>>(
-    input: DisableQuery | PartialMessage<I>,
+  createUseInfiniteQueryOptions: <
+    ParamKey extends keyof PartialMessage<I>,
+    Input extends PartialMessage<I> &
+      Required<Pick<PartialMessage<I>, ParamKey>>,
+  >(
+    input: DisableQuery | Input,
     options: BaseInfiniteQueryOptions<I, O, ParamKey> &
       RequireExactlyOne<{
         applyPageParam: (options: {
@@ -138,14 +144,14 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
-    queryFn: (
-      context: QueryFunctionContext<
-        ConnectQueryKey<I>,
-        PartialMessage<I>[ParamKey]
-      >,
-    ) => Promise<O>;
-    getNextPageParam: GetNextPageParamFunction<O>;
-    onError?: (error: ConnectError) => void;
+    queryFn: QueryFunction<O, ConnectQueryKey<I>, PartialMessage<I>[ParamKey]>;
+    getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
+    initialPageParam: Input[ParamKey] | undefined;
+    /**
+     * We never actually return a throwOnError, we just use this to allow
+     * @tanstack/query to infer the error types we CAN throw.
+     */
+    throwOnError?: (error: ConnectError) => boolean;
   };
 
   /**
@@ -193,7 +199,7 @@ export const createUnaryFunctions = <
   const createUseQueryOptions: UnaryFunctions<I, O>["createUseQueryOptions"] = (
     input,
     // istanbul ignore next
-    { callOptions, getPlaceholderData, onError, transport } = {},
+    { callOptions, getPlaceholderData, transport } = {},
   ) => {
     const enabled = input !== disableQuery;
 
@@ -231,8 +237,6 @@ export const createUnaryFunctions = <
       },
 
       queryKey: getQueryKey(input),
-
-      ...(onError ? { onError } : {}),
     };
   };
 
@@ -248,7 +252,9 @@ export const createUnaryFunctions = <
     methodInfo,
 
     setQueriesData: (updater) => [
-      [typeName, methodInfo.name],
+      {
+        queryKey: [typeName, methodInfo.name],
+      },
       protobufSafeUpdater(updater, methodInfo.O),
     ],
 
@@ -262,7 +268,6 @@ export const createUnaryFunctions = <
       {
         transport: optionsTransport,
         getNextPageParam,
-        onError,
         callOptions,
         sanitizeInputKey,
         ...otherOptions
@@ -276,7 +281,7 @@ export const createUnaryFunctions = <
       );
 
       const enabled = input !== disableQuery;
-      let sanitizedInput = input;
+      let sanitizedInput: PartialMessage<I> | typeof disableQuery = input;
 
       if (enabled) {
         sanitizedInput =
@@ -294,16 +299,21 @@ export const createUnaryFunctions = <
 
         getNextPageParam,
 
+        initialPageParam: enabled
+          ? "pageParamKey" in otherOptions &&
+            otherOptions.pageParamKey !== undefined
+            ? input[otherOptions.pageParamKey]
+            : undefined
+          : undefined,
+
         queryFn: async (context) => {
           assert(
             input !== disableQuery,
             "queryFn does not accept a disabled query",
           );
-          const valueAtPageParam =
-            "pageParamKey" in otherOptions &&
-            otherOptions.pageParamKey !== undefined
-              ? input[otherOptions.pageParamKey]
-              : undefined;
+
+          assert("pageParam" in context, "pageParam must be part of context");
+
           const inputCombinedWithPageParam =
             "applyPageParam" in otherOptions &&
             otherOptions.applyPageParam !== undefined
@@ -313,8 +323,7 @@ export const createUnaryFunctions = <
                 })
               : {
                   ...input,
-                  [otherOptions.pageParamKey]:
-                    context.pageParam ?? valueAtPageParam,
+                  [otherOptions.pageParamKey]: context.pageParam,
                 };
 
           const result = await transport.unary(
@@ -329,8 +338,6 @@ export const createUnaryFunctions = <
         },
 
         queryKey: getQueryKey(sanitizedInput),
-
-        ...(onError ? { onError } : {}),
       };
     },
 

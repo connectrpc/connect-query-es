@@ -16,7 +16,6 @@ import { ConnectError } from "@connectrpc/connect";
 import { describe, expect, it } from "@jest/globals";
 import { useQuery } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
-import { spyOn } from "jest-mock";
 
 import { createUnaryFunctions } from "./create-unary-functions";
 import { ElizaService } from "./gen/eliza_connect";
@@ -43,7 +42,6 @@ describe("fallbackTransport", () => {
 });
 
 describe("useTransport", () => {
-  const consoleErrorSpy = spyOn(console, "error").mockImplementation(() => {});
   const say = createUnaryFunctions({
     methodInfo: ElizaService.methods.say,
     typeName: ElizaService.typeName,
@@ -64,13 +62,11 @@ describe("useTransport", () => {
 
     expect(result.current.error).toStrictEqual(null);
     expect(result.current.isError).toStrictEqual(false);
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
 
     await sleep(10);
 
     expect(result.current.error).toEqual(error);
     expect(result.current.isError).toStrictEqual(true);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
   });
 });
 

@@ -18,23 +18,17 @@ import type {
   PartialMessage,
 } from "@bufbuild/protobuf";
 import { MethodKind } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
-import {
-  afterAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  jest,
-} from "@jest/globals";
+import type { CallOptions, Transport } from "@connectrpc/connect";
+import { Code, ConnectError } from "@connectrpc/connect";
+import { describe, expect, it, jest } from "@jest/globals";
 import type {
   GetNextPageParamFunction,
+  QueryFunction,
   QueryFunctionContext,
   UseMutationResult,
 } from "@tanstack/react-query";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
-import { spyOn } from "jest-mock";
 
 import type {
   ConnectPartialQueryKey,
@@ -61,8 +55,6 @@ import {
 } from "./jest/test-utils";
 import type { DisableQuery } from "./utils";
 import { disableQuery } from "./utils";
-
-const consoleErrorSpy = spyOn(console, "error").mockImplementation(() => {});
 
 const genCount = createUnaryFunctions({
   methodInfo: BigIntService.methods.count,
@@ -175,7 +167,7 @@ describe("createUnaryFunctions", () => {
 
     describe("setQueriesData", () => {
       it("returns the correct queryKey", () => {
-        const [queryKey] = genCount.setQueriesData(partialUpdater);
+        const [{ queryKey }] = genCount.setQueriesData(partialUpdater);
         type ExpectType_QueryKey = Expect<
           Equal<typeof queryKey, ConnectPartialQueryKey>
         >;
@@ -302,7 +294,12 @@ describe("createUnaryFunctions", () => {
       >;
 
       type ExpectType_UseInfiniteQueryParams0 = Expect<
-        Equal<params[0], DisableQuery | PartialMessage<CountRequest>>
+        Equal<
+          params[0],
+          | DisableQuery
+          | (PartialMessage<CountRequest> &
+              Required<Pick<PartialMessage<CountRequest>, "add">>)
+        >
       >;
 
       type returnType = ReturnType<
@@ -312,7 +309,12 @@ describe("createUnaryFunctions", () => {
       type ExpectType_UseInfiniteQueryReturnKeys = Expect<
         Equal<
           keyof returnType,
-          "enabled" | "getNextPageParam" | "onError" | "queryFn" | "queryKey"
+          | "enabled"
+          | "getNextPageParam"
+          | "initialPageParam"
+          | "queryFn"
+          | "queryKey"
+          | "throwOnError"
         >
       >;
 
@@ -322,14 +324,17 @@ describe("createUnaryFunctions", () => {
           {
             enabled: boolean;
             queryKey: ConnectQueryKey<CountRequest>;
-            queryFn: (
-              context: QueryFunctionContext<
-                ConnectQueryKey<CountRequest>,
-                bigint | undefined
-              >,
-            ) => Promise<CountResponse>;
-            getNextPageParam: GetNextPageParamFunction<CountResponse>;
-            onError?: (error: ConnectError) => void;
+            queryFn: QueryFunction<
+              CountResponse,
+              ConnectQueryKey<CountRequest>,
+              bigint | undefined
+            >;
+            getNextPageParam: GetNextPageParamFunction<
+              bigint | undefined,
+              CountResponse
+            >;
+            throwOnError?: (error: ConnectError) => boolean;
+            initialPageParam: bigint | undefined;
           }
         >
       >;
@@ -377,7 +382,9 @@ describe("createUnaryFunctions", () => {
       it("requires a transport", () => {
         expect(() => {
           genCount.createUseInfiniteQueryOptions(
-            {},
+            {
+              add: 0n,
+            },
             {
               getNextPageParam: (lastPage) => lastPage.count + 1n,
               pageParamKey: "add",
@@ -404,13 +411,9 @@ describe("createUnaryFunctions", () => {
         wrapper({ defaultOptions }),
       );
 
-      expect(result.current.data).toStrictEqual(undefined);
-
       await waitFor(() => {
         expect(result.current.isSuccess).toBeTruthy();
       });
-
-      expect(result.current.data?.pageParams).toStrictEqual([undefined]);
 
       expect(result.current.data?.pages).toHaveLength(1);
       expect(result.current.data?.pages[0].page).toStrictEqual(1n);
@@ -423,8 +426,6 @@ describe("createUnaryFunctions", () => {
       // execute a single increment
       await result.current.fetchNextPage();
       rerender();
-
-      expect(result.current.data?.pageParams).toStrictEqual([undefined, 2n]);
 
       expect(result.current.data?.pages).toHaveLength(2);
       expect(result.current.data?.pages[1].page).toStrictEqual(2n);
@@ -489,62 +490,11 @@ describe("createUnaryFunctions", () => {
         pageParam: 1n,
         queryKey: genCount.getQueryKey(input),
         meta: {},
+        direction: "forward",
+        signal: new AbortController().signal,
       });
 
       expect(count).toStrictEqual(1n);
-    });
-
-    describe("onError", () => {
-      beforeEach(() => {
-        consoleErrorSpy.mockReset();
-      });
-
-      it("doesn't use onError if it isn't passed", () => {
-        const { result } = renderHook(
-          () =>
-            genCount.createUseInfiniteQueryOptions(
-              {},
-              {
-                pageParamKey: "add",
-                getNextPageParam: (lastPage) => lastPage.count,
-                transport: mockEliza(),
-              },
-            ),
-          wrapper(),
-        );
-        expect(result.current.onError).toBeUndefined();
-        expect(consoleErrorSpy).not.toHaveBeenCalled();
-      });
-
-      it("allows for a passthrough onError", async () => {
-        const onError = jest.fn();
-        const { result, rerender } = renderHook(
-          () =>
-            useQuery({
-              ...genCount.createUseInfiniteQueryOptions(
-                // @ts-expect-error(2345) intentionally invalid input
-                { nope: "nope nope" },
-                { onError, pageParamKey: "add", transport: mockEliza() },
-              ),
-              queryFn: async () => Promise.reject("error"),
-              retry: false,
-            }),
-          wrapper(undefined, mockBigInt()),
-        );
-        rerender();
-
-        expect(result.current.error).toStrictEqual(null);
-        expect(result.current.isError).toStrictEqual(false);
-        expect(onError).toHaveBeenCalledTimes(0);
-        expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-        await sleep(10);
-
-        expect(result.current.error).toStrictEqual("error");
-        expect(result.current.isError).toStrictEqual(true);
-        expect(onError).toHaveBeenCalledTimes(1);
-        expect(consoleErrorSpy).toHaveBeenCalledWith("error");
-      });
     });
 
     it("passes through callOptions", () => {
@@ -838,8 +788,9 @@ describe("createUnaryFunctions", () => {
               onError,
               transport: mockBigInt(),
             }),
-            mutationFn: async () => Promise.reject("error"),
-            mutationKey: genCount.getQueryKey(),
+            mutationFn: () => {
+              throw new ConnectError("error", Code.Aborted);
+            },
           }),
         wrapper({ defaultOptions }),
       );
@@ -849,7 +800,6 @@ describe("createUnaryFunctions", () => {
       expect(result.current.error).toStrictEqual(null);
       expect(result.current.isError).toStrictEqual(false);
       expect(onError).toHaveBeenCalledTimes(0);
-      expect(consoleErrorSpy).toHaveBeenCalled();
 
       type ExpectType_Error = Expect<
         Equal<typeof result.current.error, ConnectError | null>
@@ -859,10 +809,9 @@ describe("createUnaryFunctions", () => {
 
       await sleep(10);
 
-      expect(result.current.error).toStrictEqual("error");
+      expect(result.current.error?.code).toStrictEqual(Code.Aborted);
       expect(result.current.isError).toStrictEqual(true);
       expect(onError).toHaveBeenCalledTimes(1);
-      expect(consoleErrorSpy).toHaveBeenCalledWith("error");
     });
 
     it("makes a mutation", async () => {
@@ -980,7 +929,6 @@ describe("createUnaryFunctions", () => {
               getPlaceholderData?: (
                 enabled: boolean,
               ) => PartialMessage<SayResponse> | undefined;
-              onError?: (error: ConnectError) => void;
               transport?: Transport | undefined;
               callOptions?: CallOptions | undefined;
             }
@@ -1002,26 +950,19 @@ describe("createUnaryFunctions", () => {
               context?: QueryFunctionContext<ConnectQueryKey<SayRequest>>,
             ) => Promise<SayResponse>;
             placeholderData?: () => SayResponse | undefined;
-            onError?: (error: ConnectError) => void;
+            throwOnError?: (error: ConnectError) => boolean;
           }
         >
       >;
 
       const result = genSay.createUseQueryOptions(undefined, {
-        onError: jest.fn(),
         getPlaceholderData: jest.fn(() => new SayResponse()),
         transport: mockEliza(),
       });
 
       expect(
         Object.keys(result).sort((a, b) => a.localeCompare(b)),
-      ).toStrictEqual([
-        "enabled",
-        "onError",
-        "placeholderData",
-        "queryFn",
-        "queryKey",
-      ]);
+      ).toStrictEqual(["enabled", "placeholderData", "queryFn", "queryKey"]);
     });
 
     describe("enabled", () => {
@@ -1151,52 +1092,6 @@ describe("createUnaryFunctions", () => {
 
         expect(result.current.data?.sentence).toStrictEqual(undefined);
         expect(getPlaceholderData).toHaveBeenCalledWith(false);
-      });
-    });
-
-    describe("onError", () => {
-      beforeEach(() => {
-        consoleErrorSpy.mockReset();
-      });
-      afterAll(() => {
-        consoleErrorSpy.mockReset();
-      });
-
-      it("doesn't use onError if it isn't passed", () => {
-        const result = genSay.createUseQueryOptions(undefined, {
-          transport: mockEliza(),
-        });
-        expect(result.onError).toBeUndefined();
-      });
-
-      it("allows for a passthrough onError", async () => {
-        const onError = jest.fn();
-        const { result, rerender } = renderHook(
-          () =>
-            useQuery({
-              ...genSay.createUseQueryOptions(
-                // @ts-expect-error(2345) intentionally invalid input
-                { nope: "nope nope" },
-                { onError, transport: mockEliza() },
-              ),
-              queryFn: async () => Promise.reject("error"),
-              retry: false,
-            }),
-          wrapper(),
-        );
-        rerender();
-
-        expect(result.current.error).toStrictEqual(null);
-        expect(result.current.isError).toStrictEqual(false);
-        expect(onError).toHaveBeenCalledTimes(0);
-        expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-        await sleep(10);
-
-        expect(result.current.error).toStrictEqual("error");
-        expect(result.current.isError).toStrictEqual(true);
-        expect(onError).toHaveBeenCalledTimes(1);
-        expect(consoleErrorSpy).toHaveBeenCalledWith("error");
       });
     });
 
