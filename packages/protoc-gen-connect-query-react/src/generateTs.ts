@@ -167,7 +167,7 @@ const generateServiceFile =
 export const generateTs: PluginInit["generateTs"] = (schema, extension) => {
   schema.files.forEach((protoFile) => {
     protoFile.services.forEach(
-      generateServiceFile(schema, protoFile, extension)
+      generateServiceFile(schema, protoFile, extension),
     );
   });
 };
