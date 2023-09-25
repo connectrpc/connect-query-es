@@ -21,13 +21,16 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "pnpm clean && tsc --project tsconfig.build.json",
-    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
+    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header && tsc --noEmit --project tsconfig.json",
     "generate": "rm -rf snapshots/gen && cd snapshots && buf generate buf.build/connectrpc/eliza:8b8b971d6fde4dc8ba5d96f9fda7d53c"
   },
   "preferUnplugged": true,
   "devDependencies": {
+    "@connectrpc/connect": "^1.0.0",
+    "@connectrpc/connect-query": "workspace:*",
     "@bufbuild/buf": "1.26.1",
     "@bufbuild/protoc-gen-es": "^1.3.1",
+    "@tanstack/react-query": "^4.35.3",
     "typescript": "^5.2.2"
   },
   "dependencies": {

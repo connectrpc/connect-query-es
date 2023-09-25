@@ -16,6 +16,7 @@ import { createEcmaScriptPlugin } from "@bufbuild/protoplugin";
 
 import { version } from "../package.json";
 import { generateDts } from "./generateDts";
+import { generateJs } from "./generateJs";
 import { generateTs } from "./generateTs";
 
 export const protocGenConnectQueryReact = createEcmaScriptPlugin({
@@ -23,9 +24,7 @@ export const protocGenConnectQueryReact = createEcmaScriptPlugin({
   version: `v${String(version)}`,
   generateTs,
   generateDts,
-
-  // The generated TypeScript output is completely valid JavaScript since all the types are inferred
-  generateJs: generateTs,
+  generateJs,
 
   parseOption: (key) => {
     if (key !== "import-hook-from") {
