@@ -1,9 +1,0 @@
-{
-  "files": ["src/protoc-gen-connect-query-react-plugin.ts"],
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "dist/cjs",
-    "module": "CommonJS",
-    "resolveJsonModule": true
-  }
-}

@@ -235,7 +235,7 @@ const createUseQueryOptions: (
     onError?: (error: ConnectError) => void;
     transport: Transport;
     callOptions?: CallOptions | undefined;
-  },
+  }
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
@@ -259,7 +259,7 @@ const createUseMutationOptions: (options: {
 }) => {
   mutationFn: (
     input: PartialMessage<I>,
-    context?: QueryFunctionContext<ConnectQueryKey<I>>,
+    context?: QueryFunctionContext<ConnectQueryKey<I>>
   ) => Promise<O>;
   onError?: (error: ConnectError) => void;
 };
@@ -278,15 +278,12 @@ const createUseInfiniteQueryOptions: <ParamKey extends keyof PlainMessage<I>>(
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
-  },
+  }
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
   queryFn: (
-    context: QueryFunctionContext<
-      ConnectQueryKey<I>,
-      PlainMessage<I>[ParamKey]
-    >,
+    context: QueryFunctionContext<ConnectQueryKey<I>, PlainMessage<I>[ParamKey]>
   ) => Promise<O>;
   getNextPageParam: GetNextPageParamFunction<O>;
   onError?: (error: ConnectError) => void;
@@ -307,7 +304,7 @@ This helper is useful for getting query keys matching a wider set of queries ass
 
 ```ts
 const getQueryKey: (
-  input?: DisableQuery | PartialMessage<I>,
+  input?: DisableQuery | PartialMessage<I>
 ) => ConnectQueryKey<I>;
 ```
 
@@ -326,7 +323,7 @@ This is the metadata associated with this method.
 ```ts
 const setQueryData: (
   updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-  input?: PartialMessage<I>,
+  input?: PartialMessage<I>
 ) => [queryKey: ConnectQueryKey<I>, updater: (prev?: O) => O | undefined];
 ```
 
@@ -336,7 +333,7 @@ This helper is intended to be used with TanStack Query `QueryClient`'s [`setQuer
 
 ```ts
 const setQueriesData: (
-  updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
+  updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>)
 ) => [queryKey: ConnectPartialQueryKey, updater: (prev?: O) => O | undefined];
 ```
 
@@ -355,15 +352,12 @@ const useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
-  },
+  }
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
   queryFn: (
-    context: QueryFunctionContext<
-      ConnectQueryKey<I>,
-      PlainMessage<I>[ParamKey]
-    >,
+    context: QueryFunctionContext<ConnectQueryKey<I>, PlainMessage<I>[ParamKey]>
   ) => Promise<O>;
   getNextPageParam: GetNextPageParamFunction<O>;
   onError?: (error: ConnectError) => void;
@@ -384,7 +378,7 @@ const useMutation: (options?: {
 }) => {
   mutationFn: (
     input: PartialMessage<I>,
-    context?: QueryFunctionContext<ConnectQueryKey<I>>,
+    context?: QueryFunctionContext<ConnectQueryKey<I>>
   ) => Promise<O>;
   onError?: (error: ConnectError) => void;
 };
@@ -404,7 +398,7 @@ const useQuery: (
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
-  },
+  }
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
@@ -459,19 +453,6 @@ For example, a partial query key might look like this:
 Connect-query (along with all other javascript based connect packages) can be tested with the `createRouterTransport` function from `@connectrpc/connect`. This function allows you to create a transport that can be used to test your application without needing to make any network requests. We also have a dedicated package, [@connectrpc/connect-playwright](https://github.com/connectrpc/connect-playwright-es) for testing within [playwright](https://playwright.dev/).
 
 For playwright, you can see a sample test [here](https://github.com/connectrpc/connect-playwright-es/blob/main/packages/connect-playwright-example/tests/simple.spec.ts).
-
-## Experimental plugin
-
-There is an alternate plugin [`@connectrpc/protoc-gen-connect-query-react`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query-react) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.
-
-```tsx
-import { useExampleQuery } from "your-generated-code/example-ExampleService_connectquery_react";
-
-export const Example: FC = () => {
-  const { data } = useExampleQuery({});
-  return <div>{data}</div>;
-};
-```
 
 ## Frequently Asked Questions
 
@@ -576,7 +557,7 @@ import { getTodos } from "./example-ElizaService_connectquery";
 function Component() {
   const options = example.createUseQueryOptions(
     { name: "My First Todo" },
-    { transport },
+    { transport }
   );
   const query = createQuery({
     ...options,

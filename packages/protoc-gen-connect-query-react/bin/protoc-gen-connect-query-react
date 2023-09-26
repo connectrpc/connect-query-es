@@ -1,8 +1,0 @@
-#!/usr/bin/env node
-
-const { runNodeJs } = require('@bufbuild/protoplugin');
-const {
-    protocGenConnectQueryReact,
-} = require('../dist/cjs/src/protoc-gen-connect-query-react-plugin.js');
-
-runNodeJs(protocGenConnectQueryReact);
