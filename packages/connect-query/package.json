@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/connect-query",
-  "version": "0.4.4",
+  "version": "0.5.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/connectrpc/connect-query-es.git",
