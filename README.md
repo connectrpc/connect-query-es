@@ -235,7 +235,7 @@ const createUseQueryOptions: (
     onError?: (error: ConnectError) => void;
     transport: Transport;
     callOptions?: CallOptions | undefined;
-  }
+  },
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
@@ -259,7 +259,7 @@ const createUseMutationOptions: (options: {
 }) => {
   mutationFn: (
     input: PartialMessage<I>,
-    context?: QueryFunctionContext<ConnectQueryKey<I>>
+    context?: QueryFunctionContext<ConnectQueryKey<I>>,
   ) => Promise<O>;
   onError?: (error: ConnectError) => void;
 };
@@ -278,12 +278,15 @@ const createUseInfiniteQueryOptions: <ParamKey extends keyof PlainMessage<I>>(
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
-  }
+  },
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
   queryFn: (
-    context: QueryFunctionContext<ConnectQueryKey<I>, PlainMessage<I>[ParamKey]>
+    context: QueryFunctionContext<
+      ConnectQueryKey<I>,
+      PlainMessage<I>[ParamKey]
+    >,
   ) => Promise<O>;
   getNextPageParam: GetNextPageParamFunction<O>;
   onError?: (error: ConnectError) => void;
@@ -304,7 +307,7 @@ This helper is useful for getting query keys matching a wider set of queries ass
 
 ```ts
 const getQueryKey: (
-  input?: DisableQuery | PartialMessage<I>
+  input?: DisableQuery | PartialMessage<I>,
 ) => ConnectQueryKey<I>;
 ```
 
@@ -323,7 +326,7 @@ This is the metadata associated with this method.
 ```ts
 const setQueryData: (
   updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-  input?: PartialMessage<I>
+  input?: PartialMessage<I>,
 ) => [queryKey: ConnectQueryKey<I>, updater: (prev?: O) => O | undefined];
 ```
 
@@ -333,7 +336,7 @@ This helper is intended to be used with TanStack Query `QueryClient`'s [`setQuer
 
 ```ts
 const setQueriesData: (
-  updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>)
+  updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
 ) => [queryKey: ConnectPartialQueryKey, updater: (prev?: O) => O | undefined];
 ```
 
@@ -352,12 +355,15 @@ const useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
-  }
+  },
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
   queryFn: (
-    context: QueryFunctionContext<ConnectQueryKey<I>, PlainMessage<I>[ParamKey]>
+    context: QueryFunctionContext<
+      ConnectQueryKey<I>,
+      PlainMessage<I>[ParamKey]
+    >,
   ) => Promise<O>;
   getNextPageParam: GetNextPageParamFunction<O>;
   onError?: (error: ConnectError) => void;
@@ -378,7 +384,7 @@ const useMutation: (options?: {
 }) => {
   mutationFn: (
     input: PartialMessage<I>,
-    context?: QueryFunctionContext<ConnectQueryKey<I>>
+    context?: QueryFunctionContext<ConnectQueryKey<I>>,
   ) => Promise<O>;
   onError?: (error: ConnectError) => void;
 };
@@ -398,7 +404,7 @@ const useQuery: (
     onError?: (error: ConnectError) => void;
     transport?: Transport | undefined;
     callOptions?: CallOptions | undefined;
-  }
+  },
 ) => {
   enabled: boolean;
   queryKey: ConnectQueryKey<I>;
