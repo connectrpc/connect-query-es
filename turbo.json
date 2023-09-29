@@ -13,6 +13,9 @@
       "dependsOn": ["generate"],
       "cache": false
     },
+    "attw": {
+      "dependsOn": ["format"]
+    },
     "format": {
       "dependsOn": ["generate"]
     }
