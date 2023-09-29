@@ -215,34 +215,6 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/protoc-gen-connect-query-react:
-    dependencies:
-      '@bufbuild/protobuf':
-        specifier: ^1.3.1
-        version: 1.3.1
-      '@bufbuild/protoplugin':
-        specifier: ^1.3.1
-        version: 1.3.1
-    devDependencies:
-      '@bufbuild/buf':
-        specifier: 1.26.1
-        version: 1.26.1
-      '@bufbuild/protoc-gen-es':
-        specifier: ^1.3.1
-        version: 1.3.1(@bufbuild/protobuf@1.3.1)
-      '@connectrpc/connect':
-        specifier: ^1.0.0
-        version: 1.0.0(@bufbuild/protobuf@1.3.1)
-      '@connectrpc/connect-query':
-        specifier: workspace:*
-        version: link:../connect-query
-      '@tanstack/react-query':
-        specifier: ^4.35.3
-        version: 4.35.3(react@18.2.0)
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-
 packages:
 
   /@aashutoshrathi/word-wrap@1.2.6:
@@ -1634,10 +1606,6 @@ packages:
   /@tanstack/query-core@4.35.0:
     resolution: {integrity: sha512-4GMcKQuLZQi6RFBiBZNsLhl+hQGYScRZ5ZoVq8QAzfqz9M7vcGin/2YdSESwl7WaV+Qzsb5CZOAbMBes4lNTnA==}
 
-  /@tanstack/query-core@4.35.3:
-    resolution: {integrity: sha512-PS+WEjd9wzKTyNjjQymvcOe1yg8f3wYc6mD+vb6CKyZAKvu4sIJwryfqfBULITKCla7P9C4l5e9RXePHvZOZeQ==}
-    dev: true
-
   /@tanstack/react-query-devtools@4.35.0(@tanstack/react-query@4.35.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-tzN0K70idRsqnfLdUcQC3eCrv28kLIAB6/H1zsGdIw7Wmj5VgTxPmpEVc3rHQjKt0LZsvZTLmaLnI6FCI3VUZw==}
     peerDependencies:
@@ -1669,23 +1637,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
-
-  /@tanstack/react-query@4.35.3(react@18.2.0):
-    resolution: {integrity: sha512-UgTPioip/rGG3EQilXfA2j4BJkhEQsR+KAbF+KIuvQ7j4MkgnTCJF01SfRpIRNtQTlEfz/+IL7+jP8WA8bFbsw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      '@tanstack/query-core': 4.35.3
-      react: 18.2.0
-      use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: true
 
   /@testing-library/dom@9.3.1:
     resolution: {integrity: sha512-0DGPd9AR3+iDTjGoMpxIkAsUihHZ3Ai6CneU6bRRrffXMgzCdlNk43jTrD2/5LT6CBb3MWTP8v510JzYtahD2w==}

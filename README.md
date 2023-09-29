@@ -460,19 +460,6 @@ Connect-query (along with all other javascript based connect packages) can be te
 
 For playwright, you can see a sample test [here](https://github.com/connectrpc/connect-playwright-es/blob/main/packages/connect-playwright-example/tests/simple.spec.ts).
 
-## Experimental plugin
-
-There is an alternate plugin [`@connectrpc/protoc-gen-connect-query-react`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query-react) that you can use if you are using `@tanstack/react-query` only (and is not compatible with other frameworks like Solid). This plugin is currently experimental to see if it provides a better developer experience.
-
-```tsx
-import { useExampleQuery } from "your-generated-code/example-ExampleService_connectquery_react";
-
-export const Example: FC = () => {
-  const { data } = useExampleQuery({});
-  return <div>{data}</div>;
-};
-```
-
 ## Frequently Asked Questions
 
 ### How do I pass other TanStack Query options?
@@ -562,29 +549,6 @@ If the `Transport` attached to React Context via the `TransportProvider` isn't w
 You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue). All methods which are part of the `UnaryFunctions` type can be used by any framework. The only APIs which are React specific are the `TransportProvider`, and any APIs starting with `use`.
 
 > Tip: If you're a TanStack Query user that uses something other than React, we'd love to hear from you. Please reach out to us on the [Buf Slack](https://buf.build/links/slack).
-
-#### SolidJS Example
-
-Say, for example, you're using Solid together with TanStack Query's `useQuery` API. In this case you can use `UnaryFunctions.createUseQueryOptions` instead of `UnaryHooks.useQuery`. The only difference is that `createUseQueryOptions` requires you to pass in a `Transport` because it is not a hook and hooks are where transport is automatically inferred.
-
-Here's an example using SolidJS:
-
-```tsx
-import { createQuery } from "@tanstack/solid-query";
-import { getTodos } from "./example-ElizaService_connectquery";
-
-function Component() {
-  const options = example.createUseQueryOptions(
-    { name: "My First Todo" },
-    { transport },
-  );
-  const query = createQuery({
-    ...options,
-    queryKey: () => options.queryKey,
-  });
-  return <div>{whatever}</div>;
-}
-```
 
 ### What about Streaming?
 
