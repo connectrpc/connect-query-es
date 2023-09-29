@@ -15,10 +15,10 @@
 import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 
-import { Data, Datum } from "./datum.js";
-import { say } from "./gen/eliza-ElizaService_connectquery.js";
-import { Indicator, Indicators } from "./indicator.js";
-import { Page } from "./page.js";
+import { Data, Datum } from "./datum";
+import { say } from "./gen/eliza-ElizaService_connectquery";
+import { Indicator, Indicators } from "./indicator";
+import { Page } from "./page";
 
 /**
  * This example demonstrates a basic usage of Connect-Query with `useQuery`
