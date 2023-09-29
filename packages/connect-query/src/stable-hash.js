@@ -15,7 +15,9 @@
 import stableHash from "stable-hash";
 
 /**
- * Convert stable-hash to a typed API.
+ * Convert stable-hash to a typed API. This is a necessary workaround because
+ * stable-hash does not export a type for its default export that is compatible
+ * with Node16 resolution.
  *
  * @type {(value: unknown) => string}
  */
