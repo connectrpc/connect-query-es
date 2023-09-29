@@ -9,7 +9,7 @@
     "format": "pnpm run format:root && turbo run format",
     "attw": "turbo run attw",
     "check:spelling": "cspell \"**\" --gitignore",
-    "all": "turbo run build generate format test",
+    "all": "turbo run build generate format attw test",
     "update-all": "pnpm update --recursive --latest",
     "format:root": "pnpm run check:spelling && prettier \"*.js\" \"*.ts\" \"README.md\" --write --no-error-on-unmatched-pattern"
   },

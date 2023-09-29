@@ -37,20 +37,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm run build
-
-      - name: Generate
-        run: pnpm run generate
-
-      - name: Lint
-        run: pnpm run format
-
-      - name: Check types
-        run: pnpm run attw
-
-      - name: Test
-        run: pnpm run test
+      - name: Run CI
+        run: pnpm run all
 
       - name: Check changed files
         id: check_changed_files
