@@ -114,7 +114,7 @@ describe("createUnaryFunctions", () => {
 
     const sorter = (a: string, b: string) => a.localeCompare(b);
     expect(Object.keys(genSay).sort(sorter)).toStrictEqual(
-      Object.keys(matchers).sort(sorter)
+      Object.keys(matchers).sort(sorter),
     );
 
     expect(genSay).toMatchObject(matchers);
@@ -196,7 +196,7 @@ describe("createUnaryFunctions", () => {
         const { result, rerender } = renderHook(
           () =>
             useQuery(genCount.createUseQueryOptions(request, { transport })),
-          rest
+          rest,
         );
         type ExpectType_Data = Expect<
           Equal<typeof result.current.data, CountResponse | undefined>
@@ -237,9 +237,9 @@ describe("createUnaryFunctions", () => {
             useQuery(
               genCount.createUseQueryOptions(request, {
                 transport: mockBigInt(),
-              })
+              }),
             ),
-          rest
+          rest,
         );
 
         await waitFor(() => {
@@ -249,7 +249,7 @@ describe("createUnaryFunctions", () => {
         expect(result.current.data?.count).toStrictEqual(1n);
 
         queryClient.setQueryData(
-          ...genCount.setQueryData(partialUpdater, request)
+          ...genCount.setQueryData(partialUpdater, request),
         );
         rerender();
 
@@ -260,7 +260,7 @@ describe("createUnaryFunctions", () => {
       it("allows a function updater", async () => {
         /** @returns input + 1n */
         const functionUpdater = (
-          { count }: { count: bigint } = { count: 1n }
+          { count }: { count: bigint } = { count: 1n },
         ) =>
           new BigIntService.methods.count.O({
             count: count + 1n,
@@ -272,9 +272,9 @@ describe("createUnaryFunctions", () => {
             useQuery(
               genCount.createUseQueryOptions(request, {
                 transport: mockBigInt(),
-              })
+              }),
             ),
-          rest
+          rest,
         );
 
         type ExpectType_Data = Expect<
@@ -288,7 +288,7 @@ describe("createUnaryFunctions", () => {
         expect(result.current.data?.count).toStrictEqual(1n);
 
         queryClient.setQueryData(
-          ...genCount.setQueryData(functionUpdater, request)
+          ...genCount.setQueryData(functionUpdater, request),
         );
         rerender();
 
@@ -330,7 +330,7 @@ describe("createUnaryFunctions", () => {
               context: QueryFunctionContext<
                 ConnectQueryKey<CountRequest>,
                 bigint | undefined
-              >
+              >,
             ) => Promise<CountResponse>;
             getNextPageParam: GetNextPageParamFunction<CountResponse>;
             onError?: (error: ConnectError) => void;
@@ -363,10 +363,10 @@ describe("createUnaryFunctions", () => {
                   pageParamKey: "sentence",
                   getNextPageParam: () => "0",
                   transport: mockTransportOption,
-                }
-              )
+                },
+              ),
             ),
-          wrapper({}, mockTransportContext)
+          wrapper({}, mockTransportContext),
         );
 
         await waitFor(() => {
@@ -374,7 +374,7 @@ describe("createUnaryFunctions", () => {
         });
 
         expect(result.current.data?.pages[0].sentence).toStrictEqual(
-          "override"
+          "override",
         );
       });
 
@@ -385,10 +385,10 @@ describe("createUnaryFunctions", () => {
             {
               getNextPageParam: (lastPage) => lastPage.count + 1n,
               pageParamKey: "add",
-            }
+            },
           );
         }).toThrow(
-          "Invalid assertion: createUseInfiniteQueryOptions requires you to provide a Transport."
+          "Invalid assertion: createUseInfiniteQueryOptions requires you to provide a Transport.",
         );
       });
     });
@@ -403,9 +403,9 @@ describe("createUnaryFunctions", () => {
               pageParamKey: "page",
               getNextPageParam: (lastPage) => lastPage.page + 1n,
               transport: mockPaginatedTransport(),
-            })
+            }),
           ),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       expect(result.current.data).toStrictEqual(undefined);
@@ -464,13 +464,13 @@ describe("createUnaryFunctions", () => {
             getNextPageParam: (lastPage) => lastPage.count,
             transport: mockEliza(),
           }),
-        wrapper()
+        wrapper(),
       );
 
       expect(result.current).toHaveProperty("enabled", false);
 
       await expect(result.current.queryFn).rejects.toThrow(
-        "Invalid assertion: queryFn does not accept a disabled query"
+        "Invalid assertion: queryFn does not accept a disabled query",
       );
     });
 
@@ -484,7 +484,7 @@ describe("createUnaryFunctions", () => {
             getNextPageParam,
             transport: mockBigInt(),
           }),
-        wrapper()
+        wrapper(),
       );
 
       expect(result.current.getNextPageParam).toStrictEqual(getNextPageParam);
@@ -512,9 +512,9 @@ describe("createUnaryFunctions", () => {
                 pageParamKey: "add",
                 getNextPageParam: (lastPage) => lastPage.count,
                 transport: mockEliza(),
-              }
+              },
             ),
-          wrapper()
+          wrapper(),
         );
         expect(result.current.onError).toBeUndefined();
         expect(consoleErrorSpy).not.toHaveBeenCalled();
@@ -528,12 +528,12 @@ describe("createUnaryFunctions", () => {
               ...genCount.createUseInfiniteQueryOptions(
                 // @ts-expect-error(2345) intentionally invalid input
                 { nope: "nope nope" },
-                { onError, pageParamKey: "add", transport: mockEliza() }
+                { onError, pageParamKey: "add", transport: mockEliza() },
               ),
               queryFn: async () => Promise.reject("error"),
               retry: false,
             }),
-          wrapper(undefined, mockBigInt())
+          wrapper(undefined, mockBigInt()),
         );
         rerender();
 
@@ -564,10 +564,10 @@ describe("createUnaryFunctions", () => {
                 getNextPageParam: (lastPage) => lastPage.count,
                 transport,
                 callOptions: mockCallOptions,
-              }
-            )
+              },
+            ),
           ),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       expect(transportSpy).toHaveBeenCalledWith(
@@ -576,7 +576,7 @@ describe("createUnaryFunctions", () => {
         mockCallOptions.signal, // signal
         mockCallOptions.timeoutMs, // timeoutMs
         mockCallOptions.headers, // headers
-        expect.anything() // input
+        expect.anything(), // input
       );
     });
 
@@ -593,10 +593,10 @@ describe("createUnaryFunctions", () => {
                 getNextPageParam: (lastPage) => lastPage.page + 1n,
                 transport,
                 callOptions: mockCallOptions,
-              }
-            )
+              },
+            ),
           ),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       expect(transportSpy).toHaveBeenCalledWith(
@@ -607,7 +607,7 @@ describe("createUnaryFunctions", () => {
         mockCallOptions.headers, // headers
         expect.objectContaining({
           page: 1n,
-        }) // input
+        }), // input
       );
     });
 
@@ -630,10 +630,10 @@ describe("createUnaryFunctions", () => {
                   // @ts-expect-error(2345) ignore these errors for testing
                   ...input,
                 }),
-              }
-            )
+              },
+            ),
           ),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
     });
 
@@ -648,9 +648,9 @@ describe("createUnaryFunctions", () => {
               getNextPageParam: (lastPage) => lastPage.page + 1n,
               transport,
               callOptions: mockCallOptions,
-            }
+            },
           ),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       expect(result.current.queryKey).toStrictEqual([
@@ -685,9 +685,9 @@ describe("createUnaryFunctions", () => {
               getNextPageParam: (lastPage) => lastPage.page + 1n,
               transport,
               callOptions: mockCallOptions,
-            }
+            },
           ),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       expect(result.current.queryKey).toStrictEqual([
@@ -723,10 +723,10 @@ describe("createUnaryFunctions", () => {
                 getNextPageParam: (lastPage) => lastPage.page + 1n,
                 transport,
                 callOptions: mockCallOptions,
-              }
-            )
+              },
+            ),
           ),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       expect(transportSpy).toHaveBeenCalledWith(
@@ -737,7 +737,7 @@ describe("createUnaryFunctions", () => {
         mockCallOptions.headers, // headers
         expect.objectContaining({
           page: 2n,
-        }) // input
+        }), // input
       );
     });
   });
@@ -760,9 +760,9 @@ describe("createUnaryFunctions", () => {
           useMutation(
             customSay.createUseMutationOptions({
               transport: mockTransportOption,
-            })
+            }),
           ),
-        wrapper({}, mockTransportContext)
+        wrapper({}, mockTransportContext),
       );
 
       result.current.mutate({});
@@ -780,7 +780,7 @@ describe("createUnaryFunctions", () => {
       expect(() => {
         genCount.createUseMutationOptions();
       }).toThrow(
-        "Invalid assertion: createUseMutationOptions requires you to provide a Transport."
+        "Invalid assertion: createUseMutationOptions requires you to provide a Transport.",
       );
     });
 
@@ -811,7 +811,7 @@ describe("createUnaryFunctions", () => {
               input: PartialMessage<CountRequest>,
               context?:
                 | QueryFunctionContext<ConnectQueryKey<CountRequest>>
-                | undefined
+                | undefined,
             ) => Promise<CountResponse>;
             onError?: (error: ConnectError) => void;
           }
@@ -823,11 +823,11 @@ describe("createUnaryFunctions", () => {
           genCount.createUseMutationOptions({
             transport: mockBigInt(),
           }),
-        wrapper()
+        wrapper(),
       );
 
       expect(
-        Object.keys(result.current).sort((a, b) => a.localeCompare(b))
+        Object.keys(result.current).sort((a, b) => a.localeCompare(b)),
       ).toStrictEqual(["mutationFn"]);
     });
 
@@ -845,7 +845,7 @@ describe("createUnaryFunctions", () => {
             mutationFn: async () => Promise.reject("error"),
             mutationKey: genCount.getQueryKey(),
           }),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       rerender();
@@ -875,7 +875,7 @@ describe("createUnaryFunctions", () => {
 
       const { queryClient, transport, ...rest } = wrapper(
         { defaultOptions },
-        mockStatefulBigIntTransport()
+        mockStatefulBigIntTransport(),
       );
       const { result } = renderHook(
         () => ({
@@ -890,17 +890,17 @@ describe("createUnaryFunctions", () => {
                 queryClient.getQueryData<CountResponse>(queryKey) ?? {};
 
               queryClient.setQueryData(
-                ...genCount.setQueryData({ count: count + input.add }, input)
+                ...genCount.setQueryData({ count: count + input.add }, input),
               );
             },
           }),
           get: useQuery(
             genCount.createUseQueryOptions(input, {
               transport,
-            })
+            }),
           ),
         }),
-        rest
+        rest,
       );
 
       type ExpectType_MutationFn = Expect<
@@ -947,7 +947,7 @@ describe("createUnaryFunctions", () => {
             }),
             mutationKey: genCount.getQueryKey({ add: 1n }),
           }),
-        wrapper({ defaultOptions })
+        wrapper({ defaultOptions }),
       );
 
       result.current.mutate({ add: 2n });
@@ -962,7 +962,7 @@ describe("createUnaryFunctions", () => {
         mockCallOptions.signal, // signal
         mockCallOptions.timeoutMs, // timeoutMs
         mockCallOptions.headers, // headers
-        expect.anything() // input
+        expect.anything(), // input
       );
     });
   });
@@ -982,7 +982,7 @@ describe("createUnaryFunctions", () => {
           params[1],
           | {
               getPlaceholderData?: (
-                enabled: boolean
+                enabled: boolean,
               ) => PartialMessage<SayResponse> | undefined;
               onError?: (error: ConnectError) => void;
               transport?: Transport | undefined;
@@ -1003,7 +1003,7 @@ describe("createUnaryFunctions", () => {
             enabled: boolean;
             queryKey: ConnectQueryKey<SayRequest>;
             queryFn: (
-              context?: QueryFunctionContext<ConnectQueryKey<SayRequest>>
+              context?: QueryFunctionContext<ConnectQueryKey<SayRequest>>,
             ) => Promise<SayResponse>;
             placeholderData?: () => SayResponse | undefined;
             onError?: (error: ConnectError) => void;
@@ -1018,7 +1018,7 @@ describe("createUnaryFunctions", () => {
       });
 
       expect(
-        Object.keys(result).sort((a, b) => a.localeCompare(b))
+        Object.keys(result).sort((a, b) => a.localeCompare(b)),
       ).toStrictEqual([
         "enabled",
         "onError",
@@ -1035,7 +1035,7 @@ describe("createUnaryFunctions", () => {
           {},
           {
             transport: mockEliza(),
-          }
+          },
         );
         type ExpectType_Expect = Expect<Equal<typeof result.enabled, boolean>>;
       });
@@ -1045,7 +1045,7 @@ describe("createUnaryFunctions", () => {
           {},
           {
             transport: mockEliza(),
-          }
+          },
         );
 
         expect(result).toHaveProperty("enabled", true);
@@ -1118,7 +1118,7 @@ describe("createUnaryFunctions", () => {
       it("will use pass the value of `enabled` to the getPlaceholderData callback", () => {
         const getPlaceholderData = jest.fn<
           (
-            enabled?: boolean | undefined
+            enabled?: boolean | undefined,
           ) => PartialMessage<SayResponse> | undefined
         >(() => ({}));
         const { result } = renderHook(
@@ -1127,9 +1127,9 @@ describe("createUnaryFunctions", () => {
               genSay.createUseQueryOptions(disableQuery, {
                 getPlaceholderData,
                 transport: mockEliza(),
-              })
+              }),
             ),
-          wrapper()
+          wrapper(),
         );
 
         expect(result.current.data?.sentence).toStrictEqual("");
@@ -1139,7 +1139,7 @@ describe("createUnaryFunctions", () => {
       it("will be undefined if getPlaceholderData returns undefined", () => {
         const getPlaceholderData = jest.fn<
           (
-            enabled?: boolean | undefined
+            enabled?: boolean | undefined,
           ) => PartialMessage<SayResponse> | undefined
         >(() => undefined);
         const { result } = renderHook(
@@ -1148,9 +1148,9 @@ describe("createUnaryFunctions", () => {
               genSay.createUseQueryOptions(disableQuery, {
                 getPlaceholderData,
                 transport: mockEliza(),
-              })
+              }),
             ),
-          wrapper()
+          wrapper(),
         );
 
         expect(result.current.data?.sentence).toStrictEqual(undefined);
@@ -1181,12 +1181,12 @@ describe("createUnaryFunctions", () => {
               ...genSay.createUseQueryOptions(
                 // @ts-expect-error(2345) intentionally invalid input
                 { nope: "nope nope" },
-                { onError, transport: mockEliza() }
+                { onError, transport: mockEliza() },
               ),
               queryFn: async () => Promise.reject("error"),
               retry: false,
             }),
-          wrapper()
+          wrapper(),
         );
         rerender();
 
@@ -1218,7 +1218,7 @@ describe("createUnaryFunctions", () => {
             (
               context?:
                 | QueryFunctionContext<ConnectQueryKey<SayRequest>>
-                | undefined
+                | undefined,
             ) => Promise<SayResponse>
           >
         >;
@@ -1239,8 +1239,8 @@ describe("createUnaryFunctions", () => {
 
         await expect(result.queryFn).rejects.toStrictEqual(
           new Error(
-            "Invalid assertion: queryFn does not accept a disabled query"
-          )
+            "Invalid assertion: queryFn does not accept a disabled query",
+          ),
         );
       });
 
@@ -1255,10 +1255,10 @@ describe("createUnaryFunctions", () => {
                 {
                   transport,
                   callOptions: mockCallOptions,
-                }
-              )
+                },
+              ),
             ),
-          wrapper()
+          wrapper(),
         );
 
         expect(transportSpy).toHaveBeenCalledWith(
@@ -1267,7 +1267,7 @@ describe("createUnaryFunctions", () => {
           mockCallOptions.signal, // signal
           mockCallOptions.timeoutMs, // timeoutMs
           mockCallOptions.headers, // headers
-          expect.anything() // input
+          expect.anything(), // input
         );
       });
     });

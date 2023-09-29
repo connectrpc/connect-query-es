@@ -17,19 +17,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import {
-  ConverseRequest,
-  ConverseResponse,
-  CountRequest,
-  CountResponse,
-  IntroduceRequest,
-  IntroduceResponse,
-  ListRequest,
-  ListResponse,
-  Nothing,
-  SayRequest,
-  SayResponse,
-} from "./eliza_pb.js.js";
+import { ConverseRequest, ConverseResponse, CountRequest, CountResponse, IntroduceRequest, IntroduceResponse, ListRequest, ListResponse, Nothing, SayRequest, SayResponse } from "./eliza_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -92,7 +80,7 @@ export const ElizaService = {
       O: IntroduceResponse,
       kind: MethodKind.ServerStreaming,
     },
-  },
+  }
 } as const;
 
 /**
@@ -139,7 +127,7 @@ export const SecondService = {
       O: IntroduceResponse,
       kind: MethodKind.ServerStreaming,
     },
-  },
+  }
 } as const;
 
 /**
@@ -157,7 +145,7 @@ export const Haberdasher = {
       O: Nothing,
       kind: MethodKind.Unary,
     },
-  },
+  }
 } as const;
 
 /**
@@ -175,7 +163,7 @@ export const Slouch = {
       O: Nothing,
       kind: MethodKind.Unary,
     },
-  },
+  }
 } as const;
 
 /**
@@ -193,7 +181,7 @@ export const BigIntService = {
       O: CountResponse,
       kind: MethodKind.Unary,
     },
-  },
+  }
 } as const;
 
 /**
@@ -211,5 +199,6 @@ export const PaginatedService = {
       O: ListResponse,
       kind: MethodKind.Unary,
     },
-  },
+  }
 } as const;
+

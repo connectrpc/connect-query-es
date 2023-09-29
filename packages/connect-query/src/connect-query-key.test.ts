@@ -20,7 +20,7 @@ import { disableQuery } from "./utils.js";
 describe("makeQueryKey", () => {
   const queryKey = makeConnectQueryKeyGetter(
     "service.typeName",
-    "methodInfo.name"
+    "methodInfo.name",
   );
 
   it("makes a query key with input", () => {

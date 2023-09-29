@@ -60,7 +60,7 @@ export type ConnectPartialQueryKey = [
 export const makeConnectQueryKeyGetter =
   (typeName: ServiceType["typeName"], methodInfoName: MethodInfo["name"]) =>
   <I extends Message<I>>(
-    input?: DisableQuery | PartialMessage<I> | undefined
+    input?: DisableQuery | PartialMessage<I> | undefined,
   ): ConnectQueryKey<I> => [
     typeName,
     methodInfoName,

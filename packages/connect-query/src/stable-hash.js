@@ -12,21 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DefaultOptions } from "@tanstack/react-query";
-
-import stableHash from "./stable-hash.js";
+import stableHash from "stable-hash";
 
 /**
- * These default options are required for proper query key hashing.
+ * Convert stable-hash to a typed API.
  *
- * For example, if you are using BigInt values, you will need this in order to avoid getting this expected JavaScript error:
- *
- * `Error: Uncaught [TypeError: Do not know how to serialize a BigInt]`
- *
- * when TanStack Query tries to serialize the value.
+ * @type {(value: unknown) => string}
  */
-export const defaultOptions = {
-  queries: {
-    queryKeyHashFn: stableHash,
-  },
-} satisfies DefaultOptions;
+const defaultStableHash = stableHash;
+
+export default defaultStableHash;

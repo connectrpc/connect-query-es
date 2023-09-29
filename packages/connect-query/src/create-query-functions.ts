@@ -41,7 +41,7 @@ export type SupportedMethodKinds = MethodKind.Unary;
  * Today, only Unary services are supported.
  */
 export const isSupportedMethod = <I extends Message<I>, O extends Message<O>>(
-  method: MethodInfo<I, O>
+  method: MethodInfo<I, O>,
 ): method is IsSupportedMethod<I, O> => {
   return supportedMethodKinds.includes(method.kind);
 };
@@ -131,12 +131,12 @@ export const createQueryFunctions = <Service extends ServiceType>({
               methodInfo,
               `unrecognized method kind: ${
                 (methodInfo as { kind: string }).kind
-              }`
-            )
+              }`,
+            ),
           );
           return accumulator;
       }
     },
     // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter -- making this change causes the wrong overload to be selected
-    {} as QueryFunctions<Service>
+    {} as QueryFunctions<Service>,
   );

@@ -17,7 +17,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Nothing } from "./eliza_pb.js";
+import { Nothing } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 import {
   createQueryService,

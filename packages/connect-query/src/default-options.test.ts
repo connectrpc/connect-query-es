@@ -39,10 +39,10 @@ describe("defaultOptions", () => {
     // not equal
     expect(hash(() => {})).not.toStrictEqual(hash(() => {}));
     expect(hash(new Set(["a", "b"]))).not.toStrictEqual(
-      hash(new Set(["a", "b"]))
+      hash(new Set(["a", "b"])),
     );
     expect(hash(new Map([["a", "b"]]))).not.toStrictEqual(
-      hash(new Map([["a", "b"]]))
+      hash(new Map([["a", "b"]])),
     );
   });
 

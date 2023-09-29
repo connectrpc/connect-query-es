@@ -50,8 +50,8 @@ describe("createQueryService", () => {
 
     const unaryMethods = Object.keys(service.methods).filter((key) =>
       isUnaryMethod(
-        service.methods[key as keyof typeof service.methods] as MethodInfo
-      )
+        service.methods[key as keyof typeof service.methods] as MethodInfo,
+      ),
     );
     expect(Object.keys(hook)).toHaveLength(unaryMethods.length);
 
@@ -60,7 +60,7 @@ describe("createQueryService", () => {
       expect.objectContaining({
         methodInfo: service.methods[methodName],
         createUseQueryOptions: expect.any(Function),
-      })
+      }),
     );
   });
 
@@ -73,7 +73,7 @@ describe("createQueryService", () => {
           createQueryService({ service }).say.createUseQueryOptions(input, {
             transport: mockEliza(),
           }),
-        wrapper()
+        wrapper(),
       );
 
       type ExpectType_Enabled = Expect<
@@ -96,7 +96,7 @@ describe("createQueryService", () => {
           (
             context?:
               | QueryFunctionContext<ConnectQueryKey<SayRequest>>
-              | undefined
+              | undefined,
           ) => Promise<SayResponse>
         >
       >;

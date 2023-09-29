@@ -92,7 +92,7 @@ describe("createQueryHooks", () => {
     type ExpectType_GetQueryKey = Equal<
       (typeof hooks)["say"]["getQueryKey"],
       (
-        input: DisableQuery | PartialMessage<SayRequest>
+        input: DisableQuery | PartialMessage<SayRequest>,
       ) => ConnectQueryKey<SayRequest>
     >;
     expect(hooks.say).toHaveProperty("getQueryKey", expect.any(Function));
@@ -159,10 +159,10 @@ describe("createQueryHooks", () => {
     expect(Object.keys(hooks)).toStrictEqual(["Unary"]);
 
     expect(console.error).toHaveBeenCalledWith(
-      new Error("Invariant failed: unrecognized method kind: undefined")
+      new Error("Invariant failed: unrecognized method kind: undefined"),
     );
     expect(console.error).toHaveBeenCalledWith(
-      new Error("Invariant failed: unrecognized method kind: Bad")
+      new Error("Invariant failed: unrecognized method kind: Bad"),
     );
   });
 });

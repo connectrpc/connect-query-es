@@ -35,17 +35,17 @@ describe("isUnaryMethod", () => {
     expect(
       isUnaryMethod({
         kind: MethodKind.BiDiStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>)
+      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
     ).toBeFalsy();
     expect(
       isUnaryMethod({
         kind: MethodKind.ClientStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>)
+      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
     ).toBeFalsy();
     expect(
       isUnaryMethod({
         kind: MethodKind.ServerStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>)
+      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
     ).toBeFalsy();
   });
 
@@ -53,7 +53,7 @@ describe("isUnaryMethod", () => {
     expect(
       isUnaryMethod({
         kind: MethodKind.Unary,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>)
+      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
     ).toBeTruthy();
   });
 });
@@ -93,7 +93,7 @@ describe("isAbortController", () => {
     expect(isAbortController({ signal: { aborted: undefined } })).toBeFalsy();
     expect(isAbortController({ signal: { aborted: true } })).toBeFalsy();
     expect(
-      isAbortController({ signal: { aborted: true }, abort: undefined })
+      isAbortController({ signal: { aborted: true }, abort: undefined }),
     ).toBeFalsy();
   });
 
@@ -104,7 +104,7 @@ describe("isAbortController", () => {
           aborted: false,
         },
         abort: () => {},
-      })
+      }),
     ).toBeTruthy();
 
     expect(isAbortController(new AbortController())).toBeTruthy();
