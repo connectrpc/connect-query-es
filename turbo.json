@@ -16,6 +16,9 @@
       "dependsOn": ["generate"],
       "cache": false
     },
+    "attw": {
+      "dependsOn": ["build"]
+    },
     "format": {
       "dependsOn": ["generate"]
     }
