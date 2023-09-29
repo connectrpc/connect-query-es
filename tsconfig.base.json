@@ -5,6 +5,7 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "resolveJsonModule": true,
+    "module": "Node16",
 
     "strict": true,
     "exactOptionalPropertyTypes": true,
@@ -14,7 +15,7 @@
     "noImplicitOverride": true,
 
     // We need node's module resolution, so we do not have to skip lib checks
-    "moduleResolution": "Node",
+    "moduleResolution": "Node16",
     "skipLibCheck": false,
     "declaration": true,
     "declarationMap": true,

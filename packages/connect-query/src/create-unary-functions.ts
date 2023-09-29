@@ -27,16 +27,16 @@ import type {
 import type {
   ConnectPartialQueryKey,
   ConnectQueryKey,
-} from "./connect-query-key";
-import { makeConnectQueryKeyGetter } from "./connect-query-key";
-import type { DisableQuery } from "./utils";
+} from "./connect-query-key.js";
+import { makeConnectQueryKeyGetter } from "./connect-query-key.js";
+import type { DisableQuery } from "./utils.js";
 import {
   assert,
   disableQuery,
   isUnaryMethod,
   protobufSafeUpdater,
   unreachableCase,
-} from "./utils";
+} from "./utils.js";
 
 type RequireExactlyOne<T, Keys extends keyof T = keyof T> = {
   [K in Keys]-?: Partial<Record<Exclude<Keys, K>, undefined>> &
@@ -82,7 +82,7 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
       onError?: (error: ConnectError) => void;
       transport?: Transport | undefined;
       callOptions?: CallOptions | undefined;
-    },
+    }
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
@@ -112,14 +112,14 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
    */
   setQueryData: (
     updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-    input?: PartialMessage<I>,
+    input?: PartialMessage<I>
   ) => [queryKey: ConnectQueryKey<I>, updater: (prev?: O) => O | undefined];
 
   /**
    * This helper is intended to be used with `QueryClient`s `setQueriesData` function.
    */
   setQueriesData: (
-    updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
+    updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>)
   ) => [queryKey: ConnectPartialQueryKey, updater: (prev?: O) => O | undefined];
 
   /**
@@ -134,7 +134,7 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
           input: PartialMessage<I>;
         }) => PartialMessage<I>;
         pageParamKey: ParamKey;
-      }>,
+      }>
   ) => {
     enabled: boolean;
     queryKey: ConnectQueryKey<I>;
@@ -142,7 +142,7 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
       context: QueryFunctionContext<
         ConnectQueryKey<I>,
         PartialMessage<I>[ParamKey]
-      >,
+      >
     ) => Promise<O>;
     getNextPageParam: GetNextPageParamFunction<O>;
     onError?: (error: ConnectError) => void;
@@ -158,7 +158,7 @@ export interface UnaryFunctions<I extends Message<I>, O extends Message<O>> {
   }) => {
     mutationFn: (
       input: PartialMessage<I>,
-      context?: QueryFunctionContext<ConnectQueryKey<I>>,
+      context?: QueryFunctionContext<ConnectQueryKey<I>>
     ) => Promise<O>;
     onError?: (error: ConnectError) => void;
   };
@@ -184,7 +184,7 @@ export const createUnaryFunctions = <
       methodInfo,
       `createUnaryFunctions was passed a non unary method, ${
         (methodInfo as { name: string }).name
-      }`,
+      }`
     );
   }
 
@@ -193,13 +193,13 @@ export const createUnaryFunctions = <
   const createUseQueryOptions: UnaryFunctions<I, O>["createUseQueryOptions"] = (
     input,
     // istanbul ignore next
-    { callOptions, getPlaceholderData, onError, transport } = {},
+    { callOptions, getPlaceholderData, onError, transport } = {}
   ) => {
     const enabled = input !== disableQuery;
 
     assert(
       transport !== undefined,
-      "createUseQueryOptions requires you to provide a Transport.",
+      "createUseQueryOptions requires you to provide a Transport."
     );
 
     return {
@@ -225,7 +225,7 @@ export const createUnaryFunctions = <
           (callOptions ?? context)?.signal,
           callOptions?.timeoutMs,
           callOptions?.headers,
-          input ?? {},
+          input ?? {}
         );
         return result.message;
       },
@@ -266,13 +266,13 @@ export const createUnaryFunctions = <
         callOptions,
         sanitizeInputKey,
         ...otherOptions
-      },
+      }
     ) => {
       const transport = optionsTransport ?? topLevelCustomTransport;
 
       assert(
         transport !== undefined,
-        "createUseInfiniteQueryOptions requires you to provide a Transport.",
+        "createUseInfiniteQueryOptions requires you to provide a Transport."
       );
 
       const enabled = input !== disableQuery;
@@ -297,7 +297,7 @@ export const createUnaryFunctions = <
         queryFn: async (context) => {
           assert(
             input !== disableQuery,
-            "queryFn does not accept a disabled query",
+            "queryFn does not accept a disabled query"
           );
           const valueAtPageParam =
             "pageParamKey" in otherOptions &&
@@ -323,7 +323,7 @@ export const createUnaryFunctions = <
             (callOptions ?? context).signal,
             callOptions?.timeoutMs,
             callOptions?.headers,
-            inputCombinedWithPageParam,
+            inputCombinedWithPageParam
           );
           return result.message;
         },
@@ -343,7 +343,7 @@ export const createUnaryFunctions = <
 
       assert(
         transport !== undefined,
-        "createUseMutationOptions requires you to provide a Transport.",
+        "createUseMutationOptions requires you to provide a Transport."
       );
 
       return {
@@ -354,7 +354,7 @@ export const createUnaryFunctions = <
             (callOptions ?? context)?.signal,
             callOptions?.timeoutMs,
             callOptions?.headers,
-            input,
+            input
           );
           return result.message;
         },

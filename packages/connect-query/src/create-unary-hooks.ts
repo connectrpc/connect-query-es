@@ -14,8 +14,8 @@
 
 import type { Message } from "@bufbuild/protobuf";
 
-import type { UnaryFunctions } from "./create-unary-functions";
-import { useTransport } from "./use-transport";
+import type { UnaryFunctions } from "./create-unary-functions.js";
+import { useTransport } from "./use-transport.js";
 
 /**
  * All the additional hooks that are unique to React.
@@ -37,7 +37,7 @@ export interface UnaryHooks<
  * Creates the hooks for a given set of unary methods.
  */
 export function createUnaryHooks<I extends Message<I>, O extends Message<O>>(
-  unaryMethods: UnaryFunctions<I, O>,
+  unaryMethods: UnaryFunctions<I, O>
 ): UnaryHooks<I, O, UnaryFunctions<I, O>> {
   return {
     useQuery: (input, options) => {

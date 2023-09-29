@@ -18,26 +18,26 @@ import { useQuery } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
 import { spyOn } from "jest-mock";
 
-import { createUnaryFunctions } from "./create-unary-functions";
-import { ElizaService } from "./gen/eliza_connect";
-import { mockBigInt, sleep, wrapper } from "./jest/test-utils";
+import { createUnaryFunctions } from "./create-unary-functions.js";
+import { ElizaService } from "./gen/eliza_connect.js";
+import { mockBigInt, sleep, wrapper } from "./jest/test-utils.js";
 import {
   fallbackTransport,
   TransportProvider,
   useTransport,
-} from "./use-transport";
+} from "./use-transport.js";
 
 const error = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
+  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info."
 );
 
 describe("fallbackTransport", () => {
   it("throws a helpful error message", async () => {
     await expect(Promise.reject(fallbackTransport.unary)).rejects.toThrow(
-      error,
+      error
     );
     await expect(Promise.reject(fallbackTransport.stream)).rejects.toThrow(
-      error,
+      error
     );
   });
 });
@@ -58,7 +58,7 @@ describe("useTransport", () => {
           }),
           retry: false,
         }),
-      wrapper(),
+      wrapper()
     );
     rerender();
 

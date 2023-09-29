@@ -17,7 +17,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CountRequest, CountResponse } from "./eliza_pb";
+import { CountRequest, CountResponse } from "./eliza_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 import {
   createQueryService,

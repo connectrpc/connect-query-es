@@ -17,13 +17,13 @@ import { describe, expect, it } from "@jest/globals";
 import type { QueryFunctionContext } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
 
-import type { ConnectQueryKey } from "./connect-query-key";
-import { createQueryService } from "./create-query-service";
-import { ElizaService } from "./gen/eliza_connect";
-import type { SayRequest, SayResponse } from "./gen/eliza_pb";
-import type { Equal, Expect } from "./jest/test-utils";
-import { mockEliza, wrapper } from "./jest/test-utils";
-import { isUnaryMethod } from "./utils";
+import type { ConnectQueryKey } from "./connect-query-key.js";
+import { createQueryService } from "./create-query-service.js";
+import { ElizaService } from "./gen/eliza_connect.js";
+import type { SayRequest, SayResponse } from "./gen/eliza_pb.js";
+import type { Equal, Expect } from "./jest/test-utils.js";
+import { mockEliza, wrapper } from "./jest/test-utils.js";
+import { isUnaryMethod } from "./utils.js";
 
 describe("createQueryService", () => {
   const service = ElizaService;
@@ -50,8 +50,8 @@ describe("createQueryService", () => {
 
     const unaryMethods = Object.keys(service.methods).filter((key) =>
       isUnaryMethod(
-        service.methods[key as keyof typeof service.methods] as MethodInfo,
-      ),
+        service.methods[key as keyof typeof service.methods] as MethodInfo
+      )
     );
     expect(Object.keys(hook)).toHaveLength(unaryMethods.length);
 
@@ -60,7 +60,7 @@ describe("createQueryService", () => {
       expect.objectContaining({
         methodInfo: service.methods[methodName],
         createUseQueryOptions: expect.any(Function),
-      }),
+      })
     );
   });
 
@@ -73,7 +73,7 @@ describe("createQueryService", () => {
           createQueryService({ service }).say.createUseQueryOptions(input, {
             transport: mockEliza(),
           }),
-        wrapper(),
+        wrapper()
       );
 
       type ExpectType_Enabled = Expect<
@@ -96,7 +96,7 @@ describe("createQueryService", () => {
           (
             context?:
               | QueryFunctionContext<ConnectQueryKey<SayRequest>>
-              | undefined,
+              | undefined
           ) => Promise<SayResponse>
         >
       >;

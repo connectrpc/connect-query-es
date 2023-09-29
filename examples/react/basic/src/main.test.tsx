@@ -17,8 +17,8 @@ import "@testing-library/jest-dom";
 import { createRouterTransport } from "@connectrpc/connect";
 import { render, screen } from "@testing-library/react";
 
-import { ElizaService } from "./gen/eliza-ElizaService_connectquery";
-import Main from "./main";
+import { ElizaService } from "./gen/eliza-ElizaService_connectquery.js";
+import Main from "./main.js";
 
 describe("Application", () => {
   it("should show success status and response data", async () => {

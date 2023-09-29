@@ -21,16 +21,16 @@ import type {
 import { MethodKind } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 
-import type { ConnectQueryKey } from "./connect-query-key";
+import type { ConnectQueryKey } from "./connect-query-key.js";
 import {
   createQueryFunctions,
   isSupportedMethod,
-} from "./create-query-functions";
-import type { UnaryFunctions } from "./create-unary-functions";
-import { ElizaService } from "./gen/eliza_connect";
-import type { SayRequest, SayResponse } from "./gen/eliza_pb";
-import type { Alike, Equal, Expect, ExpectFalse } from "./jest/test-utils";
-import type { DisableQuery } from "./utils";
+} from "./create-query-functions.js";
+import type { UnaryFunctions } from "./create-unary-functions.js";
+import { ElizaService } from "./gen/eliza_connect.js";
+import type { SayRequest, SayResponse } from "./gen/eliza_pb.js";
+import type { Alike, Equal, Expect, ExpectFalse } from "./jest/test-utils.js";
+import type { DisableQuery } from "./utils.js";
 
 describe("isSupportedMethod", () => {
   const patch = (kind: MethodKind) => ({
@@ -92,7 +92,7 @@ describe("createQueryHooks", () => {
     type ExpectType_GetQueryKey = Equal<
       (typeof hooks)["say"]["getQueryKey"],
       (
-        input: DisableQuery | PartialMessage<SayRequest>,
+        input: DisableQuery | PartialMessage<SayRequest>
       ) => ConnectQueryKey<SayRequest>
     >;
     expect(hooks.say).toHaveProperty("getQueryKey", expect.any(Function));
@@ -159,10 +159,10 @@ describe("createQueryHooks", () => {
     expect(Object.keys(hooks)).toStrictEqual(["Unary"]);
 
     expect(console.error).toHaveBeenCalledWith(
-      new Error("Invariant failed: unrecognized method kind: undefined"),
+      new Error("Invariant failed: unrecognized method kind: undefined")
     );
     expect(console.error).toHaveBeenCalledWith(
-      new Error("Invariant failed: unrecognized method kind: Bad"),
+      new Error("Invariant failed: unrecognized method kind: Bad")
     );
   });
 });

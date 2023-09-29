@@ -14,13 +14,13 @@
 
 import { describe, expect, it } from "@jest/globals";
 
-import { makeConnectQueryKeyGetter } from "./connect-query-key";
-import { disableQuery } from "./utils";
+import { makeConnectQueryKeyGetter } from "./connect-query-key.js";
+import { disableQuery } from "./utils.js";
 
 describe("makeQueryKey", () => {
   const queryKey = makeConnectQueryKeyGetter(
     "service.typeName",
-    "methodInfo.name",
+    "methodInfo.name"
   );
 
   it("makes a query key with input", () => {

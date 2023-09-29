@@ -24,7 +24,7 @@ import {
   IntroduceResponse,
   SayRequest,
   SayResponse,
-} from "./eliza_pb";
+} from "./eliza_pb.js";
 import { MethodKind } from "@bufbuild/protobuf";
 import {
   createQueryService,

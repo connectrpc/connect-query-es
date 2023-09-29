@@ -19,8 +19,8 @@ import type {
   ServiceType,
 } from "@bufbuild/protobuf";
 
-import type { DisableQuery } from "./utils";
-import { disableQuery } from "./utils";
+import type { DisableQuery } from "./utils.js";
+import { disableQuery } from "./utils.js";
 
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
@@ -60,7 +60,7 @@ export type ConnectPartialQueryKey = [
 export const makeConnectQueryKeyGetter =
   (typeName: ServiceType["typeName"], methodInfoName: MethodInfo["name"]) =>
   <I extends Message<I>>(
-    input?: DisableQuery | PartialMessage<I> | undefined,
+    input?: DisableQuery | PartialMessage<I> | undefined
   ): ConnectQueryKey<I> => [
     typeName,
     methodInfoName,
