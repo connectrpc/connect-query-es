@@ -97,23 +97,33 @@ One of the best features of this library is that once you write your schema in P
 This example shows the best developer experience using code generation. Here's what that generated code looks like:
 
 ```ts title="your-generated-code/example-ExampleService_connectquery"
-import { createQueryService } from "@connectrpc/connect-query";
+import {
+  createQueryService,
+  createUnaryHooks,
+} from "@connectrpc/connect-query";
 import { MethodKind } from "@bufbuild/protobuf";
 import { ExampleRequest, ExampleResponse } from "./example_pb.js";
 
-export const example = createQueryService({
-  service: {
-    methods: {
-      example: {
-        name: "Example",
-        kind: MethodKind.Unary,
-        I: ExampleRequest,
-        O: ExampleResponse,
-      },
+export const typeName = "your.company.com.example.v1.ExampleService";
+
+export const ExampleService = {
+  methods: {
+    example: {
+      name: "Example",
+      kind: MethodKind.Unary,
+      I: ExampleRequest,
+      O: ExampleResponse,
     },
-    typeName: "your.company.com.example.v1.ExampleService",
   },
-}).example;
+  typeName,
+} as const;
+
+const $queryService = createQueryService({ service: ExampleService });
+
+export const example = {
+  ...$queryService.say,
+  ...createUnaryHooks($queryService.say),
+};
 ```
 
 If you want to use Connect-Query dynamically without code generation, you can call [`createQueryService`](#createqueryservice) exactly as the generated code does.
@@ -145,21 +155,26 @@ Note that the most memory performant approach is to use the transport on React C
 Here's an example of a simple usage:
 
 ```ts
-export const { say } = createQueryService({
+const queryService = createQueryService({
   service: {
     methods: {
-      say: {
-        name: "Say",
+      example: {
+        name: "Example",
         kind: MethodKind.Unary,
-        I: SayRequest,
-        O: SayResponse,
+        I: ExampleRequest,
+        O: ExampleResponse,
       },
     },
-    typeName: "connectrpc.eliza.v1.ElizaService",
+    typeName: "your.company.com.example.v1.ExampleService",
   },
 });
 
-const { data, isLoading, ...etc } = useQuery(say.useQuery());
+const example = {
+  ...queryService.say,
+  ...createUnaryHooks($queryService.say),
+};
+
+const { data, isLoading, ...etc } = useQuery(example.useQuery());
 ```
 
 ### `TransportProvider`
