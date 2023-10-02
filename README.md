@@ -11,6 +11,7 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
 
 - [Quickstart](#quickstart)
   - [Generated Code](#generated-code)
+- [Usage](#usage)
 - [Connect-Query API](#connect-query-api)
   - [`createQueryService`](#createqueryservice)
   - [`TransportProvider`](#transportprovider)
@@ -29,7 +30,6 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [`UnaryHooks.useQuery`](#unaryhooksusequery)
   - [`ConnectQueryKey`](#connectquerykey)
   - [`ConnectPartialQueryKey`](#connectpartialquerykey)
-- [Experimental plugin](#experimental-plugin)
 - [Frequently Asked Questions](#frequently-asked-questions)
   - [How do I pass other TanStack Query options?](#how-do-i-pass-other-tanstack-query-options)
   - [Is this ready for production?](#is-this-ready-for-production)
@@ -40,7 +40,7 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [Do I have to use a code generator?](#do-i-have-to-use-a-code-generator)
   - [What if I have a custom `Transport`?](#what-if-i-have-a-custom-transport)
   - [Does this only work with React?](#does-this-only-work-with-react)
-    - [SolidJS Example](#solidjs-example)
+  - [How do I do Prefetching?](#how-do-i-do-prefetching)
   - [What about Streaming?](#what-about-streaming)
 
 ## Quickstart
@@ -564,6 +564,20 @@ If the `Transport` attached to React Context via the `TransportProvider` isn't w
 You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue). All methods which are part of the `UnaryFunctions` type can be used by any framework. The only APIs which are React specific are the `TransportProvider`, and any APIs starting with `use`.
 
 > Tip: If you're a TanStack Query user that uses something other than React, we'd love to hear from you. Please reach out to us on the [Buf Slack](https://buf.build/links/slack).
+
+### How do I do Prefetching?
+
+When you might not have access to React context, you can use the `create` series of functions and provide a transport directly. For example:
+
+```ts
+import { say } from "./gen/eliza-ElizaService_connectquery";
+
+function prefetch() {
+  return queryClient.prefetchQuery(
+    say.createUseQueryOptions({ sentence: "Hello" }),
+  );
+}
+```
 
 ### What about Streaming?
 
