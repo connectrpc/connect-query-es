@@ -14,6 +14,7 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
 - [Usage](#usage)
 - [Connect-Query API](#connect-query-api)
   - [`createQueryService`](#createqueryservice)
+  - [`createUnaryHooks`](#createunaryhooks)
   - [`TransportProvider`](#transportprovider)
   - [`useTransport`](#usetransport)
   - [`UnaryFunctions.createData`](#unaryfunctionscreatedata)
@@ -121,8 +122,8 @@ export const ExampleService = {
 const $queryService = createQueryService({ service: ExampleService });
 
 export const example = {
-  ...$queryService.say,
-  ...createUnaryHooks($queryService.say),
+  ...$queryService.example,
+  ...createUnaryHooks($queryService.example),
 };
 ```
 
@@ -176,6 +177,10 @@ const example = {
 
 const { data, isLoading, ...etc } = useQuery(example.useQuery());
 ```
+
+### `createUnaryHooks`
+
+This creates some helper functions for unary methods that automatically include the transport from context. It's a distinct function from `createQueryService` so the core function can be separate from specific React APIs.
 
 ### `TransportProvider`
 
@@ -280,7 +285,7 @@ const createUseMutationOptions: (options: {
 };
 ```
 
-`createUseMutationOptions` is intended to be used with TanStack's [`useMutation`](https://tanstack.com/query/v4/docs/react/reference/useMutation) hook. The difference is that `createUseMutationOptions` is not a hook and doesn't read from `TransportProvider` for it's transport.
+`createUseMutationOptions` is intended to be used with TanStack's [`useMutation`](https://tanstack.com/query/v4/docs/react/reference/useMutation) hook. The difference is that `createUseMutationOptions` is not a hook and doesn't read from `TransportProvider` for its transport.
 
 ### `UnaryFunctions.createUseInfiniteQueryOptions`
 
@@ -308,7 +313,7 @@ const createUseInfiniteQueryOptions: <ParamKey extends keyof PlainMessage<I>>(
 };
 ```
 
-`createUseInfiniteQueryOptions` is intended to be used with TanStack's [`useInfiniteQuery`](https://tanstack.com/query/v4/docs/react/reference/useInfiniteQuery) hook. The difference is that `createUseInfiniteQueryOptions` is not a hook and doesn't read from `TransportProvider` for it's transport.
+`createUseInfiniteQueryOptions` is intended to be used with TanStack's [`useInfiniteQuery`](https://tanstack.com/query/v4/docs/react/reference/useInfiniteQuery) hook. The difference is that `createUseInfiniteQueryOptions` is not a hook and doesn't read from `TransportProvider` for its transport.
 
 ### `UnaryFunctions.getPartialQueryKey`
 
@@ -553,7 +558,7 @@ That said, we encourage you to check out the [Connect protocol](https://connectr
 
 ### Do I have to use a code generator?
 
-No. The code generator just calls [`createQueryService`](#createqueryservice) with the arguments already added, but you are free to do that yourself if you wish.
+No. The code generator just calls [`createQueryService`](#createqueryservice) and [`createUnaryHooks`](#createunaryhooks) with the arguments already added, but you are free to do that yourself if you wish.
 
 ### What if I have a custom `Transport`?
 
@@ -574,7 +579,7 @@ import { say } from "./gen/eliza-ElizaService_connectquery";
 
 function prefetch() {
   return queryClient.prefetchQuery(
-    say.createUseQueryOptions({ sentence: "Hello" }),
+    say.createUseQueryOptions({ sentence: "Hello", transport: myTransport }),
   );
 }
 ```
