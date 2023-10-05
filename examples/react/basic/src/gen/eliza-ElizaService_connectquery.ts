@@ -28,6 +28,8 @@ import { MethodKind } from "@bufbuild/protobuf";
 import {
   createQueryService,
   createUnaryHooks,
+  UnaryFunctions,
+  UnaryHooks,
 } from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.ElizaService";
@@ -102,17 +104,15 @@ const $queryService = createQueryService({ service: ElizaService });
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say = {
-  ...$queryService.say,
-  ...createUnaryHooks($queryService.say),
-};
+export const say: UnaryFunctions<SayRequest, SayResponse> &
+  UnaryHooks<SayRequest, SayResponse, UnaryFunctions<SayRequest, SayResponse>> =
+  { ...$queryService.say, ...createUnaryHooks($queryService.say) };
 
 /**
  * SayAgain is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.SayAgain
  */
-export const sayAgain = {
-  ...$queryService.sayAgain,
-  ...createUnaryHooks($queryService.sayAgain),
-};
+export const sayAgain: UnaryFunctions<SayRequest, SayResponse> &
+  UnaryHooks<SayRequest, SayResponse, UnaryFunctions<SayRequest, SayResponse>> =
+  { ...$queryService.sayAgain, ...createUnaryHooks($queryService.sayAgain) };

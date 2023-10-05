@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DescFile, DescService } from "@bufbuild/protobuf";
+import type { DescFile, DescMethod, DescService } from "@bufbuild/protobuf";
 import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
 import type { Schema } from "@bufbuild/protoplugin";
 import {
@@ -33,7 +33,8 @@ const { safeIdentifier } = codegenInfo;
  */
 const generateServiceFile =
   (schema: Schema, protoFile: DescFile, extension: 'js' | 'ts') =>
-  (service: DescService) => {
+    (service: DescService) => {
+    const isTs = extension === "ts";
     const f = schema.generateFile(
       `${protoFile.name}-${localName(service)}_connectquery.${extension}`,
     );
@@ -63,7 +64,7 @@ const generateServiceFile =
       f.print("    },");
     }
     f.print("  }");
-    f.print("}", extension === "ts" ? " as const" : "", ";");
+    f.print("}", isTs ? " as const" : "", ";");
     f.print();
 
     f.print(`const $queryService = `,
@@ -74,13 +75,22 @@ const generateServiceFile =
     );
     f.print();
 
-    
+    const unaryFunctionType = (method: DescMethod) => [f.import('UnaryFunctions', '@connectrpc/connect-query'), `<${method.input.name}, ${method.output.name}>`]
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
         f.print(makeJsDoc(method));
+        const methodTsType = [
+          ": ",
+          ...unaryFunctionType(method),
+          ` & `,
+          f.import('UnaryHooks', '@connectrpc/connect-query'),
+          `<${method.input.name}, ${method.output.name}, `,
+          ...unaryFunctionType(method), `>`
+        ]
+        
         f.print(
-          `export const ${safeIdentifier(localName(method))} = { `,
+          `export const ${safeIdentifier(localName(method))}`, ...(isTs ? methodTsType : []), ` = { `,
           `  ...$queryService.${localName(method)},`,
           `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
           `};`
