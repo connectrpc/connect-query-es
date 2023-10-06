@@ -27,7 +27,7 @@
 7. After approval, run the following commands to publish to npmjs.com:
 
    ```bash
-   pnpm run all && pnpm --filter "./packages/*" publish
+   pnpm install && pnpm run all && pnpm --filter "./packages/*" publish
    ```
 
 8. Merge your PR.
