@@ -3,9 +3,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist/cjs",
-    // Leaving these as commonjs until https://github.com/bufbuild/protobuf-es/pull/566 is merged
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   }
 }
