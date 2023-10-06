@@ -4,7 +4,6 @@
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/connectrpc/connect-query-es.git",
@@ -24,7 +23,7 @@
     "build": "pnpm clean && tsc --project tsconfig.build.json",
     "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
     "generate": "rm -rf snapshots/gen && cd snapshots && buf generate buf.build/connectrpc/eliza:8b8b971d6fde4dc8ba5d96f9fda7d53c",
-    "validate": "tsc --noEmit"
+    "test": "tsc --noEmit"
   },
   "preferUnplugged": true,
   "devDependencies": {
