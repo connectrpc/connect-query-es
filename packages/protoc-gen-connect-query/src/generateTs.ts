@@ -33,7 +33,8 @@ const { safeIdentifier } = codegenInfo;
  */
 const generateServiceFile =
   (schema: Schema, protoFile: DescFile, extension: 'js' | 'ts') =>
-  (service: DescService) => {
+    (service: DescService) => {
+    const isTs = extension === "ts";
     const f = schema.generateFile(
       `${protoFile.name}-${localName(service)}_connectquery.${extension}`,
     );
@@ -63,7 +64,7 @@ const generateServiceFile =
       f.print("    },");
     }
     f.print("  }");
-    f.print("}", extension === "ts" ? " as const" : "", ";");
+    f.print("}", isTs ? " as const" : "", ";");
     f.print();
 
     f.print(`const $queryService = `,
@@ -74,13 +75,18 @@ const generateServiceFile =
     );
     f.print();
 
-    
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
         f.print(makeJsDoc(method));
+        const methodTsType = [
+          ": ",
+          f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-query'),
+          `<${method.input.name}, ${method.output.name}>`
+        ]
+        
         f.print(
-          `export const ${safeIdentifier(localName(method))} = { `,
+          `export const ${safeIdentifier(localName(method))}`, ...(isTs ? methodTsType : []), ` = { `,
           `  ...$queryService.${localName(method)},`,
           `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
           `};`

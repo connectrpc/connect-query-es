@@ -1,59 +1,62 @@
 {
   "name": "@connectrpc/connect-query",
-  "version": "0.5.1",
+  "version": "0.5.2",
+  "description": "TypeScript-first expansion pack for TanStack Query that gives you Protobuf superpowers.",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/connectrpc/connect-query-es.git",
     "directory": "packages/connect-query"
   },
-  "license": "Apache-2.0",
-  "sideEffects": false,
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist/**"
-  ],
   "scripts": {
-    "build": "tsup",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf ./dist/*",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:proxy",
+    "build:cjs": "tsc --project tsconfig.build.json --module commonjs --outDir ./dist/cjs --declaration --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
+    "build:esm": "tsc --project tsconfig.build.json --module ES2015 --verbatimModuleSyntax --outDir ./dist/esm --declaration --declarationDir ./dist/esm",
+    "build:proxy": "node ../../scripts/gen-esm-proxy.mjs .",
     "generate": "buf generate --path eliza.proto",
     "test": "jest",
-    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header"
+    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
+    "attw": "attw --pack"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/cjs/index.js",
+  "exports": {
+    ".": {
+      "module": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/proxy/index.js"
+    }
   },
   "dependencies": {
     "stable-hash": "^0.0.3"
   },
   "devDependencies": {
-    "@bufbuild/buf": "1.26.1",
+    "@arethetypeswrong/cli": "^0.11.0",
+    "@bufbuild/buf": "1.27.0",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
-    "@bufbuild/protobuf": "^1.3.1",
-    "@bufbuild/protoc-gen-es": "^1.3.1",
-    "@connectrpc/connect": "^1.0.0",
-    "@connectrpc/connect-web": "^1.0.0",
-    "@connectrpc/protoc-gen-connect-es": "^1.0.0",
-    "@tanstack/react-query": "^4.35.0",
+    "@bufbuild/protobuf": "^1.3.3",
+    "@bufbuild/protoc-gen-es": "^1.3.3",
+    "@connectrpc/connect": "^1.1.2",
+    "@connectrpc/connect-web": "^1.1.2",
+    "@connectrpc/protoc-gen-connect-es": "^1.1.2",
+    "@tanstack/react-query": "^4.35.7",
     "@testing-library/react": "^14.0.0",
-    "@types/react": "^18.2.21",
-    "@types/react-dom": "^18.2.7",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tsup": "^7.2.0",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@bufbuild/protobuf": "^1.3.0",
-    "@connectrpc/connect": "^1.0.0",
-    "@tanstack/react-query": "^4.20.4",
+    "@bufbuild/protobuf": "^1.3.3",
+    "@connectrpc/connect": "^1.1.2",
+    "@tanstack/react-query": "4.x",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
-  }
+  },
+  "files": [
+    "dist/**"
+  ]
 }
