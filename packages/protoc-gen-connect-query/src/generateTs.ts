@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DescFile, DescMethod, DescService } from "@bufbuild/protobuf";
+import type { DescFile, DescService } from "@bufbuild/protobuf";
 import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
 import type { Schema } from "@bufbuild/protoplugin";
 import {
@@ -75,18 +75,14 @@ const generateServiceFile =
     );
     f.print();
 
-    const unaryFunctionType = (method: DescMethod) => [f.import('UnaryFunctions', '@connectrpc/connect-query'), `<${method.input.name}, ${method.output.name}>`]
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
         f.print(makeJsDoc(method));
         const methodTsType = [
           ": ",
-          ...unaryFunctionType(method),
-          ` & `,
-          f.import('UnaryHooks', '@connectrpc/connect-query'),
-          `<${method.input.name}, ${method.output.name}, `,
-          ...unaryFunctionType(method), `>`
+          f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-query'),
+          `<${method.input.name}, ${method.output.name}>`
         ]
         
         f.print(
