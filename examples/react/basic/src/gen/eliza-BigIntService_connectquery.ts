@@ -21,6 +21,7 @@ import { MethodKind } from "@bufbuild/protobuf";
 import {
   createQueryService,
   createUnaryHooks,
+  UnaryFunctionsWithHooks,
 } from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.BigIntService";
@@ -48,7 +49,7 @@ const $queryService = createQueryService({ service: BigIntService });
 /**
  * @generated from rpc connectrpc.eliza.v1.BigIntService.Count
  */
-export const count = {
+export const count: UnaryFunctionsWithHooks<CountRequest, CountResponse> = {
   ...$queryService.count,
   ...createUnaryHooks($queryService.count),
 };

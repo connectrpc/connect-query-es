@@ -16,7 +16,8 @@
     "strict": true,
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "declaration": true // necessary to check if generated code can be published
   },
   "include": ["src", "./*.config.ts", "__mocks__"],
   "references": [{ "path": "./tsconfig.node.json" }]
