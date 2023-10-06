@@ -18,7 +18,7 @@ jobs:
         node-version: [16, 18, 20]
     steps:
       - name: Checkout branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Slightly fragile since it runs on the default node version
       # but until setup-node supports corepack (https://github.com/actions/setup-node/issues/531)
