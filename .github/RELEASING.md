@@ -17,9 +17,7 @@
    commands:  
 
    ```bash
-   (cd packages/connect-query && pnpm version 1.2.3)
-   (cd packages/protoc-gen-connect-query && pnpm version 1.2.3)
-   (cd packages/protoc-gen-connect-query-react && pnpm version 1.2.3)
+   pnpm --filter "./packages/*" exec pnpm version 1.2.3
    pnpm run all
    ```
 
@@ -29,9 +27,7 @@
 7. After approval, run the following commands to publish to npmjs.com:
 
    ```bash
-   (cd packages/connect-query && pnpm publish)
-   (cd packages/protoc-gen-connect-query && pnpm publish)
-   (cd packages/protoc-gen-connect-query-react && pnpm publish)
+   pnpm --filter "./packages/*" publish
    ```
 
 8. Merge your PR.
