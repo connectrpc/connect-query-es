@@ -12,16 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {
-  DescEnum,
-  DescEnumValue,
-  DescField,
-  DescFile,
-  DescMessage,
-  DescMethod,
-  DescOneof,
-  DescService,
-} from "@bufbuild/protobuf";
+import type { DescFile, DescService } from "@bufbuild/protobuf";
 import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
 import type { Schema } from "@bufbuild/protoplugin";
 import {
@@ -34,19 +25,6 @@ import type { PluginInit } from "./utils";
 
 const { safeIdentifier } = codegenInfo;
 
-// Casting localName since in Node16 resolution scheme, this private API
-// is not visible.
-const typedLocalName = localName as (
-  desc:
-    | DescEnum
-    | DescEnumValue
-    | DescField
-    | DescMessage
-    | DescMethod
-    | DescOneof
-    | DescService,
-) => string;
-
 // prettier-ignore
 /**
  * Handles generating a TypeScript Declaration file for a given Schema, DescFile (protobuf definition) and protobuf Service.
@@ -56,18 +34,18 @@ const generateServiceFile =
     const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } = schema.runtime;
     
     const f = schema.generateFile(
-      `${protoFile.name}-${typedLocalName(service)}_connectquery.d.ts`,
+      `${protoFile.name}-${localName(service)}_connectquery.d.ts`,
     );
 
     f.preamble(protoFile);
 
     f.print(makeJsDoc(service));
-    f.print("export declare const ", typedLocalName(service), ": {");
+    f.print("export declare const ", localName(service), ": {");
     f.print(`  readonly typeName: `, literalString(service.typeName), `,`);
     f.print("  readonly methods: {");
     for (const method of service.methods) {
       f.print(makeJsDoc(method, "    "));
-      f.print("    readonly ", typedLocalName(method), ": {");
+      f.print("    readonly ", localName(method), ": {");
       f.print(`      readonly name: `, literalString(method.name), `,`);
       f.print("      readonly I: typeof ", method.input, ",");
       f.print("      readonly O: typeof ", method.output, ",");
@@ -90,7 +68,7 @@ const generateServiceFile =
           {
             f.print(
               `export const `,
-              safeIdentifier(typedLocalName(method)),
+              safeIdentifier(localName(method)),
               `: `,
               unaryFunctionsWithHooks,
               `<`,
