@@ -36,7 +36,8 @@
     "tsdoc",
     "corepack",
     "printables",
-    "arethetypeswrong"
+    "arethetypeswrong",
+    "oneof"
   ],
   "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw"]
 }
