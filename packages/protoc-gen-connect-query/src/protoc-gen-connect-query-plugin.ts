@@ -15,8 +15,8 @@
 import { createEcmaScriptPlugin } from "@bufbuild/protoplugin";
 
 import { version } from "../package.json";
-import { generateDts } from "./generateDts";
-import { generateTs } from "./generateTs";
+import { generateDts } from "./generateDts.js";
+import { generateTs } from "./generateTs.js";
 
 export const protocGenConnectQuery = createEcmaScriptPlugin({
   name: "protoc-gen-connect-query",
