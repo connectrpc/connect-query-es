@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "module": "CommonJS",
     "outDir": "dist/cjs",
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "resolveJsonModule": true
   }
 }
