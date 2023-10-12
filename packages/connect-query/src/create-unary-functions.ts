@@ -27,16 +27,16 @@ import type {
 import type {
   ConnectPartialQueryKey,
   ConnectQueryKey,
-} from "./connect-query-key";
-import { makeConnectQueryKeyGetter } from "./connect-query-key";
-import type { DisableQuery } from "./utils";
+} from "./connect-query-key.js";
+import { makeConnectQueryKeyGetter } from "./connect-query-key.js";
+import type { DisableQuery } from "./utils.js";
 import {
   assert,
   disableQuery,
   isUnaryMethod,
   protobufSafeUpdater,
   unreachableCase,
-} from "./utils";
+} from "./utils.js";
 
 type RequireExactlyOne<T, Keys extends keyof T = keyof T> = {
   [K in Keys]-?: Partial<Record<Exclude<Keys, K>, undefined>> &

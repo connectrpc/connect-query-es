@@ -15,8 +15,8 @@
 import type { ServiceType } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
 
-import type { QueryFunctions } from "./create-query-functions";
-import { createQueryFunctions } from "./create-query-functions";
+import type { QueryFunctions } from "./create-query-functions.js";
+import { createQueryFunctions } from "./create-query-functions.js";
 
 const servicesToHooks = new Map<ServiceType, QueryFunctions<ServiceType>>();
 
