@@ -542,9 +542,15 @@ describe("createUnaryFunctions", () => {
         expect(onError).toHaveBeenCalledTimes(0);
         expect(consoleErrorSpy).not.toHaveBeenCalled();
 
-        await sleep(10);
+        await waitFor(
+          () => {
+            expect(result.current.error).toStrictEqual("error");
+          },
+          {
+            timeout: 300,
+          },
+        );
 
-        expect(result.current.error).toStrictEqual("error");
         expect(result.current.isError).toStrictEqual(true);
         expect(onError).toHaveBeenCalledTimes(1);
         expect(consoleErrorSpy).toHaveBeenCalledWith("error");
@@ -1195,7 +1201,14 @@ describe("createUnaryFunctions", () => {
         expect(onError).toHaveBeenCalledTimes(0);
         expect(consoleErrorSpy).not.toHaveBeenCalled();
 
-        await sleep(10);
+        await waitFor(
+          () => {
+            expect(result.current.error).toStrictEqual("error");
+          },
+          {
+            timeout: 300,
+          },
+        );
 
         expect(result.current.error).toStrictEqual("error");
         expect(result.current.isError).toStrictEqual(true);

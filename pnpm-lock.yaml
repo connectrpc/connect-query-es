@@ -105,7 +105,7 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(@bufbuild/protoc-gen-es@1.3.3)(@connectrpc/connect@1.1.2)
       '@connectrpc/protoc-gen-connect-query':
-        specifier: workspace:*
+        specifier: ^0.5.1
         version: link:../../../packages/protoc-gen-connect-query
       '@tanstack/react-query':
         specifier: ^4.35.7
@@ -208,9 +208,18 @@ importers:
       '@bufbuild/protoc-gen-es':
         specifier: ^1.3.3
         version: 1.3.3(@bufbuild/protobuf@1.3.3)
+      '@connectrpc/connect':
+        specifier: ^1.1.2
+        version: 1.1.2(@bufbuild/protobuf@1.3.3)
+      '@connectrpc/connect-query':
+        specifier: workspace:*
+        version: link:../connect-query
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.1.2
         version: 1.1.2(@bufbuild/protoc-gen-es@1.3.3)(@connectrpc/connect@1.1.2)
+      '@tanstack/react-query':
+        specifier: ^4.35.7
+        version: 4.35.7(react-dom@18.2.0)(react@18.2.0)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
