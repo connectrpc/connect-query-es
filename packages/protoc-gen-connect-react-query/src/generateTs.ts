@@ -36,7 +36,7 @@ const generateServiceFile =
     (service: DescService) => {
     const isTs = extension === "ts";
     const f = schema.generateFile(
-      `${protoFile.name}-${localName(service)}_connectquery.${extension}`,
+      `${protoFile.name}-${localName(service)}_connectreactquery.${extension}`,
     );
     f.preamble(protoFile);
 
@@ -104,11 +104,11 @@ const generateServiceFile =
  */
 export const generateTs: PluginInit["generateJs"] & PluginInit["generateTs"] = (
   schema,
-  extension,
+  extension
 ) => {
   schema.files.forEach((protoFile) => {
     protoFile.services.forEach(
-      generateServiceFile(schema, protoFile, extension),
+      generateServiceFile(schema, protoFile, extension)
     );
   });
 };
