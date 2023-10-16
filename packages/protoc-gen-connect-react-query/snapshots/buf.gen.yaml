@@ -8,7 +8,7 @@ plugins:
       - target=ts
 
   - plugin: connect-query
-    path: ../bin/protoc-gen-connect-query
+    path: ../bin/protoc-gen-connect-react-query
     out: gen
     opt:
       - target=ts+dts+js

@@ -7,13 +7,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/connectrpc/connect-query-es.git",
-    "directory": "packages/protoc-gen-connect-query"
+    "directory": "packages/protoc-gen-connect-react-query"
   },
   "files": [
     "dist/**"
   ],
   "bin": {
-    "protoc-gen-connect-query": "bin/protoc-gen-connect-query"
+    "protoc-gen-connect-react-query": "bin/protoc-gen-connect-react-query"
   },
   "engines": {
     "node": ">=16"

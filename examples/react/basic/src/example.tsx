@@ -16,7 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 
 import { Data, Datum } from "./datum";
-import { say } from "./gen/eliza-ElizaService_connectquery";
+import { say } from "./gen/eliza-ElizaService_connectreactquery";
 import { Indicator, Indicators } from "./indicator";
 import { Page } from "./page";
 
