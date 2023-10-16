@@ -68,7 +68,7 @@ const generateServiceFile =
     f.print();
 
     f.print(`const $queryService = `,
-      f.import('createQueryService', '@connectrpc/connect-query'),
+      f.import('createQueryService', '@connectrpc/connect-react-query'),
       `({`,
       `  service: `, localName(service), `,`,
       `});`
@@ -81,14 +81,14 @@ const generateServiceFile =
         f.print(makeJsDoc(method));
         const methodTsType = [
           ": ",
-          f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-query'),
+          f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-react-query'),
           `<${method.input.name}, ${method.output.name}>`
         ]
         
         f.print(
           `export const ${safeIdentifier(localName(method))}`, ...(isTs ? methodTsType : []), ` = { `,
           `  ...$queryService.${localName(method)},`,
-          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
+          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-react-query'),`($queryService.${localName(method)})`,
           `};`
         );
 

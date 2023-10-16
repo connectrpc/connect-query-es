@@ -53,7 +53,7 @@ export const useTransport = () => useContext(transportContext);
  *
  * @example
  * import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
- * import { TransportProvider } from "@connectrpc/connect-query";
+ * import { TransportProvider } from "@connectrpc/connect-react-query";
  *
  * const queryClient = new QueryClient();
  *

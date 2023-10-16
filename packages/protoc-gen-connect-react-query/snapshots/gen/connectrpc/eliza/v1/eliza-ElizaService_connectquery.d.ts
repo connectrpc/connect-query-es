@@ -25,13 +25,7 @@ import {
   SayResponse,
 } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import {
-  createQueryService,
-  createUnaryHooks,
-  UnaryFunctionsWithHooks,
-} from "@connectrpc/connect-query";
-
-export const typeName = "connectrpc.eliza.v1.ElizaService";
+import { UnaryFunctionsWithHooks } from "@connectrpc/connect-react-query";
 
 /**
  * ElizaService provides a way to talk to Eliza, a port of the DOCTOR script
@@ -43,20 +37,20 @@ export const typeName = "connectrpc.eliza.v1.ElizaService";
  *
  * @generated from service connectrpc.eliza.v1.ElizaService
  */
-export const ElizaService = {
-  typeName: "connectrpc.eliza.v1.ElizaService",
-  methods: {
+export declare const ElizaService: {
+  readonly typeName: "connectrpc.eliza.v1.ElizaService";
+  readonly methods: {
     /**
      * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
      *
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
      */
-    say: {
-      name: "Say",
-      I: SayRequest,
-      O: SayResponse,
-      kind: MethodKind.Unary,
-    },
+    readonly say: {
+      readonly name: "Say";
+      readonly I: typeof SayRequest;
+      readonly O: typeof SayResponse;
+      readonly kind: MethodKind.Unary;
+    };
     /**
      * Converse is a bidirectional RPC. The caller may exchange multiple
      * back-and-forth messages with Eliza over a long-lived connection. Eliza
@@ -64,35 +58,25 @@ export const ElizaService = {
      *
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Converse
      */
-    converse: {
-      name: "Converse",
-      I: ConverseRequest,
-      O: ConverseResponse,
-      kind: MethodKind.BiDiStreaming,
-    },
+    readonly converse: {
+      readonly name: "Converse";
+      readonly I: typeof ConverseRequest;
+      readonly O: typeof ConverseResponse;
+      readonly kind: MethodKind.BiDiStreaming;
+    };
     /**
      * Introduce is a server streaming RPC. Given the caller's name, Eliza
      * returns a stream of sentences to introduce itself.
      *
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Introduce
      */
-    introduce: {
-      name: "Introduce",
-      I: IntroduceRequest,
-      O: IntroduceResponse,
-      kind: MethodKind.ServerStreaming,
-    },
-  },
-} as const;
-
-const $queryService = createQueryService({ service: ElizaService });
-
-/**
- * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
- *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
- */
-export const say: UnaryFunctionsWithHooks<SayRequest, SayResponse> = {
-  ...$queryService.say,
-  ...createUnaryHooks($queryService.say),
+    readonly introduce: {
+      readonly name: "Introduce";
+      readonly I: typeof IntroduceRequest;
+      readonly O: typeof IntroduceResponse;
+      readonly kind: MethodKind.ServerStreaming;
+    };
+  };
 };
+
+export const say: UnaryFunctionsWithHooks<SayRequest, SayResponse>;

@@ -28,7 +28,7 @@ import { MethodKind } from "@bufbuild/protobuf";
 import {
   createQueryService,
   createUnaryHooks,
-} from "@connectrpc/connect-query";
+} from "@connectrpc/connect-react-query";
 
 export const typeName = "connectrpc.eliza.v1.ElizaService";
 

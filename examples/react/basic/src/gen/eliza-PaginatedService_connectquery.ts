@@ -22,7 +22,7 @@ import {
   createQueryService,
   createUnaryHooks,
   UnaryFunctionsWithHooks,
-} from "@connectrpc/connect-query";
+} from "@connectrpc/connect-react-query";
 
 export const typeName = "connectrpc.eliza.v1.PaginatedService";
 

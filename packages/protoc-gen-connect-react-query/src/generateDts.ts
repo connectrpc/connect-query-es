@@ -60,7 +60,7 @@ const generateServiceFile =
     f.print("};");
     f.print();
 
-    const unaryFunctionsWithHooks = f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-query');
+    const unaryFunctionsWithHooks = f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-react-query');
 
     service.methods.forEach((method) => {
       switch (method.methodKind) {
