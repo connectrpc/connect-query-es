@@ -1,9 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["tsconfig.base.json", ".eslintrc.js", "package.json"],
+  "globalDependencies": ["tsconfig.base.json", ".eslintrc.js", "package.json", "scripts/*"],
   "pipeline": {
+    "clean": {
+      "outputs": ["dist/**"]
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["clean", "^build"],
       "outputs": ["dist/**"]
     },
     "generate": {
@@ -12,6 +15,9 @@
     "test": {
       "dependsOn": ["generate"],
       "cache": false
+    },
+    "attw": {
+      "dependsOn": ["build"]
     },
     "format": {
       "dependsOn": ["generate"]

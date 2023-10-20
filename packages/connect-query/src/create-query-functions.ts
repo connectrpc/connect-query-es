@@ -21,9 +21,9 @@ import type {
 import { MethodKind } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
 
-import type { UnaryFunctions } from "./create-unary-functions";
-import { createUnaryFunctions } from "./create-unary-functions";
-import { unreachableCase } from "./utils";
+import type { UnaryFunctions } from "./create-unary-functions.js";
+import { createUnaryFunctions } from "./create-unary-functions.js";
+import { unreachableCase } from "./utils.js";
 
 /**
  * This is an array of supported `MethodKind`s

@@ -18,7 +18,7 @@ jobs:
         node-version: [16, 18, 20]
     steps:
       - name: Checkout branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Slightly fragile since it runs on the default node version
       # but until setup-node supports corepack (https://github.com/actions/setup-node/issues/531)
@@ -37,17 +37,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm run build
-
-      - name: Generate
-        run: pnpm run generate
-
-      - name: Lint
-        run: pnpm run format
-
-      - name: Test
-        run: pnpm run test
+      - name: Run CI
+        run: pnpm run all
 
       - name: Check changed files
         id: check_changed_files
@@ -56,5 +47,6 @@ jobs:
             echo "No changed files detected."
           else
             echo "::error::Formatting resulted in changed files. Please make sure this branch is up to date and run 'pnpm format'. Verify the changes are what you want and commit them."
+            git diff
             exit 1
           fi

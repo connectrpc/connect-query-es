@@ -14,31 +14,31 @@
 
 import type { Message } from "@bufbuild/protobuf";
 
-import type { UnaryFunctions } from "./create-unary-functions";
-import type { UnaryHooks } from "./create-unary-hooks";
+import type { UnaryFunctions } from "./create-unary-functions.js";
+import type { UnaryHooks } from "./create-unary-hooks.js";
 
-export { createQueryService } from "./create-query-service";
+export { createQueryService } from "./create-query-service.js";
 export type {
   QueryFunctions,
   SupportedMethodInfo,
   IsSupportedMethod,
   SupportedMethodKinds,
-} from "./create-query-functions";
+} from "./create-query-functions.js";
 export {
   createQueryFunctions,
   supportedMethodKinds,
   isSupportedMethod,
-} from "./create-query-functions";
+} from "./create-query-functions.js";
 export type {
   ConnectQueryKey,
   ConnectPartialQueryKey,
-} from "./connect-query-key";
-export type { UnaryFunctions } from "./create-unary-functions";
-export { createUnaryFunctions } from "./create-unary-functions";
-export { disableQuery } from "./utils";
-export { useTransport, TransportProvider } from "./use-transport";
-export type { UnaryHooks } from "./create-unary-hooks";
-export { createUnaryHooks } from "./create-unary-hooks";
+} from "./connect-query-key.js";
+export type { UnaryFunctions } from "./create-unary-functions.js";
+export { createUnaryFunctions } from "./create-unary-functions.js";
+export { disableQuery } from "./utils.js";
+export { useTransport, TransportProvider } from "./use-transport.js";
+export type { UnaryHooks } from "./create-unary-hooks.js";
+export { createUnaryHooks } from "./create-unary-hooks.js";
 
 /**
  * Combined type of all the functions generated for a service.

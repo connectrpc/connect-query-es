@@ -19,8 +19,8 @@ import type {
   ServiceType,
 } from "@bufbuild/protobuf";
 
-import type { DisableQuery } from "./utils";
-import { disableQuery } from "./utils";
+import type { DisableQuery } from "./utils.js";
+import { disableQuery } from "./utils.js";
 
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.

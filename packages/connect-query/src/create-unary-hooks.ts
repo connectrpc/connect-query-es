@@ -14,8 +14,8 @@
 
 import type { Message } from "@bufbuild/protobuf";
 
-import type { UnaryFunctions } from "./create-unary-functions";
-import { useTransport } from "./use-transport";
+import type { UnaryFunctions } from "./create-unary-functions.js";
+import { useTransport } from "./use-transport.js";
 
 /**
  * All the additional hooks that are unique to React.
