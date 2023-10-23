@@ -32,18 +32,10 @@ export function createUnaryInfiniteQueryFn<
     assert(input !== disableQuery, "Disabled query cannot be fetched");
     assert("pageParam" in context, "pageParam must be part of context");
 
-    const inputCombinedWithPageParam =
-      applyPageParam !== undefined
-        ? applyPageParam({
-            pageParam: context.pageParam,
-            input,
-          })
-        : pageParamKey === undefined
-        ? input
-        : {
-            ...input,
-            [pageParamKey]: context.pageParam,
-          };
+    const inputCombinedWithPageParam = {
+      ...input,
+      [pageParamKey]: context.pageParam,
+    };
     const result = await transport.unary(
       { typeName: methodType.service.typeName, methods: {} },
       methodType,

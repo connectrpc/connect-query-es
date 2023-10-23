@@ -170,7 +170,7 @@ describe("useInfiniteQuery", () => {
     expect(result.current.data?.pages[0].page).toEqual(-1n);
   });
 
-  it("page param doesn't persist to the query cache", () => {
+  it("page param doesn't persist to the query cache", async () => {
     const { queryClient, ...remainingWrapper } = wrapper(
       {
         defaultOptions,
@@ -191,13 +191,16 @@ describe("useInfiniteQuery", () => {
     }, remainingWrapper);
 
     const cache = queryClient.getQueryCache().getAll();
-    console.log({
-      cacheKey: cache[0].queryKey,
-    });
+
     expect(cache).toHaveLength(1);
     expect(cache[0].queryKey).toEqual(
-      createConnectQueryKey(methodDescriptor, { page: 0n })
+      createConnectQueryKey(methodDescriptor, {})
     );
-    expect(result.current.data).toEqual(0n);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(result.current.data?.pageParams[0]).toEqual(0n);
   });
 });
