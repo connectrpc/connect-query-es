@@ -25,7 +25,7 @@ import {
   ElizaService,
   PaginatedService,
 } from "../gen/eliza_connect";
-import type { CountRequest, SayRequest } from "../gen/eliza_pb";
+import type { CountRequest, ListResponse, SayRequest } from "../gen/eliza_pb";
 import { CountResponse, SayResponse } from "../gen/eliza_pb";
 import { TransportProvider } from "../use-transport";
 
@@ -36,11 +36,12 @@ export const wrapper = (
   config?: QueryClientConfig,
   transport = createConnectTransport({
     baseUrl: "https://demo.connectrpc.com",
-  }),
+  })
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;
   queryClient: QueryClient;
   transport: Transport;
+  queryClientWrapper: JSXElementConstructor<PropsWithChildren>;
 } => {
   const queryClient = new QueryClient(config);
   return {
@@ -53,6 +54,9 @@ export const wrapper = (
     ),
     queryClient,
     transport,
+    queryClientWrapper: ({ children }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    ),
   };
 };
 
@@ -110,11 +114,20 @@ export const sleep = async (timeout: number) =>
 /**
  * a stateless mock for ElizaService
  */
-export const mockEliza = (override?: PartialMessage<SayRequest>) =>
+export const mockEliza = (
+  override?: PartialMessage<SayRequest>,
+  addDelay = false
+) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
-      say: (input: SayRequest) =>
-        new SayResponse(override ?? { sentence: `Hello ${input.sentence}` }),
+      say: async (input: SayRequest) => {
+        if (addDelay) {
+          await sleep(1000);
+        }
+        return new SayResponse(
+          override ?? { sentence: `Hello ${input.sentence}` }
+        );
+      },
     });
   });
 
@@ -145,10 +158,19 @@ export const mockStatefulBigIntTransport = () =>
 /**
  * a mock for PaginatedService that acts as an impromptu database
  */
-export const mockPaginatedTransport = () =>
+export const mockPaginatedTransport = (
+  override?: PartialMessage<ListResponse>,
+  addDelay = false
+) =>
   createRouterTransport(({ service }) => {
     service(PaginatedService, {
-      list: (request) => {
+      list: async (request) => {
+        if (addDelay) {
+          await sleep(1000);
+        }
+        if (override !== undefined) {
+          return override;
+        }
         const base = (request.page - 1n) * 3n;
         const result = {
           page: request.page,

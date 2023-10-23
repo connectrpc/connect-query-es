@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {
-  Message,
-  MethodInfo,
-  PartialMessage,
-  ServiceType,
-} from "@bufbuild/protobuf";
+import type { Message, PartialMessage } from "@bufbuild/protobuf";
 
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
 import type { DisableQuery } from "./utils.js";
 import { disableQuery } from "./utils.js";
 
@@ -57,12 +53,16 @@ export type ConnectPartialQueryKey = [
  *
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */
-export const makeConnectQueryKeyGetter =
-  (typeName: ServiceType["typeName"], methodInfoName: MethodInfo["name"]) =>
-  <I extends Message<I>>(
-    input?: DisableQuery | PartialMessage<I> | undefined,
-  ): ConnectQueryKey<I> => [
-    typeName,
-    methodInfoName,
+export function createConnectQueryKey<
+  I extends Message<I>,
+  O extends Message<O>,
+>(
+  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
+  input?: DisableQuery | PartialMessage<I> | undefined
+): ConnectQueryKey<I> {
+  return [
+    methodDescriptor.service.typeName,
+    methodDescriptor.name,
     input === disableQuery || !input ? {} : input,
   ];
+}

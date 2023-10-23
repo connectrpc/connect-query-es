@@ -12,14 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {
-  Message,
-  MessageType,
-  MethodInfo,
-  MethodInfoUnary,
-  PartialMessage,
-} from "@bufbuild/protobuf";
-import { MethodKind } from "@bufbuild/protobuf";
+import type { Message, MessageType, PartialMessage } from "@bufbuild/protobuf";
 
 /**
  * Pass this value as an input to signal that you want to disable the query.
@@ -60,19 +53,6 @@ export const isAbortController = (input: unknown): input is AbortController => {
   }
   return false;
 };
-
-/**
- * Type guards that the given method is a unary method
- */
-export const isUnaryMethod = <I extends Message<I>, O extends Message<O>>(
-  methodInfo: MethodInfo<I, O>,
-): methodInfo is MethodInfoUnary<I, O> => methodInfo.kind === MethodKind.Unary;
-
-/**
- * Creates (but does not throw) an error to assert that a provided case is unreachable.
- */
-export const unreachableCase = (_: never, message: string) =>
-  new Error(`Invariant failed: ${message}`) as never;
 
 /**
  * @see `Updater` from `@tanstack/react-query`

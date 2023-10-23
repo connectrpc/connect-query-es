@@ -12,51 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {
-  AnyMessage,
-  MethodInfoUnary,
-  PartialMessage,
-} from "@bufbuild/protobuf";
-import { MethodKind } from "@bufbuild/protobuf";
+import type { PartialMessage } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 
 import { BigIntService } from "./gen/eliza_connect";
 import type { CountResponse } from "./gen/eliza_pb";
 import type { Equal, Expect } from "./jest/test-utils";
-import {
-  assert,
-  isAbortController,
-  isUnaryMethod,
-  protobufSafeUpdater,
-} from "./utils";
-
-describe("isUnaryMethod", () => {
-  it("returns true for unary methods", () => {
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.BiDiStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeFalsy();
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.ClientStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeFalsy();
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.ServerStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeFalsy();
-  });
-
-  it("returns false for non-unary methods", () => {
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.Unary,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeTruthy();
-  });
-});
+import { assert, isAbortController, protobufSafeUpdater } from "./utils";
 
 describe("assert", () => {
   const message = "assertion message";
@@ -93,7 +55,7 @@ describe("isAbortController", () => {
     expect(isAbortController({ signal: { aborted: undefined } })).toBeFalsy();
     expect(isAbortController({ signal: { aborted: true } })).toBeFalsy();
     expect(
-      isAbortController({ signal: { aborted: true }, abort: undefined }),
+      isAbortController({ signal: { aborted: true }, abort: undefined })
     ).toBeFalsy();
   });
 
@@ -104,7 +66,7 @@ describe("isAbortController", () => {
           aborted: false,
         },
         abort: () => {},
-      }),
+      })
     ).toBeTruthy();
 
     expect(isAbortController(new AbortController())).toBeTruthy();

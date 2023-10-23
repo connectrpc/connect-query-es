@@ -3,14 +3,14 @@ import type { CallOptions, Transport } from "@connectrpc/connect";
 import type { QueryFunction } from "@tanstack/react-query";
 
 import type { ConnectQueryKey } from "./connect-query-key";
-import type { MethodUnaryType } from "./new-api/use-query";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
 import { assert, type DisableQuery, disableQuery } from "./utils";
 
 /**
  * Creates a base unary query function that runs in react-query.
  */
 export function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
-  methodType: MethodUnaryType<I, O>,
+  methodType: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | PartialMessage<I> | undefined,
   {
     callOptions,
