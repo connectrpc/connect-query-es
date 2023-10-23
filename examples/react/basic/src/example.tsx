@@ -24,9 +24,7 @@ import { Page } from "./page";
  * This example demonstrates a basic usage of Connect-Query with `useQuery`
  */
 export const Example: FC = () => {
-  const { status, fetchStatus, error, data } = useQuery({
-    ...useQuery(say),
-  });
+  const { status, fetchStatus, error, data } = useQuery(say);
 
   return (
     <Page>
