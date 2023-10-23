@@ -1,4 +1,4 @@
-// Copyright 2022 Buf Technologies, Inc.
+// Copyright 2021-2023 The Connect Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,14 @@
 // @generated from file connectrpc/eliza/v1/eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { ConverseRequest, ConverseResponse, IntroduceRequest, IntroduceResponse, SayRequest, SayResponse } from "./eliza_pb";
+import {
+  ConverseRequest,
+  ConverseResponse,
+  IntroduceRequest,
+  IntroduceResponse,
+  SayRequest,
+  SayResponse,
+} from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -30,7 +37,7 @@ import { MethodKind } from "@bufbuild/protobuf";
  * @generated from service connectrpc.eliza.v1.ElizaService
  */
 export declare const ElizaService: {
-  readonly typeName: "connectrpc.eliza.v1.ElizaService",
+  readonly typeName: "connectrpc.eliza.v1.ElizaService";
   readonly methods: {
     /**
      * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
@@ -38,11 +45,11 @@ export declare const ElizaService: {
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
      */
     readonly say: {
-      readonly name: "Say",
-      readonly I: typeof SayRequest,
-      readonly O: typeof SayResponse,
-      readonly kind: MethodKind.Unary,
-    },
+      readonly name: "Say";
+      readonly I: typeof SayRequest;
+      readonly O: typeof SayResponse;
+      readonly kind: MethodKind.Unary;
+    };
     /**
      * Converse is a bidirectional RPC. The caller may exchange multiple
      * back-and-forth messages with Eliza over a long-lived connection. Eliza
@@ -51,11 +58,11 @@ export declare const ElizaService: {
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Converse
      */
     readonly converse: {
-      readonly name: "Converse",
-      readonly I: typeof ConverseRequest,
-      readonly O: typeof ConverseResponse,
-      readonly kind: MethodKind.BiDiStreaming,
-    },
+      readonly name: "Converse";
+      readonly I: typeof ConverseRequest;
+      readonly O: typeof ConverseResponse;
+      readonly kind: MethodKind.BiDiStreaming;
+    };
     /**
      * Introduce is a server streaming RPC. Given the caller's name, Eliza
      * returns a stream of sentences to introduce itself.
@@ -63,20 +70,20 @@ export declare const ElizaService: {
      * @generated from rpc connectrpc.eliza.v1.ElizaService.Introduce
      */
     readonly introduce: {
-      readonly name: "Introduce",
-      readonly I: typeof IntroduceRequest,
-      readonly O: typeof IntroduceResponse,
-      readonly kind: MethodKind.ServerStreaming,
-    },
-  }
+      readonly name: "Introduce";
+      readonly I: typeof IntroduceRequest;
+      readonly O: typeof IntroduceResponse;
+      readonly kind: MethodKind.ServerStreaming;
+    };
+  };
 };
 
 export const say: {
-      readonly name: "Say",
-      readonly I: typeof SayRequest,
-      readonly O: typeof SayResponse,
-      readonly kind: MethodKind.Unary,
+  readonly name: "Say";
+  readonly I: typeof SayRequest;
+  readonly O: typeof SayResponse;
+  readonly kind: MethodKind.Unary;
   readonly service: {
-    readonly typeName: "connectrpc.eliza.v1.ElizaService"
-  }
+    readonly typeName: "connectrpc.eliza.v1.ElizaService";
+  };
 };

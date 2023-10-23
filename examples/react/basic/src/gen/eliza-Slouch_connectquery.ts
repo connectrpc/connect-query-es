@@ -16,40 +16,39 @@
 // @generated from file eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { ListRequest, ListResponse } from "./eliza_pb";
+import { Nothing } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import {
-  createQueryService,
-  createUnaryHooks,
-  UnaryFunctionsWithHooks,
-} from "@connectrpc/connect-react-query";
 
-export const typeName = "connectrpc.eliza.v1.PaginatedService";
+export const typeName = "connectrpc.eliza.v1.Slouch";
 
 /**
- * @generated from service connectrpc.eliza.v1.PaginatedService
+ * @generated from service connectrpc.eliza.v1.Slouch
  */
-export const PaginatedService = {
-  typeName: "connectrpc.eliza.v1.PaginatedService",
+export const Slouch = {
+  typeName: "connectrpc.eliza.v1.Slouch",
   methods: {
     /**
-     * @generated from rpc connectrpc.eliza.v1.PaginatedService.List
+     * @generated from rpc connectrpc.eliza.v1.Slouch.Work
      */
-    list: {
-      name: "List",
-      I: ListRequest,
-      O: ListResponse,
+    work: {
+      name: "Work",
+      I: Nothing,
+      O: Nothing,
       kind: MethodKind.Unary,
     },
   },
 } as const;
 
-const $queryService = createQueryService({ service: PaginatedService });
-
 /**
- * @generated from rpc connectrpc.eliza.v1.PaginatedService.List
+ * @generated from rpc connectrpc.eliza.v1.Slouch.Work
  */
-export const list: UnaryFunctionsWithHooks<ListRequest, ListResponse> = {
-  ...$queryService.list,
-  ...createUnaryHooks($queryService.list),
-};
+export const work = {
+  localName: "work",
+  name: "Work",
+  kind: MethodKind.Unary,
+  I: Nothing,
+  O: Nothing,
+  service: {
+    typeName: "connectrpc.eliza.v1.Slouch",
+  },
+} as const;

@@ -40,7 +40,7 @@ async function queryClientSetup(input?: PlainMessage<SayRequest>) {
     undefined,
     mockEliza({
       sentence: "Hello, world!",
-    })
+    }),
   );
   const { result } = renderHook(() => {
     const query = useQuery(methodDescriptor, input);
@@ -52,7 +52,7 @@ async function queryClientSetup(input?: PlainMessage<SayRequest>) {
 
   function getLatestData(localOverride?: PlainMessage<SayRequest>) {
     return queryClient.getQueryData(
-      createConnectQueryKey(methodDescriptor, localOverride ?? input)
+      createConnectQueryKey(methodDescriptor, localOverride ?? input),
     );
   }
 
@@ -107,7 +107,7 @@ describe("useSetQueryData", () => {
         }),
         {
           sentence: "some other input",
-        }
+        },
       );
 
       expect(getLatestData()).toEqual({
@@ -116,7 +116,7 @@ describe("useSetQueryData", () => {
       expect(
         getLatestData({
           sentence: "some other input",
-        })
+        }),
       ).toEqual({
         sentence: " -- Goodbye, world!",
       });
@@ -135,7 +135,7 @@ describe("useSetQueryData", () => {
         },
         {
           sentence: "some-input",
-        }
+        },
       );
 
       expect(getLatestData()).toEqual({
@@ -154,7 +154,7 @@ describe("useSetQueryData", () => {
         }),
         {
           sentence: "some-input",
-        }
+        },
       );
 
       expect(getLatestData()).toEqual({

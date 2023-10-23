@@ -9,7 +9,7 @@ plugins:
       - target=ts
 
   - name: connect-query
-    path: protoc-gen-connect-react-query
+    path: protoc-gen-connect-query
     out: src/gen
     opt:
       - target=ts

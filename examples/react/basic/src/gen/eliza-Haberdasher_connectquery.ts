@@ -18,11 +18,6 @@
 
 import { Nothing } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import {
-  createQueryService,
-  createUnaryHooks,
-  UnaryFunctionsWithHooks,
-} from "@connectrpc/connect-react-query";
 
 export const typeName = "connectrpc.eliza.v1.Haberdasher";
 
@@ -44,12 +39,16 @@ export const Haberdasher = {
   },
 } as const;
 
-const $queryService = createQueryService({ service: Haberdasher });
-
 /**
  * @generated from rpc connectrpc.eliza.v1.Haberdasher.Work
  */
-export const work: UnaryFunctionsWithHooks<Nothing, Nothing> = {
-  ...$queryService.work,
-  ...createUnaryHooks($queryService.work),
-};
+export const work = {
+  localName: "work",
+  name: "Work",
+  kind: MethodKind.Unary,
+  I: Nothing,
+  O: Nothing,
+  service: {
+    typeName: "connectrpc.eliza.v1.Haberdasher",
+  },
+} as const;

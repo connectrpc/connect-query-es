@@ -1,4 +1,4 @@
-// Copyright 2022 Buf Technologies, Inc.
+// Copyright 2021-2023 The Connect Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,14 @@
 // @generated from file connectrpc/eliza/v1/eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { ConverseRequest, ConverseResponse, IntroduceRequest, IntroduceResponse, SayRequest, SayResponse } from "./eliza_pb";
+import {
+  ConverseRequest,
+  ConverseResponse,
+  IntroduceRequest,
+  IntroduceResponse,
+  SayRequest,
+  SayResponse,
+} from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 export const typeName = "connectrpc.eliza.v1.ElizaService";
@@ -70,7 +77,7 @@ export const ElizaService = {
       O: IntroduceResponse,
       kind: MethodKind.ServerStreaming,
     },
-  }
+  },
 } as const;
 
 /**
@@ -78,13 +85,13 @@ export const ElizaService = {
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say = { 
+export const say = {
   localName: "say",
   name: "Say",
   kind: MethodKind.Unary,
   I: SayRequest,
   O: SayResponse,
   service: {
-    typeName: "connectrpc.eliza.v1.ElizaService"
-  }
+    typeName: "connectrpc.eliza.v1.ElizaService",
+  },
 } as const;

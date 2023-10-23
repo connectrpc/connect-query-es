@@ -41,7 +41,7 @@ describe("useQuery", () => {
           sentence: "hello",
         });
       },
-      wrapper({}, mockedElizaTransport)
+      wrapper({}, mockedElizaTransport),
     );
 
     await waitFor(() => {
@@ -56,7 +56,7 @@ describe("useQuery", () => {
       () => {
         return useQuery(sayMethodDescriptor, disableQuery);
       },
-      wrapper(undefined, mockedElizaTransport)
+      wrapper(undefined, mockedElizaTransport),
     );
     expect(result.current.isPending).toBeTruthy();
     expect(result.current.isFetching).toBeFalsy();
@@ -72,10 +72,10 @@ describe("useQuery", () => {
             transport: mockEliza({
               sentence: "Intercepted!",
             }),
-          }
+          },
         );
       },
-      wrapper(undefined, mockedElizaTransport)
+      wrapper(undefined, mockedElizaTransport),
     );
     await waitFor(() => {
       expect(result.current.isSuccess).toBeTruthy();
@@ -95,10 +95,10 @@ describe("useQuery", () => {
             placeholderData: new sayMethodDescriptor.O({
               sentence: "placeholder!",
             }),
-          }
+          },
         );
       },
-      wrapper(undefined, mockedElizaTransport)
+      wrapper(undefined, mockedElizaTransport),
     );
     expect(result.current.data?.sentence).toBe("placeholder!");
   });
@@ -112,7 +112,7 @@ describe("useSuspenseQuery", () => {
           sentence: "hello",
         });
       },
-      wrapper({}, mockedElizaTransport)
+      wrapper({}, mockedElizaTransport),
     );
 
     await waitFor(() => {

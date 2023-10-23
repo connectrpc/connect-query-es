@@ -48,15 +48,15 @@ describe("useInfiniteQuery", () => {
           {
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
-          }
+          },
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
 
     await waitFor(() => {
@@ -101,7 +101,7 @@ describe("useInfiniteQuery", () => {
           pageParamKey: "page",
         });
       },
-      wrapper(undefined, mockedPaginatedTransport)
+      wrapper(undefined, mockedPaginatedTransport),
     );
     expect(result.current.isPending).toBeTruthy();
     expect(result.current.isFetching).toBeFalsy();
@@ -122,15 +122,15 @@ describe("useInfiniteQuery", () => {
               items: ["Intercepted!"],
               page: 0n,
             }),
-          }
+          },
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
     await waitFor(() => {
       expect(result.current.isSuccess).toBeTruthy();
@@ -160,15 +160,15 @@ describe("useInfiniteQuery", () => {
                 }),
               ],
             },
-          }
+          },
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
     expect(result.current.data?.pages[0].page).toEqual(-1n);
   });
@@ -178,7 +178,7 @@ describe("useInfiniteQuery", () => {
       {
         defaultOptions,
       },
-      mockedPaginatedTransport
+      mockedPaginatedTransport,
     );
     const { result } = renderHook(() => {
       return useInfiniteQuery(
@@ -189,7 +189,7 @@ describe("useInfiniteQuery", () => {
         {
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
-        }
+        },
       );
     }, remainingWrapper);
 
@@ -197,7 +197,7 @@ describe("useInfiniteQuery", () => {
 
     expect(cache).toHaveLength(1);
     expect(cache[0].queryKey).toEqual(
-      createConnectQueryKey(methodDescriptor, {})
+      createConnectQueryKey(methodDescriptor, {}),
     );
 
     await waitFor(() => {
@@ -220,15 +220,15 @@ describe("useSuspenseInfiniteQuery", () => {
           {
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
-          }
+          },
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
 
     await waitFor(() => {

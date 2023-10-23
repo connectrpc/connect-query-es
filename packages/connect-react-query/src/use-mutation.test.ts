@@ -44,8 +44,8 @@ describe("useMutation", () => {
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
 
     result.current.mutate({
@@ -64,7 +64,7 @@ describe("useMutation", () => {
       {
         page: 0n,
       },
-      undefined
+      undefined,
     );
   });
 
@@ -82,8 +82,8 @@ describe("useMutation", () => {
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
 
     result.current.mutate({

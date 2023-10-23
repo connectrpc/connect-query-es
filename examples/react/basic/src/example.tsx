@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@connectrpc/connect-react-query";
 import type { FC } from "react";
 
 import { Data, Datum } from "./datum";
-import { say } from "./gen/eliza-ElizaService_connectreactquery";
+import { say } from "./gen/eliza-ElizaService_connectquery";
 import { Indicator, Indicators } from "./indicator";
 import { Page } from "./page";
 
@@ -31,14 +31,14 @@ export const Example: FC = () => {
     //^? const error: ConnectError | null
     data,
     //^? const data: SayResponse | undefined
-  } = useQuery(say.useQuery({}));
+  } = useQuery(say);
   //           ^? const say: UnaryHooks<SayRequest, SayResponse>
 
   return (
     <Page>
       Status: {status}
       <Indicators label="queryStatus">
-        <Indicator label="loading" parent={status} />
+        <Indicator label="pending" parent={status} />
         <Indicator label="success" parent={status} />
         <Indicator label="error" parent={status} />
       </Indicators>

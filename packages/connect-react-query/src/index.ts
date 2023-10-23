@@ -18,9 +18,18 @@ export type {
 } from "./connect-query-key.js";
 export { disableQuery } from "./utils.js";
 export { useTransport, TransportProvider } from "./use-transport.js";
-export type { UseInfiniteQueryOptions } from "./use-infinite-query.js";
+export type {
+  UseInfiniteQueryOptions,
+  createUseInfiniteQueryOptions,
+  createUseSuspenseInfiniteQueryOptions,
+} from "./create-use-infinite-query-options.js";
 export { useInfiniteQuery } from "./use-infinite-query.js";
-export type { UseQueryOptions, UseSuspenseQueryOptions } from "./use-query.js";
+export type {
+  UseQueryOptions,
+  UseSuspenseQueryOptions,
+  createUseQueryOptions,
+  createUseSuspenseQueryOptions,
+} from "./create-use-query-options.js";
 export { useQuery, useSuspenseQuery } from "./use-query.js";
 export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";

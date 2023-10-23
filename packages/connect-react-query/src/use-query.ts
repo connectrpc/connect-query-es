@@ -1,9 +1,21 @@
+// Copyright 2021-2023 The Connect Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import type { Message, PartialMessage } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
+import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
-  UseQueryOptions as TSUseQueryOptions,
   UseQueryResult,
-  UseSuspenseQueryOptions as TSUseSuspenseQueryOptions,
   UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
@@ -11,30 +23,17 @@ import {
   useSuspenseQuery as tsUseSuspenseQuery,
 } from "@tanstack/react-query";
 
-import type { ConnectQueryKey } from "./connect-query-key";
-import { createConnectQueryKey } from "./connect-query-key";
-import { createUnaryQueryFn } from "./create-unary-query-fn";
+import type {
+  UseQueryOptions,
+  UseSuspenseQueryOptions,
+} from "./create-use-query-options";
+import {
+  createUseQueryOptions,
+  createUseSuspenseQueryOptions,
+} from "./create-use-query-options";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
 import { useTransport } from "./use-transport";
 import type { DisableQuery } from "./utils";
-import { disableQuery } from "./utils";
-
-interface ConnectQueryOptions {
-  transport?: Transport;
-  callOptions?: Omit<CallOptions, "signal"> | undefined;
-}
-
-/**
- * Options for useQuery
- */
-export type UseQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-> = ConnectQueryOptions &
-  Omit<
-    TSUseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
-    "queryFn" | "queryKey"
-  >;
 
 /**
  * Query the method provided. Maps to useQuery on tanstack/react-query
@@ -45,32 +44,21 @@ export type UseQueryOptions<
 export function useQuery<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
   input?: DisableQuery | PartialMessage<I> | undefined,
-  { transport, callOptions, ...queryOptions }: UseQueryOptions<I, O> = {}
+  {
+    transport,
+    ...queryOptions
+  }: Omit<UseQueryOptions<I, O>, "transport"> & {
+    transport?: Transport;
+  } = {},
 ): UseQueryResult<O, ConnectError> {
-  const queryKey = createConnectQueryKey(methodSig, input);
   const transportFromCtx = useTransport();
-  return tsUseQuery({
-    ...queryOptions,
-    queryKey,
-    enabled: input !== disableQuery && queryOptions.enabled !== false,
-    queryFn: createUnaryQueryFn(methodSig, input, {
+  return tsUseQuery(
+    createUseQueryOptions(methodSig, input, {
       transport: transport ?? transportFromCtx,
-      callOptions,
+      ...queryOptions,
     }),
-  });
+  );
 }
-
-/**
- * Options for useQuery
- */
-export type UseSuspenseQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-> = ConnectQueryOptions &
-  Omit<
-    TSUseSuspenseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
-    "queryFn" | "queryKey"
-  >;
 
 /**
  * Query the method provided. Maps to useSuspenseQuery on tanstack/react-query
@@ -83,18 +71,16 @@ export function useSuspenseQuery<I extends Message<I>, O extends Message<O>>(
   input: PartialMessage<I> | undefined,
   {
     transport,
-    callOptions,
     ...queryOptions
-  }: UseSuspenseQueryOptions<I, O> = {}
+  }: Omit<UseSuspenseQueryOptions<I, O>, "transport"> & {
+    transport?: Transport;
+  } = {},
 ): UseSuspenseQueryResult<O, ConnectError> {
-  const queryKey = createConnectQueryKey(methodSig, input);
   const transportFromCtx = useTransport();
-  return tsUseSuspenseQuery({
-    ...queryOptions,
-    queryKey,
-    queryFn: createUnaryQueryFn(methodSig, input, {
+  return tsUseSuspenseQuery(
+    createUseSuspenseQueryOptions(methodSig, input, {
       transport: transport ?? transportFromCtx,
-      callOptions,
+      ...queryOptions,
     }),
-  });
+  );
 }
