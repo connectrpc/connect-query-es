@@ -1,7 +1,0 @@
-{
-  "extends": "./tsconfig.build.json",
-  "include": ["src", "snapshots", "./*.config.ts"],
-  "compilerOptions": {
-    "lib": ["DOM", "ESNext"]
-  }
-}

@@ -57,7 +57,7 @@ export const isAbortController = (input: unknown): input is AbortController => {
 /**
  * @see `Updater` from `@tanstack/react-query`
  */
-type ConnectUpdater<O extends Message<O>> =
+export type ConnectUpdater<O extends Message<O>> =
   | PartialMessage<O>
   | ((prev?: O) => PartialMessage<O> | undefined);
 

@@ -1,3 +1,0 @@
-# A directory that exists solely to hold the result of tsc since --noEmit doesn't discover to protability issue found
-# by https://github.com/connectrpc/connect-query-es/issues/209
-.type-dump

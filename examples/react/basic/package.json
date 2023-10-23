@@ -19,7 +19,7 @@
     "@connectrpc/connect-react-query": "workspace:*",
     "@connectrpc/connect-web": "^1.1.2",
     "@connectrpc/protoc-gen-connect-es": "^1.1.2",
-    "@connectrpc/protoc-gen-connect-react-query": "workspace:*",
+    "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@tanstack/react-query": "^4.35.7",
     "@tanstack/react-query-devtools": "^4.35.7",
     "@testing-library/jest-dom": "^6.1.3",

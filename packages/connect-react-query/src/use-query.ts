@@ -44,7 +44,7 @@ export type UseQueryOptions<
  */
 export function useQuery<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | PartialMessage<I> | undefined,
+  input?: DisableQuery | PartialMessage<I> | undefined,
   { transport, callOptions, ...queryOptions }: UseQueryOptions<I, O> = {}
 ): UseQueryResult<O, ConnectError> {
   const queryKey = createConnectQueryKey(methodSig, input);
