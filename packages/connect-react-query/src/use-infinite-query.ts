@@ -5,8 +5,13 @@ import type {
   InfiniteData,
   UseInfiniteQueryOptions as TSUseInfiniteQueryOptions,
   UseInfiniteQueryResult,
+  UseSuspenseInfiniteQueryOptions as TSUseSuspenseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryResult,
 } from "@tanstack/react-query";
-import { useInfiniteQuery as tsUseInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery as tsUseInfiniteQuery,
+  useSuspenseInfiniteQuery as tsUseSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
 
 import type { ConnectQueryKey } from "./connect-query-key";
 import { createConnectQueryKey } from "./connect-query-key";
@@ -96,6 +101,69 @@ export function useInfiniteQuery<
       : undefined,
     queryKey,
     enabled,
+    queryFn: createUnaryInfiniteQueryFn(methodSig, sanitizedInput, {
+      transport: transport ?? transportFromCtx,
+      callOptions,
+      pageParamKey,
+    }),
+  });
+}
+
+/**
+ * Options for useInfiniteQuery
+ */
+export type UseSuspenseInfiniteQueryOptions<
+  I extends Message<I>,
+  O extends Message<O>,
+  ParamKey extends keyof PartialMessage<I>,
+> = Omit<
+  TSUseSuspenseInfiniteQueryOptions<
+    O,
+    ConnectError,
+    InfiniteData<O>,
+    O,
+    ConnectQueryKey<I>,
+    PartialMessage<I>[ParamKey]
+  >,
+  "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
+> &
+  UseInfiniteQueryConnectOptions<I, O, ParamKey>;
+
+/**
+ * Query the method provided. Maps to useSuspenseInfiniteQuery on tanstack/react-query
+ *
+ * @param methodSig
+ * @returns
+ */
+export function useSuspenseInfiniteQuery<
+  I extends Message<I>,
+  O extends Message<O>,
+  ParamKey extends keyof PartialMessage<I>,
+  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
+>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  input: Input,
+  {
+    transport,
+    getNextPageParam,
+    pageParamKey,
+    callOptions,
+    ...queryOptions
+  }: UseSuspenseInfiniteQueryOptions<I, O, ParamKey>
+): UseSuspenseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
+  const transportFromCtx = useTransport();
+
+  const sanitizedInput: PartialMessage<I> = {
+    ...input,
+    [pageParamKey]: undefined,
+  };
+
+  const queryKey = createConnectQueryKey(methodSig, sanitizedInput);
+  return tsUseSuspenseInfiniteQuery({
+    ...queryOptions,
+    getNextPageParam,
+    initialPageParam: input[pageParamKey] as PartialMessage<I>[ParamKey],
+    queryKey,
     queryFn: createUnaryInfiniteQueryFn(methodSig, sanitizedInput, {
       transport: transport ?? transportFromCtx,
       callOptions,

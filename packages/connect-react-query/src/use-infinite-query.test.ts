@@ -19,7 +19,10 @@ import { createConnectQueryKey } from "./connect-query-key";
 import { defaultOptions } from "./default-options";
 import { PaginatedService } from "./gen/eliza_connect";
 import { mockPaginatedTransport, wrapper } from "./jest/test-utils";
-import { useInfiniteQuery } from "./use-infinite-query";
+import {
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from "./use-infinite-query";
 import { disableQuery } from "./utils";
 
 // TODO: maybe create a helper to take a service and method and generate this.
@@ -202,5 +205,63 @@ describe("useInfiniteQuery", () => {
     });
 
     expect(result.current.data?.pageParams[0]).toEqual(0n);
+  });
+});
+
+describe("useSuspenseInfiniteQuery", () => {
+  it("can query paginated data", async () => {
+    const { result } = renderHook(
+      () => {
+        return useSuspenseInfiniteQuery(
+          methodDescriptor,
+          {
+            page: 0n,
+          },
+          {
+            getNextPageParam: (lastPage) => lastPage.page + 1n,
+            pageParamKey: "page",
+          }
+        );
+      },
+      wrapper(
+        {
+          defaultOptions,
+        },
+        mockedPaginatedTransport
+      )
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+    expect(result.current.data).toEqual({
+      pageParams: [0n],
+      pages: [
+        {
+          items: ["-2 Item", "-1 Item", "0 Item"],
+          page: 0n,
+        },
+      ],
+    });
+
+    await result.current.fetchNextPage();
+
+    await waitFor(() => {
+      expect(result.current.isFetching).toBeFalsy();
+    });
+
+    expect(result.current.data).toEqual({
+      pageParams: [0n, 1n],
+      pages: [
+        {
+          items: ["-2 Item", "-1 Item", "0 Item"],
+          page: 0n,
+        },
+        {
+          items: ["1 Item", "2 Item", "3 Item"],
+          page: 1n,
+        },
+      ],
+    });
   });
 });

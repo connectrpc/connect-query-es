@@ -17,7 +17,7 @@ import { renderHook, waitFor } from "@testing-library/react";
 
 import { ElizaService } from "./gen/eliza_connect";
 import { mockEliza, wrapper } from "./jest/test-utils";
-import { useQuery } from "./use-query";
+import { useQuery, useSuspenseQuery } from "./use-query";
 import { disableQuery } from "./utils";
 
 // TODO: maybe create a helper to take a service and method and generate this.
@@ -101,5 +101,24 @@ describe("useQuery", () => {
       wrapper(undefined, mockedElizaTransport)
     );
     expect(result.current.data?.sentence).toBe("placeholder!");
+  });
+});
+
+describe("useSuspenseQuery", () => {
+  it("can query data", async () => {
+    const { result } = renderHook(
+      () => {
+        return useSuspenseQuery(sayMethodDescriptor, {
+          sentence: "hello",
+        });
+      },
+      wrapper({}, mockedElizaTransport)
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(typeof result.current.data.sentence).toBe("string");
   });
 });
