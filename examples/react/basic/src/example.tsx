@@ -24,15 +24,9 @@ import { Page } from "./page";
  * This example demonstrates a basic usage of Connect-Query with `useQuery`
  */
 export const Example: FC = () => {
-  const {
-    status,
-    fetchStatus,
-    error,
-    //^? const error: ConnectError | null
-    data,
-    //^? const data: SayResponse | undefined
-  } = useQuery(say);
-  //           ^? const say: UnaryHooks<SayRequest, SayResponse>
+  const { status, fetchStatus, error, data } = useQuery({
+    ...useQuery(say),
+  });
 
   return (
     <Page>
