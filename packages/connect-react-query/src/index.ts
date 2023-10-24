@@ -16,17 +16,18 @@ export type {
   ConnectQueryKey,
   ConnectPartialQueryKey,
 } from "./connect-query-key.js";
+export { createConnectQueryKey } from "./connect-query-key.js";
 export { disableQuery } from "./utils.js";
 export { useTransport, TransportProvider } from "./use-transport.js";
 export type {
-  UseInfiniteQueryOptions,
+  CreateInfiniteQueryOptions as UseInfiniteQueryOptions,
   createUseInfiniteQueryOptions,
   createUseSuspenseInfiniteQueryOptions,
 } from "./create-use-infinite-query-options.js";
 export { useInfiniteQuery } from "./use-infinite-query.js";
 export type {
-  UseQueryOptions,
-  UseSuspenseQueryOptions,
+  CreateQueryOptions as UseQueryOptions,
+  CreateSuspenseQueryOptions as UseSuspenseQueryOptions,
   createUseQueryOptions,
   createUseSuspenseQueryOptions,
 } from "./create-use-query-options.js";

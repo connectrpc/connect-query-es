@@ -24,8 +24,8 @@ import {
 } from "@tanstack/react-query";
 
 import type {
-  UseQueryOptions,
-  UseSuspenseQueryOptions,
+  CreateQueryOptions,
+  CreateSuspenseQueryOptions,
 } from "./create-use-query-options";
 import {
   createUseQueryOptions,
@@ -43,11 +43,11 @@ import type { DisableQuery } from "./utils";
  */
 export function useQuery<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input?: DisableQuery | PartialMessage<I> | undefined,
+  input?: DisableQuery | PartialMessage<I>,
   {
     transport,
     ...queryOptions
-  }: Omit<UseQueryOptions<I, O>, "transport"> & {
+  }: Omit<CreateQueryOptions<I, O>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseQueryResult<O, ConnectError> {
@@ -68,11 +68,11 @@ export function useQuery<I extends Message<I>, O extends Message<O>>(
  */
 export function useSuspenseQuery<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: PartialMessage<I> | undefined,
+  input?: PartialMessage<I>,
   {
     transport,
     ...queryOptions
-  }: Omit<UseSuspenseQueryOptions<I, O>, "transport"> & {
+  }: Omit<CreateSuspenseQueryOptions<I, O>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseSuspenseQueryResult<O, ConnectError> {

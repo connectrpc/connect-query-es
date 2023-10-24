@@ -18,8 +18,8 @@ import type {
   GetNextPageParamFunction,
   InfiniteData,
   QueryFunction,
-  UseInfiniteQueryOptions as TSUseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryOptions as TSUseSuspenseInfiniteQueryOptions,
+  UseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 
 import {
@@ -50,13 +50,13 @@ export interface ConnectInfiniteQueryOptions<
 /**
  * Options for useInfiniteQuery
  */
-export type UseInfiniteQueryOptions<
+export type CreateInfiniteQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
   ParamKey extends keyof PartialMessage<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
   Omit<
-    TSUseInfiniteQueryOptions<
+    UseInfiniteQueryOptions<
       O,
       ConnectError,
       InfiniteData<O>,
@@ -70,13 +70,13 @@ export type UseInfiniteQueryOptions<
 /**
  * Options for useSuspenseInfiniteQuery
  */
-export type UseSuspenseInfiniteQueryOptions<
+export type CreateSuspenseInfiniteQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
   ParamKey extends keyof PartialMessage<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
   Omit<
-    TSUseSuspenseInfiniteQueryOptions<
+    UseSuspenseInfiniteQueryOptions<
       O,
       ConnectError,
       InfiniteData<O>,
@@ -144,9 +144,9 @@ export function createUseSuspenseInfiniteQueryOptions<
     pageParamKey,
     callOptions,
     ...queryOptions
-  }: UseInfiniteQueryOptions<I, O, ParamKey>,
+  }: CreateInfiniteQueryOptions<I, O, ParamKey>,
 ): Omit<
-  UseInfiniteQueryOptions<I, O, ParamKey>,
+  CreateInfiniteQueryOptions<I, O, ParamKey>,
   "callOptions" | "pageParamKey" | "transport"
 > & {
   queryKey: ConnectQueryKey<I>;
@@ -184,9 +184,9 @@ export function createUseInfiniteQueryOptions<
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | Input,
-  { pageParamKey, ...queryOptions }: UseInfiniteQueryOptions<I, O, ParamKey>,
+  { pageParamKey, ...queryOptions }: CreateInfiniteQueryOptions<I, O, ParamKey>,
 ): Omit<
-  UseInfiniteQueryOptions<I, O, ParamKey>,
+  CreateInfiniteQueryOptions<I, O, ParamKey>,
   "callOptions" | "pageParamKey" | "transport"
 > & {
   queryKey: ConnectQueryKey<I>;

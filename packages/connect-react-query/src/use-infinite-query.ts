@@ -25,8 +25,8 @@ import {
 } from "@tanstack/react-query";
 
 import type {
-  UseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryOptions,
+  CreateInfiniteQueryOptions,
+  CreateSuspenseInfiniteQueryOptions,
 } from "./create-use-infinite-query-options";
 import {
   createUseInfiniteQueryOptions,
@@ -53,7 +53,7 @@ export function useInfiniteQuery<
   {
     transport,
     ...options
-  }: Omit<UseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
+  }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
@@ -83,7 +83,7 @@ export function useSuspenseInfiniteQuery<
   {
     transport,
     ...options
-  }: Omit<UseSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
+  }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
 ): UseSuspenseInfiniteQueryResult<InfiniteData<O>, ConnectError> {

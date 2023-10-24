@@ -16,8 +16,8 @@ import type { Message, PartialMessage } from "@bufbuild/protobuf";
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
-  UseQueryOptions as TSUseQueryOptions,
-  UseSuspenseQueryOptions as TSUseSuspenseQueryOptions,
+  UseQueryOptions,
+  UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 
 import type { ConnectQueryKey } from "./connect-query-key";
@@ -35,24 +35,24 @@ export interface ConnectQueryOptions {
 /**
  * Options for useQuery
  */
-export type UseQueryOptions<
+export type CreateQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
 > = ConnectQueryOptions &
   Omit<
-    TSUseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
+    UseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
     "queryFn" | "queryKey"
   >;
 
 /**
  * Options for useQuery
  */
-export type UseSuspenseQueryOptions<
+export type CreateSuspenseQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
 > = ConnectQueryOptions &
   Omit<
-    TSUseSuspenseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
+    UseSuspenseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
     "queryFn" | "queryKey"
   >;
 
@@ -94,12 +94,12 @@ export function createUseSuspenseQueryOptions<
     transport,
     callOptions,
     ...queryOptions
-  }: UseSuspenseQueryOptions<I, O> & {
+  }: CreateSuspenseQueryOptions<I, O> & {
     transport: Transport;
   },
   // Treid to return using UseSuspenseQueryOptions but it fails with some arcane
   // TS error inside `useSuspenseQuereis`.
-): Omit<UseQueryOptions<I, O>, "callOptions" | "transport"> & {
+): Omit<CreateQueryOptions<I, O>, "callOptions" | "transport"> & {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>>;
 } {
@@ -123,10 +123,10 @@ export function createUseQueryOptions<
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | PartialMessage<I> | undefined,
-  queryOptions: Omit<UseQueryOptions<I, O>, "transport"> & {
+  queryOptions: Omit<CreateQueryOptions<I, O>, "transport"> & {
     transport: Transport;
   },
-): Omit<UseQueryOptions<I, O>, "callOptions" | "transport"> & {
+): Omit<CreateQueryOptions<I, O>, "callOptions" | "transport"> & {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>>;
   enabled: boolean;
