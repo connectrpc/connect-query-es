@@ -19,6 +19,5 @@ export type MethodUnaryDescriptor<
   I extends Message<I>,
   O extends Message<O>,
 > = MethodInfoUnary<I, O> & {
-  readonly localName: string;
   readonly service: Omit<ServiceType, "methods">;
 };

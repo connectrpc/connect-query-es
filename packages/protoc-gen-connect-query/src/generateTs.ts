@@ -40,32 +40,8 @@ const generateServiceFile =
     );
     f.preamble(protoFile);
 
-    f.print(`export const typeName = ${literalString(service.typeName)};`);
-    f.print();
-
     const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
       schema.runtime;
-
-    f.print(makeJsDoc(service));
-    f.print("export const ", localName(service), " = {");
-    f.print(`  typeName: `, literalString(service.typeName), `,`);
-    f.print("  methods: {");
-    for (const method of service.methods) {
-      f.print(makeJsDoc(method, "    "));
-      f.print("    ", localName(method), ": {");
-      f.print(`      name: `, literalString(method.name), `,`);
-      f.print("      I: ", method.input, ",");
-      f.print("      O: ", method.output, ",");
-      f.print("      kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
-      if (method.idempotency !== undefined) {
-          f.print("      idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
-      }
-      // In case we start supporting options, we have to surface them here
-      f.print("    },");
-    }
-    f.print("  }");
-    f.print("}", isTs ? " as const" : "", ";");
-    f.print();
 
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
@@ -83,7 +59,7 @@ const generateServiceFile =
         f.print(`  service: {`);
         f.print(`    typeName: ${literalString(service.typeName)}`);
         f.print(`  }`);
-        f.print(`}`, extension === "ts" ? ` as const` : ``, `;`);
+        f.print(`}`, isTs ? ` as const` : ``, `;`);
 
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {
@@ -97,11 +73,11 @@ const generateServiceFile =
  */
 export const generateTs: PluginInit["generateJs"] & PluginInit["generateTs"] = (
   schema,
-  extension,
+  extension
 ) => {
   schema.files.forEach((protoFile) => {
     protoFile.services.forEach(
-      generateServiceFile(schema, protoFile, extension),
+      generateServiceFile(schema, protoFile, extension)
     );
   });
 };

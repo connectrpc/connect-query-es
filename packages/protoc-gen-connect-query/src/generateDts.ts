@@ -39,31 +39,11 @@ const generateServiceFile =
 
     f.preamble(protoFile);
 
-    f.print(makeJsDoc(service));
-    f.print("export declare const ", localName(service), ": {");
-    f.print(`  readonly typeName: `, literalString(service.typeName), `,`);
-    f.print("  readonly methods: {");
-    for (const method of service.methods) {
-      f.print(makeJsDoc(method, "    "));
-      f.print("    readonly ", localName(method), ": {");
-      f.print(`      readonly name: `, literalString(method.name), `,`);
-      f.print("      readonly I: typeof ", method.input, ",");
-      f.print("      readonly O: typeof ", method.output, ",");
-      f.print("      readonly kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
-      if (method.idempotency !== undefined) {
-        f.print("      readonly idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
-      }
-      // In case we start supporting options, we have to surface them here
-      f.print("    },");
-    }
-    f.print("  }");
-    f.print("};");
-    f.print();
-
     service.methods.forEach((method) => {
       switch (method.methodKind) {
         case MethodKind.Unary:
           {
+            f.print(makeJsDoc(method));
             f.print(
               `export const `,
               safeIdentifier(localName(method)),
