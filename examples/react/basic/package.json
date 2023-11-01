@@ -12,7 +12,7 @@
     "format": "prettier . --write && eslint . --fix && license-header"
   },
   "dependencies": {
-    "@bufbuild/buf": "1.27.0",
+    "@bufbuild/buf": "1.27.2",
     "@bufbuild/protobuf": "^1.4.1",
     "@bufbuild/protoc-gen-es": "^1.4.1",
     "@connectrpc/connect": "^1.1.3",
