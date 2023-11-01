@@ -16,20 +16,9 @@
 // @generated from file eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import {
-  ConverseRequest,
-  ConverseResponse,
-  IntroduceRequest,
-  IntroduceResponse,
-  SayRequest,
-  SayResponse,
-} from "./eliza_pb";
+import { ConverseRequest, ConverseResponse, IntroduceRequest, IntroduceResponse, SayRequest, SayResponse } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-import {
-  createQueryService,
-  createUnaryHooks,
-  UnaryFunctionsWithHooks,
-} from "@connectrpc/connect-query";
+import { createQueryService, createUnaryHooks, UnaryFunctionsWithHooks } from "@connectrpc/connect-query";
 
 export const typeName = "connectrpc.eliza.v1.ElizaService";
 
@@ -93,27 +82,21 @@ export const ElizaService = {
       O: IntroduceResponse,
       kind: MethodKind.ServerStreaming,
     },
-  },
+  }
 } as const;
 
-const $queryService = createQueryService({ service: ElizaService });
+const $queryService = createQueryService({  service: ElizaService,});
 
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say: UnaryFunctionsWithHooks<SayRequest, SayResponse> = {
-  ...$queryService.say,
-  ...createUnaryHooks($queryService.say),
-};
+export const say: UnaryFunctionsWithHooks<SayRequest, SayResponse> = {   ...$queryService.say,  ...createUnaryHooks($queryService.say)};
 
 /**
  * SayAgain is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.SayAgain
  */
-export const sayAgain: UnaryFunctionsWithHooks<SayRequest, SayResponse> = {
-  ...$queryService.sayAgain,
-  ...createUnaryHooks($queryService.sayAgain),
-};
+export const sayAgain: UnaryFunctionsWithHooks<SayRequest, SayResponse> = {   ...$queryService.sayAgain,  ...createUnaryHooks($queryService.sayAgain)};
