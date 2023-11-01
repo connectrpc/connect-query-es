@@ -84,8 +84,8 @@ importers:
   examples/react/basic:
     dependencies:
       '@bufbuild/buf':
-        specifier: 1.27.0
-        version: 1.27.0
+        specifier: 1.27.2
+        version: 1.27.2
       '@bufbuild/protobuf':
         specifier: ^1.4.1
         version: 1.4.1
@@ -151,8 +151,8 @@ importers:
         specifier: ^0.13.0
         version: 0.13.0
       '@bufbuild/buf':
-        specifier: 1.27.0
-        version: 1.27.0
+        specifier: 1.27.2
+        version: 1.27.2
       '@bufbuild/jest-environment-jsdom':
         specifier: ^0.1.1
         version: 0.1.1(jest-environment-jsdom@29.7.0)
@@ -203,8 +203,8 @@ importers:
         version: 1.4.1
     devDependencies:
       '@bufbuild/buf':
-        specifier: 1.27.0
-        version: 1.27.0
+        specifier: 1.27.2
+        version: 1.27.2
       '@bufbuild/protoc-gen-es':
         specifier: ^1.4.1
         version: 1.4.1(@bufbuild/protobuf@1.4.1)
@@ -637,66 +637,66 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  /@bufbuild/buf-darwin-arm64@1.27.0:
-    resolution: {integrity: sha512-Bsdo9BkkIlIgBpQJ2jyIXl9ggSqDdSJ12euxgU1y4pbT5iD11mdiUA7eq5/ssxLJilUrUGj2Gk1h1KbYG/JfVA==}
+  /@bufbuild/buf-darwin-arm64@1.27.2:
+    resolution: {integrity: sha512-ob1IAhFVsAVUr5o4EAwoeQ6FOGJdiS6eYGTGQiZzJEAYSs2dX/WQ9+Xz9EPQUb93n7PMjNs38DLDfwGQ3u3dsg==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-darwin-x64@1.27.0:
-    resolution: {integrity: sha512-aJmSZvO6uNxHST8+kN5cukv7/ZLgDnvklp+r6uyokocg5sk1rgWQVBqiVtGmoDWwPbotpMhb3EuqtwN9hdNrOg==}
+  /@bufbuild/buf-darwin-x64@1.27.2:
+    resolution: {integrity: sha512-Kp0HBvLjeOxJtZ/j3vOulX6G3u5pa9vksVmJ5HGjhL0BZJwavh8Bd9YgrBDrTzKtTQMHxmhTSaNEgNUWkjecfw==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-linux-aarch64@1.27.0:
-    resolution: {integrity: sha512-1NPHARYENNVWOK3bQxbnYsMLU09em4/kdyAnCwyGkNhr+pWUlWdCBu3X5tdrRW+mnhjeagIcomTMhgVjxIAS7g==}
+  /@bufbuild/buf-linux-aarch64@1.27.2:
+    resolution: {integrity: sha512-rq+bpT+FMR1iiUvcHno1SPS4e0Ydr+F7ArIzN5cO4DKL09sBJXcaVGa7fRRlBZvNJTt3XRVtlE8LNLGH7zjBOg==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-linux-x64@1.27.0:
-    resolution: {integrity: sha512-3LMTSJlwJAeOfjPuB0NBK+1Yfg1Bybadt+c1X/vF8XSXut1u0Ju1/fbRDz75BF4AlMidMQPdGS+vPWmPcb51hA==}
+  /@bufbuild/buf-linux-x64@1.27.2:
+    resolution: {integrity: sha512-t/lcJ06gELy+4hVROuoeX8Y+oXq9NrPX+UgT5WujGo21oOb8UAQETZLRefj2U4IRqYqXhTKicfOI2y8xI7CSlQ==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-win32-arm64@1.27.0:
-    resolution: {integrity: sha512-Za5d3obNvSfLZAlQW8IAWtv1Yv0gQTFDVMPyYiOh70rKIfKIxrWZxT4E4nzFLZZ54VQDFoUl81bAjOYLOgaspQ==}
+  /@bufbuild/buf-win32-arm64@1.27.2:
+    resolution: {integrity: sha512-rJieGmtSw4tfteW6mhjdtDDTFBbl2HBan1FnfNAOZH4ZrTwfcOO5Vn3fUMl+jPtiCpTscyzVaYHI+LvYffSdvg==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-win32-x64@1.27.0:
-    resolution: {integrity: sha512-OzVK4Fz162Z6fFHAAZhHPW2GiCXjweCG/hwjOtFt2gza1t3ImYp0CwxJI6ePGY+th3Y9yu8rY0iHiI59ezMa4Q==}
+  /@bufbuild/buf-win32-x64@1.27.2:
+    resolution: {integrity: sha512-x9IKCHgj6GmDGH2xlTo80l2feNU3hUeoEwLFLH4I5Qs2L1gfYIDMZGp+0Bhm5eK9CIWYtkJqeqGRIJkrJA6CfQ==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf@1.27.0:
-    resolution: {integrity: sha512-vR/ke6gUNgGSC3z7WkHLcbO+ur+zvGTC4ohHsLo2dZqEWysWySjNpcU70SKdIN3G5M4fSS1ki6MkZPes3E+83w==}
+  /@bufbuild/buf@1.27.2:
+    resolution: {integrity: sha512-hwZYF0DCxvmTAZIAeT/q66HYtIxnSH9jn/CVElaJA/l+Clr9zhLdfKFd1yD2lMqHpNUEeXtA8T0ABXv29NVfYQ==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@bufbuild/buf-darwin-arm64': 1.27.0
-      '@bufbuild/buf-darwin-x64': 1.27.0
-      '@bufbuild/buf-linux-aarch64': 1.27.0
-      '@bufbuild/buf-linux-x64': 1.27.0
-      '@bufbuild/buf-win32-arm64': 1.27.0
-      '@bufbuild/buf-win32-x64': 1.27.0
+      '@bufbuild/buf-darwin-arm64': 1.27.2
+      '@bufbuild/buf-darwin-x64': 1.27.2
+      '@bufbuild/buf-linux-aarch64': 1.27.2
+      '@bufbuild/buf-linux-x64': 1.27.2
+      '@bufbuild/buf-win32-arm64': 1.27.2
+      '@bufbuild/buf-win32-x64': 1.27.2
 
   /@bufbuild/jest-environment-jsdom@0.1.1(jest-environment-jsdom@29.7.0):
     resolution: {integrity: sha512-lO4dke+l/LQAUT8CLmh0SKtY37gmax63eD7YSBQu48sqwAx4hgu1hRmoheRysaqR4bO6Vudhf6+nkBm0TbctvA==}
