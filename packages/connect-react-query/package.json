@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/connect-react-query",
-  "version": "0.5.3",
+  "version": "1.0.0-rc.1",
   "description": "TypeScript-first expansion pack for TanStack Query that gives you Protobuf superpowers.",
   "license": "Apache-2.0",
   "repository": {
