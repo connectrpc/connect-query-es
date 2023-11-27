@@ -17,8 +17,14 @@ import "@testing-library/jest-dom";
 import { createRouterTransport } from "@connectrpc/connect";
 import { render, screen } from "@testing-library/react";
 
-import { ElizaService } from "./gen/eliza-ElizaService_connectquery";
+import * as methods from "./gen/eliza-ElizaService_connectquery";
 import Main from "./main";
+
+// Temporary workaround until connect-es releases support for router.rpc(methodType, impl)
+const ElizaService = {
+  typeName: methods.say.service.typeName,
+  methods,
+};
 
 describe("Application", () => {
   it("should show success status and response data", async () => {
