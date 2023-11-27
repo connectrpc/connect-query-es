@@ -16,28 +16,8 @@
 // @generated from file eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { ListRequest, ListResponse } from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-
-export const typeName = "connectrpc.eliza.v1.PaginatedService";
-
-/**
- * @generated from service connectrpc.eliza.v1.PaginatedService
- */
-export const PaginatedService = {
-  typeName: "connectrpc.eliza.v1.PaginatedService",
-  methods: {
-    /**
-     * @generated from rpc connectrpc.eliza.v1.PaginatedService.List
-     */
-    list: {
-      name: "List",
-      I: ListRequest,
-      O: ListResponse,
-      kind: MethodKind.Unary,
-    },
-  },
-} as const;
+import { ListRequest, ListResponse } from "./eliza_pb";
 
 /**
  * @generated from rpc connectrpc.eliza.v1.PaginatedService.List

@@ -16,64 +16,8 @@
 // @generated from file eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import {
-  ConverseRequest,
-  ConverseResponse,
-  IntroduceRequest,
-  IntroduceResponse,
-  SayRequest,
-  SayResponse,
-} from "./eliza_pb";
 import { MethodKind } from "@bufbuild/protobuf";
-
-export const typeName = "connectrpc.eliza.v1.SecondService";
-
-/**
- * Second Service just to make sure multiple file generation works
- *
- * @generated from service connectrpc.eliza.v1.SecondService
- */
-export const SecondService = {
-  typeName: "connectrpc.eliza.v1.SecondService",
-  methods: {
-    /**
-     * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
-     *
-     * @generated from rpc connectrpc.eliza.v1.SecondService.Say
-     */
-    say: {
-      name: "Say",
-      I: SayRequest,
-      O: SayResponse,
-      kind: MethodKind.Unary,
-    },
-    /**
-     * Converse is a bidirectional RPC. The caller may exchange multiple
-     * back-and-forth messages with Eliza over a long-lived connection. Eliza
-     * responds to each ConverseRequest with a ConverseResponse.
-     *
-     * @generated from rpc connectrpc.eliza.v1.SecondService.Converse
-     */
-    converse: {
-      name: "Converse",
-      I: ConverseRequest,
-      O: ConverseResponse,
-      kind: MethodKind.BiDiStreaming,
-    },
-    /**
-     * Introduce is a server streaming RPC. Given the caller's name, Eliza
-     * returns a stream of sentences to introduce itself.
-     *
-     * @generated from rpc connectrpc.eliza.v1.SecondService.Introduce
-     */
-    introduce: {
-      name: "Introduce",
-      I: IntroduceRequest,
-      O: IntroduceResponse,
-      kind: MethodKind.ServerStreaming,
-    },
-  },
-} as const;
+import { SayRequest, SayResponse } from "./eliza_pb";
 
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.

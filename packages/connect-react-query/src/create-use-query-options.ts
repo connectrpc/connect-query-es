@@ -97,8 +97,8 @@ export function createUseSuspenseQueryOptions<
   }: CreateSuspenseQueryOptions<I, O> & {
     transport: Transport;
   },
-  // Treid to return using UseSuspenseQueryOptions but it fails with some arcane
-  // TS error inside `useSuspenseQuereis`.
+  // Tried to return using UseSuspenseQueryOptions but it fails with some arcane
+  // TS error inside `useSuspenseQueries`.
 ): Omit<CreateQueryOptions<I, O>, "callOptions" | "transport"> & {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>>;

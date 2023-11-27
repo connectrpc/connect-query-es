@@ -1027,12 +1027,12 @@
       "locked": false,
       "fontSize": 20,
       "fontFamily": 3,
-      "text": "Connect-Query",
+      "text": "Connect-React-Query",
       "baseline": 19,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "NLMbxwdPMz1O8gu8ku7cT",
-      "originalText": "Connect-Query"
+      "originalText": "Connect-React-Query"
     },
     {
       "type": "rectangle",

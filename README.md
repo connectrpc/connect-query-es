@@ -30,7 +30,7 @@ Note: If you are using something that doesn't automatically install peerDependen
 
 ### Usage
 
-Connect-React-Query will immediately feel familiar to you if you've used TanStack Query. It povides a similar API, but instead takes a definition for your endpoint and returns a typesafe API for that endpoint.
+Connect-React-Query will immediately feel familiar to you if you've used TanStack Query. It provides a similar API, but instead takes a definition for your endpoint and returns a typesafe API for that endpoint.
 
 ```ts
 import { useQuery } from '@connectrpc/connect-react-query';
@@ -146,7 +146,7 @@ function useQuery<I extends Message<I>, O extends Message<O>>(
   options?: {
     transport?: Transport;
     callOptions?: CallOptions;
-  } & UseQueryOptions
+  } & UseQueryOptions,
 ): UseQueryResult<O, ConnectError>;
 ```
 
@@ -174,7 +174,7 @@ function useInfiniteQuery<
     transport?: Transport;
     callOptions?: CallOptions;
     getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
-  }
+  },
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError>;
 ```
 
@@ -207,7 +207,7 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 ```ts
 function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined
+  input?: DisableQuery | PartialMessage<I> | undefined,
 ): ConnectQueryKey<I>;
 ```
 
@@ -233,15 +233,15 @@ A non-hook version of `useSuspenseInfiniteQuery`. This is useful for situations 
 
 ```ts
 function useSetQueryData<I extends Message<I>, O extends Message<O>>(
-  methodSig: MethodUnaryDescriptor<I, O>
+  methodSig: MethodUnaryDescriptor<I, O>,
 ): (
   updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
   input?: PartialMessage<I> | undefined,
-  options?: SetDataOptions | undefined
+  options?: SetDataOptions | undefined,
 ) => unknown;
 ```
 
-Returns a function that can be called, similiar to `queryClient.setQueryData()` except provides a typesafe updater function.
+Returns a function that can be called, similar to `queryClient.setQueryData()` except provides a typesafe updater function.
 
 ### `ConnectQueryKey`
 
@@ -308,7 +308,7 @@ export const Example: FC = () => {
 
 > Why was this changed from the previous version of Connect-Query?
 >
-> Originially, all we did was pass options to TanStack Query. This was done as an intentional way to keep ourselves separate from TanStack Query. However, as usage increased, it became obvious that were still tied to the API of TanStack Query, and it only meant that we increased the burden on the developer to understand that underlying connection. This new API removes most of that burden and reduces the surface area of the API significantly.
+> Originally, all we did was pass options to TanStack Query. This was done as an intentional way to keep ourselves separate from TanStack Query. However, as usage increased, it became obvious that were still tied to the API of TanStack Query, and it only meant that we increased the burden on the developer to understand that underlying connection. This new API removes most of that burden and reduces the surface area of the API significantly.
 
 ### Is this ready for production?
 
@@ -357,7 +357,7 @@ If the `Transport` attached to React Context via the `TransportProvider` isn't w
 
 ### Does this only work with React?
 
-Connect-Reaxct-Query does require React, but the core (`createUseQueryOptions`) is not React specific so splitting off a `connect-solid-query` is possible.
+Connect-React-Query does require React, but the core (`createUseQueryOptions`) is not React specific so splitting off a `connect-solid-query` is possible.
 
 ### How do I do Prefetching?
 
@@ -373,8 +373,8 @@ function prefetch() {
       { sentence: "Hello" },
       {
         transport: myTransport,
-      }
-    )
+      },
+    ),
   );
 }
 ```
