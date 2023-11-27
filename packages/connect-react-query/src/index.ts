@@ -24,7 +24,10 @@ export {
   createUseInfiniteQueryOptions,
   createUseSuspenseInfiniteQueryOptions,
 } from "./create-use-infinite-query-options.js";
-export { useInfiniteQuery } from "./use-infinite-query.js";
+export {
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from "./use-infinite-query.js";
 export type {
   CreateQueryOptions as UseQueryOptions,
   CreateSuspenseQueryOptions as UseSuspenseQueryOptions,

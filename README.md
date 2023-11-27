@@ -7,7 +7,7 @@
 
 [![License](https://img.shields.io/github/license/connectrpc/connect-query-es?color=blue)](./LICENSE) [![Build](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml) [![NPM Version](https://img.shields.io/npm/v/@connectrpc/connect-query/latest?color=green&label=%40connectrpc%2Fconnect-query)](https://www.npmjs.com/package/@connectrpc/connect-query) [![NPM Version](https://img.shields.io/npm/v/@connectrpc/protoc-gen-connect-query/latest?color=green&label=%40connectrpc%2Fprotoc-gen-connect-query)](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query)
 
-Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested. It enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
+Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested. It enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 
 - [Quickstart](#quickstart)
   - [Generated Code](#generated-code)
@@ -17,53 +17,27 @@ Connect-Query is an expansion pack for [TanStack Query](https://tanstack.com/que
   - [`createUnaryHooks`](#createunaryhooks)
   - [`TransportProvider`](#transportprovider)
   - [`useTransport`](#usetransport)
-  - [`UnaryFunctions.createData`](#unaryfunctionscreatedata)
-  - [`UnaryFunctions.createUseQueryOptions`](#unaryfunctionscreateusequeryoptions)
-  - [`UnaryFunctions.createUseInfiniteQueryOptions`](#unaryfunctionscreateuseinfinitequeryoptions)
-  - [`UnaryFunctions.createUseMutationOptions`](#unaryfunctionscreateusemutationoptions)
-  - [`UnaryFunctions.getPartialQueryKey`](#unaryfunctionsgetpartialquerykey)
-  - [`UnaryFunctions.getQueryKey`](#unaryfunctionsgetquerykey)
-  - [`UnaryFunctions.methodInfo`](#unaryfunctionsmethodinfo)
-  - [`UnaryFunctions.setQueryData`](#unaryfunctionssetquerydata)
-  - [`UnaryFunctions.setQueriesData`](#unaryfunctionssetqueriesdata)
-  - [`UnaryHooks.useInfiniteQuery`](#unaryhooksuseinfinitequery)
-  - [`UnaryHooks.useMutation`](#unaryhooksusemutation)
-  - [`UnaryHooks.useQuery`](#unaryhooksusequery)
-  - [`ConnectQueryKey`](#connectquerykey)
-  - [`ConnectPartialQueryKey`](#connectpartialquerykey)
-- [Frequently Asked Questions](#frequently-asked-questions)
-  - [How do I pass other TanStack Query options?](#how-do-i-pass-other-tanstack-query-options)
-  - [Is this ready for production?](#is-this-ready-for-production)
-  - [What is Connect-Query's relationship to Connect-Web and Protobuf-ES?](#what-is-connect-querys-relationship-to-connect-web-and-protobuf-es)
-  - [What is `Transport`](#what-is-transport)
-  - [What if I already use Connect-Web?](#what-if-i-already-use-connect-web)
-  - [What if I use gRPC-web?](#what-if-i-use-grpc-web)
-  - [Do I have to use a code generator?](#do-i-have-to-use-a-code-generator)
-  - [What if I have a custom `Transport`?](#what-if-i-have-a-custom-transport)
-  - [Does this only work with React?](#does-this-only-work-with-react)
-  - [How do I do Prefetching?](#how-do-i-do-prefetching)
-  - [What about Streaming?](#what-about-streaming)
 
 ## Quickstart
 
 ### Install
 
 ```sh
-npm install @connectrpc/connect-query
+npm install @connectrpc/connect-react-query
 ```
 
-Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf` and `@connectrpc/connect` installed.
+Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed.
 
 ### Usage
 
-Connect-Query will immediately feel familiar to you if you've used TanStack Query. It provides a set of convenient helpers that you can pass to the same TanStack Query functions you're already using:
+Connect-React-Query will immediately feel familiar to you if you've used TanStack Query. It povides a similar API, but instead takes a definition for your endpoint and returns a typesafe API for that endpoint.
 
 ```ts
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@connectrpc/connect-react-query';
 import { example } from 'your-generated-code/example-ExampleService_connectquery';
 
 export const Example: FC = () => {
-  const { data } = useQuery(example.useQuery({}));
+  const { data } = useQuery(example);
   return <div>{data}</div>;
 };
 ```
@@ -74,117 +48,45 @@ The [code generator](packages/protoc-gen-connect-query/README.md) does all the w
 
 One of the best features of this library is that once you write your schema in Protobuf form, the TypeScript types are generated and then inferred. You never again need to specify the types of your data since the library does it automatically.
 
-<!-- markdownlint-disable-next-line MD033 -- necessary for centering -->
-<div align="center">
-  <!-- markdownlint-disable-next-line MD033 -- necessary for cross-renderer video (i.e. not just on GitHub) -->
-  <video src="https://user-images.githubusercontent.com/15232461/212362170-65eb9efa-faa5-46fd-ac61-080719d011a5.mp4" />
-</div>
-
-<!-- markdownlint-disable-next-line MD033 -- necessary for making the text small (and lessening top margin) -->
-<sup>
-  <!-- markdownlint-disable-next-line MD033 -- necessary for centering -->
-  <p align="center">
-    <!-- markdownlint-disable-next-line MD033 -- necessary for making the text italic inside of a `p` tag -->
-    <em>
-      play the above video to see the TypeScript types in action
-    </em>
-  </p>
-</sup>
-<!-- markdownlint-disable-next-line MD033 -- provides half line break between next paragraph -->
-<dl></dl>
-
 ### Generated Code
 
 This example shows the best developer experience using code generation. Here's what that generated code looks like:
 
 ```ts title="your-generated-code/example-ExampleService_connectquery"
-import {
-  createQueryService,
-  createUnaryHooks,
-} from "@connectrpc/connect-query";
 import { MethodKind } from "@bufbuild/protobuf";
 import { ExampleRequest, ExampleResponse } from "./example_pb.js";
 
-export const typeName = "your.company.com.example.v1.ExampleService";
-
-export const ExampleService = {
-  methods: {
-    example: {
-      name: "Example",
-      kind: MethodKind.Unary,
-      I: ExampleRequest,
-      O: ExampleResponse,
-    },
-  },
-  typeName,
-} as const;
-
-const $queryService = createQueryService({ service: ExampleService });
-
 export const example = {
-  ...$queryService.example,
-  ...createUnaryHooks($queryService.example),
+  name: "Example",
+  kind: MethodKind.Unary,
+  I: ExampleRequest,
+  O: ExampleResponse,
+  service: {
+    typeName: "your.company.com.example.v1.ExampleService",
+  },
 };
 ```
 
-If you want to use Connect-Query dynamically without code generation, you can call [`createQueryService`](#createqueryservice) exactly as the generated code does.
+The above code doesn't have to be generated and can be manually used to describe any given endpoint.
 
 For more information on code generation, see the [documentation](./packages/protoc-gen-connect-query/README.md) for `protoc-gen-connect-query`.
 
-## Connect-Query API
+## Connect-React-Query API
 
-### `createQueryService`
+### `MethodUnaryDescriptor`
 
-```ts
-const createQueryService: <Service extends ServiceType>({
-  service,
-  transport,
-}: {
-  service: Service;
-  transport?: Transport;
-}) => QueryHooks<Service>;
-```
+A type that describes a single unary method. It describes the following properties:
 
-`createQueryService` is the main entrypoint for Connect-Query.
+- `name`: The name of the method.
+- `kind`: The kind of method. In this case, it's usually `MethodKind.Unary`.
+- `I`: The input message type.
+- `O`: The output message type.
+- `service.typeName`: The fully qualified name of the service the method exists on.
 
-Pass in a service and you will receive an object with properties for each of your services and values that provide hooks for those services that you can then give to Tanstack Query. The `ServiceType` TypeScript interface is provided by Protobuf-ES (`@bufbuild/protobuf`) while generated service definitions are provided by Connect-Web (`@connectrpc/connect-web`).
-
-`Transport` refers to the mechanism by which your client will make the actual network calls. If you want to use a custom transport, you can optionally provide one with a call to `useTransport`, which Connect-Query exports. Otherwise, the default transport from React context will be used. This default transport is placed on React context by the `TransportProvider`. Whether you pass a custom transport or you use `TransportProvider`, in both cases you'll need to use one of `@connectrpc/connect-web`'s exports `createConnectTransport` or `createGrpcWebTransport`.
-
-Note that the most memory performant approach is to use the transport on React Context by using the `TransportProvider` because that provider is memoized by React, but also that any calls to `createQueryService` with the same service is cached by this function.
-
-Here's an example of a simple usage:
-
-```ts
-const queryService = createQueryService({
-  service: {
-    methods: {
-      example: {
-        name: "Example",
-        kind: MethodKind.Unary,
-        I: ExampleRequest,
-        O: ExampleResponse,
-      },
-    },
-    typeName: "your.company.com.example.v1.ExampleService",
-  },
-});
-
-const example = {
-  ...queryService.say,
-  ...createUnaryHooks($queryService.say),
-};
-
-const { data, isLoading, ...etc } = useQuery(example.useQuery());
-```
-
-### `createUnaryHooks`
-
-This creates some helper functions for unary methods that automatically include the transport from context. It's a distinct function from `createQueryService` so the core function can be separate from specific React APIs.
+This type is core to how connect-react-query can stay lightweight and
+limit the amount of code actually generated. The descriptor is expected to be passed to almost all the methods in this library.
 
 ### `TransportProvider`
-
-> Note: This API can only be used with React
 
 ```ts
 const TransportProvider: FC<
@@ -194,7 +96,7 @@ const TransportProvider: FC<
 >;
 ```
 
-`TransportProvider` is the main mechanism by which Connect-Query keeps track of the `Transport` used by your application.
+`TransportProvider` is the main mechanism by which Connect-React-Query keeps track of the `Transport` used by your application.
 
 Broadly speaking, "transport" joins two concepts:
 
@@ -229,212 +131,117 @@ export const App() {
 
 ### `useTransport`
 
-> Note: This API can only be used with React
-
 ```ts
 const useTransport: () => Transport;
 ```
 
 Use this helper to get the default transport that's currently attached to the React context for the calling component.
 
-### `UnaryFunctions.createData`
+### `useQuery`
 
 ```ts
-const createData: (data: PartialMessage<O>) => O;
+function useQuery<I extends Message<I>, O extends Message<O>>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  input?: DisableQuery | PartialMessage<I>,
+  options?: {
+    transport?: Transport;
+    callOptions?: CallOptions;
+  } & UseQueryOptions
+): UseQueryResult<O, ConnectError>;
 ```
 
-Use this to create a data object that can be used as `placeholderData` or initialData.
+The `useQuery` hook is the primary way to make a unary request. It's a wrapper around TanStack Query's [`useQuery`](https://tanstack.com/query/v5/docs/react/reference/useQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
 
-### `UnaryFunctions.createUseQueryOptions`
+Any additional `options` you pass to `useQuery` will be merged with the options that Connect-React-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
 
-```ts
-const createUseQueryOptions: (
-  input: DisableQuery | PartialMessage<I> | undefined,
-  options: {
-    getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
-    onError?: (error: ConnectError) => void;
-    transport: Transport;
-    callOptions?: CallOptions | undefined;
-  },
-) => {
-  enabled: boolean;
-  queryKey: ConnectQueryKey<I>;
-  queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-  placeholderData?: () => O | undefined;
-  onError?: (error: ConnectError) => void;
-};
-```
+### `useSuspenseQuery`
 
-`createUseQueryOptions` is intended to be used with TanStack's [`useQuery`](https://tanstack.com/query/v4/docs/react/reference/useQuery) hook. The difference is that `createUseQueryOptions` is not a hook. Since hooks cannot be called conditionally, it can sometimes be helpful to use `createUseQueryOptions` to prepare an input to TanStack's `useQuery`.
+Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/react/reference/useSuspenseQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
 
-It is also useful to use alongside TanStack's [`useQueries`](https://tanstack.com/query/v4/docs/react/reference/useQueries) hook since hooks cannot be called in loops.
-
-### `UnaryFunctions.createUseMutationOptions`
+### `useInfiniteQuery`
 
 ```ts
-const createUseMutationOptions: (options: {
-  onError?: (error: ConnectError) => void;
-  transport?: Transport | undefined;
-  callOptions?: CallOptions | undefined;
-}) => {
-  mutationFn: (
-    input: PartialMessage<I>,
-    context?: QueryFunctionContext<ConnectQueryKey<I>>,
-  ) => Promise<O>;
-  onError?: (error: ConnectError) => void;
-};
-```
-
-`createUseMutationOptions` is intended to be used with TanStack's [`useMutation`](https://tanstack.com/query/v4/docs/react/reference/useMutation) hook. The difference is that `createUseMutationOptions` is not a hook and doesn't read from `TransportProvider` for its transport.
-
-### `UnaryFunctions.createUseInfiniteQueryOptions`
-
-```ts
-const createUseInfiniteQueryOptions: <ParamKey extends keyof PlainMessage<I>>(
-  input: DisableQuery | PartialMessage<I>,
+function useInfiniteQuery<
+  I extends Message<I>,
+  O extends Message<O>,
+  ParamKey extends keyof PartialMessage<I>,
+  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
+>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  input: DisableQuery | Input,
   options: {
     pageParamKey: ParamKey;
-    getNextPageParam: (lastPage: O, allPages: O[]) => unknown;
-    onError?: (error: ConnectError) => void;
-    transport?: Transport | undefined;
-    callOptions?: CallOptions | undefined;
+    transport?: Transport;
+    callOptions?: CallOptions;
+    getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
+  }
+): UseInfiniteQueryResult<InfiniteData<O>, ConnectError>;
+```
+
+The `useInfiniteQuery` is a wrapper around TanStack Query's [`useInfiniteQuery`](https://tanstack.com/query/v5/docs/react/reference/useInfiniteQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
+
+There are some required options for `useInfiniteQuery`, primarily `pageParamKey` and `getNextPageParam`. These are required because Connect-React-Query doesn't know how to paginate your data. You must provide a mapping from the output of the previous page and getting the next page. All other options passed to `useInfiniteQuery` will be merged with the options that Connect-React-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
+
+### `useSuspenseInfiniteQuery`
+
+Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/react/reference/useSuspenseInfiniteQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
+
+### `useMutation`
+
+```ts
+function useMutation<I extends Message<I>, O extends Message<O>>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  options?: {
+    transport?: Transport;,
+    callOptions?: CallOptions;
   },
-) => {
-  enabled: boolean;
-  queryKey: ConnectQueryKey<I>;
-  queryFn: (
-    context: QueryFunctionContext<
-      ConnectQueryKey<I>,
-      PlainMessage<I>[ParamKey]
-    >,
-  ) => Promise<O>;
-  getNextPageParam: GetNextPageParamFunction<O>;
-  onError?: (error: ConnectError) => void;
-};
+): UseMutationResult<O, ConnectError, PartialMessage<I>>
 ```
 
-`createUseInfiniteQueryOptions` is intended to be used with TanStack's [`useInfiniteQuery`](https://tanstack.com/query/v4/docs/react/reference/useInfiniteQuery) hook. The difference is that `createUseInfiniteQueryOptions` is not a hook and doesn't read from `TransportProvider` for its transport.
+The `useMutation` is a wrapper around TanStack Query's [`useMutation`](https://tanstack.com/query/v5/docs/react/reference/useMutation) hook, but it's preconfigured with the correct `mutationFn` for the given method.
 
-### `UnaryFunctions.getPartialQueryKey`
+Any additional `options` you pass to `useMutation` will be merged with the options that Connect-React-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
 
-```ts
-const getPartialQueryKey: () => ConnectPartialQueryKey;
-```
-
-This helper is useful for getting query keys matching a wider set of queries associated to this Connect `Service`, per TanStack Query's [partial matching](https://tanstack.com/query/v4/docs/react/guides/query-invalidation#query-matching-with-invalidatequeries) mechanism.
-
-### `UnaryFunctions.getQueryKey`
+### `createConnectQueryKey`
 
 ```ts
-const getQueryKey: (
-  input?: DisableQuery | PartialMessage<I>,
-) => ConnectQueryKey<I>;
+function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
+  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
+  input?: DisableQuery | PartialMessage<I> | undefined
+): ConnectQueryKey<I>;
 ```
 
 This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query. This function has no side effects.
 
-### `UnaryFunctions.methodInfo`
+### `createUseQueryOptions`
+
+A non-hook version of `useQuery`. This is useful for situations where you want to use `useQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useQuery`.
+
+### `createUseInfiniteQueryOptions`
+
+A non-hook version of `useInfiniteQuery`. This is useful for situations where you want to use `useInfiniteQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useInfiniteQuery`.
+
+### `createUseSuspenseQueryOptions`
+
+A non-hook version of `useSuspenseQuery`. This is useful for situations where you want to use `useSuspenseQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useSuspenseQuery`.
+
+### `createUseSuspenseInfiniteQueryOptions`
+
+A non-hook version of `useSuspenseInfiniteQuery`. This is useful for situations where you want to use `useSuspenseInfiniteQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useSuspenseInfiniteQuery`.
+
+### `useSetQueryData`
 
 ```ts
-const methodInfo: MethodInfoUnary<I, O>;
-```
-
-This is the metadata associated with this method.
-
-### `UnaryFunctions.setQueryData`
-
-```ts
-const setQueryData: (
+function useSetQueryData<I extends Message<I>, O extends Message<O>>(
+  methodSig: MethodUnaryDescriptor<I, O>
+): (
   updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-  input?: PartialMessage<I>,
-) => [queryKey: ConnectQueryKey<I>, updater: (prev?: O) => O | undefined];
+  input?: PartialMessage<I> | undefined,
+  options?: SetDataOptions | undefined
+) => unknown;
 ```
 
-This helper is intended to be used with TanStack Query `QueryClient`'s [`setQueryData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetquerydata) function.
-
-### `UnaryFunctions.setQueriesData`
-
-```ts
-const setQueriesData: (
-  updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-) => [queryKey: ConnectPartialQueryKey, updater: (prev?: O) => O | undefined];
-```
-
-This helper is intended to be used with TanStack Query `QueryClient`'s [`setQueriesData`](https://tanstack.com/query/v4/docs/react/reference/QueryClient#queryclientsetqueriesdata) function.
-
-### `UnaryHooks.useInfiniteQuery`
-
-> Note: This API can only be used with React
-
-```ts
-const useInfiniteQuery: <ParamKey extends keyof PlainMessage<I>>(
-  input: DisableQuery | PartialMessage<I>,
-  options: {
-    pageParamKey: ParamKey;
-    getNextPageParam: (lastPage: O, allPages: O[]) => unknown;
-    onError?: (error: ConnectError) => void;
-    transport?: Transport | undefined;
-    callOptions?: CallOptions | undefined;
-  },
-) => {
-  enabled: boolean;
-  queryKey: ConnectQueryKey<I>;
-  queryFn: (
-    context: QueryFunctionContext<
-      ConnectQueryKey<I>,
-      PlainMessage<I>[ParamKey]
-    >,
-  ) => Promise<O>;
-  getNextPageParam: GetNextPageParamFunction<O>;
-  onError?: (error: ConnectError) => void;
-};
-```
-
-This helper is intended to be used with TanStack Query's [`useInfiniteQuery`](https://tanstack.com/query/v4/docs/react/reference/useInfiniteQuery) function.
-
-### `UnaryHooks.useMutation`
-
-> Note: This API can only be used with React
-
-```ts
-const useMutation: (options?: {
-  onError?: (error: ConnectError) => void;
-  transport?: Transport | undefined;
-  callOptions?: CallOptions | undefined;
-}) => {
-  mutationFn: (
-    input: PartialMessage<I>,
-    context?: QueryFunctionContext<ConnectQueryKey<I>>,
-  ) => Promise<O>;
-  onError?: (error: ConnectError) => void;
-};
-```
-
-This function is intended to be used with TanStack Query's [`useMutation`](https://tanstack.com/query/v4/docs/react/reference/useMutation) function.
-
-### `UnaryHooks.useQuery`
-
-> Note: This API can only be used with React
-
-```ts
-const useQuery: (
-  input?: DisableQuery | PartialMessage<I>,
-  options?: {
-    getPlaceholderData?: (enabled: boolean) => PartialMessage<O> | undefined;
-    onError?: (error: ConnectError) => void;
-    transport?: Transport | undefined;
-    callOptions?: CallOptions | undefined;
-  },
-) => {
-  enabled: boolean;
-  queryKey: ConnectQueryKey<I>;
-  queryFn: (context?: QueryFunctionContext<ConnectQueryKey<I>>) => Promise<O>;
-  placeholderData?: () => O | undefined;
-  onError?: (error: ConnectError) => void;
-};
-```
-
-This function is intended to be used with Tanstack Query's [`useQuery`](https://tanstack.com/query/v4/docs/react/reference/useQuery) function.
+Returns a function that can be called, similiar to `queryClient.setQueryData()` except provides a typesafe updater function.
 
 ### `ConnectQueryKey`
 
@@ -484,40 +291,24 @@ For playwright, you can see a sample test [here](https://github.com/connectrpc/c
 
 ### How do I pass other TanStack Query options?
 
-Say you have an query that looks something like this:
+Each function that interacts with TanStack Query also provides for options that can be passed through.
 
 ```ts
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@connectrpc/connect-react-query';
 import { example } from 'your-generated-code/example-ExampleService_connectquery';
 
 export const Example: FC = () => {
-  const { data } = useQuery(example.useQuery({}));
+  const { data } = useQuery(example, undefined, {
+    // These are typesafe options that are passed to underlying TanStack Query.
+    refetchInterval: 1000,
+  });
   return <div>{data}</div>;
 };
 ```
 
-On line 5, `example.useQuery({})` just returns an object with a few TanStack Query options preconfigured for you (for example, `queryKey` and `queryFn` and `onError`). All of the Connect-Query hooks APIs work this way, so you can always inspect the TypeScript type to see which specific TanStack query options are configured.
-
-That means, that if you want to add extra TanStack Query options, you can simply spread the object resulting from Connect-Query:
-
-```ts
-const { data } = useQuery({
-  ...example.useQuery({}),
-
-  // Add any extra TanStack Query options here.
-  // TypeScript will ensure they're valid!
-  refetchInterval: 1000,
-});
-```
-
-> Why does it work this way?
+> Why was this changed from the previous version of Connect-Query?
 >
-> You may be familiar with other projects that directly wrap react-query directly (such as tRPC). We worked with the TanStack team to develop this API and determined that it's most flexible to simply return an options object.
->
-> 1. You have full control over what's actually passed to TanStack Query. For example, if you have a query where you'd like to modify the `queryKey`, you can do so directly.
-> 1. It provides full transparency into what Connect Query is actually doing. This means that if you want to see what _exactly_ Connect Query is doing, you can simply inspect the object. This makes for a much more straightforward experience when you're debugging your app.
-> 1. This means that the resulting call is plain TanStack Query in every way, which means that you can still integrate with any existing TanStack Query plugins or extensions you may already be using.
-> 1. Not wrapping TanStack Query itself means that you can immediately use Connect-Query with any new functionality or options of TanStack Query.
+> Originially, all we did was pass options to TanStack Query. This was done as an intentional way to keep ourselves separate from TanStack Query. However, as usage increased, it became obvious that were still tied to the API of TanStack Query, and it only meant that we increased the burden on the developer to understand that underlying connection. This new API removes most of that burden and reduces the surface area of the API significantly.
 
 ### Is this ready for production?
 
@@ -558,17 +349,15 @@ That said, we encourage you to check out the [Connect protocol](https://connectr
 
 ### Do I have to use a code generator?
 
-No. The code generator just calls [`createQueryService`](#createqueryservice) and [`createUnaryHooks`](#createunaryhooks) with the arguments already added, but you are free to do that yourself if you wish.
+No. The code generator just generates the method descriptors, but you are free to do that yourself if you wish.
 
 ### What if I have a custom `Transport`?
 
-If the `Transport` attached to React Context via the `TransportProvider` isn't working for you, then you can override transport at every level. For example, you can pass a custom transport directly to the lowest-level API like `UnaryHooks.useQuery`, but you can also pass it to `createQueryHooks` or even as high as `createQueryService`. It's an optional argument for all of those cases and if you choose to omit the `transport` property, the `Transport` provided by `TransportProvider` will be used (only where necessary).
+If the `Transport` attached to React Context via the `TransportProvider` isn't working for you, then you can override transport at every level. For example, you can pass a custom transport directly to the lowest-level API like `useQuery` or `createUseQueryOptions`.
 
 ### Does this only work with React?
 
-You can use Connect-Query with any TanStack variant (React, Solid, Svelte, Vue). All methods which are part of the `UnaryFunctions` type can be used by any framework. The only APIs which are React specific are the `TransportProvider`, and any APIs starting with `use`.
-
-> Tip: If you're a TanStack Query user that uses something other than React, we'd love to hear from you. Please reach out to us on the [Buf Slack](https://buf.build/links/slack).
+Connect-Reaxct-Query does require React, but the core (`createUseQueryOptions`) is not React specific so splitting off a `connect-solid-query` is possible.
 
 ### How do I do Prefetching?
 
@@ -579,7 +368,13 @@ import { say } from "./gen/eliza-ElizaService_connectquery";
 
 function prefetch() {
   return queryClient.prefetchQuery(
-    say.createUseQueryOptions({ sentence: "Hello", transport: myTransport }),
+    createUseQueryOptions(
+      say,
+      { sentence: "Hello" },
+      {
+        transport: myTransport,
+      }
+    )
   );
 }
 ```
