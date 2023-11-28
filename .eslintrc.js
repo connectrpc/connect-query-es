@@ -71,6 +71,7 @@ const config = {
     "@typescript-eslint/no-type-alias": "off", // this rule turns off things that are absolutely required by this project such as conditional types and literals
     "@typescript-eslint/no-throw-literal": "off", // unfortunately this rule doesn't understand returns from `unreachableCase`
     "@typescript-eslint/no-magic-numbers": "off", // literal values are used in CSS-in-JS, tests, and library constants
+    "@typescript-eslint/prefer-destructuring": "off", // Added in 6.8.0, causing an issue in linting
     "@typescript-eslint/ban-ts-comment": [
       "error",
       { "ts-expect-error": { descriptionFormat: "^\\(\\d+\\) .+$" } },
