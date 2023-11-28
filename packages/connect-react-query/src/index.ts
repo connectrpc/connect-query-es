@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export type {
-  ConnectQueryKey,
-  ConnectPartialQueryKey,
-} from "./connect-query-key.js";
+export type { ConnectQueryKey } from "./connect-query-key.js";
 export { createConnectQueryKey } from "./connect-query-key.js";
-export { disableQuery } from "./utils.js";
+export { disableQuery, createProtobufSafeUpdater } from "./utils.js";
 export { useTransport, TransportProvider } from "./use-transport.js";
 export type { CreateInfiniteQueryOptions as UseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
 export {
@@ -40,5 +37,4 @@ export { useQuery, useSuspenseQuery } from "./use-query.js";
 export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";
 export { defaultOptions } from "./default-options.js";
-export { useSetQueryData } from "./use-set-query-data.js";
-export type { ConnectUpdater, DisableQuery } from "./utils.js";
+export type { DisableQuery, ConnectUpdater } from "./utils.js";

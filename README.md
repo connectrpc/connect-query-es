@@ -10,27 +10,66 @@
 Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested. It enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 
 - [Quickstart](#quickstart)
+  - [Install](#install)
+  - [Usage](#usage)
   - [Generated Code](#generated-code)
-- [Usage](#usage)
-- [Connect-Query API](#connect-query-api)
-  - [`createQueryService`](#createqueryservice)
-  - [`createUnaryHooks`](#createunaryhooks)
+- [Connect-React-Query API](#connect-react-query-api)
+  - [`MethodUnaryDescriptor`](#methodunarydescriptor)
   - [`TransportProvider`](#transportprovider)
   - [`useTransport`](#usetransport)
+  - [`useQuery](#usequery)
+  - [`useSuspenseQuery`](#usesuspensequery)
+  - [`useInfiniteQuery`](#useinfinitequery)
+  - [`useSuspenseInfiniteQuery`](#usesuspenseinfinitequery)
+  - [`useMutation`](#usemutation)
+  - [`createConnectQueryKey`](#createconnectquerykey)
+  - [`createUseQueryOptions`](#createusequeryoptions)
+  - [`createUseInfiniteQueryOptions`](#createuseinfinitequeryoptions)
+  - [`createUseSuspenseQueryOptions`](#createusesuspensequeryoptions)
+  - [`createUseSuspenseInfiniteQueryOptions`](#createusesuspenseinfinitequeryoptions)
+  - [`createProtobufSafeUpdater`](#createprotobufsafeupdater)
+  - [`ConnectQueryKey`](#connectquerykey)
 
 ## Quickstart
 
 ### Install
 
 ```sh
-npm install @connectrpc/connect-react-query
+npm install @connectrpc/connect-react-query @connectrpc/connect-web
 ```
 
-Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed.
+Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed. `@connectrpc/connect-web` is required for defining
+the transport to be used by the client.
 
 ### Usage
 
 Connect-React-Query will immediately feel familiar to you if you've used TanStack Query. It provides a similar API, but instead takes a definition for your endpoint and returns a typesafe API for that endpoint.
+
+First, make sure you've configured your provider and query client:
+
+```tsx
+import { createConnectTransport } from "@connectrpc/connect-web";
+import { TransportProvider } from "@connectrpc/connect-react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const finalTransport = createConnectTransport({
+  baseUrl: "https://demo.connectrpc.com",
+});
+
+const queryClient = new QueryClient();
+
+function App() {
+  return (
+    <TransportProvider transport={finalTransport}>
+      <QueryClientProvider client={queryClient}>
+        <YourApp />
+      </QueryClientProvider>
+    </TransportProvider>
+  );
+}
+```
+
+With configuration completed, you can now use the `useQuery` hook to make a request:
 
 ```ts
 import { useQuery } from '@connectrpc/connect-react-query';
@@ -146,7 +185,7 @@ function useQuery<I extends Message<I>, O extends Message<O>>(
   options?: {
     transport?: Transport;
     callOptions?: CallOptions;
-  } & UseQueryOptions,
+  } & UseQueryOptions
 ): UseQueryResult<O, ConnectError>;
 ```
 
@@ -174,7 +213,7 @@ function useInfiniteQuery<
     transport?: Transport;
     callOptions?: CallOptions;
     getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
-  },
+  }
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError>;
 ```
 
@@ -207,7 +246,7 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 ```ts
 function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined,
+  input?: DisableQuery | PartialMessage<I> | undefined
 ): ConnectQueryKey<I>;
 ```
 
@@ -229,19 +268,27 @@ A non-hook version of `useSuspenseQuery`. This is useful for situations where yo
 
 A non-hook version of `useSuspenseInfiniteQuery`. This is useful for situations where you want to use `useSuspenseInfiniteQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useSuspenseInfiniteQuery`.
 
-### `useSetQueryData`
+### `createProtobufSafeUpdater`
+
+Creates a typesafe updater that can be used to update data in a query cache. Used in combination with a queryClient.
 
 ```ts
-function useSetQueryData<I extends Message<I>, O extends Message<O>>(
-  methodSig: MethodUnaryDescriptor<I, O>,
-): (
-  updater: PartialMessage<O> | ((prev?: O) => PartialMessage<O>),
-  input?: PartialMessage<I> | undefined,
-  options?: SetDataOptions | undefined,
-) => unknown;
-```
+import { createProtobufSafeUpdater } from '@connectrpc/connect-react-query';
+import { useQueryClient } from "@tanstack/react-query";
 
-Returns a function that can be called, similar to `queryClient.setQueryData()` except provides a typesafe updater function.
+...
+const queryClient = useQueryClient();
+queryClient.setQueryData(
+  createConnectQueryKey(example),
+  createProtobufSafeUpdater(example, (prev) => {
+    return {
+      ...prev,
+      completed: true,
+    };
+  })
+);
+
+```
 
 ### `ConnectQueryKey`
 
@@ -265,14 +312,6 @@ For example, a query key might look like this:
   "GetTodos",
   { id: "0fdf2ebe-9a0c-4366-9772-cfb21346c3f9" },
 ];
-```
-
-### `ConnectPartialQueryKey`
-
-This type is useful In situations where you want to use partial matching for TanStack Query `queryKey`s.
-
-```ts
-type ConnectPartialQueryKey = [serviceTypeName: string, methodName: string];
 ```
 
 For example, a partial query key might look like this:
@@ -313,6 +352,17 @@ export const Example: FC = () => {
 ### Is this ready for production?
 
 Buf has been using Connect-Query in production for some time. Also, there is 100% mandatory test coverage in this project which covers quite a lot of edge cases. That said, this package is given a `v0.x` semver to designate that it's a new project, and we want to make sure the API is exactly what our users want before we call it "production ready". That also means that some parts of the API may change before `v1.0` is reached.
+
+### Using BigInt with RPC inputs
+
+Since Connect-React-Query use the inputs as keys for the query, if you have a field with type `int64`, those fields will cause serialization problems. For this reason, Connect-React-Query ships with defaultOptions that can be passed to the QueryClient to make sure serializing BigInts is done properly:
+
+```ts
+import { defaultOptions } from "@connectrpc/connect-react-query";
+import { QueryClient } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({ defaultOptions });
+```
 
 ### What is Connect-Query's relationship to Connect-Web and Protobuf-ES?
 
@@ -373,8 +423,8 @@ function prefetch() {
       { sentence: "Hello" },
       {
         transport: myTransport,
-      },
-    ),
+      }
+    )
   );
 }
 ```

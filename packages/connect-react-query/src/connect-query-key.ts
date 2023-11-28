@@ -39,14 +39,6 @@ export type ConnectQueryKey<I extends Message<I>> = [
 ];
 
 /**
- * This type is useful in situations where you want to use partial matching for TanStack Query `queryKey`s
- */
-export type ConnectPartialQueryKey = [
-  serviceTypeName: string,
-  methodName: string,
-];
-
-/**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
  *
  * In Connect-React-Query, much of this is handled automatically by this function.

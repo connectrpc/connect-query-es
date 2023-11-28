@@ -18,7 +18,7 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { BigIntService } from "./gen/eliza_connect";
 import type { CountResponse } from "./gen/eliza_pb";
 import type { Equal, Expect } from "./jest/test-utils";
-import { assert, isAbortController, protobufSafeUpdater } from "./utils";
+import { assert, createProtobufSafeUpdater, isAbortController } from "./utils";
 
 describe("assert", () => {
   const message = "assertion message";
@@ -87,7 +87,7 @@ describe("protobufSafeUpdater", () => {
 
   it("handles a PartialMessage updater", () => {
     const updater = output;
-    const safeUpdater = protobufSafeUpdater(updater, methodInfo.O);
+    const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
     type ExpectType_Updater = Expect<
       Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>
@@ -108,7 +108,7 @@ describe("protobufSafeUpdater", () => {
 
   it("handles a function updater", () => {
     const updater = jest.fn(() => new methodInfo.O({ count: 2n }));
-    const safeUpdater = protobufSafeUpdater(updater, methodInfo.O);
+    const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
     type ExpectType_Updater = Expect<
       Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>

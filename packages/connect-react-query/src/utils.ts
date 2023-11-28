@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, MessageType, PartialMessage } from "@bufbuild/protobuf";
+import type { Message, PartialMessage } from "@bufbuild/protobuf";
+
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
  * Pass this value as an input to signal that you want to disable the query.
@@ -64,12 +66,15 @@ export type ConnectUpdater<O extends Message<O>> =
 /**
  * This helper makes sure that the Class for the original data is returned, even if what's provided is a partial message or a plain JavaScript object representing the underlying values.
  */
-export const protobufSafeUpdater =
-  <O extends Message<O>>(updater: ConnectUpdater<O>, Output: MessageType<O>) =>
+export const createProtobufSafeUpdater =
+  <I extends Message<I>, O extends Message<O>>(
+    methodSig: Pick<MethodUnaryDescriptor<I, O>, "O">,
+    updater: ConnectUpdater<O>,
+  ) =>
   (prev?: O): O => {
     if (typeof updater === "function") {
-      return new Output(updater(prev));
+      return new methodSig.O(updater(prev));
     }
 
-    return new Output(updater);
+    return new methodSig.O(updater);
   };
