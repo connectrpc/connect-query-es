@@ -41,3 +41,4 @@ export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";
 export { defaultOptions } from "./default-options.js";
 export { useSetQueryData } from "./use-set-query-data.js";
+export type { ConnectUpdater, DisableQuery } from "./utils.js";
