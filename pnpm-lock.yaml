@@ -90,8 +90,8 @@ importers:
         specifier: ^1.4.1
         version: 1.4.1
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.4.1
-        version: 1.4.1(@bufbuild/protobuf@1.4.1)
+        specifier: ^1.5.0
+        version: 1.5.0(@bufbuild/protobuf@1.4.1)
       '@connectrpc/connect':
         specifier: ^1.1.3
         version: 1.1.3(@bufbuild/protobuf@1.4.1)
@@ -103,7 +103,7 @@ importers:
         version: 1.1.3(@bufbuild/protobuf@1.4.1)(@connectrpc/connect@1.1.3)
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3)
+        version: 1.1.3(@bufbuild/protoc-gen-es@1.5.0)(@connectrpc/connect@1.1.3)
       '@connectrpc/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -160,8 +160,8 @@ importers:
         specifier: ^1.4.1
         version: 1.4.1
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.4.1
-        version: 1.4.1(@bufbuild/protobuf@1.4.1)
+        specifier: ^1.5.0
+        version: 1.5.0(@bufbuild/protobuf@1.4.1)
       '@connectrpc/connect':
         specifier: ^1.1.3
         version: 1.1.3(@bufbuild/protobuf@1.4.1)
@@ -170,7 +170,7 @@ importers:
         version: 1.1.3(@bufbuild/protobuf@1.4.1)(@connectrpc/connect@1.1.3)
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3)
+        version: 1.1.3(@bufbuild/protoc-gen-es@1.5.0)(@connectrpc/connect@1.1.3)
       '@tanstack/react-query':
         specifier: ^5.4.3
         version: 5.4.3(react-dom@18.2.0)(react@18.2.0)
@@ -206,8 +206,8 @@ importers:
         specifier: 1.27.2
         version: 1.27.2
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.4.1
-        version: 1.4.1(@bufbuild/protobuf@1.4.1)
+        specifier: ^1.5.0
+        version: 1.5.0(@bufbuild/protobuf@1.4.1)
       '@connectrpc/connect':
         specifier: ^1.1.3
         version: 1.1.3(@bufbuild/protobuf@1.4.1)
@@ -216,7 +216,7 @@ importers:
         version: link:../connect-query
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3)
+        version: 1.1.3(@bufbuild/protoc-gen-es@1.5.0)(@connectrpc/connect@1.1.3)
       '@tanstack/react-query':
         specifier: ^5.4.3
         version: 5.4.3(react-dom@18.2.0)(react@18.2.0)
@@ -668,18 +668,21 @@ packages:
   /@bufbuild/protobuf@1.4.1:
     resolution: {integrity: sha512-4dthhwBGD9nlpY35ic8dMQC5R0dsND2b2xyeVO3qf+hBk8m7Y9dUs+SmMh6rqO2pGLUTKHefGXLDW+z19hBPdQ==}
 
-  /@bufbuild/protoc-gen-es@1.4.1(@bufbuild/protobuf@1.4.1):
-    resolution: {integrity: sha512-YPEFzLl/RslDJXZoqI505YutOsYGIz1zGrYTltTrdgk0EZkDSAQfq6/Yu36mPkUSypHEaRSoDlrlcpthIwA19w==}
+  /@bufbuild/protobuf@1.5.0:
+    resolution: {integrity: sha512-0Jg+B7Vl8YGCi7c3iZ8/38iTbZrwdU7or6QZlsA9lhSrhumaXOTMsGO8gqwDuus/THEkTiY3Uxn+PEJwgsLt0w==}
+
+  /@bufbuild/protoc-gen-es@1.5.0(@bufbuild/protobuf@1.4.1):
+    resolution: {integrity: sha512-6dPFlw7jhKPNoJUb5+0MPDTMEEbym4AAQZP2sCo4/0J+T2SlAzq5kbuNx92x+SFkOI5V7/iNoPHrxr0TZZ9b2g==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
-      '@bufbuild/protobuf': 1.4.1
+      '@bufbuild/protobuf': 1.5.0
     peerDependenciesMeta:
       '@bufbuild/protobuf':
         optional: true
     dependencies:
       '@bufbuild/protobuf': 1.4.1
-      '@bufbuild/protoplugin': 1.4.1
+      '@bufbuild/protoplugin': 1.5.0
     transitivePeerDependencies:
       - supports-color
 
@@ -687,6 +690,15 @@ packages:
     resolution: {integrity: sha512-URC4/O5MsM94W7ed8NJMw1mUaFAKr5y0B67PMjhBdhVcDi6p8be76wz9+xW6/B6dMzlO+SpnicFYc9fEhLcQIw==}
     dependencies:
       '@bufbuild/protobuf': 1.4.1
+      '@typescript/vfs': 1.5.0
+      typescript: 4.5.2
+    transitivePeerDependencies:
+      - supports-color
+
+  /@bufbuild/protoplugin@1.5.0:
+    resolution: {integrity: sha512-b07uxUfWUHm91PrN7dMMSmO+2RH21kPo+EhczGDR3PDh2t80e4XCZhf3Z/6SM/+ajhVpbl/WNK+z645jsSnGPg==}
+    dependencies:
+      '@bufbuild/protobuf': 1.5.0
       '@typescript/vfs': 1.5.0
       typescript: 4.5.2
     transitivePeerDependencies:
@@ -715,7 +727,7 @@ packages:
     dependencies:
       '@bufbuild/protobuf': 1.4.1
 
-  /@connectrpc/protoc-gen-connect-es@1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3):
+  /@connectrpc/protoc-gen-connect-es@1.1.3(@bufbuild/protoc-gen-es@1.5.0)(@connectrpc/connect@1.1.3):
     resolution: {integrity: sha512-Irt1WM1o45KL0DNz8D8nraNfRrOyZfn7rzRsOyfrwbNzeVO1JV3rELFpARqGAvtVveYBoO9uwYtQ8TKLXsnrng==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -729,7 +741,7 @@ packages:
         optional: true
     dependencies:
       '@bufbuild/protobuf': 1.4.1
-      '@bufbuild/protoc-gen-es': 1.4.1(@bufbuild/protobuf@1.4.1)
+      '@bufbuild/protoc-gen-es': 1.5.0(@bufbuild/protobuf@1.4.1)
       '@bufbuild/protoplugin': 1.4.1
       '@connectrpc/connect': 1.1.3(@bufbuild/protobuf@1.4.1)
     transitivePeerDependencies:
@@ -2019,6 +2031,7 @@ packages:
 
   /abab@2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
+    deprecated: Use your platform's native atob() and btoa() methods instead
     dev: true
 
   /acorn-globals@7.0.1:
@@ -2832,6 +2845,7 @@ packages:
   /domexception@4.0.0:
     resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}
     engines: {node: '>=12'}
+    deprecated: Use your platform's native DOMException instead
     dependencies:
       webidl-conversions: 7.0.0
     dev: true
