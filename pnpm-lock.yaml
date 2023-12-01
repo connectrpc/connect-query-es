@@ -111,8 +111,8 @@ importers:
         specifier: ^5.4.3
         version: 5.4.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.4.3
-        version: 5.4.3(@tanstack/react-query@5.4.3)(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^5.10.0
+        version: 5.10.0(@tanstack/react-query@5.4.3)(react@18.2.0)
       '@testing-library/jest-dom':
         specifier: ^6.1.4
         version: 6.1.4(@jest/globals@29.7.0)(@types/jest@29.5.7)(jest@29.7.0)
@@ -1580,21 +1580,19 @@ packages:
   /@tanstack/query-core@5.4.3:
     resolution: {integrity: sha512-fnI9ORjcuLGm1sNrKatKIosRQUpuqcD4SV7RqRSVmj8JSicX2aoMyKryHEBpVQvf6N4PaBVgBxQomjsbsGPssQ==}
 
-  /@tanstack/query-devtools@5.4.2:
-    resolution: {integrity: sha512-EXdaMXi8CxZuMp97J5mq6wy1RduOfoWFv5vtA1U+hyqb8Wst6M8kkkjDSdFvGZIRpYY4K8mKLlEFHNUZDG5dtw==}
+  /@tanstack/query-devtools@5.10.0:
+    resolution: {integrity: sha512-ZN17ZHiPFc8B1AZplueTLI6qxqNPuelV/8Q6gx2coNac2++AD1gq8NvCQxfq9HoaqFJM8xqS3oPYxa3HZZTo8w==}
     dev: false
 
-  /@tanstack/react-query-devtools@5.4.3(@tanstack/react-query@5.4.3)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-J9EB50vpK5yvQ5W+AOp9jIQa+1mld+Wwc2GF3VLr2SEDhOyiTiHOjrFGKKL1Cal5Wg8UuS3vexf8trElrtg05A==}
+  /@tanstack/react-query-devtools@5.10.0(@tanstack/react-query@5.4.3)(react@18.2.0):
+    resolution: {integrity: sha512-amQN/6BdSMiYtILISk5j3IrZZiWz+HOHjJdcJNZHaTpzS7aIM1Z82bghCSoPdBtS7P1KbdoW35aD4glm9EkIuQ==}
     peerDependencies:
-      '@tanstack/react-query': ^5.4.3
+      '@tanstack/react-query': ^5.10.0
       react: ^18.0.0
-      react-dom: ^18.0.0
     dependencies:
-      '@tanstack/query-devtools': 5.4.2
+      '@tanstack/query-devtools': 5.10.0
       '@tanstack/react-query': 5.4.3(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@tanstack/react-query@5.4.3(react-dom@18.2.0)(react@18.2.0):
@@ -2019,6 +2017,7 @@ packages:
 
   /abab@2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
+    deprecated: Use your platform's native atob() and btoa() methods instead
     dev: true
 
   /acorn-globals@7.0.1:
@@ -2832,6 +2831,7 @@ packages:
   /domexception@4.0.0:
     resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}
     engines: {node: '>=12'}
+    deprecated: Use your platform's native DOMException instead
     dependencies:
       webidl-conversions: 7.0.0
     dev: true
