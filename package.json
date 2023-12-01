@@ -32,7 +32,7 @@
     "eslint-config-prettier": "9.0.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-eslint-comments": "3.2.0",
-    "eslint-plugin-jsdoc": "46.8.2",
+    "eslint-plugin-jsdoc": "46.9.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jest": "27.6.0",
     "eslint-plugin-react-hooks": "^4.6.0",
