@@ -84,59 +84,30 @@ function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
 /**
  * Creates all options required to make a query. Useful in combination with `useQueries` from tanstack/react-query.
  */
-export function createUseSuspenseQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
->(
-  methodSig: MethodUnaryDescriptor<I, O>,
-  input: PartialMessage<I> | undefined,
-  {
-    transport,
-    callOptions,
-    ...queryOptions
-  }: CreateSuspenseQueryOptions<I, O> & {
-    transport: Transport;
-  },
-  // Tried to return using UseSuspenseQueryOptions but it fails with some arcane
-  // TS error inside `useSuspenseQueries`.
-): Omit<CreateQueryOptions<I, O>, "callOptions" | "transport"> & {
-  queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<O, ConnectQueryKey<I>>;
-} {
-  const queryKey = createConnectQueryKey(methodSig, input);
-  return {
-    ...queryOptions,
-    queryKey,
-    queryFn: createUnaryQueryFn(methodSig, input, {
-      transport,
-      callOptions,
-    }),
-  };
-}
-
-/**
- * Creates all options required to make a query. Useful in combination with `useQueries` from tanstack/react-query.
- */
 export function createUseQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | PartialMessage<I> | undefined,
-  queryOptions: Omit<CreateQueryOptions<I, O>, "transport"> & {
+  {
+    transport,
+    callOptions,
+  }: ConnectQueryOptions & {
     transport: Transport;
   },
-): Omit<CreateQueryOptions<I, O>, "callOptions" | "transport"> & {
+): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>>;
   enabled: boolean;
 } {
+  const queryKey = createConnectQueryKey(methodSig, input);
   return {
-    ...createUseSuspenseQueryOptions(
-      methodSig,
-      input === disableQuery ? undefined : input,
-      queryOptions,
-    ),
-    enabled: input !== disableQuery && queryOptions.enabled !== false,
+    queryKey,
+    queryFn: createUnaryQueryFn(methodSig, input, {
+      transport,
+      callOptions,
+    }),
+    enabled: input !== disableQuery,
   };
 }

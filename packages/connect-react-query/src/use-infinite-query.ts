@@ -28,10 +28,7 @@ import type {
   CreateInfiniteQueryOptions,
   CreateSuspenseInfiniteQueryOptions,
 } from "./create-use-infinite-query-options";
-import {
-  createUseInfiniteQueryOptions,
-  createUseSuspenseInfiniteQueryOptions,
-} from "./create-use-infinite-query-options";
+import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
 import { useTransport } from "./use-transport";
 import type { DisableQuery } from "./utils";
@@ -52,18 +49,22 @@ export function useInfiniteQuery<
   input: DisableQuery | Input,
   {
     transport,
+    callOptions,
+    pageParamKey,
+    getNextPageParam,
     ...options
   }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
   const transportFromCtx = useTransport();
-  return tsUseInfiniteQuery(
-    createUseInfiniteQueryOptions(methodSig, input, {
-      ...options,
-      transport: transport ?? transportFromCtx,
-    }),
-  );
+  const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
+    transport: transport ?? transportFromCtx,
+    getNextPageParam,
+    pageParamKey,
+    callOptions,
+  });
+  return tsUseInfiniteQuery({ ...options, ...baseOptions });
 }
 
 /**
@@ -82,17 +83,21 @@ export function useSuspenseInfiniteQuery<
   input: Input,
   {
     transport,
+    callOptions,
+    pageParamKey,
+    getNextPageParam,
     ...options
   }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
 ): UseSuspenseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
   const transportFromCtx = useTransport();
+  const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
+    transport: transport ?? transportFromCtx,
+    getNextPageParam,
+    pageParamKey,
+    callOptions,
+  });
 
-  return tsUseSuspenseInfiniteQuery(
-    createUseSuspenseInfiniteQueryOptions(methodSig, input, {
-      ...options,
-      transport: transport ?? transportFromCtx,
-    }),
-  );
+  return tsUseSuspenseInfiniteQuery({ ...options, ...baseOptions });
 }

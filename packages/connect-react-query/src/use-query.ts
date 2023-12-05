@@ -27,10 +27,7 @@ import type {
   CreateQueryOptions,
   CreateSuspenseQueryOptions,
 } from "./create-use-query-options";
-import {
-  createUseQueryOptions,
-  createUseSuspenseQueryOptions,
-} from "./create-use-query-options";
+import { createUseQueryOptions } from "./create-use-query-options";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
 import { useTransport } from "./use-transport";
 import type { DisableQuery } from "./utils";
@@ -46,18 +43,21 @@ export function useQuery<I extends Message<I>, O extends Message<O>>(
   input?: DisableQuery | PartialMessage<I>,
   {
     transport,
+    callOptions,
     ...queryOptions
   }: Omit<CreateQueryOptions<I, O>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseQueryResult<O, ConnectError> {
   const transportFromCtx = useTransport();
-  return tsUseQuery(
-    createUseQueryOptions(methodSig, input, {
-      transport: transport ?? transportFromCtx,
-      ...queryOptions,
-    }),
-  );
+  const baseOptions = createUseQueryOptions(methodSig, input, {
+    transport: transport ?? transportFromCtx,
+    callOptions,
+  });
+  return tsUseQuery({
+    ...queryOptions,
+    ...baseOptions,
+  });
 }
 
 /**
@@ -71,16 +71,19 @@ export function useSuspenseQuery<I extends Message<I>, O extends Message<O>>(
   input?: PartialMessage<I>,
   {
     transport,
+    callOptions,
     ...queryOptions
   }: Omit<CreateSuspenseQueryOptions<I, O>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseSuspenseQueryResult<O, ConnectError> {
   const transportFromCtx = useTransport();
-  return tsUseSuspenseQuery(
-    createUseSuspenseQueryOptions(methodSig, input, {
-      transport: transport ?? transportFromCtx,
-      ...queryOptions,
-    }),
-  );
+  const baseOptions = createUseQueryOptions(methodSig, input, {
+    transport: transport ?? transportFromCtx,
+    callOptions,
+  });
+  return tsUseSuspenseQuery({
+    ...queryOptions,
+    ...baseOptions,
+  });
 }

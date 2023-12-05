@@ -254,19 +254,11 @@ This helper is useful to manually compute the [`queryKey`](https://tanstack.com/
 
 ### `createUseQueryOptions`
 
-A non-hook version of `useQuery`. This is useful for situations where you want to use `useQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useQuery`.
+A non-hook version of `useQuery`. This is useful for situations where you want to use `useQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useQuery`. Unlike the hook versions, this function returns ONLY the necessary options for `useQuery`. Any additional options required will need to be added manually.
 
 ### `createUseInfiniteQueryOptions`
 
-A non-hook version of `useInfiniteQuery`. This is useful for situations where you want to use `useInfiniteQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useInfiniteQuery`.
-
-### `createUseSuspenseQueryOptions`
-
-A non-hook version of `useSuspenseQuery`. This is useful for situations where you want to use `useSuspenseQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useSuspenseQuery`.
-
-### `createUseSuspenseInfiniteQueryOptions`
-
-A non-hook version of `useSuspenseInfiniteQuery`. This is useful for situations where you want to use `useSuspenseInfiniteQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useSuspenseInfiniteQuery`.
+A non-hook version of `useInfiniteQuery`. This is useful for situations where you want to use `useInfiniteQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useInfiniteQuery`. Unlike the hook versions, this function returns ONLY the necessary options for `useInfiniteQuery`. Any additional options required will need to be added manually.
 
 ### `createProtobufSafeUpdater`
 

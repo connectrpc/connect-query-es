@@ -13,13 +13,10 @@
 // limitations under the License.
 
 import { describe, expect, it } from "@jest/globals";
-import { useQueries, useSuspenseQueries } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import {
-  createUseQueryOptions,
-  createUseSuspenseQueryOptions,
-} from "./create-use-query-options";
+import { createUseQueryOptions } from "./create-use-query-options";
 import { defaultOptions } from "./default-options";
 import { ElizaService, PaginatedService } from "./gen/eliza_connect";
 import { mockEliza, mockPaginatedTransport, wrapper } from "./jest/test-utils";
@@ -83,51 +80,5 @@ describe("createUseQueryOptions", () => {
     });
     expect(result.current.query1.data?.sentence).toEqual("Response 1");
     expect(result.current.query2.data?.items).toEqual(["1 item"]);
-  });
-});
-
-describe("createUseSuspenseQueryOptions", () => {
-  it("can be used with useSuspenseQueries", async () => {
-    const { result } = renderHook(
-      () => {
-        const [query1, query2] = useSuspenseQueries({
-          queries: [
-            createUseSuspenseQueryOptions(
-              sayMethodDescriptor,
-              { sentence: "query 1" },
-              {
-                transport: mockEliza({
-                  sentence: "Response 1",
-                }),
-              },
-            ),
-            createUseSuspenseQueryOptions(
-              listMethodDescriptor,
-              { page: 0n },
-              {
-                transport: mockPaginatedTransport({
-                  page: 0n,
-                  items: ["1 item"],
-                }),
-              },
-            ),
-          ],
-        });
-        return {
-          query1,
-          query2,
-        };
-      },
-      wrapper({
-        defaultOptions,
-      }),
-    );
-
-    await waitFor(() => {
-      expect(result.current.query1.isSuccess).toBeTruthy();
-      expect(result.current.query2.isSuccess).toBeTruthy();
-    });
-    expect(result.current.query1.data.sentence).toEqual("Response 1");
-    expect(result.current.query2.data.items).toEqual(["1 item"]);
   });
 });

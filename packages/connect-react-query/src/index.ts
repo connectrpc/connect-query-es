@@ -17,22 +17,13 @@ export { createConnectQueryKey } from "./connect-query-key.js";
 export { disableQuery, createProtobufSafeUpdater } from "./utils.js";
 export { useTransport, TransportProvider } from "./use-transport.js";
 export type { CreateInfiniteQueryOptions as UseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
-export {
-  createUseInfiniteQueryOptions,
-  createUseSuspenseInfiniteQueryOptions,
-} from "./create-use-infinite-query-options.js";
+export { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
 export {
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from "./use-infinite-query.js";
-export type {
-  CreateQueryOptions as UseQueryOptions,
-  CreateSuspenseQueryOptions as UseSuspenseQueryOptions,
-} from "./create-use-query-options.js";
-export {
-  createUseQueryOptions,
-  createUseSuspenseQueryOptions,
-} from "./create-use-query-options.js";
+export type { CreateQueryOptions as UseQueryOptions } from "./create-use-query-options.js";
+export { createUseQueryOptions } from "./create-use-query-options.js";
 export { useQuery, useSuspenseQuery } from "./use-query.js";
 export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";

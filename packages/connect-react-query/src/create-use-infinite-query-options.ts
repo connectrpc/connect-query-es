@@ -130,52 +130,6 @@ function createUnaryInfiniteQueryFn<
  * @param methodSig
  * @returns
  */
-export function createUseSuspenseInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
-  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
->(
-  methodSig: MethodUnaryDescriptor<I, O>,
-  input: Input,
-  {
-    transport,
-    getNextPageParam,
-    pageParamKey,
-    callOptions,
-    ...queryOptions
-  }: CreateInfiniteQueryOptions<I, O, ParamKey>,
-): Omit<
-  CreateInfiniteQueryOptions<I, O, ParamKey>,
-  "callOptions" | "pageParamKey" | "transport"
-> & {
-  queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<O, ConnectQueryKey<I>, PartialMessage<I>[ParamKey]>;
-  initialPageParam: PartialMessage<I>[ParamKey];
-} {
-  const queryKey = createConnectQueryKey(methodSig, {
-    ...input,
-    [pageParamKey]: undefined,
-  });
-  return {
-    ...queryOptions,
-    getNextPageParam,
-    initialPageParam: input[pageParamKey] as PartialMessage<I>[ParamKey],
-    queryKey,
-    queryFn: createUnaryInfiniteQueryFn(methodSig, input, {
-      transport,
-      callOptions,
-      pageParamKey,
-    }),
-  };
-}
-
-/**
- * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
- *
- * @param methodSig
- * @returns
- */
 export function createUseInfiniteQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
@@ -184,27 +138,44 @@ export function createUseInfiniteQueryOptions<
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | Input,
-  { pageParamKey, ...queryOptions }: CreateInfiniteQueryOptions<I, O, ParamKey>,
-): Omit<
-  CreateInfiniteQueryOptions<I, O, ParamKey>,
-  "callOptions" | "pageParamKey" | "transport"
-> & {
+  {
+    transport,
+    getNextPageParam,
+    pageParamKey,
+    callOptions,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
+): {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>, PartialMessage<I>[ParamKey]>;
   initialPageParam: PartialMessage<I>[ParamKey];
   enabled: boolean;
 } {
-  const enabled = input !== disableQuery && queryOptions.enabled !== false;
-
+  const queryKey = createConnectQueryKey(
+    methodSig,
+    input === disableQuery
+      ? undefined
+      : {
+          ...input,
+          [pageParamKey]: undefined,
+        },
+  );
   return {
-    ...createUseSuspenseInfiniteQueryOptions<I, O, ParamKey, Input>(
-      methodSig,
-      input === disableQuery ? ({} as Input) : input,
-      {
-        pageParamKey,
-        ...queryOptions,
-      },
-    ),
-    enabled,
+    getNextPageParam,
+    initialPageParam:
+      input === disableQuery
+        ? undefined
+        : (input[pageParamKey] as PartialMessage<I>[ParamKey]),
+    queryKey,
+    queryFn: createUnaryInfiniteQueryFn(methodSig, input, {
+      transport,
+      callOptions,
+      pageParamKey,
+    }),
+    enabled: input !== disableQuery,
   };
 }
