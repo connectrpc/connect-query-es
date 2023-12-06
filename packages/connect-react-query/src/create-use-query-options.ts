@@ -20,6 +20,7 @@ import type {
   UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 
+import { callUnaryMethod } from "./call-unary-method";
 import type { ConnectQueryKey } from "./connect-query-key";
 import { createConnectQueryKey } from "./connect-query-key";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
@@ -69,15 +70,13 @@ function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
 ): QueryFunction<O, ConnectQueryKey<I>> {
   return async (context) => {
     assert(input !== disableQuery, "Disabled query cannot be fetched");
-    const result = await transport.unary(
-      { typeName: methodType.service.typeName, methods: {} },
-      methodType,
-      (callOptions ?? context).signal,
-      callOptions?.timeoutMs,
-      callOptions?.headers,
-      input ?? {},
-    );
-    return result.message;
+    return callUnaryMethod(methodType, input, {
+      callOptions: {
+        ...callOptions,
+        signal: callOptions?.signal ?? context.signal,
+      },
+      transport,
+    });
   };
 }
 

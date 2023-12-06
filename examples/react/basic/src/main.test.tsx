@@ -20,20 +20,12 @@ import { render, screen } from "@testing-library/react";
 import * as methods from "./gen/eliza-ElizaService_connectquery";
 import Main from "./main";
 
-// Temporary workaround until connect-es releases support for router.rpc(methodType, impl)
-const ElizaService = {
-  typeName: methods.say.service.typeName,
-  methods,
-};
-
 describe("Application", () => {
   it("should show success status and response data", async () => {
-    const transport = createRouterTransport(({ service }) => {
-      service(ElizaService, {
-        say: () => ({
-          sentence: "Hello, world!",
-        }),
-      });
+    const transport = createRouterTransport(({ rpc }) => {
+      rpc(methods.say, () => ({
+        sentence: "Hello, world!",
+      }));
     });
     render(<Main transport={transport} />);
     const text = await screen.findByText("Status: success");

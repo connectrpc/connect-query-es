@@ -252,13 +252,23 @@ function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
 
 This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query. This function has no side effects.
 
-### `createUseQueryOptions`
+### `callUnaryMethod`
 
-A non-hook version of `useQuery`. This is useful for situations where you want to use `useQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useQuery`. Unlike the hook versions, this function returns ONLY the necessary options for `useQuery`. Any additional options required will need to be added manually.
+```ts
+function callUnaryMethod<I extends Message<I>, O extends Message<O>>(
+  methodType: MethodUnaryDescriptor<I, O>,
+  input: PartialMessage<I> | undefined,
+  {
+    callOptions,
+    transport,
+  }: {
+    transport: Transport;
+    callOptions?: CallOptions | undefined;
+  }
+): Promise<O>;
+```
 
-### `createUseInfiniteQueryOptions`
-
-A non-hook version of `useInfiniteQuery`. This is useful for situations where you want to use `useInfiniteQuery` but you can't use a hook (for example, in a loop). This function instead just returns the options usually passed to `useInfiniteQuery`. Unlike the hook versions, this function returns ONLY the necessary options for `useInfiniteQuery`. Any additional options required will need to be added manually.
+This API allows you to directly call the method using the provided transport. Use this if you need to manually call a method outside of the context of a React component, or need to call it where you can't use hooks.
 
 ### `createProtobufSafeUpdater`
 
@@ -347,7 +357,7 @@ Buf has been using Connect-Query in production for some time. Also, there is 100
 
 ### Using BigInt with RPC inputs
 
-Since Connect-React-Query use the inputs as keys for the query, if you have a field with type `int64`, those fields will cause serialization problems. For this reason, Connect-React-Query ships with defaultOptions that can be passed to the QueryClient to make sure serializing BigInts is done properly:
+Since Connect-React-Query use the inputs as keys for the query, if you have a field with type `int64`, those fields will cause serialization problems. For this reason, Connect-React-Query ships with defaultOptions that can be passed to the QueryClient to make sure serializing BigInt fields is done properly:
 
 ```ts
 import { defaultOptions } from "@connectrpc/connect-react-query";

@@ -22,6 +22,7 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 
+import { callUnaryMethod } from "./call-unary-method";
 import {
   type ConnectQueryKey,
   createConnectQueryKey,
@@ -112,15 +113,13 @@ function createUnaryInfiniteQueryFn<
       ...input,
       [pageParamKey]: context.pageParam,
     };
-    const result = await transport.unary(
-      { typeName: methodType.service.typeName, methods: {} },
-      methodType,
-      (callOptions ?? context).signal,
-      callOptions?.timeoutMs,
-      callOptions?.headers,
-      inputCombinedWithPageParam,
-    );
-    return result.message;
+    return callUnaryMethod(methodType, inputCombinedWithPageParam, {
+      callOptions: {
+        ...callOptions,
+        signal: callOptions?.signal ?? context.signal,
+      },
+      transport,
+    });
   };
 }
 
