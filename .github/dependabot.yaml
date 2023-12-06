@@ -1,17 +1,46 @@
 version: 2
 updates:
-  - package-ecosystem: 'github-actions'
-    directory: '/'
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: 'monthly'
-      day: 'monday'
+      interval: "monthly"
+      day: "monday"
       timezone: UTC
-      time: '07:00'
-  - package-ecosystem: 'npm'
-    directory: '/'
+      time: "07:00"
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: 'monthly'
-      day: 'monday'
+      interval: "monthly"
+      day: "monday"
       timezone: UTC
-      time: '07:00'
+      time: "07:00"
     open-pull-requests-limit: 50
+    groups:
+      connectRelated:
+        patterns:
+          - "@connectrpc/*"
+          - "@bufbuild/*"
+      devDependencies:
+        patterns:
+          - "@arethetypeswrong/*"
+          - "@testing-library/*"
+          - "@types/*"
+          - "@typescript-eslint/*"
+          - "@vitejs/*"
+          - "cspell"
+          - "eslint*"
+          - "jest-mock"
+          - "jest"
+          - "prettier"
+          - "react-dom"
+          - "react"
+          - "ts-jest"
+          - "ts-node"
+          - "turbo"
+          - "typescript"
+          - "vite"
+          - "vitest"
+      reactQuery:
+        patterns:
+          - "@tanstack/react-query"
+          - "@tanstack/react-query-devtools"
