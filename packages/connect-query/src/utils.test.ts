@@ -12,51 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {
-  AnyMessage,
-  MethodInfoUnary,
-  PartialMessage,
-} from "@bufbuild/protobuf";
-import { MethodKind } from "@bufbuild/protobuf";
+import type { PartialMessage } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 
 import { BigIntService } from "./gen/eliza_connect";
 import type { CountResponse } from "./gen/eliza_pb";
 import type { Equal, Expect } from "./jest/test-utils";
-import {
-  assert,
-  isAbortController,
-  isUnaryMethod,
-  protobufSafeUpdater,
-} from "./utils";
-
-describe("isUnaryMethod", () => {
-  it("returns true for unary methods", () => {
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.BiDiStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeFalsy();
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.ClientStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeFalsy();
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.ServerStreaming,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeFalsy();
-  });
-
-  it("returns false for non-unary methods", () => {
-    expect(
-      isUnaryMethod({
-        kind: MethodKind.Unary,
-      } as unknown as MethodInfoUnary<AnyMessage, AnyMessage>),
-    ).toBeTruthy();
-  });
-});
+import { assert, createProtobufSafeUpdater, isAbortController } from "./utils";
 
 describe("assert", () => {
   const message = "assertion message";
@@ -125,7 +87,7 @@ describe("protobufSafeUpdater", () => {
 
   it("handles a PartialMessage updater", () => {
     const updater = output;
-    const safeUpdater = protobufSafeUpdater(updater, methodInfo.O);
+    const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
     type ExpectType_Updater = Expect<
       Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>
@@ -146,7 +108,7 @@ describe("protobufSafeUpdater", () => {
 
   it("handles a function updater", () => {
     const updater = jest.fn(() => new methodInfo.O({ count: 2n }));
-    const safeUpdater = protobufSafeUpdater(updater, methodInfo.O);
+    const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
     type ExpectType_Updater = Expect<
       Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>

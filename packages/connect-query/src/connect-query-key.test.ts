@@ -14,39 +14,37 @@
 
 import { describe, expect, it } from "@jest/globals";
 
-import { makeConnectQueryKeyGetter } from "./connect-query-key";
+import { createConnectQueryKey } from "./connect-query-key";
+import { SayRequest } from "./gen/eliza_pb";
 import { disableQuery } from "./utils";
 
 describe("makeQueryKey", () => {
-  const queryKey = makeConnectQueryKeyGetter(
-    "service.typeName",
-    "methodInfo.name",
-  );
+  const methodDescriptor = {
+    I: SayRequest,
+    name: "name",
+    service: {
+      typeName: "service.typeName",
+    },
+  };
 
   it("makes a query key with input", () => {
-    const key = queryKey({ value: "someValue" });
+    const key = createConnectQueryKey(methodDescriptor, {
+      sentence: "someValue",
+    });
     expect(key).toStrictEqual([
       "service.typeName",
-      "methodInfo.name",
-      { value: "someValue" },
+      "name",
+      { sentence: "someValue" },
     ]);
   });
 
   it("allows empty inputs", () => {
-    const key = queryKey();
-    expect(key).toStrictEqual([
-      "service.typeName",
-      "methodInfo.name",
-      {}, // TODO(paul) is it better to have an empty object or have nothing?  the original implementation had an empty object
-    ]);
+    const key = createConnectQueryKey(methodDescriptor);
+    expect(key).toStrictEqual(["service.typeName", "name", {}]);
   });
 
   it("makes a query key with a disabled input", () => {
-    const key = queryKey(disableQuery);
-    expect(key).toStrictEqual([
-      "service.typeName",
-      "methodInfo.name",
-      {}, // TODO(paul) is it better to have an empty object or have nothing?  the original implementation had an empty object
-    ]);
+    const key = createConnectQueryKey(methodDescriptor, disableQuery);
+    expect(key).toStrictEqual(["service.typeName", "name", {}]);
   });
 });

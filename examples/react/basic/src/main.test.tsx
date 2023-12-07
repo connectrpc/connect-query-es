@@ -17,17 +17,15 @@ import "@testing-library/jest-dom";
 import { createRouterTransport } from "@connectrpc/connect";
 import { render, screen } from "@testing-library/react";
 
-import { ElizaService } from "./gen/eliza-ElizaService_connectquery";
+import * as methods from "./gen/eliza-ElizaService_connectquery";
 import Main from "./main";
 
 describe("Application", () => {
   it("should show success status and response data", async () => {
-    const transport = createRouterTransport(({ service }) => {
-      service(ElizaService, {
-        say: () => ({
-          sentence: "Hello, world!",
-        }),
-      });
+    const transport = createRouterTransport(({ rpc }) => {
+      rpc(methods.say, () => ({
+        sentence: "Hello, world!",
+      }));
     });
     render(<Main transport={transport} />);
     const text = await screen.findByText("Status: success");

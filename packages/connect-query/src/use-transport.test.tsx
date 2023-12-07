@@ -14,17 +14,24 @@
 
 import { ConnectError } from "@connectrpc/connect";
 import { describe, expect, it } from "@jest/globals";
-import { useQuery } from "@tanstack/react-query";
 import { renderHook } from "@testing-library/react";
 
-import { createUnaryFunctions } from "./create-unary-functions";
 import { ElizaService } from "./gen/eliza_connect";
 import { mockBigInt, sleep, wrapper } from "./jest/test-utils";
+import { useQuery } from "./use-query";
 import {
   fallbackTransport,
   TransportProvider,
   useTransport,
 } from "./use-transport";
+
+const sayMethodDescriptor = {
+  ...ElizaService.methods.say,
+  localName: "Say",
+  service: {
+    typeName: ElizaService.typeName,
+  },
+};
 
 const error = new ConnectError(
   "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
@@ -42,21 +49,12 @@ describe("fallbackTransport", () => {
 });
 
 describe("useTransport", () => {
-  const say = createUnaryFunctions({
-    methodInfo: ElizaService.methods.say,
-    typeName: ElizaService.typeName,
-  });
-
   it("throws the fallback error", async () => {
     const { result, rerender } = renderHook(
-      () =>
-        useQuery({
-          ...say.createUseQueryOptions(undefined, {
-            transport: fallbackTransport,
-          }),
-          retry: false,
-        }),
-      wrapper(),
+      () => useQuery(sayMethodDescriptor, undefined, { retry: false }),
+      {
+        wrapper: wrapper().queryClientWrapper,
+      },
     );
     rerender();
 

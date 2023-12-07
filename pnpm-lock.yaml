@@ -16,7 +16,7 @@ importers:
         version: 29.7.0
       '@types/jest':
         specifier: ^29.5.6
-        version: 29.5.7
+        version: 29.5.6
       '@types/node':
         specifier: ^20.8.10
         version: 20.8.10
@@ -84,26 +84,26 @@ importers:
   examples/react/basic:
     dependencies:
       '@bufbuild/buf':
-        specifier: 1.27.2
-        version: 1.27.2
+        specifier: 1.28.1
+        version: 1.28.1
       '@bufbuild/protobuf':
-        specifier: ^1.4.1
-        version: 1.4.1
+        specifier: ^1.5.1
+        version: 1.5.1
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.4.1
-        version: 1.4.1(@bufbuild/protobuf@1.4.1)
+        specifier: ^1.5.1
+        version: 1.5.1(@bufbuild/protobuf@1.5.1)
       '@connectrpc/connect':
-        specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protobuf@1.4.1)
+        specifier: ^1.1.4
+        version: 1.1.4(@bufbuild/protobuf@1.5.1)
       '@connectrpc/connect-query':
         specifier: workspace:*
         version: link:../../../packages/connect-query
       '@connectrpc/connect-web':
-        specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protobuf@1.4.1)(@connectrpc/connect@1.1.3)
+        specifier: ^1.1.4
+        version: 1.1.4(@bufbuild/protobuf@1.5.1)(@connectrpc/connect@1.1.4)
       '@connectrpc/protoc-gen-connect-es':
-        specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3)
+        specifier: ^1.1.4
+        version: 1.1.4(@bufbuild/protoc-gen-es@1.5.1)(@connectrpc/connect@1.1.4)
       '@connectrpc/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -115,7 +115,7 @@ importers:
         version: 5.4.3(@tanstack/react-query@5.4.3)(react-dom@18.2.0)(react@18.2.0)
       '@testing-library/jest-dom':
         specifier: ^6.1.4
-        version: 6.1.4(@jest/globals@29.7.0)(@types/jest@29.5.7)(jest@29.7.0)
+        version: 6.1.4(@jest/globals@29.7.0)(@types/jest@29.5.6)(jest@29.7.0)
       '@testing-library/react':
         specifier: ^14.0.0
         version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -151,26 +151,26 @@ importers:
         specifier: ^0.13.0
         version: 0.13.0
       '@bufbuild/buf':
-        specifier: 1.27.2
-        version: 1.27.2
+        specifier: 1.28.1
+        version: 1.28.1
       '@bufbuild/jest-environment-jsdom':
         specifier: ^0.1.1
         version: 0.1.1(jest-environment-jsdom@29.7.0)
       '@bufbuild/protobuf':
-        specifier: ^1.4.1
-        version: 1.4.1
+        specifier: ^1.5.1
+        version: 1.5.1
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.4.1
-        version: 1.4.1(@bufbuild/protobuf@1.4.1)
+        specifier: ^1.5.1
+        version: 1.5.1(@bufbuild/protobuf@1.5.1)
       '@connectrpc/connect':
-        specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protobuf@1.4.1)
+        specifier: ^1.1.4
+        version: 1.1.4(@bufbuild/protobuf@1.5.1)
       '@connectrpc/connect-web':
-        specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protobuf@1.4.1)(@connectrpc/connect@1.1.3)
+        specifier: ^1.1.4
+        version: 1.1.4(@bufbuild/protobuf@1.5.1)(@connectrpc/connect@1.1.4)
       '@connectrpc/protoc-gen-connect-es':
-        specifier: ^1.1.3
-        version: 1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3)
+        specifier: ^1.1.4
+        version: 1.1.4(@bufbuild/protoc-gen-es@1.5.1)(@connectrpc/connect@1.1.4)
       '@tanstack/react-query':
         specifier: ^5.4.3
         version: 5.4.3(react-dom@18.2.0)(react@18.2.0)
@@ -255,8 +255,8 @@ packages:
       chalk: 4.1.2
       cli-table3: 0.6.3
       commander: 10.0.1
-      marked: 9.1.4
-      marked-terminal: 6.0.0(marked@9.1.4)
+      marked: 9.1.6
+      marked-terminal: 6.1.0(marked@9.1.6)
       semver: 7.5.4
     dev: true
 
@@ -595,10 +595,28 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
+    dev: true
+    optional: true
+
+  /@bufbuild/buf-darwin-arm64@1.28.1:
+    resolution: {integrity: sha512-nAyvwKkcd8qQTExCZo5MtSRhXLK7e3vzKFKHjXfkveRakSUST2HFlFZAHfErZimN4wBrPTN0V0hNRU8PPjkMpQ==}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
     optional: true
 
   /@bufbuild/buf-darwin-x64@1.27.2:
     resolution: {integrity: sha512-Kp0HBvLjeOxJtZ/j3vOulX6G3u5pa9vksVmJ5HGjhL0BZJwavh8Bd9YgrBDrTzKtTQMHxmhTSaNEgNUWkjecfw==}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@bufbuild/buf-darwin-x64@1.28.1:
+    resolution: {integrity: sha512-b0eT3xd3vX5a5lWAbo5h7FPuf9MsOJI4I39qs4TZnrlZ8BOuPfqzwzijiFf9UCwaX2vR1NQXexIoQ80Ci+fCHw==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [darwin]
@@ -611,10 +629,28 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
+    dev: true
+    optional: true
+
+  /@bufbuild/buf-linux-aarch64@1.28.1:
+    resolution: {integrity: sha512-p5h9bZCVLMh8No9/7k7ulXzsFx5P7Lu6DiUMjSJ6aBXPMYo6Xl7r/6L2cQkpsZ53HMtIxCgMYS9a7zoS4K8wIw==}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
     optional: true
 
   /@bufbuild/buf-linux-x64@1.27.2:
     resolution: {integrity: sha512-t/lcJ06gELy+4hVROuoeX8Y+oXq9NrPX+UgT5WujGo21oOb8UAQETZLRefj2U4IRqYqXhTKicfOI2y8xI7CSlQ==}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@bufbuild/buf-linux-x64@1.28.1:
+    resolution: {integrity: sha512-fVJ3DiRigIso06jgEl+JNp59Y5t2pxDHd10d3SA4r+14sXbZ2J7Gy/wBqVXPry4x/jW567KKlvmhg7M5ZBgCQQ==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [linux]
@@ -627,10 +663,28 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
+    dev: true
+    optional: true
+
+  /@bufbuild/buf-win32-arm64@1.28.1:
+    resolution: {integrity: sha512-KJiRJpugQRK/jXC46Xjlb68UydWhCZj2jHdWLIwNtgXd1WTJ3LngChZV7Y6pPK08pwBAVz0JYeVbD5IlTCD4TQ==}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
     optional: true
 
   /@bufbuild/buf-win32-x64@1.27.2:
     resolution: {integrity: sha512-x9IKCHgj6GmDGH2xlTo80l2feNU3hUeoEwLFLH4I5Qs2L1gfYIDMZGp+0Bhm5eK9CIWYtkJqeqGRIJkrJA6CfQ==}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@bufbuild/buf-win32-x64@1.28.1:
+    resolution: {integrity: sha512-vMnc+7OVCkmlRWQsgYHgUqiBPRIjD8XeoRyApJ07YZzGs7DkRH4LhvmacJbLd3wORylbn6gLz3pQa8J/M61mzg==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
@@ -649,6 +703,20 @@ packages:
       '@bufbuild/buf-linux-x64': 1.27.2
       '@bufbuild/buf-win32-arm64': 1.27.2
       '@bufbuild/buf-win32-x64': 1.27.2
+    dev: true
+
+  /@bufbuild/buf@1.28.1:
+    resolution: {integrity: sha512-WRDagrf0uBjfV9s5eyrSPJDcdI4A5Q7JMCA4aMrHRR8fo/TTjniDBjJprszhaguqsDkn/LS4QIu92HVFZCrl9A==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      '@bufbuild/buf-darwin-arm64': 1.28.1
+      '@bufbuild/buf-darwin-x64': 1.28.1
+      '@bufbuild/buf-linux-aarch64': 1.28.1
+      '@bufbuild/buf-linux-x64': 1.28.1
+      '@bufbuild/buf-win32-arm64': 1.28.1
+      '@bufbuild/buf-win32-x64': 1.28.1
 
   /@bufbuild/jest-environment-jsdom@0.1.1(jest-environment-jsdom@29.7.0):
     resolution: {integrity: sha512-lO4dke+l/LQAUT8CLmh0SKtY37gmax63eD7YSBQu48sqwAx4hgu1hRmoheRysaqR4bO6Vudhf6+nkBm0TbctvA==}
@@ -668,6 +736,13 @@ packages:
   /@bufbuild/protobuf@1.4.1:
     resolution: {integrity: sha512-4dthhwBGD9nlpY35ic8dMQC5R0dsND2b2xyeVO3qf+hBk8m7Y9dUs+SmMh6rqO2pGLUTKHefGXLDW+z19hBPdQ==}
 
+  /@bufbuild/protobuf@1.4.2:
+    resolution: {integrity: sha512-JyEH8Z+OD5Sc2opSg86qMHn1EM1Sa+zj/Tc0ovxdwk56ByVNONJSabuCUbLQp+eKN3rWNfrho0X+3SEqEPXIow==}
+    dev: true
+
+  /@bufbuild/protobuf@1.5.1:
+    resolution: {integrity: sha512-LX+MeB1AzlbqgJXkq83lilQpLGnPvsAMj7SH8KtJAmQfBc55ee78Stxuff/HMw0xLMYJN3P1FBh5TENgjJof1w==}
+
   /@bufbuild/protoc-gen-es@1.4.1(@bufbuild/protobuf@1.4.1):
     resolution: {integrity: sha512-YPEFzLl/RslDJXZoqI505YutOsYGIz1zGrYTltTrdgk0EZkDSAQfq6/Yu36mPkUSypHEaRSoDlrlcpthIwA19w==}
     engines: {node: '>=14'}
@@ -682,11 +757,46 @@ packages:
       '@bufbuild/protoplugin': 1.4.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@bufbuild/protoc-gen-es@1.5.1(@bufbuild/protobuf@1.5.1):
+    resolution: {integrity: sha512-o4NNOf49QEjowhpQxm3fq/yv+LstO9aMmNlEE3fz4WlD5fBE8OZ7q38O+WMUVoB4Y41joxk24v7IIm61trwRyg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    peerDependencies:
+      '@bufbuild/protobuf': 1.5.1
+    peerDependenciesMeta:
+      '@bufbuild/protobuf':
+        optional: true
+    dependencies:
+      '@bufbuild/protobuf': 1.5.1
+      '@bufbuild/protoplugin': 1.5.1
+    transitivePeerDependencies:
+      - supports-color
 
   /@bufbuild/protoplugin@1.4.1:
     resolution: {integrity: sha512-URC4/O5MsM94W7ed8NJMw1mUaFAKr5y0B67PMjhBdhVcDi6p8be76wz9+xW6/B6dMzlO+SpnicFYc9fEhLcQIw==}
     dependencies:
       '@bufbuild/protobuf': 1.4.1
+      '@typescript/vfs': 1.5.0
+      typescript: 4.5.2
+    transitivePeerDependencies:
+      - supports-color
+
+  /@bufbuild/protoplugin@1.4.2:
+    resolution: {integrity: sha512-5IwGC1ZRD2A+KydGXeaSOErwfILLqVtvMH/RkN+cOoHcQd4EYXFStcF7g7aR+yICRDEEjQVi5tQF/qPGBSr9vg==}
+    dependencies:
+      '@bufbuild/protobuf': 1.4.2
+      '@typescript/vfs': 1.5.0
+      typescript: 4.5.2
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@bufbuild/protoplugin@1.5.1:
+    resolution: {integrity: sha512-4qQD3UIEXflPYCEPZxyvi9yoQiX3ONWgLw24uLJrw9AnbY7Pw1xT5v8yIMXIVccBEZNSpvIF6qD/JXfIapjRtw==}
+    dependencies:
+      '@bufbuild/protobuf': 1.5.1
       '@typescript/vfs': 1.5.0
       typescript: 4.5.2
     transitivePeerDependencies:
@@ -699,14 +809,14 @@ packages:
     dev: true
     optional: true
 
-  /@connectrpc/connect-web@1.1.3(@bufbuild/protobuf@1.4.1)(@connectrpc/connect@1.1.3):
-    resolution: {integrity: sha512-WfShOZt91duJngqivYF4wJFRbeRa4bF/fPMfDVN0MAYSX3VuaTMn8o9qgKN7tsg2H2ZClyOVQwMkZx6IdcP7Zw==}
+  /@connectrpc/connect-web@1.1.4(@bufbuild/protobuf@1.5.1)(@connectrpc/connect@1.1.4):
+    resolution: {integrity: sha512-y/CHMipRSpIIR1PCax536PquyuZ03soGTgO1gqQM4pv8lCCgAKE1S+OrirIbpyohJiUszxaRH69PoB8uACiOZA==}
     peerDependencies:
-      '@bufbuild/protobuf': ^1.3.3
-      '@connectrpc/connect': 1.1.3
+      '@bufbuild/protobuf': ^1.4.2
+      '@connectrpc/connect': 1.1.4
     dependencies:
-      '@bufbuild/protobuf': 1.4.1
-      '@connectrpc/connect': 1.1.3(@bufbuild/protobuf@1.4.1)
+      '@bufbuild/protobuf': 1.5.1
+      '@connectrpc/connect': 1.1.4(@bufbuild/protobuf@1.5.1)
 
   /@connectrpc/connect@1.1.3(@bufbuild/protobuf@1.4.1):
     resolution: {integrity: sha512-AXkbsLQe2Nm7VuoN5nqp05GEb9mPa/f5oFzDqTbHME4i8TghTrlY03uefbhuAq4wjsnfDnmuxHZvn6ndlgXmbg==}
@@ -714,6 +824,14 @@ packages:
       '@bufbuild/protobuf': ^1.3.3
     dependencies:
       '@bufbuild/protobuf': 1.4.1
+    dev: true
+
+  /@connectrpc/connect@1.1.4(@bufbuild/protobuf@1.5.1):
+    resolution: {integrity: sha512-kFiOi3jsEyOuL4gGW55LgNCqQBNA0Z/GLXrfeJO4r6pI/f8L9rqnjrFZTCeyrvzu1TuqEtL51cR+c46KMCposw==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.4.2
+    dependencies:
+      '@bufbuild/protobuf': 1.5.1
 
   /@connectrpc/protoc-gen-connect-es@1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3):
     resolution: {integrity: sha512-Irt1WM1o45KL0DNz8D8nraNfRrOyZfn7rzRsOyfrwbNzeVO1JV3rELFpARqGAvtVveYBoO9uwYtQ8TKLXsnrng==}
@@ -728,10 +846,31 @@ packages:
       '@connectrpc/connect':
         optional: true
     dependencies:
-      '@bufbuild/protobuf': 1.4.1
+      '@bufbuild/protobuf': 1.5.1
       '@bufbuild/protoc-gen-es': 1.4.1(@bufbuild/protobuf@1.4.1)
-      '@bufbuild/protoplugin': 1.4.1
+      '@bufbuild/protoplugin': 1.4.2
       '@connectrpc/connect': 1.1.3(@bufbuild/protobuf@1.4.1)
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@connectrpc/protoc-gen-connect-es@1.1.4(@bufbuild/protoc-gen-es@1.5.1)(@connectrpc/connect@1.1.4):
+    resolution: {integrity: sha512-q+leRn9Bd1FzEbthN1qWHwYaGYGc84rLXy/hEkDlMCiWrqz2zxb4Ijy37gOMlE8eRfwYRwn08XcEhV+Y/1jlyA==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@bufbuild/protoc-gen-es': ^1.3.3
+      '@connectrpc/connect': 1.1.4
+    peerDependenciesMeta:
+      '@bufbuild/protoc-gen-es':
+        optional: true
+      '@connectrpc/connect':
+        optional: true
+    dependencies:
+      '@bufbuild/protobuf': 1.5.1
+      '@bufbuild/protoc-gen-es': 1.5.1(@bufbuild/protobuf@1.5.1)
+      '@bufbuild/protoplugin': 1.5.1
+      '@connectrpc/connect': 1.1.4(@bufbuild/protobuf@1.5.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -743,7 +882,7 @@ packages:
       '@cspell/dict-aws': 4.0.0
       '@cspell/dict-bash': 4.1.2
       '@cspell/dict-companies': 3.0.26
-      '@cspell/dict-cpp': 5.0.9
+      '@cspell/dict-cpp': 5.0.10
       '@cspell/dict-cryptocurrencies': 4.0.0
       '@cspell/dict-csharp': 4.0.2
       '@cspell/dict-css': 4.0.12
@@ -754,7 +893,7 @@ packages:
       '@cspell/dict-elixir': 4.0.3
       '@cspell/dict-en-common-misspellings': 1.0.2
       '@cspell/dict-en-gb': 1.1.33
-      '@cspell/dict-en_us': 4.3.11
+      '@cspell/dict-en_us': 4.3.12
       '@cspell/dict-filetypes': 3.0.1
       '@cspell/dict-fonts': 4.0.0
       '@cspell/dict-fsharp': 1.0.0
@@ -780,7 +919,7 @@ packages:
       '@cspell/dict-ruby': 5.0.1
       '@cspell/dict-rust': 4.0.1
       '@cspell/dict-scala': 5.0.0
-      '@cspell/dict-software-terms': 3.3.9
+      '@cspell/dict-software-terms': 3.3.11
       '@cspell/dict-sql': 2.1.2
       '@cspell/dict-svelte': 1.0.2
       '@cspell/dict-swift': 2.0.1
@@ -833,8 +972,8 @@ packages:
     resolution: {integrity: sha512-BGRZ/Uykx+IgQoTGqvRqbBMQy7QSuY0pbTHgtmKtc1scgzZMJQKMDwyuE6LJzlhdlrV7TsVY0lyXREybnDpQPQ==}
     dev: true
 
-  /@cspell/dict-cpp@5.0.9:
-    resolution: {integrity: sha512-ql9WPNp8c+fhdpVpjpZEUWmxBHJXs9CJuiVVfW/iwv5AX7VuMHyEwid+9/6nA8qnCxkUQ5pW83Ums1lLjn8ScA==}
+  /@cspell/dict-cpp@5.0.10:
+    resolution: {integrity: sha512-WCRuDrkFdpmeIR6uXQYKU9loMQKNFS4bUhtHdv5fu4qVyJSh3k/kgmtTm1h1BDTj8EwPRc/RGxS+9Z3b2mnabA==}
     dev: true
 
   /@cspell/dict-cryptocurrencies@4.0.0:
@@ -881,8 +1020,8 @@ packages:
     resolution: {integrity: sha512-tKSSUf9BJEV+GJQAYGw5e+ouhEe2ZXE620S7BLKe3ZmpnjlNG9JqlnaBhkIMxKnNFkLY2BP/EARzw31AZnOv4g==}
     dev: true
 
-  /@cspell/dict-en_us@4.3.11:
-    resolution: {integrity: sha512-GhdavZFlS2YbUNcRtPbgJ9j6aUyq116LmDQ2/Q5SpQxJ5/6vVs8Yj5WxV1JD+Zh/Zim1NJDcneTOuLsUGi+Czw==}
+  /@cspell/dict-en_us@4.3.12:
+    resolution: {integrity: sha512-1bsUxFjgxF30FTzcU5uvmCvH3lyqVKR9dbwsJhomBlUM97f0edrd6590SiYBXDm7ruE68m3lJd4vs0Ev2D6FtQ==}
     dev: true
 
   /@cspell/dict-filetypes@3.0.1:
@@ -987,8 +1126,8 @@ packages:
     resolution: {integrity: sha512-ph0twaRoV+ylui022clEO1dZ35QbeEQaKTaV2sPOsdwIokABPIiK09oWwGK9qg7jRGQwVaRPEq0Vp+IG1GpqSQ==}
     dev: true
 
-  /@cspell/dict-software-terms@3.3.9:
-    resolution: {integrity: sha512-/O3EWe0SIznx18S7J3GAXPDe7sexn3uTsf4IlnGYK9WY6ZRuEywkXCB+5/USLTGf4+QC05pkHofphdvVSifDyA==}
+  /@cspell/dict-software-terms@3.3.11:
+    resolution: {integrity: sha512-a2Zml4G47dbQ6GDdN7+YlIWs3nFnIcJkZOLT88m/LzxjApiF7AOZLqQiKwow03hyvGSuZy8itgQZmQHoPlw2vQ==}
     dev: true
 
   /@cspell/dict-sql@2.1.2:
@@ -1562,8 +1701,8 @@ packages:
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  /@sindresorhus/is@3.1.2:
-    resolution: {integrity: sha512-JiX9vxoKMmu8Y3Zr2RVathBL1Cdu4Nt4MuNWemt1Nc06A0RAin9c5FArkhGsyMBWfCu4zj+9b+GxtjAnE4qqLQ==}
+  /@sindresorhus/is@4.6.0:
+    resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
     engines: {node: '>=10'}
     dev: true
 
@@ -1626,7 +1765,7 @@ packages:
       lz-string: 1.5.0
       pretty-format: 27.5.1
 
-  /@testing-library/jest-dom@6.1.4(@jest/globals@29.7.0)(@types/jest@29.5.7)(jest@29.7.0):
+  /@testing-library/jest-dom@6.1.4(@jest/globals@29.7.0)(@types/jest@29.5.6)(jest@29.7.0):
     resolution: {integrity: sha512-wpoYrCYwSZ5/AxcrjLxJmCU6I5QAJXslEeSiMQqaWmP2Kzpd1LvF/qxmAIW2qposULGWq2gw30GgVNFLSc2Jnw==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
     peerDependencies:
@@ -1647,7 +1786,7 @@ packages:
       '@adobe/css-tools': 4.3.1
       '@babel/runtime': 7.23.1
       '@jest/globals': 29.7.0
-      '@types/jest': 29.5.7
+      '@types/jest': 29.5.6
       aria-query: 5.3.0
       chalk: 3.0.0
       css.escape: 1.5.1
@@ -1733,8 +1872,8 @@ packages:
     dependencies:
       '@types/istanbul-lib-report': 3.0.1
 
-  /@types/jest@29.5.7:
-    resolution: {integrity: sha512-HLyetab6KVPSiF+7pFcUyMeLsx25LDNDemw9mGsJBkai/oouwrjTycocSDYopMEwFhN2Y4s9oPyOCZNofgSt2g==}
+  /@types/jest@29.5.6:
+    resolution: {integrity: sha512-/t9NnzkOpXb4Nfvg17ieHE6EeSjDS2SGSpNYfoLbUAeL/EOueU/RSdOWFpfQTXBEM7BguYW1XQ0EbM+6RlIh6w==}
     dependencies:
       expect: 29.7.0
       pretty-format: 29.7.0
@@ -1742,7 +1881,7 @@ packages:
   /@types/jsdom@20.0.1:
     resolution: {integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==}
     dependencies:
-      '@types/node': 20.8.10
+      '@types/node': 20.10.0
       '@types/tough-cookie': 4.0.3
       parse5: 7.1.2
     dev: true
@@ -1753,6 +1892,12 @@ packages:
 
   /@types/json5@0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+    dev: true
+
+  /@types/node@20.10.0:
+    resolution: {integrity: sha512-D0WfRmU9TQ8I9PFx9Yc+EBHw+vSpIub4IDvQivcp26PtPrdMGAq5SDcpXEo/epqa/DXotVpekHiLNTg3iaKXBQ==}
+    dependencies:
+      undici-types: 5.26.5
     dev: true
 
   /@types/node@20.8.10:
@@ -2019,6 +2164,7 @@ packages:
 
   /abab@2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
+    deprecated: Use your platform's native atob() and btoa() methods instead
     dev: true
 
   /acorn-globals@7.0.1:
@@ -2663,7 +2809,7 @@ packages:
       cspell-lib: 7.3.8
       fast-glob: 3.3.1
       fast-json-stable-stringify: 2.1.0
-      file-entry-cache: 7.0.1
+      file-entry-cache: 7.0.2
       get-stdin: 9.0.0
       semver: 7.5.4
       strip-ansi: 7.1.0
@@ -2832,6 +2978,7 @@ packages:
   /domexception@4.0.0:
     resolution: {integrity: sha512-A2is4PLG+eeSfoTMA95/s4pvAoSo2mKtiM5jlHkAVewmiO8ISFTFKZjH7UAM1Atli/OT/7JHOrJRJiMKUZKYBw==}
     engines: {node: '>=12'}
+    deprecated: Use your platform's native DOMException instead
     dependencies:
       webidl-conversions: 7.0.0
     dev: true
@@ -3382,14 +3529,14 @@ packages:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
     dependencies:
-      flat-cache: 3.1.1
+      flat-cache: 3.1.0
     dev: true
 
-  /file-entry-cache@7.0.1:
-    resolution: {integrity: sha512-uLfFktPmRetVCbHe5UPuekWrQ6hENufnA46qEGbfACkK5drjTTdQYUragRgMjHldcbYG+nslUerqMPjbBSHXjQ==}
+  /file-entry-cache@7.0.2:
+    resolution: {integrity: sha512-TfW7/1iI4Cy7Y8L6iqNdZQVvdXn0f8B4QcIXmkIbtTIe/Okm/nSlHb4IwGzRVOd3WfSieCgvf5cMzEfySAIl0g==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      flat-cache: 3.1.1
+      flat-cache: 3.2.0
     dev: true
 
   /fill-range@7.0.1:
@@ -3421,9 +3568,18 @@ packages:
       path-exists: 5.0.0
     dev: true
 
-  /flat-cache@3.1.1:
-    resolution: {integrity: sha512-/qM2b3LUIaIgviBQovTLvijfyOQXPtSRnRK26ksj2J7rzPIecePUIpJsZ4T02Qg+xiAEKIs5K8dsHEd+VaKa/Q==}
+  /flat-cache@3.1.0:
+    resolution: {integrity: sha512-OHx4Qwrrt0E4jEIcI5/Xb+f+QmJYNj2rrK8wiIdQOIrB9WrrJL8cjZvXdXuBTkkEwEqLycb5BeZDV1o2i9bTew==}
     engines: {node: '>=12.0.0'}
+    dependencies:
+      flatted: 3.2.9
+      keyv: 4.5.3
+      rimraf: 3.0.2
+    dev: true
+
+  /flat-cache@3.2.0:
+    resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
+    engines: {node: ^10.12.0 || >=12.0.0}
     dependencies:
       flatted: 3.2.9
       keyv: 4.5.3
@@ -4108,7 +4264,7 @@ packages:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
       '@types/jsdom': 20.0.1
-      '@types/node': 20.8.10
+      '@types/node': 20.10.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
       jsdom: 20.0.3
@@ -4562,23 +4718,23 @@ packages:
     dependencies:
       tmpl: 1.0.5
 
-  /marked-terminal@6.0.0(marked@9.1.4):
-    resolution: {integrity: sha512-6rruICvqRfA4N+Mvdc0UyDbLA0A0nI5omtARIlin3P2F+aNc3EbW91Rd9HTuD0v9qWyHmNIu8Bt40gAnPfldsg==}
+  /marked-terminal@6.1.0(marked@9.1.6):
+    resolution: {integrity: sha512-QaCSF6NV82oo6K0szEnmc65ooDeW0T/Adcyf0fcW+Hto2GT1VADFg8dn1zaeHqzj65fqDH1hMNChGNRaC/lbkA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      marked: '>=1 <10'
+      marked: '>=1 <11'
     dependencies:
       ansi-escapes: 6.2.0
       cardinal: 2.1.1
       chalk: 5.3.0
       cli-table3: 0.6.3
-      marked: 9.1.4
-      node-emoji: 2.1.0
+      marked: 9.1.6
+      node-emoji: 2.1.3
       supports-hyperlinks: 3.0.0
     dev: true
 
-  /marked@9.1.4:
-    resolution: {integrity: sha512-Mq83CCaClhXqhf8sLQ57c1unNelHEuFadK36ga+GeXR4FeT/5ssaC5PaCRVqMA74VYorzYRqdAaxxteIanh3Kw==}
+  /marked@9.1.6:
+    resolution: {integrity: sha512-jcByLnIFkd5gSXZmjNvS1TlmRhCXZjIzHYlaGkPlLIekG55JDR2Z4va9tZwCiP+/RDERiNhMOFu01xd6O5ct1Q==}
     engines: {node: '>= 16'}
     hasBin: true
     dev: true
@@ -4644,10 +4800,11 @@ packages:
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  /node-emoji@2.1.0:
-    resolution: {integrity: sha512-tcsBm9C6FmPN5Wo7OjFi9lgMyJjvkAeirmjR/ax8Ttfqy4N8PoFic26uqFTIgayHPNI5FH4ltUvfh9kHzwcK9A==}
+  /node-emoji@2.1.3:
+    resolution: {integrity: sha512-E2WEOVsgs7O16zsURJ/eH8BqhF029wGpEOnv7Urwdo2wmQanOACwJQh0devF9D9RhoZru0+9JXIS0dBXIAz+lA==}
+    engines: {node: '>=18'}
     dependencies:
-      '@sindresorhus/is': 3.1.2
+      '@sindresorhus/is': 4.6.0
       char-regex: 1.0.2
       emojilib: 2.4.0
       skin-tone: 2.0.0

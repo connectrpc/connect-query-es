@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@connectrpc/connect-query";
 import type { FC } from "react";
 
 import { Data, Datum } from "./datum";
@@ -21,12 +21,10 @@ import { Indicator, Indicators } from "./indicator";
 import { Page } from "./page";
 
 /**
- * This example demonstrates a basic usage of Connect-Query with `useQuery`
+ * This example demonstrates a basic usage of Connect-React-Query with `useQuery`
  */
 export const Example: FC = () => {
-  const { status, fetchStatus, error, data } = useQuery({
-    ...say.useQuery({}),
-  });
+  const { status, fetchStatus, error, data } = useQuery(say);
 
   return (
     <Page>
