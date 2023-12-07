@@ -148,8 +148,8 @@ importers:
         version: 0.0.3
     devDependencies:
       '@arethetypeswrong/cli':
-        specifier: ^0.13.0
-        version: 0.13.0
+        specifier: ^0.13.3
+        version: 0.13.3
       '@bufbuild/buf':
         specifier: 1.28.1
         version: 1.28.1
@@ -246,12 +246,12 @@ packages:
     resolution: {integrity: sha512-Jh15/qVmrLGhkKJBdXlK1+9tY4lZruYjsgkDFj08ZmDiWVBLJcqkok7Z0/R0In+i1rScBpJlSvrTS2Lm41Pbnw==}
     dev: true
 
-  /@arethetypeswrong/cli@0.13.0:
-    resolution: {integrity: sha512-e//5sfUssKZLep6GoFqhgeoW9kndXGAREAY7yZxKBm6kLlAa/4gpvWoqKubnUCEFNbekNKEpWnR2zn3Bc5r6aA==}
+  /@arethetypeswrong/cli@0.13.3:
+    resolution: {integrity: sha512-lA29j9fkRGq+hNE3zQGxD/d8WmjhimSaPU2887CBe0Yv3C1UbIWvy51mYerp3/NoevjBLKSWhHmP5oY/eavtjQ==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      '@arethetypeswrong/core': 0.13.0
+      '@arethetypeswrong/core': 0.13.3
       chalk: 4.1.2
       cli-table3: 0.6.3
       commander: 10.0.1
@@ -260,14 +260,14 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /@arethetypeswrong/core@0.13.0:
-    resolution: {integrity: sha512-dEDo+Vq/Kt12ZZJANuUDKWZzogswcmndcY293LVgswKv69YXq9jMR8HjVTDGhwnlGJ8fAiJC+XYhg/wfTwAFCA==}
+  /@arethetypeswrong/core@0.13.3:
+    resolution: {integrity: sha512-oxa26D3z5DEv9LGzfJWV/6PhQd170dFfDOXl9J3cGRNLo2B68zj6/YOD1RJaYF/kmxechdXT1XyGUPOtkXv8Lg==}
     engines: {node: '>=18'}
     dependencies:
       '@andrewbranch/untar.js': 1.0.3
       fflate: 0.7.4
       semver: 7.5.4
-      typescript: 5.2.2
+      typescript: 5.3.2
       validate-npm-package-name: 5.0.0
     dev: true
 
@@ -5750,6 +5750,12 @@ packages:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  /typescript@5.3.2:
+    resolution: {integrity: sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
