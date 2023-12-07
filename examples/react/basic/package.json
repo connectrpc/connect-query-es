@@ -22,7 +22,7 @@
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@tanstack/react-query": "^5.4.3",
     "@tanstack/react-query-devtools": "^5.4.3",
-    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
