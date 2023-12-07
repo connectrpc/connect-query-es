@@ -1,5 +1,5 @@
 {
-  "name": "@connectrpc/connect-react-query-example-basic",
+  "name": "@connectrpc/connect-query-example-basic",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     "@bufbuild/protobuf": "^1.5.1",
     "@bufbuild/protoc-gen-es": "^1.5.1",
     "@connectrpc/connect": "^1.1.4",
-    "@connectrpc/connect-react-query": "workspace:*",
+    "@connectrpc/connect-query": "workspace:*",
     "@connectrpc/connect-web": "^1.1.4",
     "@connectrpc/protoc-gen-connect-es": "^1.1.4",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",

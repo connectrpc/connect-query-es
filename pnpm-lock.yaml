@@ -95,9 +95,9 @@ importers:
       '@connectrpc/connect':
         specifier: ^1.1.4
         version: 1.1.4(@bufbuild/protobuf@1.5.1)
-      '@connectrpc/connect-react-query':
+      '@connectrpc/connect-query':
         specifier: workspace:*
-        version: link:../../../packages/connect-react-query
+        version: link:../../../packages/connect-query
       '@connectrpc/connect-web':
         specifier: ^1.1.4
         version: 1.1.4(@bufbuild/protobuf@1.5.1)(@connectrpc/connect@1.1.4)
@@ -141,7 +141,7 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0(@types/node@20.8.10)
 
-  packages/connect-react-query:
+  packages/connect-query:
     dependencies:
       stable-hash:
         specifier: ^0.0.3
@@ -211,9 +211,9 @@ importers:
       '@connectrpc/connect':
         specifier: ^1.1.3
         version: 1.1.3(@bufbuild/protobuf@1.4.1)
-      '@connectrpc/connect-react-query':
+      '@connectrpc/connect-query':
         specifier: workspace:*
-        version: link:../connect-react-query
+        version: link:../connect-query
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.1.3
         version: 1.1.3(@bufbuild/protoc-gen-es@1.4.1)(@connectrpc/connect@1.1.3)

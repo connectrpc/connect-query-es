@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { useQuery } from "@connectrpc/connect-react-query";
+import { useQuery } from "@connectrpc/connect-query";
 import type { FC } from "react";
 
 import { Data, Datum } from "./datum";
