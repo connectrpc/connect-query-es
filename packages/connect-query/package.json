@@ -41,7 +41,7 @@
     "@connectrpc/connect": "^1.1.4",
     "@connectrpc/connect-web": "^1.1.4",
     "@connectrpc/protoc-gen-connect-es": "^1.1.4",
-    "@tanstack/react-query": "^5.4.3",
+    "@tanstack/react-query": "^5.12.2",
     "@testing-library/react": "^14.0.0",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
@@ -52,7 +52,7 @@
   "peerDependencies": {
     "@bufbuild/protobuf": "^1.3.3",
     "@connectrpc/connect": "^1.1.2",
-    "@tanstack/react-query": "^5.4.3",
+    "@tanstack/react-query": "^5.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
