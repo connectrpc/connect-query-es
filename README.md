@@ -350,7 +350,7 @@ export const Example: FC = () => {
 
 ### Is this ready for production?
 
-Buf has been using Connect-Query in production for some time. Also, there is 100% mandatory test coverage in this project which covers quite a lot of edge cases. That said, this package is given a `v0.x` semver to designate that it's a new project, and we want to make sure the API is exactly what our users want before we call it "production ready". That also means that some parts of the API may change before `v1.0` is reached.
+Buf has been using Connect-Query in production for some time. Also, there is 100% mandatory test coverage in this project which covers quite a lot of edge cases.
 
 ### Using BigInt with RPC inputs
 
@@ -439,12 +439,6 @@ To get started, we invite you to open a pull request with an example project in 
 If you're not yet at the point of creating an example project, feel free to open an issue in the repository and describe your use case. We'll follow up with questions to better understand your needs.
 
 Your input and ideas are crucial in shaping the future development of Connect-Query. We appreciate your input and look forward to hearing from you.
-
-## Status
-
-This project is a beta: we rely on it in production, but we may make a few
-changes as we gather feedback from early adopters. Join us on [Slack](https://buf.build/links/slack)
-to stay updated on future releases.
 
 ## Legal
 
