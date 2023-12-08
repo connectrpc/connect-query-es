@@ -39,9 +39,10 @@ export interface ConnectQueryOptions {
 export type CreateQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
+  SelectData = 0,
 > = ConnectQueryOptions &
   Omit<
-    UseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
+    UseQueryOptions<O, ConnectError, SelectData, ConnectQueryKey<I>>,
     "queryFn" | "queryKey"
   >;
 
@@ -51,9 +52,10 @@ export type CreateQueryOptions<
 export type CreateSuspenseQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
+  SelectData = 0,
 > = ConnectQueryOptions &
   Omit<
-    UseSuspenseQueryOptions<O, ConnectError, O, ConnectQueryKey<I>>,
+    UseSuspenseQueryOptions<O, ConnectError, SelectData, ConnectQueryKey<I>>,
     "queryFn" | "queryKey"
   >;
 
