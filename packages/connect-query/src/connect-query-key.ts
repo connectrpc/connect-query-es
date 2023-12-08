@@ -21,7 +21,7 @@ import { disableQuery } from "./utils.js";
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
  *
- * `QueryKey`s in TanStack Query are usually arbitrary, but Connect-React-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
+ * `QueryKey`s in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
  *
  * For example, for a query key might look like this:
  *
@@ -41,16 +41,16 @@ export type ConnectQueryKey<I extends Message<I>> = [
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
  *
- * In Connect-React-Query, much of this is handled automatically by this function.
+ * In Connect-Query, much of this is handled automatically by this function.
  *
- * @see ConnectQueryKey for information on the components of Connect-React-Query's keys.
+ * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */
 export function createConnectQueryKey<
   I extends Message<I>,
   O extends Message<O>,
 >(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined,
+  input?: DisableQuery | PartialMessage<I> | undefined
 ): ConnectQueryKey<I> {
   return [
     methodDescriptor.service.typeName,

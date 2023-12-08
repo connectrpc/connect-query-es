@@ -30,13 +30,13 @@ import { CountResponse, SayResponse } from "../gen/eliza_pb";
 import { TransportProvider } from "../use-transport";
 
 /**
- * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-React-Query's `TransportProvider`.
+ * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-Query's `TransportProvider`.
  */
 export const wrapper = (
   config?: QueryClientConfig,
   transport = createConnectTransport({
     baseUrl: "https://demo.connectrpc.com",
-  }),
+  })
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;
   queryClient: QueryClient;
@@ -116,7 +116,7 @@ export const sleep = async (timeout: number) =>
  */
 export const mockEliza = (
   override?: PartialMessage<SayRequest>,
-  addDelay = false,
+  addDelay = false
 ) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
@@ -125,7 +125,7 @@ export const mockEliza = (
           await sleep(1000);
         }
         return new SayResponse(
-          override ?? { sentence: `Hello ${input.sentence}` },
+          override ?? { sentence: `Hello ${input.sentence}` }
         );
       },
     });
@@ -160,7 +160,7 @@ export const mockStatefulBigIntTransport = () =>
  */
 export const mockPaginatedTransport = (
   override?: PartialMessage<ListResponse>,
-  addDelay = false,
+  addDelay = false
 ) =>
   createRouterTransport(({ service }) => {
     service(PaginatedService, {
