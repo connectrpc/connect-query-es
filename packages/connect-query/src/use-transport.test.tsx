@@ -14,10 +14,10 @@
 
 import { ConnectError } from "@connectrpc/connect";
 import { describe, expect, it } from "@jest/globals";
-import { renderHook } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 
 import { ElizaService } from "./gen/eliza_connect";
-import { mockBigInt, sleep, wrapper } from "./jest/test-utils";
+import { mockBigInt, wrapper } from "./jest/test-utils";
 import { useQuery } from "./use-query";
 import {
   fallbackTransport,
@@ -61,7 +61,11 @@ describe("useTransport", () => {
     expect(result.current.error).toStrictEqual(null);
     expect(result.current.isError).toStrictEqual(false);
 
-    await sleep(10);
+    await waitFor(() => {
+      if (!result.current.isError) {
+        throw result.current.error;
+      }
+    });
 
     expect(result.current.error).toEqual(error);
     expect(result.current.isError).toStrictEqual(true);
