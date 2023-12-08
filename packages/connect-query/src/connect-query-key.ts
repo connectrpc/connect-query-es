@@ -50,7 +50,7 @@ export function createConnectQueryKey<
   O extends Message<O>,
 >(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined
+  input?: DisableQuery | PartialMessage<I> | undefined,
 ): ConnectQueryKey<I> {
   return [
     methodDescriptor.service.typeName,
