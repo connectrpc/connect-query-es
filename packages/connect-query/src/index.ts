@@ -28,3 +28,4 @@ export { useMutation } from "./use-mutation.js";
 export { defaultOptions } from "./default-options.js";
 export type { DisableQuery, ConnectUpdater } from "./utils.js";
 export { callUnaryMethod } from "./call-unary-method.js";
+export type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
