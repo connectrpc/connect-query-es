@@ -102,6 +102,27 @@ describe("useQuery", () => {
     );
     expect(result.current.data?.sentence).toBe("placeholder!");
   });
+
+  it("can be used along with the select", async () => {
+    const { result } = renderHook(
+      () => {
+        return useQuery(
+          sayMethodDescriptor,
+          {},
+          {
+            select: (data) => data.sentence.length,
+          },
+        );
+      },
+      wrapper(undefined, mockedElizaTransport),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(result.current.data).toBe(6);
+  });
 });
 
 describe("useSuspenseQuery", () => {
@@ -120,5 +141,28 @@ describe("useSuspenseQuery", () => {
     });
 
     expect(typeof result.current.data.sentence).toBe("string");
+  });
+
+  it("can be used along with the select", async () => {
+    const { result } = renderHook(
+      () => {
+        return useSuspenseQuery(
+          sayMethodDescriptor,
+          {
+            sentence: "hello",
+          },
+          {
+            select: (data) => data.sentence.length,
+          },
+        );
+      },
+      wrapper({}, mockedElizaTransport),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(result.current.data).toBe(11);
   });
 });
