@@ -15,7 +15,7 @@
 import type { Message, PartialMessage } from "@bufbuild/protobuf";
 import type { CallOptions, Transport } from "@connectrpc/connect";
 
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
  * Call a unary method given it's signature and input.

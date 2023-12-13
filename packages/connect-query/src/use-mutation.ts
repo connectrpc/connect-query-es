@@ -21,9 +21,9 @@ import type {
 import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
-import type { ConnectQueryKey } from "./connect-query-key";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
-import { useTransport } from "./use-transport";
+import type { ConnectQueryKey } from "./connect-query-key.js";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { useTransport } from "./use-transport.js";
 
 /**
  * Options for useQuery

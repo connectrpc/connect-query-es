@@ -20,11 +20,11 @@ import type {
   UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 
-import { callUnaryMethod } from "./call-unary-method";
-import type { ConnectQueryKey } from "./connect-query-key";
-import { createConnectQueryKey } from "./connect-query-key";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
-import { assert, type DisableQuery, disableQuery } from "./utils";
+import { callUnaryMethod } from "./call-unary-method.js";
+import type { ConnectQueryKey } from "./connect-query-key.js";
+import { createConnectQueryKey } from "./connect-query-key.js";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { assert, type DisableQuery, disableQuery } from "./utils.js";
 
 export interface ConnectQueryOptions {
   /** The transport to be used for the fetching. */

@@ -22,13 +22,13 @@ import type {
   UseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 
-import { callUnaryMethod } from "./call-unary-method";
+import { callUnaryMethod } from "./call-unary-method.js";
 import {
   type ConnectQueryKey,
   createConnectQueryKey,
-} from "./connect-query-key";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
-import { assert, type DisableQuery, disableQuery } from "./utils";
+} from "./connect-query-key.js";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { assert, type DisableQuery, disableQuery } from "./utils.js";
 
 /**
  * Options specific to connect-query
