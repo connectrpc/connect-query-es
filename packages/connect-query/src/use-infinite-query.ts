@@ -27,8 +27,8 @@ import {
 import type {
   CreateInfiniteQueryOptions,
   CreateSuspenseInfiniteQueryOptions,
-} from "./create-use-infinite-query-options";
-import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options";
+} from "./create-use-infinite-query-options.js";
+import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 import type { DisableQuery } from "./utils.js";
@@ -55,7 +55,7 @@ export function useInfiniteQuery<
     ...options
   }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
-  },
+  }
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
@@ -89,7 +89,7 @@ export function useSuspenseInfiniteQuery<
     ...options
   }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
-  },
+  }
 ): UseSuspenseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
