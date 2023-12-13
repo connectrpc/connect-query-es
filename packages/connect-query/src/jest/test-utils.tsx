@@ -40,7 +40,7 @@ export const wrapper = (
   config?: QueryClientConfig,
   transport = createConnectTransport({
     baseUrl: "https://demo.connectrpc.com",
-  })
+  }),
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;
   queryClient: QueryClient;
@@ -120,7 +120,7 @@ export const sleep = async (timeout: number) =>
  */
 export const mockEliza = (
   override?: PartialMessage<SayRequest>,
-  addDelay = false
+  addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
@@ -129,7 +129,7 @@ export const mockEliza = (
           await sleep(1000);
         }
         return new SayResponse(
-          override ?? { sentence: `Hello ${input.sentence}` }
+          override ?? { sentence: `Hello ${input.sentence}` },
         );
       },
     });
@@ -164,7 +164,7 @@ export const mockStatefulBigIntTransport = () =>
  */
 export const mockPaginatedTransport = (
   override?: PartialMessage<ListResponse>,
-  addDelay = false
+  addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
     service(PaginatedService, {

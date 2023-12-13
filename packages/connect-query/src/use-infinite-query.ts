@@ -55,7 +55,7 @@ export function useInfiniteQuery<
     ...options
   }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
-  }
+  },
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
@@ -89,7 +89,7 @@ export function useSuspenseInfiniteQuery<
     ...options
   }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
-  }
+  },
 ): UseSuspenseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {

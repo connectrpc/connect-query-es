@@ -59,7 +59,7 @@ describe("isAbortController", () => {
     expect(isAbortController({ signal: { aborted: undefined } })).toBeFalsy();
     expect(isAbortController({ signal: { aborted: true } })).toBeFalsy();
     expect(
-      isAbortController({ signal: { aborted: true }, abort: undefined })
+      isAbortController({ signal: { aborted: true }, abort: undefined }),
     ).toBeFalsy();
   });
 
@@ -70,7 +70,7 @@ describe("isAbortController", () => {
           aborted: false,
         },
         abort: () => {},
-      })
+      }),
     ).toBeTruthy();
 
     expect(isAbortController(new AbortController())).toBeTruthy();
