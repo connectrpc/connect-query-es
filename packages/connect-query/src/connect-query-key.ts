@@ -14,7 +14,7 @@
 
 import type { Message, PartialMessage } from "@bufbuild/protobuf";
 
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import type { DisableQuery } from "./utils.js";
 import { disableQuery } from "./utils.js";
 

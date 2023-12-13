@@ -29,9 +29,9 @@ import type {
   CreateSuspenseInfiniteQueryOptions,
 } from "./create-use-infinite-query-options";
 import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
-import { useTransport } from "./use-transport";
-import type { DisableQuery } from "./utils";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { useTransport } from "./use-transport.js";
+import type { DisableQuery } from "./utils.js";
 
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query

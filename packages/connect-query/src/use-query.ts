@@ -26,11 +26,11 @@ import {
 import type {
   CreateQueryOptions,
   CreateSuspenseQueryOptions,
-} from "./create-use-query-options";
-import { createUseQueryOptions } from "./create-use-query-options";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor";
-import { useTransport } from "./use-transport";
-import type { DisableQuery } from "./utils";
+} from "./create-use-query-options.js";
+import { createUseQueryOptions } from "./create-use-query-options.js";
+import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { useTransport } from "./use-transport.js";
+import type { DisableQuery } from "./utils.js";
 
 /**
  * Query the method provided. Maps to useQuery on tanstack/react-query

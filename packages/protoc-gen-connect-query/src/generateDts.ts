@@ -21,7 +21,7 @@ import {
   makeJsDoc,
 } from "@bufbuild/protoplugin/ecmascript";
 
-import type { PluginInit } from "./utils";
+import type { PluginInit } from "./utils.js";
 
 const { safeIdentifier } = codegenInfo;
 
