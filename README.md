@@ -402,7 +402,7 @@ No. The code generator just generates the method descriptors, but you are free t
 
 ### What if I have a custom `Transport`?
 
-If the `Transport` attached to React Context via the `TransportProvider` isn't working for you, then you can override transport at every level. For example, you can pass a custom transport directly to the lowest-level API like `useQuery` or `createUseQueryOptions`.
+If the `Transport` attached to React Context via the `TransportProvider` isn't working for you, then you can override transport at every level. For example, you can pass a custom transport directly to the lowest-level API like `useQuery` or `callUnaryMethod`.
 
 ### Does this only work with React?
 
@@ -416,15 +416,11 @@ When you might not have access to React context, you can use the `create` series
 import { say } from "./gen/eliza-ElizaService_connectquery";
 
 function prefetch() {
-  return queryClient.prefetchQuery(
-    createUseQueryOptions(
-      say,
-      { sentence: "Hello" },
-      {
-        transport: myTransport,
-      }
-    )
-  );
+  return queryClient.prefetchQuery({
+    queryKey: createConnectQueryKey(say, { sentence: "Hello" }),
+    queryFn: () =>
+      callUnaryMethod(say, { sentence: "Hello" }, { transport: myTransport }),
+  });
 }
 ```
 
