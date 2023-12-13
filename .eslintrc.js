@@ -120,7 +120,7 @@ const config = {
       },
     },
     {
-      files: ["**/eliza/*", "**/gen/**"], // generated code
+      files: ["**/eliza/*", "**/gen/**", "**/gen_cjs/**"], // generated code
       rules: {
         "eslint-comments/no-unused-enable": "off",
         "eslint-comments/no-unused-disable": "off",

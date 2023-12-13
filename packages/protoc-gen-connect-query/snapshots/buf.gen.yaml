@@ -6,6 +6,10 @@ plugins:
     out: gen
     opt:
       - target=ts
+  - plugin: es
+    out: gen_cjs
+    opt:
+      - target=ts
 
   - plugin: connect-query
     path: ../bin/protoc-gen-connect-query
@@ -14,3 +18,10 @@ plugins:
       - target=ts+dts+js
       - import_extension=none
       - ts_nocheck=false
+  - plugin: connect-query
+    path: ../bin/protoc-gen-connect-query
+    out: gen_cjs
+    opt:
+      - target=dts+js
+      - import_extension=.js
+      - js_import_style=legacy_commonjs
