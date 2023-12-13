@@ -406,7 +406,7 @@ If the `Transport` attached to React Context via the `TransportProvider` isn't w
 
 ### Does this only work with React?
 
-Connect-Query does require React, but the core (`createUseQueryOptions`) is not React specific so splitting off a `connect-solid-query` is possible.
+Connect-Query does require React, but the core (`createConnectQueryKey` and `callUnaryMethod`) is not React specific so splitting off a `connect-solid-query` is possible.
 
 ### How do I do Prefetching?
 
