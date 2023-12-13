@@ -12,38 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message } from "@bufbuild/protobuf";
-
-import type { UnaryFunctions } from "./create-unary-functions.js";
-import type { UnaryHooks } from "./create-unary-hooks.js";
-
-export { createQueryService } from "./create-query-service.js";
-export type {
-  QueryFunctions,
-  SupportedMethodInfo,
-  IsSupportedMethod,
-  SupportedMethodKinds,
-} from "./create-query-functions.js";
-export {
-  createQueryFunctions,
-  supportedMethodKinds,
-  isSupportedMethod,
-} from "./create-query-functions.js";
-export type {
-  ConnectQueryKey,
-  ConnectPartialQueryKey,
-} from "./connect-query-key.js";
-export type { UnaryFunctions } from "./create-unary-functions.js";
-export { createUnaryFunctions } from "./create-unary-functions.js";
-export { disableQuery } from "./utils.js";
+export type { ConnectQueryKey } from "./connect-query-key.js";
+export { createConnectQueryKey } from "./connect-query-key.js";
+export { disableQuery, createProtobufSafeUpdater } from "./utils.js";
 export { useTransport, TransportProvider } from "./use-transport.js";
-export type { UnaryHooks } from "./create-unary-hooks.js";
-export { createUnaryHooks } from "./create-unary-hooks.js";
-
-/**
- * Combined type of all the functions generated for a service.
- */
-export type UnaryFunctionsWithHooks<
-  I extends Message<I>,
-  O extends Message<O>,
-> = UnaryFunctions<I, O> & UnaryHooks<I, O, UnaryFunctions<I, O>>;
+export type { CreateInfiniteQueryOptions as UseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
+export {
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from "./use-infinite-query.js";
+export type { CreateQueryOptions as UseQueryOptions } from "./create-use-query-options.js";
+export { useQuery, useSuspenseQuery } from "./use-query.js";
+export type { UseMutationOptions } from "./use-mutation.js";
+export { useMutation } from "./use-mutation.js";
+export { defaultOptions } from "./default-options.js";
+export type { DisableQuery, ConnectUpdater } from "./utils.js";
+export { callUnaryMethod } from "./call-unary-method.js";
+export type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";

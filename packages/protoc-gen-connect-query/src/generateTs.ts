@@ -40,57 +40,26 @@ const generateServiceFile =
     );
     f.preamble(protoFile);
 
-    f.print(`export const typeName = ${literalString(service.typeName)};`);
-    f.print();
-
     const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
       schema.runtime;
-
-    f.print(makeJsDoc(service));
-    f.print("export const ", localName(service), " = {");
-    f.print(`  typeName: `, literalString(service.typeName), `,`);
-    f.print("  methods: {");
-    for (const method of service.methods) {
-      f.print(makeJsDoc(method, "    "));
-      f.print("    ", localName(method), ": {");
-      f.print(`      name: `, literalString(method.name), `,`);
-      f.print("      I: ", method.input, ",");
-      f.print("      O: ", method.output, ",");
-      f.print("      kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
-      if (method.idempotency !== undefined) {
-          f.print("      idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
-      }
-      // In case we start supporting options, we have to surface them here
-      f.print("    },");
-    }
-    f.print("  }");
-    f.print("}", isTs ? " as const" : "", ";");
-    f.print();
-
-    f.print(`const $queryService = `,
-      f.import('createQueryService', '@connectrpc/connect-query'),
-      `({`,
-      `  service: `, localName(service), `,`,
-      `});`
-    );
-    f.print();
 
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
         f.print(makeJsDoc(method));
-        const methodTsType = [
-          ": ",
-          f.import('UnaryFunctionsWithHooks', '@connectrpc/connect-query'),
-          `<${method.input.name}, ${method.output.name}>`
-        ]
-        
-        f.print(
-          `export const ${safeIdentifier(localName(method))}`, ...(isTs ? methodTsType : []), ` = { `,
-          `  ...$queryService.${localName(method)},`,
-          `  ...`, f.import('createUnaryHooks', '@connectrpc/connect-query'),`($queryService.${localName(method)})`,
-          `};`
-        );
+        f.print(`export const ${safeIdentifier(localName(method))} = { `);
+        f.print(`  localName: ${literalString(localName(method))},`);
+        f.print(`  name: ${literalString(method.name)},`);
+        f.print(`  kind: `, rtMethodKind, ".", MethodKind[method.methodKind], ",");
+        f.print(`  I: `, method.input, `,`);
+        f.print(`  O: `, method.output, `,`);
+        if (method.idempotency !== undefined) {
+          f.print("      idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
+        }
+        f.print(`  service: {`);
+        f.print(`    typeName: ${literalString(service.typeName)}`);
+        f.print(`  }`);
+        f.print(`}`, isTs ? ` as const` : ``, `;`);
 
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {
