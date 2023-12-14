@@ -27,8 +27,8 @@ import {
 import type {
   CreateInfiniteQueryOptions,
   CreateSuspenseInfiniteQueryOptions,
-} from "./create-use-infinite-query-options";
-import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options";
+} from "./create-use-infinite-query-options.js";
+import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 import type { DisableQuery } from "./utils.js";
