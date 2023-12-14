@@ -14,12 +14,8 @@
 
 import type { DescFile, DescService } from "@bufbuild/protobuf";
 import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import type { Schema } from "@bufbuild/protoplugin";
-import {
-  literalString,
-  localName,
-  makeJsDoc,
-} from "@bufbuild/protoplugin/ecmascript";
+import type { Schema } from "@bufbuild/protoplugin/ecmascript";
+import { localName } from "@bufbuild/protoplugin/ecmascript";
 
 import type { PluginInit } from "./utils.js";
 
@@ -46,20 +42,20 @@ const generateServiceFile =
     service.methods
       .filter((method) => method.methodKind === MethodKind.Unary)
       .forEach((method, index, filteredMethods) => {
-        f.print(makeJsDoc(method));
-        f.print(`export const ${safeIdentifier(localName(method))} = { `);
-        f.print(`  localName: ${literalString(localName(method))},`);
-        f.print(`  name: ${literalString(method.name)},`);
-        f.print(`  kind: `, rtMethodKind, ".", MethodKind[method.methodKind], ",");
-        f.print(`  I: `, method.input, `,`);
-        f.print(`  O: `, method.output, `,`);
+        f.print(f.jsDoc(method));
+        f.print(f.exportDecl("const", safeIdentifier(localName(method))), " = {");
+        f.print("  localName: ",f.string(localName(method)), ",");
+        f.print("  name: ", f.string(method.name), ",");
+        f.print("  kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
+        f.print("  I: ", method.input, ",");
+        f.print("  O: ", method.output, ",");
         if (method.idempotency !== undefined) {
           f.print("      idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
         }
-        f.print(`  service: {`);
-        f.print(`    typeName: ${literalString(service.typeName)}`);
-        f.print(`  }`);
-        f.print(`}`, isTs ? ` as const` : ``, `;`);
+        f.print("  service: {");
+        f.print("    typeName: ", f.string(service.typeName));
+        f.print("  }");
+        f.print("}", isTs ? " as const" : "", ";");
 
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {
