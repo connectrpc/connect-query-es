@@ -14,12 +14,8 @@
 
 import type { DescFile, DescService } from "@bufbuild/protobuf";
 import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import type { Schema } from "@bufbuild/protoplugin";
-import {
-  literalString,
-  localName,
-  makeJsDoc,
-} from "@bufbuild/protoplugin/ecmascript";
+import type { Schema } from "@bufbuild/protoplugin/ecmascript";
+import { localName } from "@bufbuild/protoplugin/ecmascript";
 
 import type { PluginInit } from "./utils.js";
 
@@ -43,22 +39,18 @@ const generateServiceFile =
       switch (method.methodKind) {
         case MethodKind.Unary:
           {
-            f.print(makeJsDoc(method));
-            f.print(
-              `export const `,
-              safeIdentifier(localName(method)),
-              `: {`
-            );
-            f.print(`      readonly name: `, literalString(method.name), `,`);
+            f.print(f.jsDoc(method));
+            f.print(f.exportDecl("const", safeIdentifier(localName(method))), ": {");
+            f.print("      readonly name: ", f.string(method.name), ",");
             f.print("      readonly I: typeof ", method.input, ",");
             f.print("      readonly O: typeof ", method.output, ",");
             f.print("      readonly kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
             if (method.idempotency !== undefined) {
               f.print("      readonly idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
             }
-            f.print(`  readonly service: {`);
-            f.print(`    readonly typeName: ${literalString(service.typeName)}`);
-            f.print(`  }`);
+            f.print("  readonly service: {");
+            f.print("    readonly typeName: ", f.string(service.typeName));
+            f.print("  }");
             f.print("};")
           }
           break;

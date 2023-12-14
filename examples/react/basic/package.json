@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@bufbuild/buf": "1.28.1",
-    "@bufbuild/protobuf": "^1.5.1",
-    "@bufbuild/protoc-gen-es": "^1.5.1",
+    "@bufbuild/protobuf": "^1.6.0",
+    "@bufbuild/protoc-gen-es": "^1.6.0",
     "@connectrpc/connect": "^1.1.4",
     "@connectrpc/connect-query": "workspace:*",
     "@connectrpc/connect-web": "^1.1.4",

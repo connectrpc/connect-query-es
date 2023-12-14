@@ -34,7 +34,7 @@ import { CountResponse, SayResponse } from "../gen/eliza_pb.js";
 import { TransportProvider } from "../use-transport.js";
 
 /**
- * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-React-Query's `TransportProvider`.
+ * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-Query's `TransportProvider`.
  */
 export const wrapper = (
   config?: QueryClientConfig,

@@ -38,7 +38,7 @@ const transportContext = createContext(fallbackTransport);
 export const useTransport = () => useContext(transportContext);
 
 /**
- * `TransportProvider` is the main mechanism by which Connect-React-Query keeps track of the `Transport` used by your application.
+ * `TransportProvider` is the main mechanism by which Connect-Query keeps track of the `Transport` used by your application.
  *
  * Broadly speaking, "transport" joins two concepts:
  *
@@ -49,7 +49,7 @@ export const useTransport = () => useContext(transportContext);
  *
  * To learn more about the two modes of transport, take a look at the npm package `@connectrpc/connect-web`.
  *
- * To get started with Connect-React-Query, simply import a transport (either `createConnectTransport` or `createGrpcWebTransport` from `@connectrpc/connect-web`) and pass it to the provider.
+ * To get started with Connect-Query, simply import a transport (either `createConnectTransport` or `createGrpcWebTransport` from `@connectrpc/connect-web`) and pass it to the provider.
  *
  * @example
  * import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
