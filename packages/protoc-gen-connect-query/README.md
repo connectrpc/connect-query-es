@@ -198,6 +198,20 @@ Unfortunately, not all bundlers and tools have caught up yet, and Deno requires 
 
 This option exists for other plugins but is not applicable to `protoc-gen-connect-query` because, unlike most other plugins, it does not generate a maximum of one output file for every input proto file. Instead, it generates one output file per service. If you provide a valid proto file that contains no services, `protoc-gen-connect-query` will have no output.
 
+### `js_import_style`
+
+By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query)
+(and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin))
+generate ECMAScript `import` and `export` statements. For use cases where
+CommonJS is difficult to avoid, this option can be used to generate CommonJS
+`require()` calls.
+
+Possible values:
+
+- `js_import_style=module` generate ECMAScript `import` / `export` statements -
+  the default behavior.
+- `js_import_style=legacy_commonjs` generate CommonJS `require()` calls.
+
 ## Example Generated Code
 
 See [`eliza.proto`](../../examples/react/basic/eliza.proto) for example inputs, and look [here](../../examples/react/basic/src/gen) to see the outputs those files generate.

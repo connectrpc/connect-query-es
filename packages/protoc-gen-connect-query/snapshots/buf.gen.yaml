@@ -1,16 +1,32 @@
-# buf.gen.yaml defines a local generation template.
-# For details, see https://docs.buf.build/configuration/v1/buf-gen-yaml
 version: v1
 plugins:
+  # js
   - plugin: es
-    out: gen
-    opt:
-      - target=ts
-
+    out: gen_js
   - plugin: connect-query
     path: ../bin/protoc-gen-connect-query
-    out: gen
+    out: gen_js
+
+  # cjs
+  - plugin: es
+    out: gen_cjs
     opt:
-      - target=ts+dts+js
-      - import_extension=none
-      - ts_nocheck=false
+      - js_import_style=legacy_commonjs
+  - plugin: connect-query
+    path: ../bin/protoc-gen-connect-query
+    out: gen_cjs
+    opt:
+      - js_import_style=legacy_commonjs
+      - ts_nocheck=false # we only set this for our tests
+
+  # ts
+  - plugin: es
+    out: gen_ts
+    opt:
+      - target=ts
+  - plugin: connect-query
+    path: ../bin/protoc-gen-connect-query
+    out: gen_ts
+    opt:
+      - target=ts
+      - ts_nocheck=false # we only set this for our tests
