@@ -145,6 +145,8 @@ To learn more about the two modes of transport, take a look at the Connect-Web d
 
 To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@connectrpc/connect-web`](https://www.npmjs.com/package/@connectrpc/connect-web)) and pass it to the provider.
 
+A common use case for the transport is to add headers to requests (like auth tokens, etc). You can do this with a custom [interceptor](https://connectrpc.com/docs/web/interceptors).
+
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TransportProvider } from "@connectrpc/connect-query";
@@ -154,6 +156,11 @@ const queryClient = new QueryClient();
 export const App() {
   const transport = createConnectTransport({
     baseUrl: "<your baseUrl here>",
+    interceptors: [(next) => (request) => {
+      req.header.append("some-new-header", "some-value");
+      // Add your headers here
+      return next(request);
+    }],
   });
   return (
     <TransportProvider transport={transport}>
@@ -164,6 +171,8 @@ export const App() {
   );
 }
 ```
+
+For more details about what you can do with the transport, see the [Connect-Web documentation](https://connectrpc.com/docs/web/).
 
 ### `useTransport`
 
