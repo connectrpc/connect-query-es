@@ -24,10 +24,10 @@
   "module": "./dist/esm/index.js",
   "exports": {
     ".": {
+      "module": "./dist/esm/index.js",
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
-    },
-    "./package.json": "./package.json"
+    }
   },
   "dependencies": {
     "stable-hash": "^0.0.3"
