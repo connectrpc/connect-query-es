@@ -132,7 +132,7 @@ const TransportProvider: FC<
 >;
 ```
 
-`TransportProvider` is the main mechanism by which Connect-Query keeps track of the `Transport` used by your application.
+`TransportProvider` is the main mechanism by which Connect-Query keeps track of the `Transport` used by your application. All APIs that use the transport also take an optional `transport` option so you can override the transport used by a specific query or mutation. This option is (by convention) usually found in the last paremeter sent to each API so check the docs of the API your interested in for details.
 
 Broadly speaking, "transport" joins two concepts:
 
