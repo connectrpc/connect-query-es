@@ -123,6 +123,42 @@ describe("useQuery", () => {
 
     expect(result.current.data).toBe(6);
   });
+
+  it("can be disabled without explicit disableQuery", () => {
+    const { result } = renderHook(
+      () => {
+        return useQuery(
+          sayMethodDescriptor,
+          {
+            sentence: "hello",
+          },
+          {
+            enabled: false,
+          },
+        );
+      },
+      wrapper({}, mockedElizaTransport),
+    );
+
+    expect(result.current.data).toBeUndefined();
+    expect(result.current.isPending).toBeTruthy();
+    expect(result.current.isFetching).toBeFalsy();
+  });
+
+  it("disableQuery will override explicit enabled", () => {
+    const { result } = renderHook(
+      () => {
+        return useQuery(sayMethodDescriptor, disableQuery, {
+          enabled: true,
+        });
+      },
+      wrapper({}, mockedElizaTransport),
+    );
+
+    expect(result.current.data).toBeUndefined();
+    expect(result.current.isPending).toBeTruthy();
+    expect(result.current.isFetching).toBeFalsy();
+  });
 });
 
 describe("useSuspenseQuery", () => {
