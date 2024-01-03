@@ -108,11 +108,11 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
       '@tanstack/react-query':
-        specifier: ^5.13.4
-        version: 5.13.4(react@18.2.0)
+        specifier: ^5.17.1
+        version: 5.17.1(react@18.2.0)
       '@tanstack/react-query-devtools':
-        specifier: ^5.13.5
-        version: 5.13.5(@tanstack/react-query@5.13.4)(react@18.2.0)
+        specifier: ^5.17.1
+        version: 5.17.1(@tanstack/react-query@5.17.1)(react@18.2.0)
       '@testing-library/jest-dom':
         specifier: ^6.1.6
         version: 6.1.6(@jest/globals@29.7.0)(@types/jest@29.5.11)(jest@29.7.0)
@@ -172,8 +172,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4(@bufbuild/protoc-gen-es@1.6.0)(@connectrpc/connect@1.1.4)
       '@tanstack/react-query':
-        specifier: ^5.13.4
-        version: 5.13.4(react@18.2.0)
+        specifier: ^5.17.1
+        version: 5.17.1(react@18.2.0)
       '@testing-library/react':
         specifier: ^14.1.2
         version: 14.1.2(react-dom@18.2.0)(react@18.2.0)
@@ -218,8 +218,8 @@ importers:
         specifier: ^1.1.4
         version: 1.1.4(@bufbuild/protoc-gen-es@1.6.0)(@connectrpc/connect@1.1.4)
       '@tanstack/react-query':
-        specifier: ^5.13.4
-        version: 5.13.4(react@18.2.0)
+        specifier: ^5.17.1
+        version: 5.17.1(react@18.2.0)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1812,30 +1812,30 @@ packages:
     dependencies:
       '@sinonjs/commons': 3.0.0
 
-  /@tanstack/query-core@5.13.4:
-    resolution: {integrity: sha512-8+rJucXvC/xlr4OrxHhEIob/cTlbT4fgmz1VsvB0D12FRStKaXeLORNGcOhSAynRd2NL74SV/Qq0IIb4DedLcA==}
+  /@tanstack/query-core@5.17.1:
+    resolution: {integrity: sha512-kUXozQmU7NBtzX5dM6qfFNZN+YK/9Ct37hnG/ogdgI4mExIx7VH/qRepsPhKfNrJz2w81/JykmM3Uug6sVpUSw==}
 
-  /@tanstack/query-devtools@5.13.5:
-    resolution: {integrity: sha512-effSYz9AWcZ6sNd+c8LCBYFIuDZApoCTXEpRlEYChBZpMz9QUUVMLToThwCyUY49+T5pANL3XxgZf3HV7hwJlg==}
+  /@tanstack/query-devtools@5.17.1:
+    resolution: {integrity: sha512-gNdt6PYzYlyjtSAoO8Jt9GIFq5VSLLDV2qq0TCi1t/PGnpAIlIHqNZGYkQTPsy0FyGUTX3pCq4bd7v5z/wzf3A==}
     dev: false
 
-  /@tanstack/react-query-devtools@5.13.5(@tanstack/react-query@5.13.4)(react@18.2.0):
-    resolution: {integrity: sha512-FB17B/yPtwnqg+DAdosAM+rFj3t8Pl121MPLiUGgl6jvG0A+U9XN3n39zVbhurbdSFO5jCMkPBlloW4NH5ojrA==}
+  /@tanstack/react-query-devtools@5.17.1(@tanstack/react-query@5.17.1)(react@18.2.0):
+    resolution: {integrity: sha512-QWHqdEN2TJpj76r0yzdOJEopmPvdAHOJHAKXaygubRASqCqfcWGkOHGD9pqqHOfTu5eQdV1Csx97EuSjnHMKcA==}
     peerDependencies:
-      '@tanstack/react-query': ^5.13.4
+      '@tanstack/react-query': ^5.17.1
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-devtools': 5.13.5
-      '@tanstack/react-query': 5.13.4(react@18.2.0)
+      '@tanstack/query-devtools': 5.17.1
+      '@tanstack/react-query': 5.17.1(react@18.2.0)
       react: 18.2.0
     dev: false
 
-  /@tanstack/react-query@5.13.4(react@18.2.0):
-    resolution: {integrity: sha512-3HjvkFFriEQwffUXtKHPiwkfFXUGbs46YATTzzyK1+Pw6Ekd3kwzS50e45qdamWuEXmXxyo5S1zp534LdFG0Rw==}
+  /@tanstack/react-query@5.17.1(react@18.2.0):
+    resolution: {integrity: sha512-4JYgX0kU+pvwVQi5eRiHGvBK7WnahEl6lmaxd32ZVSKmByAxLgaewoxBR03cdDNse8lUD2zGOe0sx3M/EGRlmA==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
-      '@tanstack/query-core': 5.13.4
+      '@tanstack/query-core': 5.17.1
       react: 18.2.0
 
   /@testing-library/dom@9.3.3:
@@ -2554,7 +2554,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001572
-      electron-to-chromium: 1.4.616
+      electron-to-chromium: 1.4.617
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
     dev: true
@@ -3096,8 +3096,8 @@ packages:
   /electron-to-chromium@1.4.542:
     resolution: {integrity: sha512-6+cpa00G09N3sfh2joln4VUXHquWrOFx3FLZqiVQvl45+zS9DskDBTPvob+BhvFRmTBkyDSk0vvLMMRo/qc6mQ==}
 
-  /electron-to-chromium@1.4.616:
-    resolution: {integrity: sha512-1n7zWYh8eS0L9Uy+GskE0lkBUNK83cXTVJI0pU3mGprFsbfSdAc15VTFbo+A+Bq4pwstmL30AVcEU3Fo463lNg==}
+  /electron-to-chromium@1.4.617:
+    resolution: {integrity: sha512-sYNE3QxcDS4ANW1k4S/wWYMXjCVcFSOX3Bg8jpuMFaXt/x8JCmp0R1Xe1ZXDX4WXnSRBf+GJ/3eGWicUuQq5cg==}
     dev: true
 
   /emittery@0.13.1:
