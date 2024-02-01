@@ -12,10 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it, jest } from "@jest/globals";
+import { QueryCache } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { createConnectQueryKey } from "./connect-query-key";
+import {
+  createConnectInfiniteQueryKey,
+  createConnectQueryKey,
+} from "./connect-query-key";
 import { defaultOptions } from "./default-options";
 import { PaginatedService } from "./gen/eliza_connect";
 import { mockPaginatedTransport, wrapper } from "./jest/test-utils";
@@ -23,6 +27,7 @@ import {
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from "./use-infinite-query";
+import { useQuery } from "./use-query";
 import { disableQuery } from "./utils";
 
 // TODO: maybe create a helper to take a service and method and generate this.
@@ -48,15 +53,15 @@ describe("useInfiniteQuery", () => {
           {
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
-          },
+          }
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport,
-      ),
+        mockedPaginatedTransport
+      )
     );
 
     await waitFor(() => {
@@ -101,7 +106,7 @@ describe("useInfiniteQuery", () => {
           pageParamKey: "page",
         });
       },
-      wrapper(undefined, mockedPaginatedTransport),
+      wrapper(undefined, mockedPaginatedTransport)
     );
     expect(result.current.isPending).toBeTruthy();
     expect(result.current.isFetching).toBeFalsy();
@@ -122,15 +127,15 @@ describe("useInfiniteQuery", () => {
               items: ["Intercepted!"],
               page: 0n,
             }),
-          },
+          }
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport,
-      ),
+        mockedPaginatedTransport
+      )
     );
     await waitFor(() => {
       expect(result.current.isSuccess).toBeTruthy();
@@ -160,15 +165,15 @@ describe("useInfiniteQuery", () => {
                 }),
               ],
             },
-          },
+          }
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport,
-      ),
+        mockedPaginatedTransport
+      )
     );
     expect(result.current.data?.pages[0].page).toEqual(-1n);
   });
@@ -178,7 +183,7 @@ describe("useInfiniteQuery", () => {
       {
         defaultOptions,
       },
-      mockedPaginatedTransport,
+      mockedPaginatedTransport
     );
     const { result } = renderHook(() => {
       return useInfiniteQuery(
@@ -189,7 +194,7 @@ describe("useInfiniteQuery", () => {
         {
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
-        },
+        }
       );
     }, remainingWrapper);
 
@@ -197,7 +202,7 @@ describe("useInfiniteQuery", () => {
 
     expect(cache).toHaveLength(1);
     expect(cache[0].queryKey).toEqual(
-      createConnectQueryKey(methodDescriptor, {}),
+      createConnectInfiniteQueryKey(methodDescriptor, {})
     );
 
     await waitFor(() => {
@@ -205,6 +210,83 @@ describe("useInfiniteQuery", () => {
     });
 
     expect(result.current.data?.pageParams[0]).toEqual(0n);
+  });
+
+  it("doesn't share data with a similar non-infinite query", async () => {
+    const remainingWrapper = wrapper(
+      {
+        defaultOptions,
+      },
+      mockedPaginatedTransport
+    );
+    const { result } = renderHook(() => {
+      return useInfiniteQuery(
+        methodDescriptor,
+        {
+          page: 0n,
+        },
+        {
+          getNextPageParam: (lastPage) => lastPage.page + 1n,
+          pageParamKey: "page",
+        }
+      );
+    }, remainingWrapper);
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+    expect(result.current.data?.pages[0].items).toHaveLength(3);
+
+    const { result: useQueryResult } = renderHook(() => {
+      // @ts-expect-error(2345) this exception is intentional to simulate a pagination query
+      // that's based on a string | undefined page param.
+      return useQuery(methodDescriptor, {
+        page: undefined,
+      });
+    }, remainingWrapper);
+
+    await waitFor(() => {
+      expect(useQueryResult.current.isSuccess).toBeTruthy();
+    });
+
+    expect(useQueryResult.current.data?.items).toHaveLength(3);
+  });
+
+  it("cache can be invalidated with the shared, non-infinite key", async () => {
+    const onSuccessSpy = jest.fn();
+    const spiedQueryCache = new QueryCache({
+      onSuccess: onSuccessSpy,
+    });
+    const { queryClient, ...remainingWrapper } = wrapper(
+      {
+        defaultOptions,
+        queryCache: spiedQueryCache,
+      },
+      mockedPaginatedTransport
+    );
+    const { result } = renderHook(() => {
+      return useInfiniteQuery(
+        methodDescriptor,
+        {
+          page: 0n,
+        },
+        {
+          getNextPageParam: (lastPage) => lastPage.page + 1n,
+          pageParamKey: "page",
+        }
+      );
+    }, remainingWrapper);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(onSuccessSpy).toHaveBeenCalledTimes(1);
+
+    await queryClient.invalidateQueries({
+      queryKey: createConnectQueryKey(methodDescriptor),
+    });
+
+    expect(onSuccessSpy).toHaveBeenCalledTimes(2);
   });
 });
 
@@ -220,15 +302,15 @@ describe("useSuspenseInfiniteQuery", () => {
           {
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
-          },
+          }
         );
       },
       wrapper(
         {
           defaultOptions,
         },
-        mockedPaginatedTransport,
-      ),
+        mockedPaginatedTransport
+      )
     );
 
     await waitFor(() => {

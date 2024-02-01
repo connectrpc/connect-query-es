@@ -191,7 +191,7 @@ function useQuery<I extends Message<I>, O extends Message<O>>(
   options?: {
     transport?: Transport;
     callOptions?: CallOptions;
-  } & UseQueryOptions,
+  } & UseQueryOptions
 ): UseQueryResult<O, ConnectError>;
 ```
 
@@ -219,7 +219,7 @@ function useInfiniteQuery<
     transport?: Transport;
     callOptions?: CallOptions;
     getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
-  },
+  }
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError>;
 ```
 
@@ -252,11 +252,26 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 ```ts
 function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined,
+  input?: DisableQuery | PartialMessage<I> | undefined
 ): ConnectQueryKey<I>;
 ```
 
 This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query. This function has no side effects.
+
+### `createConnectInfiniteQueryKey`
+
+```ts
+function createConnectInfiniteQueryKey<
+  I extends Message<I>,
+  O extends Message<O>,
+>(
+  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
+  input: DisableQuery | PartialMessage<I>,
+  pageParamKey: keyof PartialMessage<I>
+): ConnectInfiniteQueryKey<I>;
+```
+
+This function is not really necessary unless you are manually creating infinite query keys. When invalidating queries, it usually makes more sense to use the `createConnectQueryKey` function instead since it will also invalidate the regular queries (as well as the infinite queries).
 
 ### `callUnaryMethod`
 
@@ -270,7 +285,7 @@ function callUnaryMethod<I extends Message<I>, O extends Message<O>>(
   }: {
     transport: Transport;
     callOptions?: CallOptions | undefined;
-  },
+  }
 ): Promise<O>;
 ```
 
@@ -326,6 +341,19 @@ For example, a partial query key might look like this:
 
 ```ts
 ["example.v1.ExampleService", "GetTodos"];
+```
+
+### `ConnectInfiniteQueryKey`
+
+Similar to `ConnectQueryKey`, but for infinite queries.
+
+```ts
+type ConnectInfiniteQueryKey<I extends Message<I>> = [
+  serviceTypeName: string,
+  methodName: string,
+  input: PartialMessage<I>,
+  "infinite",
+];
 ```
 
 ## Testing
