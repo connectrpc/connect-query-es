@@ -191,7 +191,7 @@ function useQuery<I extends Message<I>, O extends Message<O>>(
   options?: {
     transport?: Transport;
     callOptions?: CallOptions;
-  } & UseQueryOptions
+  } & UseQueryOptions,
 ): UseQueryResult<O, ConnectError>;
 ```
 
@@ -219,7 +219,7 @@ function useInfiniteQuery<
     transport?: Transport;
     callOptions?: CallOptions;
     getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
-  }
+  },
 ): UseInfiniteQueryResult<InfiniteData<O>, ConnectError>;
 ```
 
@@ -252,7 +252,7 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 ```ts
 function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined
+  input?: DisableQuery | PartialMessage<I> | undefined,
 ): ConnectQueryKey<I>;
 ```
 
@@ -267,7 +267,7 @@ function createConnectInfiniteQueryKey<
 >(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
   input: DisableQuery | PartialMessage<I>,
-  pageParamKey: keyof PartialMessage<I>
+  pageParamKey: keyof PartialMessage<I>,
 ): ConnectInfiniteQueryKey<I>;
 ```
 
@@ -285,7 +285,7 @@ function callUnaryMethod<I extends Message<I>, O extends Message<O>>(
   }: {
     transport: Transport;
     callOptions?: CallOptions | undefined;
-  }
+  },
 ): Promise<O>;
 ```
 
