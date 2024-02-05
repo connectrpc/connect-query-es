@@ -25,7 +25,7 @@ import type {
 import { callUnaryMethod } from "./call-unary-method.js";
 import {
   type ConnectInfiniteQueryKey,
-  createConnectQueryKey,
+  createConnectInfiniteQueryKey,
 } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { assert, type DisableQuery, disableQuery } from "./utils.js";
@@ -103,7 +103,7 @@ function createUnaryInfiniteQueryFn<
     transport: Transport;
     callOptions?: CallOptions | undefined;
     pageParamKey: ParamKey;
-  },
+  }
 ): QueryFunction<O, ConnectInfiniteQueryKey<I>, PartialMessage<I>[ParamKey]> {
   return async (context) => {
     assert(input !== disableQuery, "Disabled query cannot be fetched");
@@ -142,7 +142,7 @@ export function createUseInfiniteQueryOptions<
     getNextPageParam,
     pageParamKey,
     callOptions,
-  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey>
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
     I,
@@ -158,14 +158,14 @@ export function createUseInfiniteQueryOptions<
   initialPageParam: PartialMessage<I>[ParamKey];
   enabled: boolean;
 } {
-  const queryKey = createConnectQueryKey(
+  const queryKey = createConnectInfiniteQueryKey(
     methodSig,
     input === disableQuery
       ? undefined
       : {
           ...input,
           [pageParamKey]: undefined,
-        },
+        }
   );
   return {
     getNextPageParam,
@@ -173,7 +173,7 @@ export function createUseInfiniteQueryOptions<
       input === disableQuery
         ? undefined
         : (input[pageParamKey] as PartialMessage<I>[ParamKey]),
-    queryKey: [...queryKey, "infinite"],
+    queryKey,
     queryFn: createUnaryInfiniteQueryFn(methodSig, input, {
       transport,
       callOptions,
