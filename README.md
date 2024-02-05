@@ -137,7 +137,7 @@ const TransportProvider: FC<
 Broadly speaking, "transport" joins two concepts:
 
 1. The protocol of communication. For this there are two options: the [Connect Protocol](https://connectrpc.com/docs/protocol/), or the [gRPC-Web Protocol](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md).
-1. The protocol options. The primary important piece of information here is the `baseUrl`, but there are also other potentially critical options like request credentials and binary wire format encoding options.
+1. The protocol options. The primary important piece of information here is the `baseUrl`, but there are also other potentially critical options like request credentials, wire serialization options, or protocol-specific options like Connect's support for [HTTP GET](https://connectrpc.com/docs/web/get-requests-and-caching).
 
 With these two pieces of information in hand, the transport provides the critical mechanism by which your app can make network requests.
 
