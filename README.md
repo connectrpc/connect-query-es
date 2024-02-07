@@ -258,6 +258,21 @@ function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
 
 This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query. This function has no side effects.
 
+### `createConnectInfiniteQueryKey`
+
+```ts
+function createConnectInfiniteQueryKey<
+  I extends Message<I>,
+  O extends Message<O>,
+>(
+  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
+  input: DisableQuery | PartialMessage<I>,
+  pageParamKey: keyof PartialMessage<I>,
+): ConnectInfiniteQueryKey<I>;
+```
+
+This function is not really necessary unless you are manually creating infinite query keys. When invalidating queries, it usually makes more sense to use the `createConnectQueryKey` function instead since it will also invalidate the regular queries (as well as the infinite queries).
+
 ### `callUnaryMethod`
 
 ```ts
@@ -326,6 +341,19 @@ For example, a partial query key might look like this:
 
 ```ts
 ["example.v1.ExampleService", "GetTodos"];
+```
+
+### `ConnectInfiniteQueryKey`
+
+Similar to `ConnectQueryKey`, but for infinite queries.
+
+```ts
+type ConnectInfiniteQueryKey<I extends Message<I>> = [
+  serviceTypeName: string,
+  methodName: string,
+  input: PartialMessage<I>,
+  "infinite",
+];
 ```
 
 ## Testing

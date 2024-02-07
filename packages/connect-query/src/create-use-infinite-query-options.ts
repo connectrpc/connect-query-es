@@ -24,8 +24,8 @@ import type {
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import {
-  type ConnectQueryKey,
-  createConnectQueryKey,
+  type ConnectInfiniteQueryKey,
+  createConnectInfiniteQueryKey,
 } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { assert, type DisableQuery, disableQuery } from "./utils.js";
@@ -62,7 +62,7 @@ export type CreateInfiniteQueryOptions<
       ConnectError,
       InfiniteData<O>,
       O,
-      ConnectQueryKey<I>,
+      ConnectInfiniteQueryKey<I>,
       PartialMessage<I>[ParamKey]
     >,
     "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
@@ -82,7 +82,7 @@ export type CreateSuspenseInfiniteQueryOptions<
       ConnectError,
       InfiniteData<O>,
       O,
-      ConnectQueryKey<I>,
+      ConnectInfiniteQueryKey<I>,
       PartialMessage<I>[ParamKey]
     >,
     "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
@@ -104,7 +104,7 @@ function createUnaryInfiniteQueryFn<
     callOptions?: CallOptions | undefined;
     pageParamKey: ParamKey;
   },
-): QueryFunction<O, ConnectQueryKey<I>, PartialMessage<I>[ParamKey]> {
+): QueryFunction<O, ConnectInfiniteQueryKey<I>, PartialMessage<I>[ParamKey]> {
   return async (context) => {
     assert(input !== disableQuery, "Disabled query cannot be fetched");
     assert("pageParam" in context, "pageParam must be part of context");
@@ -149,12 +149,16 @@ export function createUseInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<O, ConnectQueryKey<I>, PartialMessage<I>[ParamKey]>;
+  queryKey: ConnectInfiniteQueryKey<I>;
+  queryFn: QueryFunction<
+    O,
+    ConnectInfiniteQueryKey<I>,
+    PartialMessage<I>[ParamKey]
+  >;
   initialPageParam: PartialMessage<I>[ParamKey];
   enabled: boolean;
 } {
-  const queryKey = createConnectQueryKey(
+  const queryKey = createConnectInfiniteQueryKey(
     methodSig,
     input === disableQuery
       ? undefined

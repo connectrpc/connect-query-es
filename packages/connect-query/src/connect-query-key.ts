@@ -58,3 +58,26 @@ export function createConnectQueryKey<
     input === disableQuery || !input ? {} : input,
   ];
 }
+
+/**
+ * Similar to @see ConnectQueryKey, but for infinite queries.
+ */
+export type ConnectInfiniteQueryKey<I extends Message<I>> = [
+  serviceTypeName: string,
+  methodName: string,
+  input: PartialMessage<I>,
+  "infinite",
+];
+
+/**
+ * Similar to @see createConnectQueryKey, but for infinite queries.
+ */
+export function createConnectInfiniteQueryKey<
+  I extends Message<I>,
+  O extends Message<O>,
+>(
+  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
+  input?: DisableQuery | PartialMessage<I> | undefined,
+): ConnectInfiniteQueryKey<I> {
+  return [...createConnectQueryKey(methodDescriptor, input), "infinite"];
+}
