@@ -14,6 +14,7 @@
     - [`import_extension=.js`](#import_extensionjs)
     - [`keep_empty_files=true`](#keep_empty_filestrue)
     - [`js_import_style`](#js_import_style)
+    - [`ts_nocheck=false`](#ts_nocheckfalse)
   - [Example Generated Code](#example-generated-code)
 
 The code generator for Connect-Query, a expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), that enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
@@ -195,10 +196,6 @@ Unfortunately, not all bundlers and tools have caught up yet, and Deno requires 
 - `import_extension=none` to remove the `.js` extension
 - `import_extension=.ts` to replace the `.js` extension with `.ts`
 
-### `keep_empty_files=true`
-
-This option exists for other plugins but is not applicable to `protoc-gen-connect-query` because, unlike most other plugins, it does not generate a maximum of one output file for every input proto file. Instead, it generates one output file per service. If you provide a valid proto file that contains no services, `protoc-gen-connect-query` will have no output.
-
 ### `js_import_style`
 
 By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query)
@@ -212,6 +209,21 @@ Possible values:
 - `js_import_style=module` generate ECMAScript `import` / `export` statements -
   the default behavior.
 - `js_import_style=legacy_commonjs` generate CommonJS `require()` calls.
+
+### `keep_empty_files=true`
+
+This option exists for other plugins but is not applicable to `protoc-gen-connect-query` because, unlike most other plugins, it does not generate a maximum of one output file for every input proto file. Instead, it generates one output file per service. If you provide a valid proto file that contains no services, `protoc-gen-connect-query` will have no output.
+
+### `ts_nocheck=false`
+
+By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query)
+(and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin))
+generate an annotation at the top of each file: `// @ts-nocheck`.
+
+We generate the annotation to support a wide of compiler configurations and
+future changes to the language. But there can be situation where the annotation
+shadows an underlying problem, for example an unresolvable import. To remove
+the annotation and to enable type checks, set the plugin option `ts_nocheck=false`.
 
 ## Example Generated Code
 
