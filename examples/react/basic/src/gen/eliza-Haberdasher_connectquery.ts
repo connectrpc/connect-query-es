@@ -29,6 +29,6 @@ export const work = {
   I: Nothing,
   O: Nothing,
   service: {
-    typeName: "connectrpc.eliza.v1.Haberdasher"
-  }
+    typeName: "connectrpc.eliza.v1.Haberdasher",
+  },
 } as const;

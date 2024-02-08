@@ -1,4 +1,4 @@
-// Copyright 2022 Buf Technologies, Inc.
+// Copyright 2021-2023 The Connect Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,6 +32,6 @@ export const say = {
   I: SayRequest,
   O: SayResponse,
   service: {
-    typeName: "connectrpc.eliza.v1.ElizaService"
-  }
+    typeName: "connectrpc.eliza.v1.ElizaService",
+  },
 };
