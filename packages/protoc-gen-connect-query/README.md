@@ -14,7 +14,7 @@
     - [`import_extension=.js`](#import_extensionjs)
     - [`keep_empty_files=true`](#keep_empty_filestrue)
     - [`js_import_style`](#js_import_style)
-    - [`ts_nocheck=false`](#tsnocheck)
+    - [`ts_nocheck=false`](#ts_nocheckfalse)
   - [Example Generated Code](#example-generated-code)
 
 The code generator for Connect-Query, a expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), that enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
