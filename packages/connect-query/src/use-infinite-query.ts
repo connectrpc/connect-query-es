@@ -64,7 +64,10 @@ export function useInfiniteQuery<
     pageParamKey,
     callOptions,
   });
-  return tsUseInfiniteQuery({ ...options, ...baseOptions });
+  // The query cannot be enabled if the base options are disabled, regardless of
+  // incoming query options.
+  const enabled = baseOptions.enabled && (options.enabled ?? true);
+  return tsUseInfiniteQuery({ ...options, ...baseOptions, enabled });
 }
 
 /**

@@ -346,4 +346,32 @@ describe("useSuspenseInfiniteQuery", () => {
       ],
     });
   });
+
+  it("can be disabled without explicit disableQuery", () => {
+    const { result } = renderHook(
+      () => {
+        return useInfiniteQuery(
+          methodDescriptor,
+          {
+            page: 0n,
+          },
+          {
+            getNextPageParam: (lastPage) => lastPage.page + 1n,
+            pageParamKey: "page",
+            enabled: false,
+          },
+        );
+      },
+      wrapper(
+        {
+          defaultOptions,
+        },
+        mockedPaginatedTransport,
+      ),
+    );
+
+    expect(result.current.data).toBeUndefined();
+    expect(result.current.isPending).toBeTruthy();
+    expect(result.current.isFetching).toBeFalsy();
+  });
 });
