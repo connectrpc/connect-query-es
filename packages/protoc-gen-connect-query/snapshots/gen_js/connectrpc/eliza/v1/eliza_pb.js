@@ -1,4 +1,4 @@
-// Copyright 2021-2023 The Connect Authors
+// Copyright 2022 Buf Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -76,7 +76,9 @@ export const ConverseResponse = proto3.makeMessageType(
  */
 export const IntroduceRequest = proto3.makeMessageType(
   "connectrpc.eliza.v1.IntroduceRequest",
-  () => [{ no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ }],
+  () => [
+    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ],
 );
 
 /**
@@ -90,3 +92,4 @@ export const IntroduceResponse = proto3.makeMessageType(
     { no: 1, name: "sentence", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ],
 );
+
