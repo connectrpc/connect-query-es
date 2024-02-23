@@ -29,6 +29,6 @@ export const count = {
   I: CountRequest,
   O: CountResponse,
   service: {
-    typeName: "connectrpc.eliza.v1.BigIntService"
-  }
+    typeName: "connectrpc.eliza.v1.BigIntService",
+  },
 } as const;

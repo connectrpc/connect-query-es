@@ -29,6 +29,6 @@ export const list = {
   I: ListRequest,
   O: ListResponse,
   service: {
-    typeName: "connectrpc.eliza.v1.PaginatedService"
-  }
+    typeName: "connectrpc.eliza.v1.PaginatedService",
+  },
 } as const;
