@@ -43,10 +43,11 @@ export function useInfiniteQuery<
   I extends Message<I>,
   O extends Message<O>,
   ParamKey extends keyof PartialMessage<I>,
-  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | Input,
+  input:
+    | DisableQuery
+    | (PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>),
   {
     transport,
     callOptions,
@@ -80,10 +81,9 @@ export function useSuspenseInfiniteQuery<
   I extends Message<I>,
   O extends Message<O>,
   ParamKey extends keyof PartialMessage<I>,
-  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: Input,
+  input: PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
   {
     transport,
     callOptions,
