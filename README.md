@@ -25,8 +25,8 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`createConnectQueryKey`](#createconnectquerykey)
   - [`callUnaryMethod`](#callunarymethod)
   - [`createProtobufSafeUpdater`](#createprotobufsafeupdater)
-  - [`createUseQueryOptions`](#createusequeryoptions)
-  - [`createUseInfiniteQueryOptions`](#createuseinfinitequeryoptions)
+  - [`createQueryOptions`](#createqueryoptions)
+  - [`createInfiniteQueryOptions`](#createinfinitequeryoptions)
   - [`ConnectQueryKey`](#connectquerykey)
 
 ## Quickstart
