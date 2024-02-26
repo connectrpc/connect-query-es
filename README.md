@@ -340,14 +340,14 @@ An example of how to use this function with `useQueries`:
 
 ```ts
 import { useQueries } from "@tanstack/react-query";
-import { createUseQueryOptions, useTransport } from "@connectrpc/connect-query";
+import { createQueryOptions, useTransport } from "@connectrpc/connect-query";
 import { example } from "your-generated-code/example-ExampleService_connectquery";
 
 const MyComponent = () => {
   const transport = useTransport();
   const [query1, query2] = useQueries([
-    createUseQueryOptions(example, { sentence: "First query" }, { transport }),
-    createUseQueryOptions(example, { sentence: "Second query" }, { transport }),
+    createQueryOptions(example, { sentence: "First query" }, { transport }),
+    createQueryOptions(example, { sentence: "Second query" }, { transport }),
   ]);
   ...
 };
