@@ -315,9 +315,26 @@ queryClient.setQueryData(
 
 ```
 
-### `createUseQueryOptions`
+### `createQueryOptions`
 
-A functional version of the options usually passed the underlying `useQuery` hook. This is useful when interacting with `useQueries` API or queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+```ts
+function createQueryOptions<I extends Message<I>, O extends Message<O>>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  input: DisableQuery | PartialMessage<I> | undefined,
+  {
+    transport,
+    callOptions,
+  }: ConnectQueryOptions & {
+    transport: Transport;
+  },
+): {
+  queryKey: ConnectQueryKey<I>;
+  queryFn: QueryFunction<O, ConnectQueryKey<I>>;
+  enabled: boolean;
+};
+```
+
+A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `enabled` flag. This is useful when interacting with `useQueries` API or queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
 
 An example of how to use this function with `useQueries`:
 
@@ -336,9 +353,41 @@ const MyComponent = () => {
 };
 ```
 
-### `createUseInfiniteQueryOptions`
+### `createInfiniteQueryOptions`
 
-A functional version of the options usually passed the underlying `useInfiniteQuery` hook. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+```ts
+function createInfiniteQueryOptions<
+  I extends Message<I>,
+  O extends Message<O>,
+  ParamKey extends keyof PartialMessage<I>,
+  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
+>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  input: DisableQuery | Input,
+  {
+    transport,
+    getNextPageParam,
+    pageParamKey,
+    callOptions,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
+): {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
+  queryKey: ConnectInfiniteQueryKey<I>;
+  queryFn: QueryFunction<
+    O,
+    ConnectInfiniteQueryKey<I>,
+    PartialMessage<I>[ParamKey]
+  >;
+  initialPageParam: PartialMessage<I>[ParamKey];
+  enabled: boolean;
+};
+```
+
+A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `enabled` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
 
 ### `ConnectQueryKey`
 
