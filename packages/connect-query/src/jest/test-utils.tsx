@@ -63,11 +63,10 @@ export const wrapper = (
 /**
  * Asserts X and Y are equal
  */
-export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
-  T,
->() => T extends Y ? 1 : 2
-  ? true
-  : false;
+export type Equal<X, Y> =
+  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
+    ? true
+    : false;
 
 /**
  * Asserts X and Y are not equal

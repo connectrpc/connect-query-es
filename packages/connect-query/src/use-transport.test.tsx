@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { ConnectError } from "@connectrpc/connect";
+import { createAsyncIterable } from "@connectrpc/connect/protocol";
 import { describe, expect, it } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
@@ -33,28 +34,44 @@ const sayMethodDescriptor = {
   },
 };
 
-const error = new ConnectError(
-  "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",
-);
-
 describe("fallbackTransport", () => {
   it("throws a helpful error message", async () => {
-    await expect(Promise.reject(fallbackTransport.unary)).rejects.toThrow(
-      error,
+    const error = new ConnectError(
+      "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info."
     );
-    await expect(Promise.reject(fallbackTransport.stream)).rejects.toThrow(
-      error,
-    );
+    await expect(async () =>
+      fallbackTransport.unary(
+        ElizaService,
+        ElizaService.methods.say,
+        undefined,
+        undefined,
+        undefined,
+        {}
+      )
+    ).rejects.toThrow(error);
+    await expect(async () =>
+      fallbackTransport.stream(
+        ElizaService,
+        ElizaService.methods.introduce,
+        undefined,
+        undefined,
+        undefined,
+        createAsyncIterable([])
+      )
+    ).rejects.toThrow(error);
   });
 });
 
 describe("useTransport", () => {
   it("throws the fallback error", async () => {
+    const error = new ConnectError(
+      "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info."
+    );
     const { result, rerender } = renderHook(
       () => useQuery(sayMethodDescriptor, undefined, { retry: false }),
       {
         wrapper: wrapper().queryClientWrapper,
-      },
+      }
     );
     rerender();
 
