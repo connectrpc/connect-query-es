@@ -35,3 +35,5 @@ export { defaultOptions } from "./default-options.js";
 export type { DisableQuery, ConnectUpdater } from "./utils.js";
 export { callUnaryMethod } from "./call-unary-method.js";
 export type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+export { createUseInfiniteQueryOptions as createInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
+export { createUseQueryOptions as createQueryOptions } from "./create-use-query-options.js";
