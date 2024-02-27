@@ -374,4 +374,30 @@ describe("useSuspenseInfiniteQuery", () => {
     expect(result.current.isPending).toBeTruthy();
     expect(result.current.isFetching).toBeFalsy();
   });
+
+  // eslint-disable-next-line jest/expect-expect -- We are asserting via @ts-expect-error
+  it("does not allow excess properties", () => {
+    renderHook(
+      () => {
+        return useInfiniteQuery(
+          methodDescriptor,
+          {
+            page: 0n,
+            // @ts-expect-error(2345) extra fields should not be allowed
+            extraField: "extra",
+          },
+          {
+            getNextPageParam: (lastPage) => lastPage.page + 1n,
+            pageParamKey: "page",
+          },
+        );
+      },
+      wrapper(
+        {
+          defaultOptions,
+        },
+        mockedPaginatedTransport,
+      ),
+    );
+  });
 });
