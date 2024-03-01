@@ -137,6 +137,8 @@ describe("useMutation", () => {
       expect(abortController.signal.aborted).toBeTruthy();
     });
 
+    expect(result.current.isPending).toBeFalsy();
+
     const newResult = await mutationTransport.unary(
       BigIntService,
       BigIntService.methods.getCount,
