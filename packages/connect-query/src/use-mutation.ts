@@ -36,7 +36,7 @@ export type UseMutationOptions<
   "mutationFn"
 > & {
   transport?: Transport;
-  callOptions?: Omit<CallOptions, "signal"> | undefined;
+  callOptions?: CallOptions;
 };
 
 /**
@@ -48,7 +48,7 @@ export type UseMutationOptions<
 export function useMutation<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
   // istanbul ignore next
-  { transport, callOptions, ...queryOptions }: UseMutationOptions<I, O> = {},
+  { transport, callOptions, ...queryOptions }: UseMutationOptions<I, O> = {}
 ): UseMutationResult<O, ConnectError, PartialMessage<I>> {
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
@@ -57,14 +57,14 @@ export function useMutation<I extends Message<I>, O extends Message<O>>(
       const result = await transportToUse.unary(
         { typeName: methodSig.service.typeName, methods: {} },
         methodSig,
-        undefined,
+        callOptions?.signal,
         callOptions?.timeoutMs,
         callOptions?.headers,
-        input,
+        input
       );
       return result.message;
     },
-    [transportToUse, callOptions, methodSig],
+    [transportToUse, callOptions, methodSig]
   );
   return tsUseMutation({
     ...queryOptions,
