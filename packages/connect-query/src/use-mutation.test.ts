@@ -16,7 +16,7 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { defaultOptions } from "./default-options";
-import { PaginatedService, BigIntService } from "./gen/eliza_connect";
+import { BigIntService,PaginatedService } from "./gen/eliza_connect";
 import {
   mockPaginatedTransport,
   mockStatefulBigIntTransport,
@@ -56,8 +56,8 @@ describe("useMutation", () => {
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
 
     result.current.mutate({
@@ -76,7 +76,7 @@ describe("useMutation", () => {
       {
         page: 0n,
       },
-      undefined
+      undefined,
     );
   });
 
@@ -94,8 +94,8 @@ describe("useMutation", () => {
         {
           defaultOptions,
         },
-        mockedPaginatedTransport
-      )
+        mockedPaginatedTransport,
+      ),
     );
 
     result.current.mutate({
@@ -123,8 +123,8 @@ describe("useMutation", () => {
         {
           defaultOptions,
         },
-        mutationTransport
-      )
+        mutationTransport,
+      ),
     );
 
     result.current.mutate({
@@ -143,7 +143,7 @@ describe("useMutation", () => {
       undefined,
       undefined,
       undefined,
-      {}
+      {},
     );
 
     expect(newResult.message.count).toBe(0n);

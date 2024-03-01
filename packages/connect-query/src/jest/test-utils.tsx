@@ -36,7 +36,7 @@ export const wrapper = (
   config?: QueryClientConfig,
   transport = createConnectTransport({
     baseUrl: "https://demo.connectrpc.com",
-  })
+  }),
 ): {
   wrapper: JSXElementConstructor<PropsWithChildren>;
   queryClient: QueryClient;
@@ -63,10 +63,11 @@ export const wrapper = (
 /**
  * Asserts X and Y are equal
  */
-export type Equal<X, Y> =
-  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
-    ? true
-    : false;
+export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
+  T,
+>() => T extends Y ? 1 : 2
+  ? true
+  : false;
 
 /**
  * Asserts X and Y are not equal
@@ -115,7 +116,7 @@ export const sleep = async (timeout: number) =>
  */
 export const mockEliza = (
   override?: PartialMessage<SayRequest>,
-  addDelay = false
+  addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
@@ -124,7 +125,7 @@ export const mockEliza = (
           await sleep(1000);
         }
         return new SayResponse(
-          override ?? { sentence: `Hello ${input.sentence}` }
+          override ?? { sentence: `Hello ${input.sentence}` },
         );
       },
     });
@@ -163,7 +164,7 @@ export const mockStatefulBigIntTransport = (addDelay = false) =>
  */
 export const mockPaginatedTransport = (
   override?: PartialMessage<ListResponse>,
-  addDelay = false
+  addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
     service(PaginatedService, {
