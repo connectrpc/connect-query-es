@@ -142,16 +142,20 @@ export const mockBigInt = () =>
 /**
  * a mock for BigIntService that acts as an impromptu database
  */
-export const mockStatefulBigIntTransport = () =>
+export const mockStatefulBigIntTransport = (addDelay = false) =>
   createRouterTransport(({ service }) => {
     let count = 0n;
     service(BigIntService, {
-      count: (request?: CountRequest) => {
+      count: async (request?: CountRequest) => {
+        if (addDelay) {
+          await sleep(1000);
+        }
         if (request) {
           count += request.add;
         }
         return new CountResponse({ count });
       },
+      getCount: () => new CountResponse({ count }),
     });
   });
 

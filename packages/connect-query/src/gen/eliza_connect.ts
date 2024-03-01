@@ -181,6 +181,15 @@ export const BigIntService = {
       O: CountResponse,
       kind: MethodKind.Unary,
     },
+    /**
+     * @generated from rpc connectrpc.eliza.v1.BigIntService.GetCount
+     */
+    getCount: {
+      name: "GetCount",
+      I: Nothing,
+      O: CountResponse,
+      kind: MethodKind.Unary,
+    },
   }
 } as const;
 

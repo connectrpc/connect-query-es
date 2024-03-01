@@ -36,7 +36,7 @@ export type UseMutationOptions<
   "mutationFn"
 > & {
   transport?: Transport;
-  callOptions?: Omit<CallOptions, "signal"> | undefined;
+  callOptions?: CallOptions;
 };
 
 /**
@@ -57,7 +57,7 @@ export function useMutation<I extends Message<I>, O extends Message<O>>(
       const result = await transportToUse.unary(
         { typeName: methodSig.service.typeName, methods: {} },
         methodSig,
-        undefined,
+        callOptions?.signal,
         callOptions?.timeoutMs,
         callOptions?.headers,
         input,
