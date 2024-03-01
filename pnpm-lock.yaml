@@ -144,8 +144,8 @@ importers:
   packages/connect-query:
     dependencies:
       stable-hash:
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.4
+        version: 0.0.4
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.13.5
@@ -5530,8 +5530,8 @@ packages:
   /sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
 
-  /stable-hash@0.0.3:
-    resolution: {integrity: sha512-c63fvNCQ7ip1wBfPv54MflMA5L6OE5J0p6Fg13IpKft4JAFoNal8+s/jtJ8PibrwqXm4onnbeQsADs8k0NQGUA==}
+  /stable-hash@0.0.4:
+    resolution: {integrity: sha512-LjdcbuBeLcdETCrPn9i8AYAZ1eCtu4ECAWtP7UleOiZ9LzVxRzzUZEoZ8zB24nhkQnDWyET0I+3sWokSDS3E7g==}
     dev: false
 
   /stack-utils@2.0.6:
