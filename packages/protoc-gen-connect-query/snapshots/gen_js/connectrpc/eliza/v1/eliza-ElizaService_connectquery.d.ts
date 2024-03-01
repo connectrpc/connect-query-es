@@ -1,4 +1,4 @@
-// Copyright 2021-2023 The Connect Authors
+// Copyright 2022 Buf Technologies, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,11 +26,11 @@ import { MethodKind } from "@bufbuild/protobuf";
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
 export const say: {
-  readonly name: "Say";
-  readonly I: typeof SayRequest;
-  readonly O: typeof SayResponse;
-  readonly kind: MethodKind.Unary;
+      readonly name: "Say",
+      readonly I: typeof SayRequest,
+      readonly O: typeof SayResponse,
+      readonly kind: MethodKind.Unary,
   readonly service: {
-    readonly typeName: "connectrpc.eliza.v1.ElizaService";
-  };
+    readonly typeName: "connectrpc.eliza.v1.ElizaService"
+  }
 };

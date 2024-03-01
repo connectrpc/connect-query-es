@@ -16,8 +16,12 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { defaultOptions } from "./default-options";
-import { PaginatedService } from "./gen/eliza_connect";
-import { mockPaginatedTransport, wrapper } from "./jest/test-utils";
+import { PaginatedService, BigIntService } from "./gen/eliza_connect";
+import {
+  mockPaginatedTransport,
+  mockStatefulBigIntTransport,
+  wrapper,
+} from "./jest/test-utils";
 import { useMutation } from "./use-mutation";
 
 // TODO: maybe create a helper to take a service and method and generate this.
@@ -30,6 +34,14 @@ const methodDescriptor = {
 };
 
 const mockedPaginatedTransport = mockPaginatedTransport();
+const mutationTransport = mockStatefulBigIntTransport(true);
+
+const statefulDescriptor = {
+  ...BigIntService.methods.count,
+  service: {
+    typeName: BigIntService.typeName,
+  },
+};
 
 describe("useMutation", () => {
   it("performs a mutation", async () => {
@@ -44,8 +56,8 @@ describe("useMutation", () => {
         {
           defaultOptions,
         },
-        mockedPaginatedTransport,
-      ),
+        mockedPaginatedTransport
+      )
     );
 
     result.current.mutate({
@@ -64,7 +76,7 @@ describe("useMutation", () => {
       {
         page: 0n,
       },
-      undefined,
+      undefined
     );
   });
 
@@ -82,8 +94,8 @@ describe("useMutation", () => {
         {
           defaultOptions,
         },
-        mockedPaginatedTransport,
-      ),
+        mockedPaginatedTransport
+      )
     );
 
     result.current.mutate({
@@ -95,5 +107,45 @@ describe("useMutation", () => {
     });
 
     expect(result.current.data?.items[0]).toBe("Intercepted!");
+  });
+
+  it("can be cancelled", async () => {
+    const abortController = new AbortController();
+    const { result } = renderHook(
+      () => {
+        return useMutation(statefulDescriptor, {
+          callOptions: {
+            signal: abortController.signal,
+          },
+        });
+      },
+      wrapper(
+        {
+          defaultOptions,
+        },
+        mutationTransport
+      )
+    );
+
+    result.current.mutate({
+      add: 1n,
+    });
+
+    abortController.abort();
+
+    await waitFor(() => {
+      expect(abortController.signal.aborted).toBeTruthy();
+    });
+
+    const newResult = await mutationTransport.unary(
+      BigIntService,
+      BigIntService.methods.getCount,
+      undefined,
+      undefined,
+      undefined,
+      {}
+    );
+
+    expect(newResult.message.count).toBe(0n);
   });
 });
