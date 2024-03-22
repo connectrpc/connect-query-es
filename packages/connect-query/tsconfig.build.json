@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "skipLibCheck": true,
-    "verbatimModuleSyntax": true,
     "declaration": true,
     "declarationDir": "./dist/esm",
     "outDir": "./dist/esm"

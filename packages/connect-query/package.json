@@ -11,7 +11,7 @@
   "scripts": {
     "clean": "rm -rf ./dist/*",
     "build": "npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc --project tsconfig.build.json --module commonjs --moduleResolution node --verbatimModuleSyntax false --outDir ./dist/cjs --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
+    "build:cjs": "tsc --project tsconfig.build.json --module commonjs --moduleResolution node10 --verbatimModuleSyntax false --outDir ./dist/cjs --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
     "build:esm": "tsc --project tsconfig.build.json",
     "generate": "buf generate --path eliza.proto",
     "test": "jest",
