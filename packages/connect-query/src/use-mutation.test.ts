@@ -16,8 +16,12 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { defaultOptions } from "./default-options.js";
-import { PaginatedService } from "./gen/eliza_connect.js";
-import { mockPaginatedTransport, wrapper } from "./jest/test-utils.js";
+import { BigIntService, PaginatedService } from "./gen/eliza_connect.js";
+import {
+  mockPaginatedTransport,
+  mockStatefulBigIntTransport,
+  wrapper,
+} from "./jest/test-utils.js";
 import { useMutation } from "./use-mutation.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
@@ -30,6 +34,14 @@ const methodDescriptor = {
 };
 
 const mockedPaginatedTransport = mockPaginatedTransport();
+const mutationTransport = mockStatefulBigIntTransport(true);
+
+const statefulDescriptor = {
+  ...BigIntService.methods.count,
+  service: {
+    typeName: BigIntService.typeName,
+  },
+};
 
 describe("useMutation", () => {
   it("performs a mutation", async () => {
@@ -95,5 +107,47 @@ describe("useMutation", () => {
     });
 
     expect(result.current.data?.items[0]).toBe("Intercepted!");
+  });
+
+  it("can be cancelled", async () => {
+    const abortController = new AbortController();
+    const { result } = renderHook(
+      () => {
+        return useMutation(statefulDescriptor, {
+          callOptions: {
+            signal: abortController.signal,
+          },
+        });
+      },
+      wrapper(
+        {
+          defaultOptions,
+        },
+        mutationTransport,
+      ),
+    );
+
+    result.current.mutate({
+      add: 1n,
+    });
+
+    abortController.abort();
+
+    await waitFor(() => {
+      expect(abortController.signal.aborted).toBeTruthy();
+    });
+
+    expect(result.current.isPending).toBeFalsy();
+
+    const newResult = await mutationTransport.unary(
+      BigIntService,
+      BigIntService.methods.getCount,
+      undefined,
+      undefined,
+      undefined,
+      {},
+    );
+
+    expect(newResult.message.count).toBe(0n);
   });
 });

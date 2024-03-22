@@ -25,6 +25,8 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`createConnectQueryKey`](#createconnectquerykey)
   - [`callUnaryMethod`](#callunarymethod)
   - [`createProtobufSafeUpdater`](#createprotobufsafeupdater)
+  - [`createQueryOptions`](#createqueryoptions)
+  - [`createInfiniteQueryOptions`](#createinfinitequeryoptions)
   - [`ConnectQueryKey`](#connectquerykey)
 
 ## Quickstart
@@ -137,13 +139,15 @@ const TransportProvider: FC<
 Broadly speaking, "transport" joins two concepts:
 
 1. The protocol of communication. For this there are two options: the [Connect Protocol](https://connectrpc.com/docs/protocol/), or the [gRPC-Web Protocol](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md).
-1. The protocol options. The primary important piece of information here is the `baseUrl`, but there are also other potentially critical options like request credentials and binary wire format encoding options.
+1. The protocol options. The primary important piece of information here is the `baseUrl`, but there are also other potentially critical options like request credentials, wire serialization options, or protocol-specific options like Connect's support for [HTTP GET](https://connectrpc.com/docs/web/get-requests-and-caching).
 
 With these two pieces of information in hand, the transport provides the critical mechanism by which your app can make network requests.
 
 To learn more about the two modes of transport, take a look at the Connect-Web documentation on [choosing a protocol](https://connectrpc.com/docs/web/choosing-a-protocol/).
 
 To get started with Connect-Query, simply import a transport (either [`createConnectTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/connect-transport.ts) or [`createGrpcWebTransport`](https://github.com/connectrpc/connect-es/blob/main/packages/connect-web/src/grpc-web-transport.ts) from [`@connectrpc/connect-web`](https://www.npmjs.com/package/@connectrpc/connect-web)) and pass it to the provider.
+
+A common use case for the transport is to add headers to requests (like auth tokens, etc). You can do this with a custom [interceptor](https://connectrpc.com/docs/web/interceptors).
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -154,6 +158,11 @@ const queryClient = new QueryClient();
 export const App() {
   const transport = createConnectTransport({
     baseUrl: "<your baseUrl here>",
+    interceptors: [(next) => (request) => {
+      req.header.append("some-new-header", "some-value");
+      // Add your headers here
+      return next(request);
+    }],
   });
   return (
     <TransportProvider transport={transport}>
@@ -164,6 +173,8 @@ export const App() {
   );
 }
 ```
+
+For more details about what you can do with the transport, see the [Connect-Web documentation](https://connectrpc.com/docs/web/).
 
 ### `useTransport`
 
@@ -249,6 +260,21 @@ function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
 
 This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query. This function has no side effects.
 
+### `createConnectInfiniteQueryKey`
+
+```ts
+function createConnectInfiniteQueryKey<
+  I extends Message<I>,
+  O extends Message<O>,
+>(
+  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
+  input: DisableQuery | PartialMessage<I>,
+  pageParamKey: keyof PartialMessage<I>,
+): ConnectInfiniteQueryKey<I>;
+```
+
+This function is not really necessary unless you are manually creating infinite query keys. When invalidating queries, it usually makes more sense to use the `createConnectQueryKey` function instead since it will also invalidate the regular queries (as well as the infinite queries).
+
 ### `callUnaryMethod`
 
 ```ts
@@ -289,6 +315,80 @@ queryClient.setQueryData(
 
 ```
 
+### `createQueryOptions`
+
+```ts
+function createQueryOptions<I extends Message<I>, O extends Message<O>>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  input: DisableQuery | PartialMessage<I> | undefined,
+  {
+    transport,
+    callOptions,
+  }: ConnectQueryOptions & {
+    transport: Transport;
+  },
+): {
+  queryKey: ConnectQueryKey<I>;
+  queryFn: QueryFunction<O, ConnectQueryKey<I>>;
+  enabled: boolean;
+};
+```
+
+A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `enabled` flag. This is useful when interacting with `useQueries` API or queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+
+An example of how to use this function with `useQueries`:
+
+```ts
+import { useQueries } from "@tanstack/react-query";
+import { createQueryOptions, useTransport } from "@connectrpc/connect-query";
+import { example } from "your-generated-code/example-ExampleService_connectquery";
+
+const MyComponent = () => {
+  const transport = useTransport();
+  const [query1, query2] = useQueries([
+    createQueryOptions(example, { sentence: "First query" }, { transport }),
+    createQueryOptions(example, { sentence: "Second query" }, { transport }),
+  ]);
+  ...
+};
+```
+
+### `createInfiniteQueryOptions`
+
+```ts
+function createInfiniteQueryOptions<
+  I extends Message<I>,
+  O extends Message<O>,
+  ParamKey extends keyof PartialMessage<I>,
+  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
+>(
+  methodSig: MethodUnaryDescriptor<I, O>,
+  input: DisableQuery | Input,
+  {
+    transport,
+    getNextPageParam,
+    pageParamKey,
+    callOptions,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
+): {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
+  queryKey: ConnectInfiniteQueryKey<I>;
+  queryFn: QueryFunction<
+    O,
+    ConnectInfiniteQueryKey<I>,
+    PartialMessage<I>[ParamKey]
+  >;
+  initialPageParam: PartialMessage<I>[ParamKey];
+  enabled: boolean;
+};
+```
+
+A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `enabled` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+
 ### `ConnectQueryKey`
 
 ```ts
@@ -317,6 +417,19 @@ For example, a partial query key might look like this:
 
 ```ts
 ["example.v1.ExampleService", "GetTodos"];
+```
+
+### `ConnectInfiniteQueryKey`
+
+Similar to `ConnectQueryKey`, but for infinite queries.
+
+```ts
+type ConnectInfiniteQueryKey<I extends Message<I>> = [
+  serviceTypeName: string,
+  methodName: string,
+  input: PartialMessage<I>,
+  "infinite",
+];
 ```
 
 ## Testing

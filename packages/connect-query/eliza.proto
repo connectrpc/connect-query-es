@@ -101,6 +101,7 @@ message CountResponse {
 
 service BigIntService {
   rpc Count(CountRequest) returns (CountResponse);
+  rpc GetCount(Nothing) returns (CountResponse);
 }
 
 message ListRequest {
