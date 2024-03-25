@@ -16,10 +16,10 @@ import { ConnectError } from "@connectrpc/connect";
 import { describe, expect, it } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { ElizaService } from "./gen/eliza_connect";
-import { mockBigInt, wrapper } from "./jest/test-utils";
-import { useQuery } from "./use-query";
-import { TransportProvider, useTransport } from "./use-transport";
+import { ElizaService } from "./gen/eliza_connect.js";
+import { mockBigInt, wrapper } from "./jest/test-utils.js";
+import { useQuery } from "./use-query.js";
+import { TransportProvider, useTransport } from "./use-transport.js";
 
 const sayMethodDescriptor = {
   ...ElizaService.methods.say,

@@ -3,7 +3,9 @@
   "compilerOptions": {
     "rootDir": ".",
     "noUnusedLocals": false, // necessary for TypeScript type tests, but since this is not enabled for build, unused variables have no risk of leaking into the build output
-    "lib": ["DOM", "ESNext"]
+    "lib": ["DOM", "ESNext"],
+    "noEmit": true,
+    "verbatimModuleSyntax": false
   },
   "exclude": ["coverage", "dist"],
   "include": ["src", "./*.config.ts"]

@@ -15,14 +15,14 @@
 import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { defaultOptions } from "./default-options";
-import { BigIntService, PaginatedService } from "./gen/eliza_connect";
+import { defaultOptions } from "./default-options.js";
+import { BigIntService, PaginatedService } from "./gen/eliza_connect.js";
 import {
   mockPaginatedTransport,
   mockStatefulBigIntTransport,
   wrapper,
-} from "./jest/test-utils";
-import { useMutation } from "./use-mutation";
+} from "./jest/test-utils.js";
+import { useMutation } from "./use-mutation.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const methodDescriptor = {

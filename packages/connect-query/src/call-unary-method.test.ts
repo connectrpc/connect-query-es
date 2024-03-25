@@ -17,13 +17,13 @@ import type { QueryFunctionContext } from "@tanstack/react-query";
 import { useQueries } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { callUnaryMethod } from "./call-unary-method";
-import type { ConnectQueryKey } from "./connect-query-key";
-import { createConnectQueryKey } from "./connect-query-key";
-import { defaultOptions } from "./default-options";
-import { ElizaService } from "./gen/eliza_connect";
-import type { SayRequest } from "./gen/eliza_pb";
-import { mockEliza, wrapper } from "./jest/test-utils";
+import { callUnaryMethod } from "./call-unary-method.js";
+import type { ConnectQueryKey } from "./connect-query-key.js";
+import { createConnectQueryKey } from "./connect-query-key.js";
+import { defaultOptions } from "./default-options.js";
+import { ElizaService } from "./gen/eliza_connect.js";
+import type { SayRequest } from "./gen/eliza_pb.js";
+import { mockEliza, wrapper } from "./jest/test-utils.js";
 
 const sayMethodDescriptor = {
   ...ElizaService.methods.say,

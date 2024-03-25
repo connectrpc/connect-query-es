@@ -14,7 +14,7 @@
 
 import { describe, expect, it } from "@jest/globals";
 
-import { defaultOptions } from "./default-options";
+import { defaultOptions } from "./default-options.js";
 
 describe("defaultOptions", () => {
   const {

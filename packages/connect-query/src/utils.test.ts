@@ -15,10 +15,14 @@
 import type { PartialMessage } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 
-import { BigIntService } from "./gen/eliza_connect";
-import type { CountResponse } from "./gen/eliza_pb";
-import type { Equal, Expect } from "./jest/test-utils";
-import { assert, createProtobufSafeUpdater, isAbortController } from "./utils";
+import { BigIntService } from "./gen/eliza_connect.js";
+import type { CountResponse } from "./gen/eliza_pb.js";
+import type { Equal, Expect } from "./jest/test-utils.js";
+import {
+  assert,
+  createProtobufSafeUpdater,
+  isAbortController,
+} from "./utils.js";
 
 describe("assert", () => {
   const message = "assertion message";

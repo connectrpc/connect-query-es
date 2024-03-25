@@ -37,6 +37,7 @@
     "corepack",
     "printables",
     "arethetypeswrong",
+    "oneof",
     "typesafe"
   ],
   "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw"]

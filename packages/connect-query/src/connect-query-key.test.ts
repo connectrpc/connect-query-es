@@ -14,9 +14,9 @@
 
 import { describe, expect, it } from "@jest/globals";
 
-import { createConnectQueryKey } from "./connect-query-key";
-import { SayRequest } from "./gen/eliza_pb";
-import { disableQuery } from "./utils";
+import { createConnectQueryKey } from "./connect-query-key.js";
+import { SayRequest } from "./gen/eliza_pb.js";
+import { disableQuery } from "./utils.js";
 
 describe("makeQueryKey", () => {
   const methodDescriptor = {

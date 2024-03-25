@@ -26,6 +26,7 @@ import stableHash from "stable-hash";
  */
 export const defaultOptions = {
   queries: {
-    queryKeyHashFn: stableHash,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- stableHash is a function but doesn't seem to satisfy the type. Likely a node16 compat problem.
+    queryKeyHashFn: stableHash as any as (object: any) => string,
   },
 } satisfies DefaultOptions;

@@ -24,10 +24,14 @@ import {
   BigIntService,
   ElizaService,
   PaginatedService,
-} from "../gen/eliza_connect";
-import type { CountRequest, ListResponse, SayRequest } from "../gen/eliza_pb";
-import { CountResponse, SayResponse } from "../gen/eliza_pb";
-import { TransportProvider } from "../use-transport";
+} from "../gen/eliza_connect.js";
+import type {
+  CountRequest,
+  ListResponse,
+  SayRequest,
+} from "../gen/eliza_pb.js";
+import { CountResponse, SayResponse } from "../gen/eliza_pb.js";
+import { TransportProvider } from "../use-transport.js";
 
 /**
  * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-Query's `TransportProvider`.

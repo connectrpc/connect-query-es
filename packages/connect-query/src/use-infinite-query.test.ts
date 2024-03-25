@@ -19,16 +19,16 @@ import { renderHook, waitFor } from "@testing-library/react";
 import {
   createConnectInfiniteQueryKey,
   createConnectQueryKey,
-} from "./connect-query-key";
-import { defaultOptions } from "./default-options";
-import { PaginatedService } from "./gen/eliza_connect";
-import { mockPaginatedTransport, wrapper } from "./jest/test-utils";
+} from "./connect-query-key.js";
+import { defaultOptions } from "./default-options.js";
+import { PaginatedService } from "./gen/eliza_connect.js";
+import { mockPaginatedTransport, wrapper } from "./jest/test-utils.js";
 import {
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
-} from "./use-infinite-query";
-import { useQuery } from "./use-query";
-import { disableQuery } from "./utils";
+} from "./use-infinite-query.js";
+import { useQuery } from "./use-query.js";
+import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const methodDescriptor = {

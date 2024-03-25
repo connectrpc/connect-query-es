@@ -32,7 +32,7 @@ module.exports = {
   },
   workerThreads: true, // Enabled so jest would stop complaining about serializing BigInt.  See https://github.com/jestjs/jest/issues/11617#issuecomment-1458155552 for details
   transform: {
-    "^.+\\.(ts|tsx)$": [
+    "^.+\\.(ts|tsx|js)$": [
       "ts-jest",
       {
         isolatedModules: false,
