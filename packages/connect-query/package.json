@@ -40,7 +40,7 @@
     "@connectrpc/connect": "^1.4.0",
     "@connectrpc/connect-web": "^1.4.0",
     "@connectrpc/protoc-gen-connect-es": "^1.4.0",
-    "@tanstack/react-query": "^5.24.1",
+    "@tanstack/react-query": "^5.28.9",
     "@testing-library/react": "^14.2.2",
     "@types/react": "^18.2.73",
     "@types/react-dom": "^18.2.23",
