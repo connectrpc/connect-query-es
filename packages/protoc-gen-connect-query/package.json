@@ -27,8 +27,8 @@
   },
   "preferUnplugged": true,
   "devDependencies": {
-    "@bufbuild/buf": "1.29.0",
-    "@bufbuild/protoc-gen-es": "^1.7.2",
+    "@bufbuild/buf": "1.30.0",
+    "@bufbuild/protoc-gen-es": "^1.8.0",
     "@connectrpc/connect": "^1.4.0",
     "@connectrpc/connect-query": "workspace:*",
     "@connectrpc/protoc-gen-connect-es": "^1.4.0",
@@ -36,8 +36,8 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^1.7.2",
-    "@bufbuild/protoplugin": "^1.7.2"
+    "@bufbuild/protobuf": "^1.8.0",
+    "@bufbuild/protoplugin": "^1.8.0"
   },
   "peerDependencies": {
     "@bufbuild/protoc-gen-es": "1.x"
