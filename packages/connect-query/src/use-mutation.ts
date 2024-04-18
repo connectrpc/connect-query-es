@@ -21,7 +21,6 @@ import type {
 import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
-import type { ConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
@@ -31,8 +30,9 @@ import { useTransport } from "./use-transport.js";
 export type UseMutationOptions<
   I extends Message<I>,
   O extends Message<O>,
+  Ctx = unknown,
 > = Omit<
-  TSUseMutationOptions<O, ConnectError, PartialMessage<I>, ConnectQueryKey<I>>,
+  TSUseMutationOptions<O, ConnectError, PartialMessage<I>, Ctx>,
   "mutationFn"
 > & {
   transport?: Transport;
@@ -45,11 +45,19 @@ export type UseMutationOptions<
  * @param methodSig
  * @returns
  */
-export function useMutation<I extends Message<I>, O extends Message<O>>(
+export function useMutation<
+  I extends Message<I>,
+  O extends Message<O>,
+  Ctx = unknown,
+>(
   methodSig: MethodUnaryDescriptor<I, O>,
   // istanbul ignore next
-  { transport, callOptions, ...queryOptions }: UseMutationOptions<I, O> = {},
-): UseMutationResult<O, ConnectError, PartialMessage<I>> {
+  {
+    transport,
+    callOptions,
+    ...queryOptions
+  }: UseMutationOptions<I, O, Ctx> = {},
+): UseMutationResult<O, ConnectError, PartialMessage<I>, Ctx> {
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
