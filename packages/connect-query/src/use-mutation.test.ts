@@ -150,4 +150,49 @@ describe("useMutation", () => {
 
     expect(newResult.message.count).toBe(0n);
   });
+
+  it("can forward onMutate params", async () => {
+    const onSuccess = jest.fn();
+    const { result } = renderHook(
+      () => {
+        return useMutation(methodDescriptor, {
+          onMutate: (variables) => {
+            return {
+              somethingElse: `Some additional context: ${(variables.page ?? 0n) + 2n}`,
+            };
+          },
+          onSuccess: (data, variables, context) => {
+            onSuccess(data, variables, context);
+            // Customizing on success so we can test the types
+            expect(context.somethingElse).toBe("Some additional context: 2");
+          },
+        });
+      },
+      wrapper(
+        {
+          defaultOptions,
+        },
+        mockedPaginatedTransport,
+      ),
+    );
+
+    result.current.mutate({
+      page: 0n,
+    });
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(onSuccess).toHaveBeenCalledWith(
+      {
+        items: ["-2 Item", "-1 Item", "0 Item"],
+        page: 0n,
+      },
+      {
+        page: 0n,
+      },
+      { somethingElse: "Some additional context: 2" },
+    );
+  });
 });
