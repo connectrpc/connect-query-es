@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from "@connectrpc/connect-query-core";
-export { useTransport, TransportProvider } from "./use-transport.js";
-export type {
-  UseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryOptions,
-} from "./use-infinite-query.js";
-export {
-  useInfiniteQuery,
-  useSuspenseInfiniteQuery,
-} from "./use-infinite-query.js";
-export type { UseQueryOptions, UseSuspenseQueryOptions } from "./use-query.js";
-export { useQuery, useSuspenseQuery } from "./use-query.js";
-export type { UseMutationOptions } from "./use-mutation.js";
-export { useMutation } from "./use-mutation.js";
+import type { Config } from "jest";
+
+const config: Config = {
+  preset: "../../jest-preset.js",
+  testEnvironment: "@bufbuild/jest-environment-jsdom",
+  moduleNameMapper: {
+    "(.+)\\.js": "$1", // https://connectrpc.com/docs/web/supported-browsers-and-frameworks/#jest
+  },
+  testMatch: ["<rootDir>/**/*.test.ts?(x)"],
+};
+
+export default config;

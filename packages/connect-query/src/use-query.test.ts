@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { disableQuery } from "@connectrpc/connect-query-core";
 import { describe, expect, it } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { ElizaService } from "./gen/eliza_connect.js";
 import { mockEliza, wrapper } from "./jest/test-utils.js";
 import { useQuery, useSuspenseQuery } from "./use-query.js";
-import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const sayMethodDescriptor = {

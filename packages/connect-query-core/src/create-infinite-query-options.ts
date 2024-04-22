@@ -13,22 +13,18 @@
 // limitations under the License.
 
 import type { Message, PartialMessage } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
+import type { CallOptions, Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
-  InfiniteData,
   QueryFunction,
-  UseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryOptions,
-} from "@tanstack/react-query";
+} from "@tanstack/query-core";
 
 import { callUnaryMethod } from "./call-unary-method.js";
-import {
-  type ConnectInfiniteQueryKey,
-  createConnectInfiniteQueryKey,
-} from "./connect-query-key.js";
+import type { ConnectInfiniteQueryKey } from "./connect-query-key.js";
+import { createConnectInfiniteQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
-import { assert, type DisableQuery, disableQuery } from "./utils.js";
+import type { DisableQuery } from "./utils.js";
+import { assert, disableQuery } from "./utils.js";
 
 /**
  * Options specific to connect-query
@@ -47,46 +43,6 @@ export interface ConnectInfiniteQueryOptions<
   /** Determines the next page. */
   getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
 }
-
-/**
- * Options for useInfiniteQuery
- */
-export type CreateInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
-> = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Omit<
-    UseInfiniteQueryOptions<
-      O,
-      ConnectError,
-      InfiniteData<O>,
-      O,
-      ConnectInfiniteQueryKey<I>,
-      PartialMessage<I>[ParamKey]
-    >,
-    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
-  >;
-
-/**
- * Options for useSuspenseInfiniteQuery
- */
-export type CreateSuspenseInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
-> = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Omit<
-    UseSuspenseInfiniteQueryOptions<
-      O,
-      ConnectError,
-      InfiniteData<O>,
-      O,
-      ConnectInfiniteQueryKey<I>,
-      PartialMessage<I>[ParamKey]
-    >,
-    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
-  >;
 
 function createUnaryInfiniteQueryFn<
   I extends Message<I>,
@@ -129,7 +85,7 @@ function createUnaryInfiniteQueryFn<
  * @param methodSig
  * @returns
  */
-export function createUseInfiniteQueryOptions<
+export function createInfiniteQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
   ParamKey extends keyof PartialMessage<I>,

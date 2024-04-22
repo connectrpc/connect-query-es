@@ -14,6 +14,10 @@
 
 import type { Message, PartialMessage } from "@bufbuild/protobuf";
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
+import {
+  callUnaryMethod,
+  type MethodUnaryDescriptor,
+} from "@connectrpc/connect-query-core";
 import type {
   UseMutationOptions as TSUseMutationOptions,
   UseMutationResult,
@@ -21,7 +25,6 @@ import type {
 import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
 /**
@@ -61,16 +64,11 @@ export function useMutation<
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
-    async (input: PartialMessage<I>) => {
-      const result = await transportToUse.unary(
-        { typeName: methodSig.service.typeName, methods: {} },
-        methodSig,
-        callOptions?.signal,
-        callOptions?.timeoutMs,
-        callOptions?.headers,
-        input,
-      );
-      return result.message;
+    async (input?: PartialMessage<I>) => {
+      return callUnaryMethod(methodSig, input, {
+        callOptions,
+        transport: transportToUse,
+      });
     },
     [transportToUse, callOptions, methodSig],
   );

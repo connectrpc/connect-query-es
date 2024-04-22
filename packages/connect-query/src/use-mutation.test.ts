@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { defaultOptions } from "@connectrpc/connect-query-core";
 import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { defaultOptions } from "./default-options.js";
 import { BigIntService, PaginatedService } from "./gen/eliza_connect.js";
 import {
   mockPaginatedTransport,

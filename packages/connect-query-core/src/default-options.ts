@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DefaultOptions } from "@tanstack/react-query";
+import type { DefaultOptions } from "@tanstack/query-core";
 import stableHash from "stable-hash";
 
 /**

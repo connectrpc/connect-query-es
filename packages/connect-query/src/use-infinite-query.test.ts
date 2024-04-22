@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import {
+  createConnectInfiniteQueryKey,
+  createConnectQueryKey,
+  defaultOptions,
+  disableQuery,
+} from "@connectrpc/connect-query-core";
 import { describe, expect, it, jest } from "@jest/globals";
 import { QueryCache } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import {
-  createConnectInfiniteQueryKey,
-  createConnectQueryKey,
-} from "./connect-query-key.js";
-import { defaultOptions } from "./default-options.js";
 import { PaginatedService } from "./gen/eliza_connect.js";
 import { mockPaginatedTransport, wrapper } from "./jest/test-utils.js";
 import {
@@ -28,7 +29,6 @@ import {
   useSuspenseInfiniteQuery,
 } from "./use-infinite-query.js";
 import { useQuery } from "./use-query.js";
-import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const methodDescriptor = {

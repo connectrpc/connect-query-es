@@ -13,18 +13,15 @@
 // limitations under the License.
 
 import type { Message, PartialMessage } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
-import type {
-  QueryFunction,
-  UseQueryOptions,
-  UseSuspenseQueryOptions,
-} from "@tanstack/react-query";
+import type { CallOptions, Transport } from "@connectrpc/connect";
+import type { QueryFunction } from "@tanstack/query-core";
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
-import { assert, type DisableQuery, disableQuery } from "./utils.js";
+import type { DisableQuery } from "./utils.js";
+import { assert, disableQuery } from "./utils.js";
 
 export interface ConnectQueryOptions {
   /** The transport to be used for the fetching. */
@@ -32,32 +29,6 @@ export interface ConnectQueryOptions {
   /** Any additional call options to provide the transport on call. */
   callOptions?: Omit<CallOptions, "signal"> | undefined;
 }
-
-/**
- * Options for useQuery
- */
-export type CreateQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  SelectOutData = 0,
-> = ConnectQueryOptions &
-  Omit<
-    UseQueryOptions<O, ConnectError, SelectOutData, ConnectQueryKey<I>>,
-    "queryFn" | "queryKey"
-  >;
-
-/**
- * Options for useQuery
- */
-export type CreateSuspenseQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  SelectOutData = 0,
-> = ConnectQueryOptions &
-  Omit<
-    UseSuspenseQueryOptions<O, ConnectError, SelectOutData, ConnectQueryKey<I>>,
-    "queryFn" | "queryKey"
-  >;
 
 function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
   methodType: MethodUnaryDescriptor<I, O>,
@@ -85,10 +56,7 @@ function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
 /**
  * Creates all options required to make a query. Useful in combination with `useQueries` from tanstack/react-query.
  */
-export function createUseQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
->(
+export function createQueryOptions<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | PartialMessage<I> | undefined,
   {

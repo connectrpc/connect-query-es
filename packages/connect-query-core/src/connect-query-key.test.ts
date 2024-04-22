@@ -14,19 +14,22 @@
 
 import { describe, expect, it } from "@jest/globals";
 
-import { createConnectQueryKey } from "./connect-query-key.js";
+import {
+  createConnectInfiniteQueryKey,
+  createConnectQueryKey,
+} from "./connect-query-key.js";
 import { SayRequest } from "./gen/eliza_pb.js";
 import { disableQuery } from "./utils.js";
 
-describe("makeQueryKey", () => {
-  const methodDescriptor = {
-    I: SayRequest,
-    name: "name",
-    service: {
-      typeName: "service.typeName",
-    },
-  };
+const methodDescriptor = {
+  I: SayRequest,
+  name: "name",
+  service: {
+    typeName: "service.typeName",
+  },
+};
 
+describe("createConnectQueryKey", () => {
   it("makes a query key with input", () => {
     const key = createConnectQueryKey(methodDescriptor, {
       sentence: "someValue",
@@ -46,5 +49,13 @@ describe("makeQueryKey", () => {
   it("makes a query key with a disabled input", () => {
     const key = createConnectQueryKey(methodDescriptor, disableQuery);
     expect(key).toStrictEqual(["service.typeName", "name", {}]);
+  });
+});
+
+describe("createConnectInfiniteQueryKey", () => {
+  it("only differs from the query key by the last section", () => {
+    const queryKey = createConnectQueryKey(methodDescriptor);
+    const infiniteQueryKey = createConnectInfiniteQueryKey(methodDescriptor);
+    expect(infiniteQueryKey).toStrictEqual([...queryKey, "infinite"]);
   });
 });

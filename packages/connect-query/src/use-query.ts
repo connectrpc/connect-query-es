@@ -14,8 +14,17 @@
 
 import type { Message, PartialMessage } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
+import {
+  type ConnectQueryKey,
+  type ConnectQueryOptions,
+  createQueryOptions,
+  type DisableQuery,
+  type MethodUnaryDescriptor,
+} from "@connectrpc/connect-query-core";
 import type {
+  UseQueryOptions as TSUseQueryOptions,
   UseQueryResult,
+  UseSuspenseQueryOptions as TSUseSuspenseQueryOptions,
   UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
@@ -23,14 +32,38 @@ import {
   useSuspenseQuery as tsUseSuspenseQuery,
 } from "@tanstack/react-query";
 
-import type {
-  CreateQueryOptions,
-  CreateSuspenseQueryOptions,
-} from "./create-use-query-options.js";
-import { createUseQueryOptions } from "./create-use-query-options.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
-import type { DisableQuery } from "./utils.js";
+
+/**
+ * Options for useQuery
+ */
+export type UseQueryOptions<
+  I extends Message<I>,
+  O extends Message<O>,
+  SelectOutData = 0,
+> = ConnectQueryOptions &
+  Omit<
+    TSUseQueryOptions<O, ConnectError, SelectOutData, ConnectQueryKey<I>>,
+    "queryFn" | "queryKey"
+  >;
+
+/**
+ * Options for useSuspenseQuery
+ */
+export type UseSuspenseQueryOptions<
+  I extends Message<I>,
+  O extends Message<O>,
+  SelectOutData = 0,
+> = ConnectQueryOptions &
+  Omit<
+    TSUseSuspenseQueryOptions<
+      O,
+      ConnectError,
+      SelectOutData,
+      ConnectQueryKey<I>
+    >,
+    "queryFn" | "queryKey"
+  >;
 
 /**
  * Query the method provided. Maps to useQuery on tanstack/react-query
@@ -49,12 +82,12 @@ export function useQuery<
     transport,
     callOptions,
     ...queryOptions
-  }: Omit<CreateQueryOptions<I, O, SelectOutData>, "transport"> & {
+  }: Omit<UseQueryOptions<I, O, SelectOutData>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(methodSig, input, {
+  const baseOptions = createQueryOptions(methodSig, input, {
     transport: transport ?? transportFromCtx,
     callOptions,
   });
@@ -85,12 +118,12 @@ export function useSuspenseQuery<
     transport,
     callOptions,
     ...queryOptions
-  }: Omit<CreateSuspenseQueryOptions<I, O, SelectOutData>, "transport"> & {
+  }: Omit<UseSuspenseQueryOptions<I, O, SelectOutData>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(methodSig, input, {
+  const baseOptions = createQueryOptions(methodSig, input, {
     transport: transport ?? transportFromCtx,
     callOptions,
   });
