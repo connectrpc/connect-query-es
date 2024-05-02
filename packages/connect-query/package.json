@@ -33,10 +33,10 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.15.2",
-    "@bufbuild/buf": "1.30.0",
+    "@bufbuild/buf": "1.31.0",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
-    "@bufbuild/protobuf": "^1.8.0",
-    "@bufbuild/protoc-gen-es": "^1.8.0",
+    "@bufbuild/protobuf": "^1.9.0",
+    "@bufbuild/protoc-gen-es": "^1.9.0",
     "@connectrpc/connect": "^1.4.0",
     "@connectrpc/connect-web": "^1.4.0",
     "@connectrpc/protoc-gen-connect-es": "^1.4.0",
