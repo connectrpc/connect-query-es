@@ -60,9 +60,9 @@ export function createConnectQueryKey<
   return [
     methodDescriptor.service.typeName,
     methodDescriptor.name,
-    input === disableQuery || !input
-      ? toPlainMessage(new methodDescriptor.I({}))
-      : toPlainMessage(new methodDescriptor.I(input)),
+    toPlainMessage(
+      new methodDescriptor.I(input === disableQuery || !input ? {} : input),
+    ),
   ];
 }
 
