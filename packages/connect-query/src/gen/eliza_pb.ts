@@ -18,7 +18,7 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
+import { Message, proto3, protoInt64, Timestamp } from "@bufbuild/protobuf";
 
 /**
  * SayRequest is a single-sentence request.
@@ -438,6 +438,80 @@ export class ListResponse extends Message<ListResponse> {
 
   static equals(a: ListResponse | PlainMessage<ListResponse> | undefined, b: ListResponse | PlainMessage<ListResponse> | undefined): boolean {
     return proto3.util.equals(ListResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message connectrpc.eliza.v1.OperationRequest
+ */
+export class OperationRequest extends Message<OperationRequest> {
+  /**
+   * @generated from field: google.protobuf.Timestamp timestamp = 1;
+   */
+  timestamp?: Timestamp;
+
+  constructor(data?: PartialMessage<OperationRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "connectrpc.eliza.v1.OperationRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "timestamp", kind: "message", T: Timestamp },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OperationRequest {
+    return new OperationRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OperationRequest {
+    return new OperationRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OperationRequest {
+    return new OperationRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: OperationRequest | PlainMessage<OperationRequest> | undefined, b: OperationRequest | PlainMessage<OperationRequest> | undefined): boolean {
+    return proto3.util.equals(OperationRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message connectrpc.eliza.v1.OperationResponse
+ */
+export class OperationResponse extends Message<OperationResponse> {
+  /**
+   * @generated from field: google.protobuf.Timestamp timestamp = 1;
+   */
+  timestamp?: Timestamp;
+
+  constructor(data?: PartialMessage<OperationResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "connectrpc.eliza.v1.OperationResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "timestamp", kind: "message", T: Timestamp },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OperationResponse {
+    return new OperationResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OperationResponse {
+    return new OperationResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OperationResponse {
+    return new OperationResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: OperationResponse | PlainMessage<OperationResponse> | undefined, b: OperationResponse | PlainMessage<OperationResponse> | undefined): boolean {
+    return proto3.util.equals(OperationResponse, a, b);
   }
 }
 

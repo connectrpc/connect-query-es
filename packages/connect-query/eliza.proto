@@ -16,6 +16,8 @@ syntax = "proto3";
 
 package connectrpc.eliza.v1;
 
+import "google/protobuf/timestamp.proto";
+
 // ElizaService provides a way to talk to Eliza, a port of the DOCTOR script
 // for Joseph Weizenbaum's original ELIZA program. Created in the mid-1960s at
 // the MIT Artificial Intelligence Laboratory, ELIZA demonstrates the
@@ -115,4 +117,16 @@ message ListResponse {
 
 service PaginatedService {
   rpc List(ListRequest) returns (ListResponse);
+}
+
+message OperationRequest {
+  google.protobuf.Timestamp timestamp = 1;
+}
+
+message OperationResponse {
+  google.protobuf.Timestamp timestamp = 1;
+}
+
+service ServiceWithMessage {
+  rpc Operation(OperationRequest) returns (OperationResponse);
 }
