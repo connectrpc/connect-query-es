@@ -70,4 +70,10 @@ describe("makeQueryKey", () => {
     });
     expect(key[2].timestamp).not.toBeInstanceOf(Timestamp);
   });
+
+  it("key generated with default is the same as without the field", () => {
+    const key1 = createConnectQueryKey(methodDescriptor, {});
+    const key2 = createConnectQueryKey(methodDescriptor, { sentence: "" });
+    expect(key1).toStrictEqual(key2);
+  });
 });
