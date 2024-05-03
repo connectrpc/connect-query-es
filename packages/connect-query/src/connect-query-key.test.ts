@@ -71,7 +71,7 @@ describe("makeQueryKey", () => {
     expect(key[2].timestamp).not.toBeInstanceOf(Timestamp);
   });
 
-  it("generates identical keys with default as well as when default is provided", () => {
+  it("generates identical keys when input is empty or the default is explicitly sent", () => {
     const key1 = createConnectQueryKey(methodDescriptor, {});
     const key2 = createConnectQueryKey(methodDescriptor, { sentence: "" });
     expect(key1).toStrictEqual(key2);
