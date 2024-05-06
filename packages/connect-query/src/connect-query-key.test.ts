@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { Timestamp, toPlainMessage } from "@bufbuild/protobuf";
 import { describe, expect, it } from "@jest/globals";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { SayRequest } from "./gen/eliza_pb.js";
+import { OperationRequest, SayRequest } from "./gen/eliza_pb.js";
 import { disableQuery } from "./utils.js";
 
 describe("makeQueryKey", () => {
@@ -40,11 +41,39 @@ describe("makeQueryKey", () => {
 
   it("allows empty inputs", () => {
     const key = createConnectQueryKey(methodDescriptor);
-    expect(key).toStrictEqual(["service.typeName", "name", {}]);
+    expect(key).toStrictEqual([
+      "service.typeName",
+      "name",
+      toPlainMessage(new methodDescriptor.I({})),
+    ]);
   });
 
   it("makes a query key with a disabled input", () => {
     const key = createConnectQueryKey(methodDescriptor, disableQuery);
-    expect(key).toStrictEqual(["service.typeName", "name", {}]);
+    expect(key).toStrictEqual([
+      "service.typeName",
+      "name",
+      toPlainMessage(new methodDescriptor.I({})),
+    ]);
+  });
+
+  it("converts nested Timestamps to PlainMessages", () => {
+    const methodDescriptorWithMessage = {
+      I: OperationRequest,
+      name: "name",
+      service: {
+        typeName: "service.typeName",
+      },
+    };
+    const key = createConnectQueryKey(methodDescriptorWithMessage, {
+      timestamp: new Timestamp(),
+    });
+    expect(key[2].timestamp).not.toBeInstanceOf(Timestamp);
+  });
+
+  it("generates identical keys when input is empty or the default is explicitly sent", () => {
+    const key1 = createConnectQueryKey(methodDescriptor, {});
+    const key2 = createConnectQueryKey(methodDescriptor, { sentence: "" });
+    expect(key1).toStrictEqual(key2);
   });
 });

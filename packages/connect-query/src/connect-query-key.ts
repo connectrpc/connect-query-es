@@ -12,7 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import {
+  type Message,
+  type PartialMessage,
+  type PlainMessage,
+  toPlainMessage,
+} from "@bufbuild/protobuf";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import type { DisableQuery } from "./utils.js";
@@ -35,7 +40,7 @@ import { disableQuery } from "./utils.js";
 export type ConnectQueryKey<I extends Message<I>> = [
   serviceTypeName: string,
   methodName: string,
-  input: PartialMessage<I>,
+  input: PlainMessage<I>,
 ];
 
 /**
@@ -55,7 +60,9 @@ export function createConnectQueryKey<
   return [
     methodDescriptor.service.typeName,
     methodDescriptor.name,
-    input === disableQuery || !input ? {} : input,
+    toPlainMessage(
+      new methodDescriptor.I(input === disableQuery || !input ? {} : input),
+    ),
   ];
 }
 
@@ -65,7 +72,7 @@ export function createConnectQueryKey<
 export type ConnectInfiniteQueryKey<I extends Message<I>> = [
   serviceTypeName: string,
   methodName: string,
-  input: PartialMessage<I>,
+  input: PlainMessage<I>,
   "infinite",
 ];
 
