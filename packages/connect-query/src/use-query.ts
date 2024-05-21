@@ -58,14 +58,18 @@ export function useQuery<
     transport: transport ?? transportFromCtx,
     callOptions,
   });
+  const { enabled: baseEnabled, ...baseRest } = baseOptions;
+  const tsOpts = {
+    ...queryOptions,
+    ...baseRest,
+  };
   // The query cannot be enabled if the base options are disabled, regardless of
   // incoming query options.
-  const enabled = baseOptions.enabled && (queryOptions.enabled ?? true);
-  return tsUseQuery({
-    ...queryOptions,
-    ...baseOptions,
-    enabled,
-  });
+  const enabled = baseEnabled ?? queryOptions.enabled;
+  if (enabled !== undefined) {
+    tsOpts.enabled = enabled;
+  }
+  return tsUseQuery(tsOpts);
 }
 
 /**
