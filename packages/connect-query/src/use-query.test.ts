@@ -145,6 +145,52 @@ describe("useQuery", () => {
     expect(result.current.isFetching).toBeFalsy();
   });
 
+  it("can be disabled with QueryClient default options", () => {
+    const { result } = renderHook(
+      () => {
+        return useQuery(sayMethodDescriptor, {
+          sentence: "hello",
+        });
+      },
+      wrapper(
+        {
+          defaultOptions: {
+            queries: {
+              enabled: false,
+            },
+          },
+        },
+        mockedElizaTransport,
+      ),
+    );
+
+    expect(result.current.data).toBeUndefined();
+    expect(result.current.isPending).toBeTruthy();
+    expect(result.current.isFetching).toBeFalsy();
+  });
+
+  it("cannot be enabled with QueryClient default options with explicit disableQuery", () => {
+    const { result } = renderHook(
+      () => {
+        return useQuery(sayMethodDescriptor, disableQuery);
+      },
+      wrapper(
+        {
+          defaultOptions: {
+            queries: {
+              enabled: true,
+            },
+          },
+        },
+        mockedElizaTransport,
+      ),
+    );
+
+    expect(result.current.data).toBeUndefined();
+    expect(result.current.isPending).toBeTruthy();
+    expect(result.current.isFetching).toBeFalsy();
+  });
+
   it("disableQuery will override explicit enabled", () => {
     const { result } = renderHook(
       () => {

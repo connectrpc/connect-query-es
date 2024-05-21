@@ -100,7 +100,7 @@ export function createUseQueryOptions<
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>>;
-  enabled: boolean;
+  enabled: boolean | undefined;
 } {
   const queryKey = createConnectQueryKey(methodSig, input);
   return {
@@ -109,6 +109,6 @@ export function createUseQueryOptions<
       transport,
       callOptions,
     }),
-    enabled: input !== disableQuery,
+    enabled: input === disableQuery ? false : undefined,
   };
 }
