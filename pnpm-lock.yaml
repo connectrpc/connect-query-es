@@ -84,26 +84,26 @@ importers:
   examples/react/basic:
     dependencies:
       '@bufbuild/buf':
-        specifier: 1.31.0
-        version: 1.31.0
+        specifier: 1.32.2
+        version: 1.32.2
       '@bufbuild/protobuf':
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.9.0
-        version: 1.9.0(@bufbuild/protobuf@1.9.0)
+        specifier: ^1.10.0
+        version: 1.10.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protobuf@1.9.0)
+        version: 1.4.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect-query':
         specifier: workspace:*
         version: link:../../../packages/connect-query
       '@connectrpc/connect-web':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protobuf@1.9.0)(@connectrpc/connect@1.4.0)
+        version: 1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0)
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protoc-gen-es@1.9.0)(@connectrpc/connect@1.4.0)
+        version: 1.4.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.4.0)
       '@connectrpc/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -151,26 +151,26 @@ importers:
         specifier: ^0.15.3
         version: 0.15.3
       '@bufbuild/buf':
-        specifier: 1.31.0
-        version: 1.31.0
+        specifier: 1.32.2
+        version: 1.32.2
       '@bufbuild/jest-environment-jsdom':
         specifier: ^0.1.1
         version: 0.1.1(jest-environment-jsdom@29.7.0)
       '@bufbuild/protobuf':
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.9.0
-        version: 1.9.0(@bufbuild/protobuf@1.9.0)
+        specifier: ^1.10.0
+        version: 1.10.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protobuf@1.9.0)
+        version: 1.4.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect-web':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protobuf@1.9.0)(@connectrpc/connect@1.4.0)
+        version: 1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0)
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protoc-gen-es@1.9.0)(@connectrpc/connect@1.4.0)
+        version: 1.4.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.4.0)
       '@tanstack/react-query':
         specifier: ^5.40.0
         version: 5.40.0(react@18.3.1)
@@ -196,27 +196,27 @@ importers:
   packages/protoc-gen-connect-query:
     dependencies:
       '@bufbuild/protobuf':
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
       '@bufbuild/protoplugin':
-        specifier: ^1.9.0
-        version: 1.9.0
+        specifier: ^1.10.0
+        version: 1.10.0
     devDependencies:
       '@bufbuild/buf':
-        specifier: 1.31.0
-        version: 1.31.0
+        specifier: 1.32.2
+        version: 1.32.2
       '@bufbuild/protoc-gen-es':
-        specifier: ^1.9.0
-        version: 1.9.0(@bufbuild/protobuf@1.9.0)
+        specifier: ^1.10.0
+        version: 1.10.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protobuf@1.9.0)
+        version: 1.4.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect-query':
         specifier: workspace:*
         version: link:../connect-query
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.4.0
-        version: 1.4.0(@bufbuild/protoc-gen-es@1.9.0)(@connectrpc/connect@1.4.0)
+        version: 1.4.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.4.0)
       '@tanstack/react-query':
         specifier: ^5.40.0
         version: 5.40.0(react@18.3.1)
@@ -594,66 +594,66 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  /@bufbuild/buf-darwin-arm64@1.31.0:
-    resolution: {integrity: sha512-C0jArGS/SW0jfpBBmG6xEhUBWQTsGInnPr7y44WYWNS/U5OnnWPJtYQ7xbH0mzYDMx7sZVRV0FKvPO0FPKS+hA==}
+  /@bufbuild/buf-darwin-arm64@1.32.2:
+    resolution: {integrity: sha512-AR6WlhY6CmLlZetvYzLjbyVpU5jM4eDd3PRTUAK5NcpqIPdCMiMK9nc33Yxc8pO04Lv4yrYdzWnFqZdbCzsS2g==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-darwin-x64@1.31.0:
-    resolution: {integrity: sha512-oBTe1T4l2WSukAG+9YS7VHID4N1CuSvAxGBfuzpFQrjjiQZaaTfYuLqqVP6408MyCN7X/LOjfCekR1QToVweNw==}
+  /@bufbuild/buf-darwin-x64@1.32.2:
+    resolution: {integrity: sha512-ZmVYsMcS06KHZYy4DmKf95BnDWji5/xo42oybqjtlE/wPGKNpqgiq0UGHSlK0oCh67sybHidXVci6LC95xHNrw==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-linux-aarch64@1.31.0:
-    resolution: {integrity: sha512-UN9KsTuO9YS5Vefj/CaqX1wO+hvc3AyGElxzOHMc7S3MWEuqSAFOhxu5I7CyOr2/yoZO2qZPPR29HuzmQsb2+w==}
+  /@bufbuild/buf-linux-aarch64@1.32.2:
+    resolution: {integrity: sha512-OG509xwJHjuzSn5nNrVWghW/RpB76Ovhj7LCKi52QVh/qQq6VUXeQk42XIWjXY/Cmzmg81G7t97kLw27JLzH0w==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-linux-x64@1.31.0:
-    resolution: {integrity: sha512-4uKq5Iu5tNEFE3Mz9a52KFCaywg5xLqwhN6Kf4kAk34kxWJgQ8D3WFe9ZpXHzH7Lj00u3Q+V/3vKCVATHR3tkw==}
+  /@bufbuild/buf-linux-x64@1.32.2:
+    resolution: {integrity: sha512-TFNN87nhLyGFUKOy3beU/0GZk7TEs57J5VQczSq83rHLC+7t1nDuk5Rew8QEyV0OzEzZF+BkpLZj0jY+dWg6/g==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-win32-arm64@1.31.0:
-    resolution: {integrity: sha512-jz7GenlNsqwbC3qaHcBHBO35MycZ1gV8OUSRp/wTXGgZsEZzAyw335JA2NWL+5LaI8cF+CsYd6/uuWzKkdCKTQ==}
+  /@bufbuild/buf-win32-arm64@1.32.2:
+    resolution: {integrity: sha512-SsGUfILZblPNbCgG6W9DxzCdfHnT2YTYQEkCS877DL1wkWMlMJ/ijZA9Cg2fx8NrLKzFTKC1nlTfqRBcLPf2Mg==}
     engines: {node: '>=12'}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf-win32-x64@1.31.0:
-    resolution: {integrity: sha512-gw7p3PYam0g7hNwIhNphua5P8GBZczginoWNK3jk5sGVv0TzWOdHrjkVVhkc3DJbRZEg10ExGI3qRfCqiX1IHw==}
+  /@bufbuild/buf-win32-x64@1.32.2:
+    resolution: {integrity: sha512-FXOHmXB0kxQ7nQ0JYWpByl6/ebkKwWPPjucOHIDcfo7czg5ZD/fRusb738YJ1qeN+5RXybkvhJIrewxVnhYuhg==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@bufbuild/buf@1.31.0:
-    resolution: {integrity: sha512-kM/eueGkp0NDo8p8B6GXr1MdCzf4w8zEV1gbEiDlaLYDoyeHGLtlf5jF/hrb6MsvCccy3x7cc+cj4Wn/DmoR2g==}
+  /@bufbuild/buf@1.32.2:
+    resolution: {integrity: sha512-WL2mpou8k9EBo2US0KyZhFSHrDmRZvv5ZMp7lywUFb+3lW1+E/OZnBaBYTrSAb9vfzSmwdRsSOJwKdDpfbjdSg==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@bufbuild/buf-darwin-arm64': 1.31.0
-      '@bufbuild/buf-darwin-x64': 1.31.0
-      '@bufbuild/buf-linux-aarch64': 1.31.0
-      '@bufbuild/buf-linux-x64': 1.31.0
-      '@bufbuild/buf-win32-arm64': 1.31.0
-      '@bufbuild/buf-win32-x64': 1.31.0
+      '@bufbuild/buf-darwin-arm64': 1.32.2
+      '@bufbuild/buf-darwin-x64': 1.32.2
+      '@bufbuild/buf-linux-aarch64': 1.32.2
+      '@bufbuild/buf-linux-x64': 1.32.2
+      '@bufbuild/buf-win32-arm64': 1.32.2
+      '@bufbuild/buf-win32-x64': 1.32.2
 
   /@bufbuild/jest-environment-jsdom@0.1.1(jest-environment-jsdom@29.7.0):
     resolution: {integrity: sha512-lO4dke+l/LQAUT8CLmh0SKtY37gmax63eD7YSBQu48sqwAx4hgu1hRmoheRysaqR4bO6Vudhf6+nkBm0TbctvA==}
@@ -670,28 +670,28 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@bufbuild/protobuf@1.9.0:
-    resolution: {integrity: sha512-W7gp8Q/v1NlCZLsv8pQ3Y0uCu/SHgXOVFK+eUluUKWXmsb6VHkpNx0apdOWWcDbB9sJoKeP8uPrjmehJz6xETQ==}
+  /@bufbuild/protobuf@1.10.0:
+    resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
 
-  /@bufbuild/protoc-gen-es@1.9.0(@bufbuild/protobuf@1.9.0):
-    resolution: {integrity: sha512-LJy1nC3Jsfdhs9v48P7qF6YXIqh+usFhXSVzJDTmw0yKjxQ3CKBNISRtaMql/g9hb1MLRU6unHCcFfdz4HSO/Q==}
+  /@bufbuild/protoc-gen-es@1.10.0(@bufbuild/protobuf@1.10.0):
+    resolution: {integrity: sha512-zBYBsVT/ul4uZb6F+kD7/k4sWNHVVbEPfJwKi0FDr+9VJo8MKIofI6pkr5ksBLr4fi/74r+e/75Xi/0clL5dXg==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
-      '@bufbuild/protobuf': 1.9.0
+      '@bufbuild/protobuf': 1.10.0
     peerDependenciesMeta:
       '@bufbuild/protobuf':
         optional: true
     dependencies:
-      '@bufbuild/protobuf': 1.9.0
-      '@bufbuild/protoplugin': 1.9.0
+      '@bufbuild/protobuf': 1.10.0
+      '@bufbuild/protoplugin': 1.10.0
     transitivePeerDependencies:
       - supports-color
 
-  /@bufbuild/protoplugin@1.9.0:
-    resolution: {integrity: sha512-/mxMiGs5h78RUHT7v4+mv0Wt0gyRf/SOS5PLzKEg2sclEAlFPbXfZ8HjlvxJpXZP/YpP3HvsW/mil3E69G0mXg==}
+  /@bufbuild/protoplugin@1.10.0:
+    resolution: {integrity: sha512-u6NE4vL0lw1+EK4/PiE/SQB7fKO4LRJNTEScIXVOi2x88K/c8WKc/k0KyEaA0asVBMpwekJQZGnRyj04ZtN5Gg==}
     dependencies:
-      '@bufbuild/protobuf': 1.9.0
+      '@bufbuild/protobuf': 1.10.0
       '@typescript/vfs': 1.5.0
       typescript: 4.5.2
     transitivePeerDependencies:
@@ -704,23 +704,23 @@ packages:
     dev: true
     optional: true
 
-  /@connectrpc/connect-web@1.4.0(@bufbuild/protobuf@1.9.0)(@connectrpc/connect@1.4.0):
+  /@connectrpc/connect-web@1.4.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.4.0):
     resolution: {integrity: sha512-13aO4psFbbm7rdOFGV0De2Za64DY/acMspgloDlcOKzLPPs0yZkhp1OOzAQeiAIr7BM/VOHIA3p8mF0inxCYTA==}
     peerDependencies:
       '@bufbuild/protobuf': ^1.4.2
       '@connectrpc/connect': 1.4.0
     dependencies:
-      '@bufbuild/protobuf': 1.9.0
-      '@connectrpc/connect': 1.4.0(@bufbuild/protobuf@1.9.0)
+      '@bufbuild/protobuf': 1.10.0
+      '@connectrpc/connect': 1.4.0(@bufbuild/protobuf@1.10.0)
 
-  /@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.9.0):
+  /@connectrpc/connect@1.4.0(@bufbuild/protobuf@1.10.0):
     resolution: {integrity: sha512-vZeOkKaAjyV4+RH3+rJZIfDFJAfr+7fyYr6sLDKbYX3uuTVszhFe9/YKf5DNqrDb5cKdKVlYkGn6DTDqMitAnA==}
     peerDependencies:
       '@bufbuild/protobuf': ^1.4.2
     dependencies:
-      '@bufbuild/protobuf': 1.9.0
+      '@bufbuild/protobuf': 1.10.0
 
-  /@connectrpc/protoc-gen-connect-es@1.4.0(@bufbuild/protoc-gen-es@1.9.0)(@connectrpc/connect@1.4.0):
+  /@connectrpc/protoc-gen-connect-es@1.4.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.4.0):
     resolution: {integrity: sha512-/7vQ8Q7mEBhV8qEVh/eifRQlQnf8EJ6weMwCD2DljVAQRlZYcW9SLxjYZhV1uM1ZZqQC7Cw2vvgXRg2XQswHBg==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -733,10 +733,10 @@ packages:
       '@connectrpc/connect':
         optional: true
     dependencies:
-      '@bufbuild/protobuf': 1.9.0
-      '@bufbuild/protoc-gen-es': 1.9.0(@bufbuild/protobuf@1.9.0)
-      '@bufbuild/protoplugin': 1.9.0
-      '@connectrpc/connect': 1.4.0(@bufbuild/protobuf@1.9.0)
+      '@bufbuild/protobuf': 1.10.0
+      '@bufbuild/protoc-gen-es': 1.10.0(@bufbuild/protobuf@1.10.0)
+      '@bufbuild/protoplugin': 1.10.0
+      '@connectrpc/connect': 1.4.0(@bufbuild/protobuf@1.10.0)
     transitivePeerDependencies:
       - supports-color
 
