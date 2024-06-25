@@ -6,6 +6,7 @@
 # Connect-Query
 
 [![License](https://img.shields.io/github/license/connectrpc/connect-query-es?color=blue)](./LICENSE) [![Build](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/connectrpc/connect-query-es/actions/workflows/ci.yaml) [![NPM Version](https://img.shields.io/npm/v/@connectrpc/connect-query/latest?color=green&label=%40connectrpc%2Fconnect-query)](https://www.npmjs.com/package/@connectrpc/connect-query) [![NPM Version](https://img.shields.io/npm/v/@connectrpc/protoc-gen-connect-query/latest?color=green&label=%40connectrpc%2Fprotoc-gen-connect-query)](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fconnectrpc%2Fconnect-query-es.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fconnectrpc%2Fconnect-query-es?ref=badge_shield)
 
 Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) (react-query), written in TypeScript and thoroughly tested. It enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
 
@@ -552,3 +553,7 @@ Your input and ideas are crucial in shaping the future development of Connect-Qu
 ## Legal
 
 Offered under the [Apache 2 license](/LICENSE).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fconnectrpc%2Fconnect-query-es.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fconnectrpc%2Fconnect-query-es?ref=badge_large)
