@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["tsconfig.base.json", ".eslintrc.js", "package.json", "scripts/*"],
-  "pipeline": {
+  "tasks": {
     "clean": {
       "outputs": ["dist/**"]
     },
