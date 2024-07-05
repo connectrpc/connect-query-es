@@ -155,11 +155,11 @@ import { TransportProvider } from "@connectrpc/connect-query";
 
 const queryClient = new QueryClient();
 
-export const App() {
+export const App = () => {
   const transport = createConnectTransport({
     baseUrl: "<your baseUrl here>",
     interceptors: [(next) => (request) => {
-      req.header.append("some-new-header", "some-value");
+      request.header.append("some-new-header", "some-value");
       // Add your headers here
       return next(request);
     }],
