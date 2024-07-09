@@ -8,9 +8,8 @@ pull request review much smoother. In your issue, pull request, and any other
 communications, please remember to treat your fellow contributors with
 respect!
 
-Note that you'll need to sign [Buf's Contributor License Agreement][cla]
-before we can accept any of your contributions. If necessary, a bot will remind
-you to accept the CLA when you open your pull request.
+Note that for a contribution to be accepted, you must sign off on all commits
+in order to affirm that they comply with the [Developer Certificate of Origin][dco].
 
 ## Setup
 
@@ -81,5 +80,5 @@ If everything goes as planned, you should not see any output from the `pnpm outd
 
 [fork]: https://github.com/connectrpc/connect-query-es/fork
 [open-issue]: https://github.com/connectrpc/connect-query-es/issues/new
-[cla]: https://cla-assistant.io/connectrpc/connect-query-es
+[dco]: https://developercertificate.org
 [commit-message]: http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
