@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
@@ -34,9 +38,9 @@ import { assert, type DisableQuery, disableQuery } from "./utils.js";
  * Options specific to connect-query
  */
 export interface ConnectInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 > {
   /** Defines which part of the input should be considered the page param */
   pageParamKey: ParamKey;
@@ -45,25 +49,28 @@ export interface ConnectInfiniteQueryOptions<
   /** Additional call options */
   callOptions?: Omit<CallOptions, "signal"> | undefined;
   /** Determines the next page. */
-  getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
+  getNextPageParam: GetNextPageParamFunction<
+    MessageInitShape<I>[ParamKey],
+    MessageShape<O>
+  >;
 }
 
 /**
  * Options for useInfiniteQuery
  */
 export type CreateInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
   Omit<
     UseInfiniteQueryOptions<
-      O,
+      MessageShape<O>,
       ConnectError,
-      InfiniteData<O>,
-      O,
+      InfiniteData<MessageShape<O>>,
+      MessageShape<O>,
       ConnectInfiniteQueryKey<I>,
-      PartialMessage<I>[ParamKey]
+      MessageInitShape<I>[ParamKey]
     >,
     "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
   >;
@@ -72,29 +79,29 @@ export type CreateInfiniteQueryOptions<
  * Options for useSuspenseInfiniteQuery
  */
 export type CreateSuspenseInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
   Omit<
     UseSuspenseInfiniteQueryOptions<
-      O,
+      MessageShape<O>,
       ConnectError,
-      InfiniteData<O>,
-      O,
+      InfiniteData<MessageShape<O>>,
+      MessageShape<O>,
       ConnectInfiniteQueryKey<I>,
-      PartialMessage<I>[ParamKey]
+      MessageInitShape<I>[ParamKey]
     >,
     "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
   >;
 
 function createUnaryInfiniteQueryFn<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 >(
   methodType: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | PartialMessage<I>,
+  input: DisableQuery | MessageInitShape<I>,
   {
     callOptions,
     transport,
@@ -104,7 +111,11 @@ function createUnaryInfiniteQueryFn<
     callOptions?: CallOptions | undefined;
     pageParamKey: ParamKey;
   },
-): QueryFunction<O, ConnectInfiniteQueryKey<I>, PartialMessage<I>[ParamKey]> {
+): QueryFunction<
+  MessageShape<O>,
+  ConnectInfiniteQueryKey<I>,
+  MessageInitShape<I>[ParamKey]
+> {
   return async (context) => {
     assert(input !== disableQuery, "Disabled query cannot be fetched");
     assert("pageParam" in context, "pageParam must be part of context");
@@ -130,14 +141,14 @@ function createUnaryInfiniteQueryFn<
  * @returns
  */
 export function createUseInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
   input:
     | DisableQuery
-    | (PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>),
+    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
   {
     transport,
     getNextPageParam,
@@ -152,11 +163,11 @@ export function createUseInfiniteQueryOptions<
   >["getNextPageParam"];
   queryKey: ConnectInfiniteQueryKey<I>;
   queryFn: QueryFunction<
-    O,
+    MessageShape<O>,
     ConnectInfiniteQueryKey<I>,
-    PartialMessage<I>[ParamKey]
+    MessageInitShape<I>[ParamKey]
   >;
-  initialPageParam: PartialMessage<I>[ParamKey];
+  initialPageParam: MessageInitShape<I>[ParamKey];
   enabled: boolean;
 } {
   const queryKey = createConnectInfiniteQueryKey(
@@ -172,8 +183,8 @@ export function createUseInfiniteQueryOptions<
     getNextPageParam,
     initialPageParam:
       input === disableQuery
-        ? undefined
-        : (input[pageParamKey] as PartialMessage<I>[ParamKey]),
+        ? (undefined as MessageInitShape<I>[ParamKey])
+        : (input[pageParamKey] as MessageInitShape<I>[ParamKey]),
     queryKey,
     queryFn: createUnaryInfiniteQueryFn(methodSig, input, {
       transport,

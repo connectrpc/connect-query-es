@@ -16,20 +16,11 @@
 // @generated from file connectrpc/eliza/v1/eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { SayRequest, SayResponse } from "./eliza_pb.js";
-import { MethodKind } from "@bufbuild/protobuf";
+import { ElizaService } from "./eliza_pb";
 
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say: {
-  readonly name: "Say";
-  readonly I: typeof SayRequest;
-  readonly O: typeof SayResponse;
-  readonly kind: MethodKind.Unary;
-  readonly service: {
-    readonly typeName: "connectrpc.eliza.v1.ElizaService";
-  };
-};
+export const say: (typeof ElizaService)["method"]["say"];

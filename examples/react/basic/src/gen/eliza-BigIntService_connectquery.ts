@@ -16,19 +16,9 @@
 // @generated from file eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { MethodKind } from "@bufbuild/protobuf";
-import { CountRequest, CountResponse } from "./eliza_pb";
+import { BigIntService } from "./eliza_pb";
 
 /**
  * @generated from rpc connectrpc.eliza.v1.BigIntService.Count
  */
-export const count = {
-  localName: "count",
-  name: "Count",
-  kind: MethodKind.Unary,
-  I: CountRequest,
-  O: CountResponse,
-  service: {
-    typeName: "connectrpc.eliza.v1.BigIntService",
-  },
-} as const;
+export const count = BigIntService.method.count;

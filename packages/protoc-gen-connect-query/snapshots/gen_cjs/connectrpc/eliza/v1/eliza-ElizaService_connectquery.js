@@ -19,23 +19,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
-const { MethodKind } = require("@bufbuild/protobuf");
-const { SayRequest, SayResponse } = require("./eliza_pb.js");
+const { ElizaService } = require("./eliza_pb");
 
 /**
  * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-const say = {
-  localName: "say",
-  name: "Say",
-  kind: MethodKind.Unary,
-  I: SayRequest,
-  O: SayResponse,
-  service: {
-    typeName: "connectrpc.eliza.v1.ElizaService",
-  },
-};
+const say = ElizaService.method.say;
 
 exports.say = say;

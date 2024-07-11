@@ -16,19 +16,9 @@
 // @generated from file eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { MethodKind } from "@bufbuild/protobuf";
-import { Nothing } from "./eliza_pb";
+import { Haberdasher } from "./eliza_pb";
 
 /**
  * @generated from rpc connectrpc.eliza.v1.Haberdasher.Work
  */
-export const work = {
-  localName: "work",
-  name: "Work",
-  kind: MethodKind.Unary,
-  I: Nothing,
-  O: Nothing,
-  service: {
-    typeName: "connectrpc.eliza.v1.Haberdasher",
-  },
-} as const;
+export const work = Haberdasher.method.work;

@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
@@ -37,12 +41,17 @@ export interface ConnectQueryOptions {
  * Options for useQuery
  */
 export type CreateQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
   SelectOutData = 0,
 > = ConnectQueryOptions &
   Omit<
-    UseQueryOptions<O, ConnectError, SelectOutData, ConnectQueryKey<I>>,
+    UseQueryOptions<
+      MessageShape<O>,
+      ConnectError,
+      SelectOutData,
+      ConnectQueryKey<I>
+    >,
     "queryFn" | "queryKey"
   >;
 
@@ -50,18 +59,23 @@ export type CreateQueryOptions<
  * Options for useQuery
  */
 export type CreateSuspenseQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
   SelectOutData = 0,
 > = ConnectQueryOptions &
   Omit<
-    UseSuspenseQueryOptions<O, ConnectError, SelectOutData, ConnectQueryKey<I>>,
+    UseSuspenseQueryOptions<
+      MessageShape<O>,
+      ConnectError,
+      SelectOutData,
+      ConnectQueryKey<I>
+    >,
     "queryFn" | "queryKey"
   >;
 
-function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
+function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   methodType: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | PartialMessage<I> | undefined,
+  input: DisableQuery | MessageInitShape<I> | undefined,
   {
     callOptions,
     transport,
@@ -69,7 +83,7 @@ function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
     transport: Transport;
     callOptions?: CallOptions | undefined;
   },
-): QueryFunction<O, ConnectQueryKey<I>> {
+): QueryFunction<MessageShape<O>, ConnectQueryKey<I>> {
   return async (context) => {
     assert(input !== disableQuery, "Disabled query cannot be fetched");
     return callUnaryMethod(methodType, input, {
@@ -86,11 +100,11 @@ function createUnaryQueryFn<I extends Message<I>, O extends Message<O>>(
  * Creates all options required to make a query. Useful in combination with `useQueries` from tanstack/react-query.
  */
 export function createUseQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | PartialMessage<I> | undefined,
+  input: DisableQuery | MessageInitShape<I> | undefined,
   {
     transport,
     callOptions,
@@ -99,7 +113,7 @@ export function createUseQueryOptions<
   },
 ): {
   queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<O, ConnectQueryKey<I>>;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>>;
   enabled: boolean | undefined;
 } {
   const queryKey = createConnectQueryKey(methodSig, input);
