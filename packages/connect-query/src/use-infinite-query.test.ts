@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { create } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 import { QueryCache } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
@@ -21,7 +22,7 @@ import {
   createConnectQueryKey,
 } from "./connect-query-key.js";
 import { defaultOptions } from "./default-options.js";
-import { PaginatedService } from "./gen/eliza_connect.js";
+import { ListResponseSchema, PaginatedService } from "./gen/eliza_pb.js";
 import { mockPaginatedTransport, wrapper } from "./jest/test-utils.js";
 import {
   useInfiniteQuery,
@@ -31,13 +32,7 @@ import { useQuery } from "./use-query.js";
 import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
-const methodDescriptor = {
-  ...PaginatedService.methods.list,
-  localName: "List",
-  service: {
-    typeName: PaginatedService.typeName,
-  },
-};
+const methodDescriptor = PaginatedService.method.list;
 
 const mockedPaginatedTransport = mockPaginatedTransport();
 
@@ -70,10 +65,10 @@ describe("useInfiniteQuery", () => {
     expect(result.current.data).toEqual({
       pageParams: [0n],
       pages: [
-        {
+        create(ListResponseSchema, {
           items: ["-2 Item", "-1 Item", "0 Item"],
           page: 0n,
-        },
+        }),
       ],
     });
 
@@ -86,14 +81,14 @@ describe("useInfiniteQuery", () => {
     expect(result.current.data).toEqual({
       pageParams: [0n, 1n],
       pages: [
-        {
+        create(ListResponseSchema, {
           items: ["-2 Item", "-1 Item", "0 Item"],
           page: 0n,
-        },
-        {
+        }),
+        create(ListResponseSchema, {
           items: ["1 Item", "2 Item", "3 Item"],
           page: 1n,
-        },
+        }),
       ],
     });
   });
@@ -159,7 +154,7 @@ describe("useInfiniteQuery", () => {
             placeholderData: {
               pageParams: [-1n],
               pages: [
-                new methodDescriptor.O({
+                create(methodDescriptor.output, {
                   page: -1n,
                   items: [],
                 }),
@@ -319,10 +314,10 @@ describe("useSuspenseInfiniteQuery", () => {
     expect(result.current.data).toEqual({
       pageParams: [0n],
       pages: [
-        {
+        create(ListResponseSchema, {
           items: ["-2 Item", "-1 Item", "0 Item"],
           page: 0n,
-        },
+        }),
       ],
     });
 
@@ -335,14 +330,14 @@ describe("useSuspenseInfiniteQuery", () => {
     expect(result.current.data).toEqual({
       pageParams: [0n, 1n],
       pages: [
-        {
+        create(ListResponseSchema, {
           items: ["-2 Item", "-1 Item", "0 Item"],
           page: 0n,
-        },
-        {
+        }),
+        create(ListResponseSchema, {
           items: ["1 Item", "2 Item", "3 Item"],
           page: 1n,
-        },
+        }),
       ],
     });
   });

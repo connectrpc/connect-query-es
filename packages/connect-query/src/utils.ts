@@ -12,7 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
+import { create } from "@bufbuild/protobuf";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
@@ -59,22 +64,27 @@ export const isAbortController = (input: unknown): input is AbortController => {
 /**
  * @see `Updater` from `@tanstack/react-query`
  */
-export type ConnectUpdater<O extends Message<O>> =
-  | PartialMessage<O>
-  | ((prev?: O) => PartialMessage<O> | undefined);
+export type ConnectUpdater<O extends DescMessage> =
+  | MessageInitShape<O>
+  | ((prev?: MessageShape<O>) => MessageInitShape<O> | undefined);
 
 /**
  * This helper makes sure that the Class for the original data is returned, even if what's provided is a partial message or a plain JavaScript object representing the underlying values.
  */
 export const createProtobufSafeUpdater =
-  <I extends Message<I>, O extends Message<O>>(
-    methodSig: Pick<MethodUnaryDescriptor<I, O>, "O">,
+  <I extends DescMessage, O extends DescMessage>(
+    methodSig: Pick<MethodUnaryDescriptor<I, O>, "output">,
     updater: ConnectUpdater<O>,
   ) =>
-  (prev?: O): O => {
+  (prev?: MessageShape<O>): MessageShape<O> => {
     if (typeof updater === "function") {
-      return new methodSig.O(updater(prev));
+      return create(
+        methodSig.output,
+        (
+          updater as (prev?: MessageShape<O>) => MessageInitShape<O> | undefined
+        )(prev),
+      );
     }
 
-    return new methodSig.O(updater);
+    return create(methodSig.output, updater);
   };

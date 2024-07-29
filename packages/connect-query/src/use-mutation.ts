@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   UseMutationOptions as TSUseMutationOptions,
@@ -28,11 +32,11 @@ import { useTransport } from "./use-transport.js";
  * Options for useQuery
  */
 export type UseMutationOptions<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
   Ctx = unknown,
 > = Omit<
-  TSUseMutationOptions<O, ConnectError, PartialMessage<I>, Ctx>,
+  TSUseMutationOptions<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx>,
   "mutationFn"
 > & {
   transport?: Transport;
@@ -46,8 +50,8 @@ export type UseMutationOptions<
  * @returns
  */
 export function useMutation<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
   Ctx = unknown,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
@@ -57,13 +61,12 @@ export function useMutation<
     callOptions,
     ...queryOptions
   }: UseMutationOptions<I, O, Ctx> = {},
-): UseMutationResult<O, ConnectError, PartialMessage<I>, Ctx> {
+): UseMutationResult<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx> {
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
-    async (input: PartialMessage<I>) => {
+    async (input: MessageInitShape<I>) => {
       const result = await transportToUse.unary(
-        { typeName: methodSig.service.typeName, methods: {} },
         methodSig,
         callOptions?.signal,
         callOptions?.timeoutMs,

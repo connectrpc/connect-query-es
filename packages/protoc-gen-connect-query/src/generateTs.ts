@@ -13,13 +13,10 @@
 // limitations under the License.
 
 import type { DescFile, DescService } from "@bufbuild/protobuf";
-import { codegenInfo, MethodIdempotency, MethodKind } from "@bufbuild/protobuf";
-import type { Schema } from "@bufbuild/protoplugin/ecmascript";
-import { localName } from "@bufbuild/protoplugin/ecmascript";
+import type { Schema } from "@bufbuild/protoplugin";
+import { safeIdentifier } from "@bufbuild/protoplugin";
 
 import type { PluginInit } from "./utils.js";
-
-const { safeIdentifier } = codegenInfo;
 
 // prettier-ignore
 /**
@@ -30,33 +27,16 @@ const { safeIdentifier } = codegenInfo;
 const generateServiceFile =
   (schema: Schema, protoFile: DescFile, extension: 'js' | 'ts') =>
     (service: DescService) => {
-    const isTs = extension === "ts";
     const f = schema.generateFile(
-      `${protoFile.name}-${localName(service)}_connectquery.${extension}`,
+      `${protoFile.name}-${service.name}_connectquery.${extension}`,
     );
     f.preamble(protoFile);
 
-    const { MethodKind: rtMethodKind, MethodIdempotency: rtMethodIdempotency } =
-      schema.runtime;
-
     service.methods
-      .filter((method) => method.methodKind === MethodKind.Unary)
+      .filter((method) => method.methodKind === "unary")
       .forEach((method, index, filteredMethods) => {
         f.print(f.jsDoc(method));
-        f.print(f.exportDecl("const", safeIdentifier(localName(method))), " = {");
-        f.print("  localName: ",f.string(localName(method)), ",");
-        f.print("  name: ", f.string(method.name), ",");
-        f.print("  kind: ", rtMethodKind, ".", MethodKind[method.methodKind], ",");
-        f.print("  I: ", method.input, ",");
-        f.print("  O: ", method.output, ",");
-        if (method.idempotency !== undefined) {
-          f.print("      idempotency: ", rtMethodIdempotency, ".", MethodIdempotency[method.idempotency], ",");
-        }
-        f.print("  service: {");
-        f.print("    typeName: ", f.string(service.typeName));
-        f.print("  }");
-        f.print("}", isTs ? " as const" : "", ";");
-
+        f.print(f.export("const", safeIdentifier(method.localName)), " = ", f.importSchema(service), ".method.", method.localName, ";");
         const lastIndex = index === filteredMethods.length - 1;
         if (!lastIndex) {
           f.print();

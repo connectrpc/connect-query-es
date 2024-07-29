@@ -12,22 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { create } from "@bufbuild/protobuf";
 import { describe, expect, it } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { ElizaService } from "./gen/eliza_connect.js";
+import { ElizaService } from "./gen/eliza_pb.js";
 import { mockEliza, wrapper } from "./jest/test-utils.js";
 import { useQuery, useSuspenseQuery } from "./use-query.js";
 import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
-const sayMethodDescriptor = {
-  ...ElizaService.methods.say,
-  localName: "Say",
-  service: {
-    typeName: ElizaService.typeName,
-  },
-};
+const sayMethodDescriptor = ElizaService.method.say;
 
 const mockedElizaTransport = mockEliza();
 
@@ -92,7 +87,7 @@ describe("useQuery", () => {
           {},
           {
             transport: elizaWithDelayTransport,
-            placeholderData: new sayMethodDescriptor.O({
+            placeholderData: create(sayMethodDescriptor.output, {
               sentence: "placeholder!",
             }),
           },

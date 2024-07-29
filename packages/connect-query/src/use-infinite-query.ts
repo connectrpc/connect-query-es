@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   InfiniteData,
@@ -40,14 +44,14 @@ import type { DisableQuery } from "./utils.js";
  * @returns
  */
 export function useInfiniteQuery<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
   input:
     | DisableQuery
-    | (PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>),
+    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
   {
     transport,
     callOptions,
@@ -57,7 +61,7 @@ export function useInfiniteQuery<
   }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
-): UseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
+): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
     transport: transport ?? transportFromCtx,
@@ -78,12 +82,12 @@ export function useInfiniteQuery<
  * @returns
  */
 export function useSuspenseInfiniteQuery<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
+  input: MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>,
   {
     transport,
     callOptions,
@@ -93,7 +97,7 @@ export function useSuspenseInfiniteQuery<
   }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
-): UseSuspenseInfiniteQueryResult<InfiniteData<O>, ConnectError> {
+): UseSuspenseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
     transport: transport ?? transportFromCtx,

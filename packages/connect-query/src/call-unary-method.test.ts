@@ -21,16 +21,9 @@ import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { defaultOptions } from "./default-options.js";
-import { ElizaService } from "./gen/eliza_connect.js";
-import type { SayRequest } from "./gen/eliza_pb.js";
+import type { SayRequestSchema } from "./gen/eliza_pb.js";
+import { ElizaService } from "./gen/eliza_pb.js";
 import { mockEliza, wrapper } from "./jest/test-utils.js";
-
-const sayMethodDescriptor = {
-  ...ElizaService.methods.say,
-  service: {
-    typeName: ElizaService.typeName,
-  },
-};
 
 describe("callUnaryMethod", () => {
   it("can be used with useQueries", async () => {
@@ -39,15 +32,17 @@ describe("callUnaryMethod", () => {
         const [query1] = useQueries({
           queries: [
             {
-              queryKey: createConnectQueryKey(sayMethodDescriptor, {
+              queryKey: createConnectQueryKey(ElizaService.method.say, {
                 sentence: "query 1",
               }),
               queryFn: async ({
                 queryKey,
                 signal,
-              }: QueryFunctionContext<ConnectQueryKey<SayRequest>>) => {
+              }: QueryFunctionContext<
+                ConnectQueryKey<typeof SayRequestSchema>
+              >) => {
                 const res = await callUnaryMethod(
-                  sayMethodDescriptor,
+                  ElizaService.method.say,
                   queryKey[2],
                   {
                     transport: mockEliza({

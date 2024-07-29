@@ -16,18 +16,12 @@ import { ConnectError } from "@connectrpc/connect";
 import { describe, expect, it } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
-import { ElizaService } from "./gen/eliza_connect.js";
+import { ElizaService } from "./gen/eliza_pb.js";
 import { mockBigInt, wrapper } from "./jest/test-utils.js";
 import { useQuery } from "./use-query.js";
 import { TransportProvider, useTransport } from "./use-transport.js";
 
-const sayMethodDescriptor = {
-  ...ElizaService.methods.say,
-  localName: "Say",
-  service: {
-    typeName: ElizaService.typeName,
-  },
-};
+const sayMethodDescriptor = ElizaService.method.say;
 
 const error = new ConnectError(
   "To use Connect, you must provide a `Transport`: a simple object that handles `unary` and `stream` requests. `Transport` objects can easily be created by using `@connectrpc/connect-web`'s exports `createConnectTransport` and `createGrpcWebTransport`. see: https://connectrpc.com/docs/web/getting-started for more info.",

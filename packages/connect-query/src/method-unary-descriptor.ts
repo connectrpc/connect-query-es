@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, MethodInfoUnary, ServiceType } from "@bufbuild/protobuf";
+import type { DescMessage, DescMethod } from "@bufbuild/protobuf";
 
 /** Defines a standalone method and associated service  */
 export type MethodUnaryDescriptor<
-  I extends Message<I>,
-  O extends Message<O>,
-> = MethodInfoUnary<I, O> & {
-  readonly service: Omit<ServiceType, "methods">;
-};
+  I extends DescMessage,
+  O extends DescMessage,
+> = DescMethod & { methodKind: "unary"; input: I; output: O };

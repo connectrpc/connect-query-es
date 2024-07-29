@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   UseQueryResult,
@@ -39,12 +43,12 @@ import type { DisableQuery } from "./utils.js";
  * @returns
  */
 export function useQuery<
-  I extends Message<I>,
-  O extends Message<O>,
-  SelectOutData = O,
+  I extends DescMessage,
+  O extends DescMessage,
+  SelectOutData = MessageShape<O>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input?: DisableQuery | PartialMessage<I>,
+  input?: DisableQuery | MessageInitShape<I>,
   {
     transport,
     callOptions,
@@ -79,12 +83,12 @@ export function useQuery<
  * @returns
  */
 export function useSuspenseQuery<
-  I extends Message<I>,
-  O extends Message<O>,
-  SelectOutData = O,
+  I extends DescMessage,
+  O extends DescMessage,
+  SelectOutData = MessageShape<O>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input?: PartialMessage<I>,
+  input?: MessageInitShape<I>,
   {
     transport,
     callOptions,

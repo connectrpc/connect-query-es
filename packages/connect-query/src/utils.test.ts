@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { PartialMessage } from "@bufbuild/protobuf";
+import { create, type MessageInitShape } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 
-import { BigIntService } from "./gen/eliza_connect.js";
-import type { CountResponse } from "./gen/eliza_pb.js";
+import type { CountResponse, CountResponseSchema } from "./gen/eliza_pb.js";
+import { BigIntService } from "./gen/eliza_pb.js";
 import type { Equal, Expect } from "./jest/test-utils.js";
 import {
   assert,
@@ -78,18 +78,18 @@ describe("isAbortController", () => {
 });
 
 describe("protobufSafeUpdater", () => {
-  const { count: methodInfo } = BigIntService.methods;
-  const input: PartialMessage<CountResponse> = {
+  const { count: methodInfo } = BigIntService.method;
+  const input: MessageInitShape<typeof CountResponseSchema> = {
     count: 1n,
   };
-  const wrappedInput = new methodInfo.O(input);
+  const wrappedInput = create(methodInfo.output, input);
 
-  const output: PartialMessage<CountResponse> = {
+  const output: MessageInitShape<typeof CountResponseSchema> = {
     count: 2n,
   };
-  const wrappedOutput = new methodInfo.O(output);
+  const wrappedOutput = create(methodInfo.output, output);
 
-  it("handles a PartialMessage updater", () => {
+  it("handles a MessageInitShape updater", () => {
     const updater = output;
     const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
@@ -107,11 +107,11 @@ describe("protobufSafeUpdater", () => {
     expect(wrappedInput.count).toStrictEqual(1n);
     expect(result.count).toStrictEqual(2n);
     expect(result).toStrictEqual(wrappedOutput);
-    expect(result).toHaveProperty("clone");
+    expect(result).toHaveProperty("$typeName");
   });
 
   it("handles a function updater", () => {
-    const updater = jest.fn(() => new methodInfo.O({ count: 2n }));
+    const updater = jest.fn(() => create(methodInfo.output, { count: 2n }));
     const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
     type ExpectType_Updater = Expect<
@@ -120,7 +120,7 @@ describe("protobufSafeUpdater", () => {
     expect(typeof safeUpdater).toStrictEqual("function");
 
     const result = safeUpdater(wrappedInput);
-    expect(updater).toHaveBeenCalledWith(input);
+    expect(updater).toHaveBeenCalledWith(wrappedInput);
     type ExpectType_Result = Expect<Equal<typeof result, CountResponse>>;
     expect(result).not.toStrictEqual(wrappedInput);
 
@@ -129,6 +129,6 @@ describe("protobufSafeUpdater", () => {
     expect(wrappedInput.count).toStrictEqual(1n);
     expect(result.count).toStrictEqual(2n);
     expect(result).toStrictEqual(wrappedOutput);
-    expect(result).toHaveProperty("clone");
+    expect(result).toHaveProperty("$typeName");
   });
 });

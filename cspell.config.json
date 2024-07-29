@@ -40,5 +40,5 @@
     "oneof",
     "typesafe"
   ],
-  "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw"]
+  "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw", "**/gen", "**/snapshots"]
 }

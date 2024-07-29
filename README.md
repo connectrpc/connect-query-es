@@ -158,20 +158,22 @@ const queryClient = new QueryClient();
 export const App = () => {
   const transport = createConnectTransport({
     baseUrl: "<your baseUrl here>",
-    interceptors: [(next) => (request) => {
-      request.header.append("some-new-header", "some-value");
-      // Add your headers here
-      return next(request);
-    }],
+    interceptors: [
+      (next) => (request) => {
+        request.header.append("some-new-header", "some-value");
+        // Add your headers here
+        return next(request);
+      },
+    ],
   });
   return (
     <TransportProvider transport={transport}>
       <QueryClientProvider client={queryClient}>
-         <YourApp />
+        <YourApp />
       </QueryClientProvider>
     </TransportProvider>
   );
-}
+};
 ```
 
 For more details about what you can do with the transport, see the [Connect-Web documentation](https://connectrpc.com/docs/web/).

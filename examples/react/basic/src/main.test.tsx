@@ -31,6 +31,8 @@ describe("Application", () => {
     const text = await screen.findByText("Status: success");
     expect(text).toBeInTheDocument();
     const response = await screen.findByLabelText("data");
-    expect(response).toHaveTextContent('{"sentence":"Hello, world!"}');
+    expect(response).toHaveTextContent(
+      '{"sentence":"Hello, world!","$typeName":"connectrpc.eliza.v1.SayResponse"}',
+    );
   });
 });

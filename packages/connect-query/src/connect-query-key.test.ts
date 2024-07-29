@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Timestamp, toPlainMessage } from "@bufbuild/protobuf";
+import { create } from "@bufbuild/protobuf";
 import { describe, expect, it } from "@jest/globals";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { OperationRequest, SayRequest } from "./gen/eliza_pb.js";
+import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";
 import { disableQuery } from "./utils.js";
 
 describe("makeQueryKey", () => {
   const methodDescriptor = {
-    I: SayRequest,
+    input: SayRequestSchema,
     name: "name",
-    service: {
-      typeName: "service.typeName",
-    },
+    parent: ElizaService,
   };
 
   it("makes a query key with input", () => {
@@ -33,42 +31,28 @@ describe("makeQueryKey", () => {
       sentence: "someValue",
     });
     expect(key).toStrictEqual([
-      "service.typeName",
+      ElizaService.typeName,
       "name",
-      { sentence: "someValue" },
+      create(SayRequestSchema, { sentence: "someValue" }),
     ]);
   });
 
   it("allows empty inputs", () => {
     const key = createConnectQueryKey(methodDescriptor);
     expect(key).toStrictEqual([
-      "service.typeName",
+      ElizaService.typeName,
       "name",
-      toPlainMessage(new methodDescriptor.I({})),
+      create(methodDescriptor.input),
     ]);
   });
 
   it("makes a query key with a disabled input", () => {
     const key = createConnectQueryKey(methodDescriptor, disableQuery);
     expect(key).toStrictEqual([
-      "service.typeName",
+      ElizaService.typeName,
       "name",
-      toPlainMessage(new methodDescriptor.I({})),
+      create(methodDescriptor.input),
     ]);
-  });
-
-  it("converts nested Timestamps to PlainMessages", () => {
-    const methodDescriptorWithMessage = {
-      I: OperationRequest,
-      name: "name",
-      service: {
-        typeName: "service.typeName",
-      },
-    };
-    const key = createConnectQueryKey(methodDescriptorWithMessage, {
-      timestamp: new Timestamp(),
-    });
-    expect(key[2].timestamp).not.toBeInstanceOf(Timestamp);
   });
 
   it("generates identical keys when input is empty or the default is explicitly sent", () => {

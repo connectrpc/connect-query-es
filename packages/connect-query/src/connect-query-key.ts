@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {
-  type Message,
-  type PartialMessage,
-  type PlainMessage,
-  toPlainMessage,
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
 } from "@bufbuild/protobuf";
+import { create } from "@bufbuild/protobuf";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import type { DisableQuery } from "./utils.js";
@@ -37,10 +37,10 @@ import { disableQuery } from "./utils.js";
  *   { sentence: "hello there" },
  * ]
  */
-export type ConnectQueryKey<I extends Message<I>> = [
+export type ConnectQueryKey<I extends DescMessage> = [
   serviceTypeName: string,
   methodName: string,
-  input: PlainMessage<I>,
+  input: MessageShape<I>,
 ];
 
 /**
@@ -51,17 +51,21 @@ export type ConnectQueryKey<I extends Message<I>> = [
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */
 export function createConnectQueryKey<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
 >(
-  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined,
+  methodDescriptor: Pick<
+    MethodUnaryDescriptor<I, O>,
+    "input" | "parent" | "name"
+  >,
+  input?: DisableQuery | MessageInitShape<I> | undefined,
 ): ConnectQueryKey<I> {
   return [
-    methodDescriptor.service.typeName,
+    methodDescriptor.parent.typeName,
     methodDescriptor.name,
-    toPlainMessage(
-      new methodDescriptor.I(input === disableQuery || !input ? {} : input),
+    create(
+      methodDescriptor.input,
+      input === disableQuery || !input ? undefined : input,
     ),
   ];
 }
@@ -69,10 +73,10 @@ export function createConnectQueryKey<
 /**
  * Similar to @see ConnectQueryKey, but for infinite queries.
  */
-export type ConnectInfiniteQueryKey<I extends Message<I>> = [
+export type ConnectInfiniteQueryKey<I extends DescMessage> = [
   serviceTypeName: string,
   methodName: string,
-  input: PlainMessage<I>,
+  input: MessageShape<I>,
   "infinite",
 ];
 
@@ -80,11 +84,14 @@ export type ConnectInfiniteQueryKey<I extends Message<I>> = [
  * Similar to @see createConnectQueryKey, but for infinite queries.
  */
 export function createConnectInfiniteQueryKey<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
 >(
-  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined,
+  methodDescriptor: Pick<
+    MethodUnaryDescriptor<I, O>,
+    "input" | "parent" | "name"
+  >,
+  input?: DisableQuery | MessageInitShape<I> | undefined,
 ): ConnectInfiniteQueryKey<I> {
   return [...createConnectQueryKey(methodDescriptor, input), "infinite"];
 }
