@@ -33,7 +33,7 @@
     "@connectrpc/connect-query": "workspace:*",
     "@connectrpc/protoc-gen-connect-es": "^1.4.0",
     "@tanstack/react-query": "^5.51.16",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^1.10.0",
