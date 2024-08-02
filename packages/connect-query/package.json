@@ -32,7 +32,7 @@
     "stable-hash": "^0.0.4"
   },
   "devDependencies": {
-    "@bufbuild/buf": "1.34.0",
+    "@bufbuild/buf": "1.35.1",
     "@arethetypeswrong/cli": "^0.15.3",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
     "@bufbuild/protobuf": "^1.10.0",
