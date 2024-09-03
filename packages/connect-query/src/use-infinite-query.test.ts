@@ -43,8 +43,8 @@ const defaultCallOptions = {
   // This query returns a ListResponse which contains a bigint.
   // As a result, tanstack will show an error that
   // StructuralSharing requires data to be JSON serializable.
-  // So we turn it off for this test. Another option would be to
-  // implement a `select` option to transform the data into something
+  // So we turn it off for these test. Another option would be to
+  // implement a `select` option to transform the response into something
   // JSON serializable.
   structuralSharing: false,
 };
