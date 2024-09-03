@@ -39,6 +39,16 @@ const methodDescriptor = {
   },
 };
 
+const defaultCallOptions = {
+  // This query returns a ListResponse which contains a bigint.
+  // As a result, tanstack will show an error that
+  // StructuralSharing requires data to be JSON serializable.
+  // So we turn it off for this test. Another option would be to
+  // implement a `select` option to transform the data into something
+  // JSON serializable.
+  structuralSharing: false,
+};
+
 const mockedPaginatedTransport = mockPaginatedTransport();
 
 describe("useInfiniteQuery", () => {
@@ -51,6 +61,7 @@ describe("useInfiniteQuery", () => {
             page: 0n,
           },
           {
+            ...defaultCallOptions,
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
           },
@@ -102,6 +113,7 @@ describe("useInfiniteQuery", () => {
     const { result } = renderHook(
       () => {
         return useInfiniteQuery(methodDescriptor, disableQuery, {
+          ...defaultCallOptions,
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
         });
@@ -121,6 +133,7 @@ describe("useInfiniteQuery", () => {
             page: 0n,
           },
           {
+            ...defaultCallOptions,
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
             transport: mockPaginatedTransport({
@@ -153,6 +166,7 @@ describe("useInfiniteQuery", () => {
             page: 0n,
           },
           {
+            ...defaultCallOptions,
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
             transport: mockPaginatedTransport(undefined, true),
@@ -192,6 +206,7 @@ describe("useInfiniteQuery", () => {
           page: 0n,
         },
         {
+          ...defaultCallOptions,
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
         },
@@ -226,6 +241,7 @@ describe("useInfiniteQuery", () => {
           page: 0n,
         },
         {
+          ...defaultCallOptions,
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
         },
@@ -270,6 +286,7 @@ describe("useInfiniteQuery", () => {
           page: 0n,
         },
         {
+          ...defaultCallOptions,
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
         },
@@ -300,6 +317,7 @@ describe("useSuspenseInfiniteQuery", () => {
             page: 0n,
           },
           {
+            ...defaultCallOptions,
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
           },
@@ -356,6 +374,7 @@ describe("useSuspenseInfiniteQuery", () => {
             page: 0n,
           },
           {
+            ...defaultCallOptions,
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
             enabled: false,
@@ -387,6 +406,7 @@ describe("useSuspenseInfiniteQuery", () => {
             extraField: "extra",
           },
           {
+            ...defaultCallOptions,
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
           },
