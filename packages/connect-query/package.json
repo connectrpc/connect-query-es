@@ -23,7 +23,6 @@
   "main": "./dist/cjs/index.js",
   "exports": {
     ".": {
-      "module": "./dist/esm/index.js",
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     }
