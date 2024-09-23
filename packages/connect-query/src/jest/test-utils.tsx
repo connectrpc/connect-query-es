@@ -26,7 +26,6 @@ import type {
   CountRequest,
   ListResponseSchema,
   SayRequest,
-  SayRequestSchema,
 } from "../gen/eliza_pb.js";
 import {
   BigIntService,
@@ -125,7 +124,7 @@ export const sleep = async (timeout: number) =>
  * a stateless mock for ElizaService
  */
 export const mockEliza = (
-  override?: MessageInitShape<typeof SayRequestSchema>,
+  override?: MessageInitShape<typeof SayResponseSchema>,
   addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {

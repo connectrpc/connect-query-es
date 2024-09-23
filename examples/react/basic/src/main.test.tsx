@@ -32,7 +32,7 @@ describe("Application", () => {
     expect(text).toBeInTheDocument();
     const response = await screen.findByLabelText("data");
     expect(response).toHaveTextContent(
-      '{"sentence":"Hello, world!","$typeName":"connectrpc.eliza.v1.SayResponse"}',
+      '{"$typeName":"connectrpc.eliza.v1.SayResponse","sentence":"Hello, world!"}',
     );
   });
 });

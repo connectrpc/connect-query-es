@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/protoc-gen-connect-query",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
@@ -27,16 +27,16 @@
   },
   "preferUnplugged": true,
   "devDependencies": {
-    "@bufbuild/buf": "1.34.0",
-    "@bufbuild/protoc-gen-es": "^2.0.0-beta.1",
-    "@connectrpc/connect": "^2.0.0-alpha.1",
+    "@bufbuild/buf": "1.39.0",
+    "@bufbuild/protoc-gen-es": "^2.1.0",
+    "@connectrpc/connect": "^2.0.0-beta.1",
     "@connectrpc/connect-query": "workspace:*",
-    "@tanstack/react-query": "^5.40.0",
-    "typescript": "^5.5.3"
+    "@tanstack/react-query": "^5.53.3",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.0.0-beta.1",
-    "@bufbuild/protoplugin": "^2.0.0-beta.1"
+    "@bufbuild/protobuf": "^2.1.0",
+    "@bufbuild/protoplugin": "^2.1.0"
   },
   "peerDependencies": {
     "@bufbuild/protoc-gen-es": "1.x"
