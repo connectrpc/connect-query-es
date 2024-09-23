@@ -12,7 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
+import type {
+  DescMessage,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
+import { create } from "@bufbuild/protobuf";
 import type { CallOptions, Transport } from "@connectrpc/connect";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
@@ -21,11 +26,11 @@ import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
  * Call a unary method given it's signature and input.
  */
 export async function callUnaryMethod<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
 >(
   methodType: MethodUnaryDescriptor<I, O>,
-  input: PartialMessage<I> | undefined,
+  input: MessageInitShape<I> | undefined,
   {
     callOptions,
     transport,
@@ -33,14 +38,13 @@ export async function callUnaryMethod<
     transport: Transport;
     callOptions?: CallOptions | undefined;
   },
-): Promise<O> {
+): Promise<MessageShape<O>> {
   const result = await transport.unary(
-    { typeName: methodType.service.typeName, methods: {} },
     methodType,
     callOptions?.signal,
     callOptions?.timeoutMs,
     callOptions?.headers,
-    input ?? {},
+    input ?? create(methodType.input),
   );
   return result.message;
 }

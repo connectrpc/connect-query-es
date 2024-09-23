@@ -12,11 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { create } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { defaultOptions } from "./default-options.js";
-import { BigIntService, PaginatedService } from "./gen/eliza_connect.js";
+import {
+  BigIntService,
+  ListResponseSchema,
+  PaginatedService,
+} from "./gen/eliza_pb.js";
 import {
   mockPaginatedTransport,
   mockStatefulBigIntTransport,
@@ -25,23 +30,12 @@ import {
 import { useMutation } from "./use-mutation.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
-const methodDescriptor = {
-  ...PaginatedService.methods.list,
-  localName: "List",
-  service: {
-    typeName: PaginatedService.typeName,
-  },
-};
+const methodDescriptor = PaginatedService.method.list;
 
 const mockedPaginatedTransport = mockPaginatedTransport();
 const mutationTransport = mockStatefulBigIntTransport(true);
 
-const statefulDescriptor = {
-  ...BigIntService.methods.count,
-  service: {
-    typeName: BigIntService.typeName,
-  },
-};
+const statefulDescriptor = BigIntService.method.count;
 
 describe("useMutation", () => {
   it("performs a mutation", async () => {
@@ -69,10 +63,10 @@ describe("useMutation", () => {
     });
 
     expect(onSuccess).toHaveBeenCalledWith(
-      {
+      create(ListResponseSchema, {
         items: ["-2 Item", "-1 Item", "0 Item"],
         page: 0n,
-      },
+      }),
       {
         page: 0n,
       },
@@ -140,8 +134,7 @@ describe("useMutation", () => {
     expect(result.current.isPending).toBeFalsy();
 
     const newResult = await mutationTransport.unary(
-      BigIntService,
-      BigIntService.methods.getCount,
+      BigIntService.method.getCount,
       undefined,
       undefined,
       undefined,
@@ -185,10 +178,10 @@ describe("useMutation", () => {
     });
 
     expect(onSuccess).toHaveBeenCalledWith(
-      {
+      create(ListResponseSchema, {
         items: ["-2 Item", "-1 Item", "0 Item"],
         page: 0n,
-      },
+      }),
       {
         page: 0n,
       },

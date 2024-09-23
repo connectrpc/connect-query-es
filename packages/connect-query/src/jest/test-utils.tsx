@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { PartialMessage } from "@bufbuild/protobuf";
+import type { MessageInitShape } from "@bufbuild/protobuf";
+import { create } from "@bufbuild/protobuf";
 import type { CallOptions, Transport } from "@connectrpc/connect";
 import { createRouterTransport } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
@@ -21,17 +22,18 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { JSXElementConstructor, PropsWithChildren } from "react";
 
 import { defaultOptions } from "../default-options.js";
-import {
-  BigIntService,
-  ElizaService,
-  PaginatedService,
-} from "../gen/eliza_connect.js";
 import type {
   CountRequest,
-  ListResponse,
+  ListResponseSchema,
   SayRequest,
 } from "../gen/eliza_pb.js";
-import { CountResponse, SayResponse } from "../gen/eliza_pb.js";
+import {
+  BigIntService,
+  CountResponseSchema,
+  ElizaService,
+  PaginatedService,
+  SayResponseSchema,
+} from "../gen/eliza_pb.js";
 import { TransportProvider } from "../use-transport.js";
 
 /**
@@ -122,7 +124,7 @@ export const sleep = async (timeout: number) =>
  * a stateless mock for ElizaService
  */
 export const mockEliza = (
-  override?: PartialMessage<SayRequest>,
+  override?: MessageInitShape<typeof SayResponseSchema>,
   addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
@@ -131,7 +133,8 @@ export const mockEliza = (
         if (addDelay) {
           await sleep(1000);
         }
-        return new SayResponse(
+        return create(
+          SayResponseSchema,
           override ?? { sentence: `Hello ${input.sentence}` },
         );
       },
@@ -143,7 +146,9 @@ export const mockEliza = (
  */
 export const mockBigInt = () =>
   createRouterTransport(({ service }) => {
-    service(BigIntService, { count: () => new CountResponse({ count: 1n }) });
+    service(BigIntService, {
+      count: () => create(CountResponseSchema, { count: 1n }),
+    });
   });
 
 /**
@@ -160,9 +165,9 @@ export const mockStatefulBigIntTransport = (addDelay = false) =>
         if (request) {
           count += request.add;
         }
-        return new CountResponse({ count });
+        return create(CountResponseSchema, { count });
       },
-      getCount: () => new CountResponse({ count }),
+      getCount: () => create(CountResponseSchema, { count }),
     });
   });
 
@@ -170,7 +175,7 @@ export const mockStatefulBigIntTransport = (addDelay = false) =>
  * a mock for PaginatedService that acts as an impromptu database
  */
 export const mockPaginatedTransport = (
-  override?: PartialMessage<ListResponse>,
+  override?: MessageInitShape<typeof ListResponseSchema>,
   addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {

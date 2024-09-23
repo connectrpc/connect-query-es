@@ -6,8 +6,3 @@ plugins:
     out: src/gen
     opt:
       - target=ts
-
-  - plugin: connect-es
-    out: src/gen
-    opt:
-      - target=ts

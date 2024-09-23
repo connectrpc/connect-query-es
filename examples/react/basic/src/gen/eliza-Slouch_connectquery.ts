@@ -16,19 +16,9 @@
 // @generated from file eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import { MethodKind } from "@bufbuild/protobuf";
-import { Nothing } from "./eliza_pb";
+import { Slouch } from "./eliza_pb";
 
 /**
  * @generated from rpc connectrpc.eliza.v1.Slouch.Work
  */
-export const work = {
-  localName: "work",
-  name: "Work",
-  kind: MethodKind.Unary,
-  I: Nothing,
-  O: Nothing,
-  service: {
-    typeName: "connectrpc.eliza.v1.Slouch",
-  },
-} as const;
+export const work = Slouch.method.work;
