@@ -28,6 +28,7 @@ import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { createStructuralSharing } from "./structural-sharing.js";
 import { assert, type DisableQuery, disableQuery } from "./utils.js";
 
 export interface ConnectQueryOptions {
@@ -114,15 +115,18 @@ export function createUseQueryOptions<
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>>;
+  structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   enabled: boolean | undefined;
 } {
   const queryKey = createConnectQueryKey(methodSig, input);
+  const structuralSharing = createStructuralSharing(methodSig.output);
   return {
     queryKey,
     queryFn: createUnaryQueryFn(methodSig, input, {
       transport,
       callOptions,
     }),
+    structuralSharing,
     enabled: input === disableQuery ? false : undefined,
   };
 }

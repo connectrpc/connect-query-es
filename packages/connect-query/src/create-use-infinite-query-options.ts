@@ -23,6 +23,7 @@ import type {
   InfiniteData,
   QueryFunction,
   UseInfiniteQueryOptions,
+  UseQueryOptions,
   UseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 
@@ -32,6 +33,7 @@ import {
   createConnectInfiniteQueryKey,
 } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { createStructuralSharing } from "./structural-sharing.js";
 import { assert, type DisableQuery, disableQuery } from "./utils.js";
 
 /**
@@ -167,6 +169,7 @@ export function createUseInfiniteQueryOptions<
     ConnectInfiniteQueryKey<I>,
     MessageInitShape<I>[ParamKey]
   >;
+  structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   initialPageParam: MessageInitShape<I>[ParamKey];
   enabled: boolean;
 } {
@@ -179,6 +182,7 @@ export function createUseInfiniteQueryOptions<
           [pageParamKey]: undefined,
         },
   );
+  const structuralSharing = createStructuralSharing(methodSig.output);
   return {
     getNextPageParam,
     initialPageParam:
@@ -191,6 +195,7 @@ export function createUseInfiniteQueryOptions<
       callOptions,
       pageParamKey,
     }),
+    structuralSharing,
     enabled: input !== disableQuery,
   };
 }
