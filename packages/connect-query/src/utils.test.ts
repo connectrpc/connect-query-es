@@ -15,8 +15,11 @@
 import { create, type MessageInitShape } from "@bufbuild/protobuf";
 import { describe, expect, it, jest } from "@jest/globals";
 
-import type { CountResponse, CountResponseSchema } from "./gen/eliza_pb.js";
-import { BigIntService } from "./gen/eliza_pb.js";
+import {
+  BigIntService,
+  type CountResponse,
+  type CountResponseSchema,
+} from "./gen/bigint_pb.js";
 import type { Equal, Expect } from "./jest/test-utils.js";
 import {
   assert,
