@@ -21,7 +21,7 @@ import { createStructuralSharing } from "./structural-sharing.js";
 describe("structural sharing", () => {
   const schema = SayResponseSchema;
   const fn = createStructuralSharing(schema);
-  it("returns old data if equal to old data", () => {
+  it("returns old data if new data is equal", () => {
     const oldData = create(schema, { sentence: "hi" });
     const newData = create(schema, { sentence: "hi" });
     const result = fn(oldData, newData);
