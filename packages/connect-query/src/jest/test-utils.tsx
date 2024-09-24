@@ -22,18 +22,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { JSXElementConstructor, PropsWithChildren } from "react";
 
 import { defaultOptions } from "../default-options.js";
-import type {
-  CountRequest,
-  ListResponseSchema,
-  SayRequest,
-} from "../gen/eliza_pb.js";
 import {
   BigIntService,
+  type CountRequest,
   CountResponseSchema,
+} from "../gen/bigint_pb.js";
+import {
   ElizaService,
-  PaginatedService,
+  type SayRequest,
   SayResponseSchema,
 } from "../gen/eliza_pb.js";
+import { type ListResponseSchema, ListService } from "../gen/list_pb.js";
 import { TransportProvider } from "../use-transport.js";
 
 /**
@@ -179,7 +178,7 @@ export const mockPaginatedTransport = (
   addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
-    service(PaginatedService, {
+    service(ListService, {
       list: async (request) => {
         if (addDelay) {
           await sleep(1000);

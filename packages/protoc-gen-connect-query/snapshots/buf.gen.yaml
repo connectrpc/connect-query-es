@@ -1,6 +1,6 @@
 version: v2
 inputs:
-  - module: buf.build/connectrpc/eliza:8b8b971d6fde4dc8ba5d96f9fda7d53c
+  - proto_file: test.proto
 clean: true
 plugins:
   # js

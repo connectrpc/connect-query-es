@@ -22,7 +22,7 @@
     "clean": "rm -rf dist",
     "build": "pnpm clean && tsc --project tsconfig.build.json",
     "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
-    "generate": "cd snapshots && buf generate && license-header",
+    "generate": "cd snapshots && buf generate",
     "test": "tsc --declaration --declarationDir .type-dump --emitDeclarationOnly"
   },
   "preferUnplugged": true,

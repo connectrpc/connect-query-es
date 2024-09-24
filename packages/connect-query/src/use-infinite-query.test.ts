@@ -22,7 +22,7 @@ import {
   createConnectQueryKey,
 } from "./connect-query-key.js";
 import { defaultOptions } from "./default-options.js";
-import { ListResponseSchema, PaginatedService } from "./gen/eliza_pb.js";
+import { ListResponseSchema, ListService } from "./gen/list_pb.js";
 import { mockPaginatedTransport, wrapper } from "./jest/test-utils.js";
 import {
   useInfiniteQuery,
@@ -32,7 +32,7 @@ import { useQuery } from "./use-query.js";
 import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
-const methodDescriptor = PaginatedService.method.list;
+const methodDescriptor = ListService.method.list;
 
 const mockedPaginatedTransport = mockPaginatedTransport();
 

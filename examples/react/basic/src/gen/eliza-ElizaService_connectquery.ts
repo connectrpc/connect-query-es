@@ -24,10 +24,3 @@ import { ElizaService } from "./eliza_pb";
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
 export const say = ElizaService.method.say;
-
-/**
- * SayAgain is a unary RPC. Eliza responds to the prompt with a single sentence.
- *
- * @generated from rpc connectrpc.eliza.v1.ElizaService.SayAgain
- */
-export const sayAgain = ElizaService.method.sayAgain;

@@ -13,15 +13,13 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
+import { Code } from "@connectrpc/connect";
 import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
 
 import { defaultOptions } from "./default-options.js";
-import {
-  BigIntService,
-  ListResponseSchema,
-  PaginatedService,
-} from "./gen/eliza_pb.js";
+import { BigIntService } from "./gen/bigint_pb.js";
+import { ListResponseSchema, ListService } from "./gen/list_pb.js";
 import {
   mockPaginatedTransport,
   mockStatefulBigIntTransport,
@@ -30,7 +28,7 @@ import {
 import { useMutation } from "./use-mutation.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
-const methodDescriptor = PaginatedService.method.list;
+const methodDescriptor = ListService.method.list;
 
 const mockedPaginatedTransport = mockPaginatedTransport();
 const mutationTransport = mockStatefulBigIntTransport(true);
@@ -132,6 +130,8 @@ describe("useMutation", () => {
     });
 
     expect(result.current.isPending).toBeFalsy();
+    expect(result.current.isError).toBeTruthy();
+    expect(result.current.error?.code).toBe(Code.Canceled);
 
     const newResult = await mutationTransport.unary(
       BigIntService.method.getCount,
