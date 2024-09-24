@@ -11,10 +11,10 @@
   - [Generated Output](#generated-output)
   - [Plugin options](#plugin-options)
     - [`target`](#target)
-    - [`import_extension=.js`](#import_extensionjs)
+    - [`import_extension`](#import_extension)
     - [`keep_empty_files=true`](#keep_empty_filestrue)
     - [`js_import_style`](#js_import_style)
-    - [`ts_nocheck=false`](#ts_nocheckfalse)
+    - [`ts_nocheck=true`](#ts_nochecktrue)
   - [Example Generated Code](#example-generated-code)
 
 The code generator for Connect-Query, a expansion pack for [TanStack Query](https://tanstack.com/query) (react-query), that enables effortless communication with servers that speak the [Connect Protocol](https://connectrpc.com/docs/protocol).
@@ -185,16 +185,13 @@ Multiple values can be given by separating them with `+`, for example `target=js
 
 By default, we generate JavaScript and TypeScript declaration files, which produces the smallest code size and is the most compatible with various bundler configurations. If you prefer to generate TypeScript, use `target=ts`.
 
-### `import_extension=.js`
+### `import_extension`
 
-By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) uses a `.js` file extensions in import paths, even in TypeScript files.
+By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) (and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin)) doesn't add file extensions to import paths. However, some environments require an import extension. For example, using ECMAScript modules in Node.js requires the `.js` extension, and Deno requires `.ts`. With this plugin option, you can add `.js`/`.ts` extensions in import paths with the given value. Possible values:
 
-This is unintuitive, but necessary for [ECMAScript modules in Node.js](https://www.typescriptlang.org/docs/handbook/esm-node.html).
-
-Unfortunately, not all bundlers and tools have caught up yet, and Deno requires `.ts`. With this plugin option, you can replace `.js` extensions in import paths with the given value. For example, set
-
-- `import_extension=none` to remove the `.js` extension
-- `import_extension=.ts` to replace the `.js` extension with `.ts`
+- `import_extension=none`: Doesn't add an extension. (Default)
+- `import_extension=js`: Adds the `.js` extension.
+- `import_extension=ts`. Adds the `.ts` extension.
 
 ### `js_import_style`
 
@@ -214,16 +211,9 @@ Possible values:
 
 This option exists for other plugins but is not applicable to `protoc-gen-connect-query` because, unlike most other plugins, it does not generate a maximum of one output file for every input proto file. Instead, it generates one output file per service. If you provide a valid proto file that contains no services, `protoc-gen-connect-query` will have no output.
 
-### `ts_nocheck=false`
+### `ts_nocheck=true`
 
-By default, [protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query)
-(and all other plugins based on [@bufbuild/protoplugin](https://www.npmjs.com/package/@bufbuild/protoplugin))
-generate an annotation at the top of each file: `// @ts-nocheck`.
-
-We generate the annotation to support a wide range of compiler configurations and
-future changes to the language. But there can be situations where the annotation
-shadows an underlying problem, for example an unresolvable import. To remove
-the annotation and to enable type checks, set the plugin option `ts_nocheck=false`.
+[protoc-gen-connect-query](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) generates valid TypeScript for current versions of the TypeScript compiler with standard settings. If you use compiler settings that yield an error for generated code, setting this option generates an annotation at the top of each file to skip type checks: `// @ts-nocheck`.
 
 ## Example Generated Code
 
