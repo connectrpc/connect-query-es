@@ -1,32 +1,30 @@
-version: v1
+version: v2
+inputs:
+  - module: buf.build/connectrpc/eliza:8b8b971d6fde4dc8ba5d96f9fda7d53c
+clean: true
 plugins:
   # js
-  - plugin: es
+  - local: protoc-gen-es
     out: gen_js
-  - plugin: connect-query
-    path: ../bin/protoc-gen-connect-query
+  - local: ../bin/protoc-gen-connect-query
     out: gen_js
 
   # cjs
-  - plugin: es
+  - local: protoc-gen-es
     out: gen_cjs
     opt:
       - js_import_style=legacy_commonjs
-  - plugin: connect-query
-    path: ../bin/protoc-gen-connect-query
+  - local: ../bin/protoc-gen-connect-query
     out: gen_cjs
     opt:
       - js_import_style=legacy_commonjs
-      - ts_nocheck=false # we only set this for our tests
 
   # ts
-  - plugin: es
+  - local: protoc-gen-es
     out: gen_ts
     opt:
       - target=ts
-  - plugin: connect-query
-    path: ../bin/protoc-gen-connect-query
+  - local: ../bin/protoc-gen-connect-query
     out: gen_ts
     opt:
       - target=ts
-      - ts_nocheck=false # we only set this for our tests

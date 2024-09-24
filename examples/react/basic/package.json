@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "generate": "rm -rf src/gen && buf generate --path eliza.proto",
+    "generate": "buf generate",
     "license-header": "license-header",
     "preview": "vite preview",
     "test": "jest",
-    "format": "prettier . --write && eslint . --fix && license-header"
+    "format": "prettier --write . '!src/gen' && eslint . --fix && license-header"
   },
   "dependencies": {
     "@bufbuild/buf": "1.39.0",
