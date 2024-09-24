@@ -14,10 +14,12 @@ plugins:
     out: gen_cjs
     opt:
       - js_import_style=legacy_commonjs
+      - import_extension=js
   - local: ../bin/protoc-gen-connect-query
     out: gen_cjs
     opt:
       - js_import_style=legacy_commonjs
+      - import_extension=js
 
   # ts
   - local: protoc-gen-es
