@@ -1,17 +1,16 @@
 # buf.gen.yaml defines a local generation template.
-# For details, see https://docs.buf.build/configuration/v1/buf-gen-yaml
-version: v1
+# For details, see https://buf.build/docs/configuration/v2/buf-gen-yaml
+version: v2
+inputs:
+  - proto_file: eliza.proto
+# Deletes the directories specified in the `out` field for all plugins before running code generation.
+clean: true
 plugins:
-  - name: es
-    path: protoc-gen-es
+  - local: protoc-gen-es
     out: src/gen
     opt:
       - target=ts
-
-  - name: connect-query
-    path: protoc-gen-connect-query
+  - local: protoc-gen-connect-query
     out: src/gen
     opt:
       - target=ts
-      - import_extension=none
-      - ts_nocheck=false

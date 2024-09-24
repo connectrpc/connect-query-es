@@ -23,4 +23,4 @@ import { ElizaService } from "./eliza_pb";
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say: (typeof ElizaService)["method"]["say"];
+export const say: typeof ElizaService["method"]["say"];

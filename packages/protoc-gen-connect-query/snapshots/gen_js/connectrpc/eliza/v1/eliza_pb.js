@@ -16,67 +16,54 @@
 // @generated from file connectrpc/eliza/v1/eliza.proto (package connectrpc.eliza.v1, syntax proto3)
 /* eslint-disable */
 
-import {
-  fileDesc,
-  messageDesc,
-  serviceDesc,
-} from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
 
 /**
  * Describes the file connectrpc/eliza/v1/eliza.proto.
  */
-export const file_connectrpc_eliza_v1_eliza =
-  /*@__PURE__*/
-  fileDesc(
-    "Ch9jb25uZWN0cnBjL2VsaXphL3YxL2VsaXphLnByb3RvEhNjb25uZWN0cnBjLmVsaXphLnYxIh4KClNheVJlcXVlc3QSEAoIc2VudGVuY2UYASABKAkiHwoLU2F5UmVzcG9uc2USEAoIc2VudGVuY2UYASABKAkiIwoPQ29udmVyc2VSZXF1ZXN0EhAKCHNlbnRlbmNlGAEgASgJIiQKEENvbnZlcnNlUmVzcG9uc2USEAoIc2VudGVuY2UYASABKAkiIAoQSW50cm9kdWNlUmVxdWVzdBIMCgRuYW1lGAEgASgJIiUKEUludHJvZHVjZVJlc3BvbnNlEhAKCHNlbnRlbmNlGAEgASgJMpkCCgxFbGl6YVNlcnZpY2USSgoDU2F5Eh8uY29ubmVjdHJwYy5lbGl6YS52MS5TYXlSZXF1ZXN0GiAuY29ubmVjdHJwYy5lbGl6YS52MS5TYXlSZXNwb25zZSIAEl0KCENvbnZlcnNlEiQuY29ubmVjdHJwYy5lbGl6YS52MS5Db252ZXJzZVJlcXVlc3QaJS5jb25uZWN0cnBjLmVsaXphLnYxLkNvbnZlcnNlUmVzcG9uc2UiACgBMAESXgoJSW50cm9kdWNlEiUuY29ubmVjdHJwYy5lbGl6YS52MS5JbnRyb2R1Y2VSZXF1ZXN0GiYuY29ubmVjdHJwYy5lbGl6YS52MS5JbnRyb2R1Y2VSZXNwb25zZSIAMAFiBnByb3RvMw",
-  );
+export const file_connectrpc_eliza_v1_eliza = /*@__PURE__*/
+  fileDesc("Ch9jb25uZWN0cnBjL2VsaXphL3YxL2VsaXphLnByb3RvEhNjb25uZWN0cnBjLmVsaXphLnYxIh4KClNheVJlcXVlc3QSEAoIc2VudGVuY2UYASABKAkiHwoLU2F5UmVzcG9uc2USEAoIc2VudGVuY2UYASABKAkiIwoPQ29udmVyc2VSZXF1ZXN0EhAKCHNlbnRlbmNlGAEgASgJIiQKEENvbnZlcnNlUmVzcG9uc2USEAoIc2VudGVuY2UYASABKAkiIAoQSW50cm9kdWNlUmVxdWVzdBIMCgRuYW1lGAEgASgJIiUKEUludHJvZHVjZVJlc3BvbnNlEhAKCHNlbnRlbmNlGAEgASgJMpkCCgxFbGl6YVNlcnZpY2USSgoDU2F5Eh8uY29ubmVjdHJwYy5lbGl6YS52MS5TYXlSZXF1ZXN0GiAuY29ubmVjdHJwYy5lbGl6YS52MS5TYXlSZXNwb25zZSIAEl0KCENvbnZlcnNlEiQuY29ubmVjdHJwYy5lbGl6YS52MS5Db252ZXJzZVJlcXVlc3QaJS5jb25uZWN0cnBjLmVsaXphLnYxLkNvbnZlcnNlUmVzcG9uc2UiACgBMAESXgoJSW50cm9kdWNlEiUuY29ubmVjdHJwYy5lbGl6YS52MS5JbnRyb2R1Y2VSZXF1ZXN0GiYuY29ubmVjdHJwYy5lbGl6YS52MS5JbnRyb2R1Y2VSZXNwb25zZSIAMAFiBnByb3RvMw");
 
 /**
  * Describes the message connectrpc.eliza.v1.SayRequest.
  * Use `create(SayRequestSchema)` to create a new message.
  */
-export const SayRequestSchema =
-  /*@__PURE__*/
+export const SayRequestSchema = /*@__PURE__*/
   messageDesc(file_connectrpc_eliza_v1_eliza, 0);
 
 /**
  * Describes the message connectrpc.eliza.v1.SayResponse.
  * Use `create(SayResponseSchema)` to create a new message.
  */
-export const SayResponseSchema =
-  /*@__PURE__*/
+export const SayResponseSchema = /*@__PURE__*/
   messageDesc(file_connectrpc_eliza_v1_eliza, 1);
 
 /**
  * Describes the message connectrpc.eliza.v1.ConverseRequest.
  * Use `create(ConverseRequestSchema)` to create a new message.
  */
-export const ConverseRequestSchema =
-  /*@__PURE__*/
+export const ConverseRequestSchema = /*@__PURE__*/
   messageDesc(file_connectrpc_eliza_v1_eliza, 2);
 
 /**
  * Describes the message connectrpc.eliza.v1.ConverseResponse.
  * Use `create(ConverseResponseSchema)` to create a new message.
  */
-export const ConverseResponseSchema =
-  /*@__PURE__*/
+export const ConverseResponseSchema = /*@__PURE__*/
   messageDesc(file_connectrpc_eliza_v1_eliza, 3);
 
 /**
  * Describes the message connectrpc.eliza.v1.IntroduceRequest.
  * Use `create(IntroduceRequestSchema)` to create a new message.
  */
-export const IntroduceRequestSchema =
-  /*@__PURE__*/
+export const IntroduceRequestSchema = /*@__PURE__*/
   messageDesc(file_connectrpc_eliza_v1_eliza, 4);
 
 /**
  * Describes the message connectrpc.eliza.v1.IntroduceResponse.
  * Use `create(IntroduceResponseSchema)` to create a new message.
  */
-export const IntroduceResponseSchema =
-  /*@__PURE__*/
+export const IntroduceResponseSchema = /*@__PURE__*/
   messageDesc(file_connectrpc_eliza_v1_eliza, 5);
 
 /**
@@ -89,6 +76,6 @@ export const IntroduceResponseSchema =
  *
  * @generated from service connectrpc.eliza.v1.ElizaService
  */
-export const ElizaService =
-  /*@__PURE__*/
+export const ElizaService = /*@__PURE__*/
   serviceDesc(file_connectrpc_eliza_v1_eliza, 0);
+
