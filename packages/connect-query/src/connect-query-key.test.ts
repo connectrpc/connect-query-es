@@ -60,4 +60,14 @@ describe("makeQueryKey", () => {
     const key2 = createConnectQueryKey(methodDescriptor, { sentence: "" });
     expect(key1).toStrictEqual(key2);
   });
+
+  // describe("new", () => {
+  //   it.only("test new", () => {
+  //     const key = createConnectQueryKey2(methodDescriptor as unknown as any, {
+  //       sentence: "hello world",
+  //     });
+
+  //     console.log("keyss", key);
+  //   });
+  // });
 });

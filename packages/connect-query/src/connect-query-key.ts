@@ -15,13 +15,14 @@
 import type {
   DescMessage,
   MessageInitShape,
-  MessageShape,
+  // MessageShape,
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import type { DisableQuery } from "./utils.js";
 import { disableQuery } from "./utils.js";
+import { createMessageKey } from "./message-key.js";
 
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
@@ -40,7 +41,8 @@ import { disableQuery } from "./utils.js";
 export type ConnectQueryKey<I extends DescMessage> = [
   serviceTypeName: string,
   methodName: string,
-  input: MessageShape<I>,
+  // input: MessageShape<I>,
+  input: Record<string, unknown>,
 ];
 
 /**
@@ -55,12 +57,16 @@ export function createConnectQueryKey<
   O extends DescMessage,
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: DisableQuery | MessageInitShape<I> | undefined,
+  input?: DisableQuery | MessageInitShape<I> | undefined
 ): ConnectQueryKey<I> {
+  const message = create(
+    schema.input,
+    input === disableQuery || !input ? undefined : input
+  );
   return [
     schema.parent.typeName,
     schema.name,
-    create(schema.input, input === disableQuery || !input ? undefined : input),
+    createMessageKey(schema.input, message),
   ];
 }
 
@@ -70,7 +76,8 @@ export function createConnectQueryKey<
 export type ConnectInfiniteQueryKey<I extends DescMessage> = [
   serviceTypeName: string,
   methodName: string,
-  input: MessageShape<I>,
+  // input: MessageShape<I>,
+  input: Record<string, unknown>,
   "infinite",
 ];
 
@@ -82,7 +89,7 @@ export function createConnectInfiniteQueryKey<
   O extends DescMessage,
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: DisableQuery | MessageInitShape<I> | undefined,
+  input?: DisableQuery | MessageInitShape<I> | undefined
 ): ConnectInfiniteQueryKey<I> {
   return [...createConnectQueryKey(schema, input), "infinite"];
 }
