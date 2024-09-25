@@ -46,7 +46,7 @@ export type UseMutationOptions<
 /**
  * Query the method provided. Maps to useMutation on tanstack/react-query
  *
- * @param methodSig
+ * @param schema
  * @returns
  */
 export function useMutation<
@@ -54,7 +54,7 @@ export function useMutation<
   O extends DescMessage,
   Ctx = unknown,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   // istanbul ignore next
   {
     transport,
@@ -67,7 +67,7 @@ export function useMutation<
   const mutationFn = useCallback(
     async (input: MessageInitShape<I>) => {
       const result = await transportToUse.unary(
-        methodSig,
+        schema,
         callOptions?.signal,
         callOptions?.timeoutMs,
         callOptions?.headers,
@@ -75,7 +75,7 @@ export function useMutation<
       );
       return result.message;
     },
-    [transportToUse, callOptions, methodSig],
+    [transportToUse, callOptions, schema],
   );
   return tsUseMutation({
     ...queryOptions,

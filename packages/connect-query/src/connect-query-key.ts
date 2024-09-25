@@ -54,19 +54,13 @@ export function createConnectQueryKey<
   I extends DescMessage,
   O extends DescMessage,
 >(
-  methodDescriptor: Pick<
-    MethodUnaryDescriptor<I, O>,
-    "input" | "parent" | "name"
-  >,
+  schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
   input?: DisableQuery | MessageInitShape<I> | undefined,
 ): ConnectQueryKey<I> {
   return [
-    methodDescriptor.parent.typeName,
-    methodDescriptor.name,
-    create(
-      methodDescriptor.input,
-      input === disableQuery || !input ? undefined : input,
-    ),
+    schema.parent.typeName,
+    schema.name,
+    create(schema.input, input === disableQuery || !input ? undefined : input),
   ];
 }
 
@@ -87,11 +81,8 @@ export function createConnectInfiniteQueryKey<
   I extends DescMessage,
   O extends DescMessage,
 >(
-  methodDescriptor: Pick<
-    MethodUnaryDescriptor<I, O>,
-    "input" | "parent" | "name"
-  >,
+  schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
   input?: DisableQuery | MessageInitShape<I> | undefined,
 ): ConnectInfiniteQueryKey<I> {
-  return [...createConnectQueryKey(methodDescriptor, input), "infinite"];
+  return [...createConnectQueryKey(schema, input), "infinite"];
 }

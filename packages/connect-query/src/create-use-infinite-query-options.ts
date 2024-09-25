@@ -102,7 +102,7 @@ function createUnaryInfiniteQueryFn<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  methodType: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | MessageInitShape<I>,
   {
     callOptions,
@@ -126,7 +126,7 @@ function createUnaryInfiniteQueryFn<
       ...input,
       [pageParamKey]: context.pageParam,
     };
-    return callUnaryMethod(methodType, inputCombinedWithPageParam, {
+    return callUnaryMethod(schema, inputCombinedWithPageParam, {
       callOptions: {
         ...callOptions,
         signal: callOptions?.signal ?? context.signal,
@@ -139,7 +139,7 @@ function createUnaryInfiniteQueryFn<
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
  *
- * @param methodSig
+ * @param schema
  * @returns
  */
 export function createUseInfiniteQueryOptions<
@@ -147,7 +147,7 @@ export function createUseInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input:
     | DisableQuery
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
@@ -174,7 +174,7 @@ export function createUseInfiniteQueryOptions<
   enabled: boolean;
 } {
   const queryKey = createConnectInfiniteQueryKey(
-    methodSig,
+    schema,
     input === disableQuery
       ? undefined
       : {
@@ -182,7 +182,7 @@ export function createUseInfiniteQueryOptions<
           [pageParamKey]: undefined,
         },
   );
-  const structuralSharing = createStructuralSharing(methodSig.output);
+  const structuralSharing = createStructuralSharing(schema.output);
   return {
     getNextPageParam,
     initialPageParam:
@@ -190,7 +190,7 @@ export function createUseInfiniteQueryOptions<
         ? (undefined as MessageInitShape<I>[ParamKey])
         : (input[pageParamKey] as MessageInitShape<I>[ParamKey]),
     queryKey,
-    queryFn: createUnaryInfiniteQueryFn(methodSig, input, {
+    queryFn: createUnaryInfiniteQueryFn(schema, input, {
       transport,
       callOptions,
       pageParamKey,

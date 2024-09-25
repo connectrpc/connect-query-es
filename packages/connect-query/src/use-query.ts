@@ -39,7 +39,7 @@ import type { DisableQuery } from "./utils.js";
 /**
  * Query the method provided. Maps to useQuery on tanstack/react-query
  *
- * @param methodSig
+ * @param schema
  * @returns
  */
 export function useQuery<
@@ -47,7 +47,7 @@ export function useQuery<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input?: DisableQuery | MessageInitShape<I>,
   {
     transport,
@@ -58,7 +58,7 @@ export function useQuery<
   } = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(methodSig, input, {
+  const baseOptions = createUseQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     callOptions,
   });
@@ -79,7 +79,7 @@ export function useQuery<
 /**
  * Query the method provided. Maps to useSuspenseQuery on tanstack/react-query
  *
- * @param methodSig
+ * @param schema
  * @returns
  */
 export function useSuspenseQuery<
@@ -87,7 +87,7 @@ export function useSuspenseQuery<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input?: MessageInitShape<I>,
   {
     transport,
@@ -98,7 +98,7 @@ export function useSuspenseQuery<
   } = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(methodSig, input, {
+  const baseOptions = createUseQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     callOptions,
   });
