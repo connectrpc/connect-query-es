@@ -73,18 +73,18 @@ export type ConnectUpdater<O extends DescMessage> =
  */
 export const createProtobufSafeUpdater =
   <I extends DescMessage, O extends DescMessage>(
-    methodSig: Pick<MethodUnaryDescriptor<I, O>, "output">,
+    schema: Pick<MethodUnaryDescriptor<I, O>, "output">,
     updater: ConnectUpdater<O>,
   ) =>
   (prev?: MessageShape<O>): MessageShape<O> => {
     if (typeof updater === "function") {
       return create(
-        methodSig.output,
+        schema.output,
         (
           updater as (prev?: MessageShape<O>) => MessageInitShape<O> | undefined
         )(prev),
       );
     }
 
-    return create(methodSig.output, updater);
+    return create(schema.output, updater);
   };

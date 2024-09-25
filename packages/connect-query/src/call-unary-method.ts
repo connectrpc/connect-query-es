@@ -29,7 +29,7 @@ export async function callUnaryMethod<
   I extends DescMessage,
   O extends DescMessage,
 >(
-  methodType: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input: MessageInitShape<I> | undefined,
   {
     callOptions,
@@ -40,11 +40,11 @@ export async function callUnaryMethod<
   },
 ): Promise<MessageShape<O>> {
   const result = await transport.unary(
-    methodType,
+    schema,
     callOptions?.signal,
     callOptions?.timeoutMs,
     callOptions?.headers,
-    input ?? create(methodType.input),
+    input ?? create(schema.input),
   );
   return result.message;
 }

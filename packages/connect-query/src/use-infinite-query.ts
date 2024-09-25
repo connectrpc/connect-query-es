@@ -40,7 +40,7 @@ import type { DisableQuery } from "./utils.js";
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
  *
- * @param methodSig
+ * @param schema
  * @returns
  */
 export function useInfiniteQuery<
@@ -48,7 +48,7 @@ export function useInfiniteQuery<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input:
     | DisableQuery
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
@@ -63,7 +63,7 @@ export function useInfiniteQuery<
   },
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
+  const baseOptions = createUseInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
@@ -78,7 +78,7 @@ export function useInfiniteQuery<
 /**
  * Query the method provided. Maps to useSuspenseInfiniteQuery on tanstack/react-query
  *
- * @param methodSig
+ * @param schema
  * @returns
  */
 export function useSuspenseInfiniteQuery<
@@ -86,7 +86,7 @@ export function useSuspenseInfiniteQuery<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input: MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>,
   {
     transport,
@@ -99,7 +99,7 @@ export function useSuspenseInfiniteQuery<
   },
 ): UseSuspenseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseInfiniteQueryOptions(methodSig, input, {
+  const baseOptions = createUseInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,

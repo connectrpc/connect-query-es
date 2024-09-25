@@ -75,7 +75,7 @@ export type CreateSuspenseQueryOptions<
   >;
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
-  methodType: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | MessageInitShape<I> | undefined,
   {
     callOptions,
@@ -87,7 +87,7 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
 ): QueryFunction<MessageShape<O>, ConnectQueryKey<I>> {
   return async (context) => {
     assert(input !== disableQuery, "Disabled query cannot be fetched");
-    return callUnaryMethod(methodType, input, {
+    return callUnaryMethod(schema, input, {
       callOptions: {
         ...callOptions,
         signal: callOptions?.signal ?? context.signal,
@@ -104,7 +104,7 @@ export function createUseQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
+  schema: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | MessageInitShape<I> | undefined,
   {
     transport,
@@ -118,11 +118,11 @@ export function createUseQueryOptions<
   structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   enabled: boolean | undefined;
 } {
-  const queryKey = createConnectQueryKey(methodSig, input);
-  const structuralSharing = createStructuralSharing(methodSig.output);
+  const queryKey = createConnectQueryKey(schema, input);
+  const structuralSharing = createStructuralSharing(schema.output);
   return {
     queryKey,
-    queryFn: createUnaryQueryFn(methodSig, input, {
+    queryFn: createUnaryQueryFn(schema, input, {
       transport,
       callOptions,
     }),
