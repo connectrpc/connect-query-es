@@ -91,10 +91,7 @@ export function createUseQueryOptions<
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
   input: DisableQuery | PartialMessage<I> | undefined,
-  {
-    transport,
-    callOptions,
-  }: ConnectQueryOptions,
+  { transport, callOptions }: ConnectQueryOptions,
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>>;
