@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { describe, expect, it } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { ElizaService } from "./gen/eliza_pb.js";
-import { mockEliza, wrapper } from "./jest/test-utils.js";
+import { mockEliza, wrapper } from "./test/test-utils.js";
 import { useQuery, useSuspenseQuery } from "./use-query.js";
 import { disableQuery } from "./utils.js";
 

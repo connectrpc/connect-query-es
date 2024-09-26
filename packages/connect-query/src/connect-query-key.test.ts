@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";

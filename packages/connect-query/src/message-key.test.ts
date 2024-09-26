@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from "vitest";
 
 import { Proto2MessageSchema } from "./gen/proto2_pb.js";
 import { Proto3Enum, Proto3MessageSchema } from "./gen/proto3_pb.js";

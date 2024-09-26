@@ -13,14 +13,13 @@
 // limitations under the License.
 
 import { create, type MessageInitShape } from "@bufbuild/protobuf";
-import { describe, expect, it, jest } from "@jest/globals";
+import { describe, expect, expectTypeOf, it, vi } from "vitest";
 
 import {
   BigIntService,
   type CountResponse,
   type CountResponseSchema,
 } from "./gen/bigint_pb.js";
-import type { Equal, Expect } from "./jest/test-utils.js";
 import {
   assert,
   createProtobufSafeUpdater,
@@ -96,17 +95,16 @@ describe("protobufSafeUpdater", () => {
     const updater = output;
     const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
-    type ExpectType_Updater = Expect<
-      Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>
-    >;
+    expectTypeOf(safeUpdater).toEqualTypeOf<
+      (prev?: CountResponse) => CountResponse
+    >();
     expect(typeof safeUpdater).toStrictEqual("function");
 
     const result = safeUpdater(wrappedInput);
-    type ExpectType_Result = Expect<Equal<typeof result, CountResponse>>;
+    expectTypeOf(result).toEqualTypeOf<CountResponse>();
     expect(result).not.toStrictEqual(wrappedInput);
 
-    type ExpectType_BigInt = Expect<Equal<(typeof result)["count"], bigint>>;
-
+    expectTypeOf(result.count).toEqualTypeOf<bigint>();
     expect(wrappedInput.count).toStrictEqual(1n);
     expect(result.count).toStrictEqual(2n);
     expect(result).toStrictEqual(wrappedOutput);
@@ -114,20 +112,20 @@ describe("protobufSafeUpdater", () => {
   });
 
   it("handles a function updater", () => {
-    const updater = jest.fn(() => create(methodInfo.output, { count: 2n }));
+    const updater = vi.fn(() => create(methodInfo.output, { count: 2n }));
     const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
 
-    type ExpectType_Updater = Expect<
-      Equal<typeof safeUpdater, (prev?: CountResponse) => CountResponse>
-    >;
+    expectTypeOf(safeUpdater).toEqualTypeOf<
+      (prev?: CountResponse) => CountResponse
+    >();
     expect(typeof safeUpdater).toStrictEqual("function");
 
     const result = safeUpdater(wrappedInput);
     expect(updater).toHaveBeenCalledWith(wrappedInput);
-    type ExpectType_Result = Expect<Equal<typeof result, CountResponse>>;
+    expectTypeOf(result).toEqualTypeOf<CountResponse>();
     expect(result).not.toStrictEqual(wrappedInput);
 
-    type ExpectType_BigInt = Expect<Equal<(typeof result)["count"], bigint>>;
+    expectTypeOf(result.count).toEqualTypeOf<bigint>();
 
     expect(wrappedInput.count).toStrictEqual(1n);
     expect(result.count).toStrictEqual(2n);
