@@ -94,9 +94,7 @@ export function createUseQueryOptions<
   {
     transport,
     callOptions,
-  }: ConnectQueryOptions & {
-    transport: Transport;
-  },
+  }: ConnectQueryOptions,
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<O, ConnectQueryKey<I>>;
