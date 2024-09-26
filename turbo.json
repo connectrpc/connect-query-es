@@ -1,6 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["tsconfig.base.json", ".eslintrc.js", "package.json", "scripts/*"],
+  "globalDependencies": [
+    "tsconfig.base.json",
+    ".eslintrc.js",
+    "package.json",
+    "scripts/*"
+  ],
   "tasks": {
     "clean": {
       "outputs": ["dist/**"]

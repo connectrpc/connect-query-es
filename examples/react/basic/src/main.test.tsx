@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
 
 import { createRouterTransport } from "@connectrpc/connect";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import * as methods from "./gen/eliza-ElizaService_connectquery";
 import Main from "./main";

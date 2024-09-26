@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { Timestamp, toPlainMessage } from "@bufbuild/protobuf";
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { OperationRequest, SayRequest } from "./gen/eliza_pb.js";

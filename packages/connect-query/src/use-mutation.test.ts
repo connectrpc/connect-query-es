@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { describe, expect, it, jest } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { defaultOptions } from "./default-options.js";
 import { BigIntService, PaginatedService } from "./gen/eliza_connect.js";
@@ -21,7 +21,7 @@ import {
   mockPaginatedTransport,
   mockStatefulBigIntTransport,
   wrapper,
-} from "./jest/test-utils.js";
+} from "./test/test-utils.js";
 import { useMutation } from "./use-mutation.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
@@ -45,7 +45,7 @@ const statefulDescriptor = {
 
 describe("useMutation", () => {
   it("performs a mutation", async () => {
-    const onSuccess = jest.fn();
+    const onSuccess = vi.fn();
     const { result } = renderHook(
       () => {
         return useMutation(methodDescriptor, {
@@ -152,7 +152,7 @@ describe("useMutation", () => {
   });
 
   it("can forward onMutate params", async () => {
-    const onSuccess = jest.fn();
+    const onSuccess = vi.fn();
     const { result } = renderHook(
       () => {
         return useMutation(methodDescriptor, {

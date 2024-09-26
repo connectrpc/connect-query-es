@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const vitest = require("eslint-plugin-vitest");
+
 /** @type { import('@typescript-eslint/utils/dist/index').TSESLint.Linter.Config } */
 const config = {
   env: {
@@ -27,20 +29,22 @@ const config = {
   plugins: [
     "@typescript-eslint",
     "jsdoc",
-    "jest",
     "import",
     "simple-import-sort",
+    "vitest",
   ],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/all",
     "plugin:eslint-comments/recommended",
-    "plugin:jest/recommended",
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "prettier",
   ],
+  rules: {
+    ...vitest.configs.recommended.rules,
+  },
   settings: {
     jsdoc: {
       mode: "typescript",
@@ -105,7 +109,7 @@ const config = {
       files: ["**/*.d.ts"],
     },
     {
-      files: ["**/*.test.ts", "**/*.test.tsx", "jest.config.ts"],
+      files: ["**/*.test.ts", "**/*.test.tsx", "vite.config.ts"],
       rules: {
         "@typescript-eslint/no-empty-function": "off", // noops are commonly needed in tests
         "@typescript-eslint/unbound-method": "off", // functors are commonly necessary for tests
