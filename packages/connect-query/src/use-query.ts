@@ -34,9 +34,6 @@ import type { DisableQuery } from "./utils.js";
 
 /**
  * Query the method provided. Maps to useQuery on tanstack/react-query
- *
- * @param methodSig
- * @returns
  */
 export function useQuery<
   I extends Message<I>,
@@ -74,9 +71,6 @@ export function useQuery<
 
 /**
  * Query the method provided. Maps to useSuspenseQuery on tanstack/react-query
- *
- * @param methodSig
- * @returns
  */
 export function useSuspenseQuery<
   I extends Message<I>,
