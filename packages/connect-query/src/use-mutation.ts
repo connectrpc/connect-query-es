@@ -29,7 +29,7 @@ import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
 /**
- * Options for useQuery
+ * Options for useMutation
  */
 export type UseMutationOptions<
   I extends DescMessage,
@@ -40,7 +40,7 @@ export type UseMutationOptions<
   "mutationFn"
 > & {
   transport?: Transport;
-  callOptions?: CallOptions;
+  callOptions?: Omit<CallOptions, "signal">;
 };
 
 /**
@@ -68,7 +68,7 @@ export function useMutation<
     async (input: MessageInitShape<I>) => {
       const result = await transportToUse.unary(
         schema,
-        callOptions?.signal,
+        undefined,
         callOptions?.timeoutMs,
         callOptions?.headers,
         input,
