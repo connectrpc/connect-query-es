@@ -45,9 +45,6 @@ export type UseMutationOptions<
 
 /**
  * Query the method provided. Maps to useMutation on tanstack/react-query
- *
- * @param schema
- * @returns
  */
 export function useMutation<
   I extends DescMessage,

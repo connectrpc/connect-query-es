@@ -39,9 +39,6 @@ import type { DisableQuery } from "./utils.js";
 
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
- *
- * @param schema
- * @returns
  */
 export function useInfiniteQuery<
   I extends DescMessage,
@@ -77,9 +74,6 @@ export function useInfiniteQuery<
 
 /**
  * Query the method provided. Maps to useSuspenseInfiniteQuery on tanstack/react-query
- *
- * @param schema
- * @returns
  */
 export function useSuspenseInfiniteQuery<
   I extends DescMessage,
