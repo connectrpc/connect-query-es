@@ -39,7 +39,7 @@ export interface ConnectQueryOptions {
 export type CreateQueryOptions<
   I extends Message<I>,
   O extends Message<O>,
-  SelectOutData = 0,
+  SelectOutData = O,
 > = ConnectQueryOptions &
   Omit<
     UseQueryOptions<O, ConnectError, SelectOutData, ConnectQueryKey<I>>,
