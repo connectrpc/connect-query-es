@@ -44,7 +44,7 @@ export interface ConnectQueryOptions {
 export type CreateQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  SelectOutData = 0,
+  SelectOutData = MessageShape<O>,
 > = ConnectQueryOptions &
   Omit<
     UseQueryOptions<
