@@ -54,7 +54,7 @@ export function useInfiniteQuery<
     callOptions,
     pageParamKey,
     getNextPageParam,
-    ...options
+    ...queryOptions
   }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
@@ -66,10 +66,10 @@ export function useInfiniteQuery<
     pageParamKey,
     callOptions,
   });
-  // The query cannot be enabled if the base options are disabled, regardless of
-  // incoming query options.
-  const enabled = baseOptions.enabled && (options.enabled ?? true);
-  return tsUseInfiniteQuery({ ...options, ...baseOptions, enabled });
+  return tsUseInfiniteQuery({
+    ...queryOptions,
+    ...baseOptions,
+  });
 }
 
 /**
@@ -87,7 +87,7 @@ export function useSuspenseInfiniteQuery<
     callOptions,
     pageParamKey,
     getNextPageParam,
-    ...options
+    ...queryOptions
   }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
@@ -99,6 +99,8 @@ export function useSuspenseInfiniteQuery<
     pageParamKey,
     callOptions,
   });
-
-  return tsUseSuspenseInfiniteQuery({ ...options, ...baseOptions });
+  return tsUseSuspenseInfiniteQuery({
+    ...queryOptions,
+    ...baseOptions,
+  });
 }

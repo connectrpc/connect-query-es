@@ -116,7 +116,7 @@ export function createUseQueryOptions<
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>>;
   structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
-  enabled: boolean | undefined;
+  enabled?: false;
 } {
   const queryKey = createConnectQueryKey(schema, input);
   const structuralSharing = createStructuralSharing(schema.output);
@@ -127,6 +127,6 @@ export function createUseQueryOptions<
       callOptions,
     }),
     structuralSharing,
-    enabled: input === disableQuery ? false : undefined,
+    ...(input === disableQuery ? { enabled: false } : undefined),
   };
 }
