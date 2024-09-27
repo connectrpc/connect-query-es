@@ -171,7 +171,7 @@ export function createUseInfiniteQueryOptions<
   >;
   structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   initialPageParam: MessageInitShape<I>[ParamKey];
-  enabled: boolean;
+  enabled?: false;
 } {
   const queryKey = createConnectInfiniteQueryKey(
     schema,
@@ -196,6 +196,6 @@ export function createUseInfiniteQueryOptions<
       pageParamKey,
     }),
     structuralSharing,
-    enabled: input !== disableQuery,
+    ...(input === disableQuery ? { enabled: false } : undefined),
   };
 }
