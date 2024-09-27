@@ -21,6 +21,7 @@ import type {
 import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
+import { callUnaryMethod } from "./call-unary-method.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
@@ -58,17 +59,11 @@ export function useMutation<
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
-    async (input: PartialMessage<I>) => {
-      const result = await transportToUse.unary(
-        { typeName: methodSig.service.typeName, methods: {} },
-        methodSig,
-        callOptions?.signal,
-        callOptions?.timeoutMs,
-        callOptions?.headers,
-        input,
-      );
-      return result.message;
-    },
+    async (input: PartialMessage<I>) =>
+      callUnaryMethod(methodSig, input, {
+        transport: transportToUse,
+        callOptions,
+      }),
     [transportToUse, callOptions, methodSig],
   );
   return tsUseMutation({
