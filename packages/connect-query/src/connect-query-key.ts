@@ -18,10 +18,10 @@ import type {
   MessageShape,
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
+import type { SkipToken } from "@tanstack/react-query";
+import { skipToken } from "@tanstack/react-query";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
-import type { DisableQuery } from "./utils.js";
-import { disableQuery } from "./utils.js";
 
 /**
  * TanStack Query requires query keys in order to decide when the query should automatically update.
@@ -55,12 +55,12 @@ export function createConnectQueryKey<
   O extends DescMessage,
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: DisableQuery | MessageInitShape<I> | undefined,
+  input?: SkipToken | MessageInitShape<I> | undefined,
 ): ConnectQueryKey<I> {
   return [
     schema.parent.typeName,
     schema.name,
-    create(schema.input, input === disableQuery || !input ? undefined : input),
+    create(schema.input, input === skipToken || !input ? undefined : input),
   ];
 }
 
@@ -82,7 +82,7 @@ export function createConnectInfiniteQueryKey<
   O extends DescMessage,
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: DisableQuery | MessageInitShape<I> | undefined,
+  input?: SkipToken | MessageInitShape<I> | undefined,
 ): ConnectInfiniteQueryKey<I> {
   return [...createConnectQueryKey(schema, input), "infinite"];
 }

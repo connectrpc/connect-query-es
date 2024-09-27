@@ -21,11 +21,14 @@ import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
   InfiniteData,
+  Optional,
   QueryFunction,
+  SkipToken,
   UseInfiniteQueryOptions,
   UseQueryOptions,
   UseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query";
+import { skipToken } from "@tanstack/react-query";
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import {
@@ -34,7 +37,7 @@ import {
 } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
-import { assert, type DisableQuery, disableQuery } from "./utils.js";
+import { assert } from "./utils.js";
 
 /**
  * Options specific to connect-query
@@ -65,7 +68,7 @@ export type CreateInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Omit<
+  Optional<
     UseInfiniteQueryOptions<
       MessageShape<O>,
       ConnectError,
@@ -74,7 +77,7 @@ export type CreateInfiniteQueryOptions<
       ConnectInfiniteQueryKey<I>,
       MessageInitShape<I>[ParamKey]
     >,
-    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
+    "queryKey"
   >;
 
 /**
@@ -85,7 +88,7 @@ export type CreateSuspenseInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Omit<
+  Optional<
     UseSuspenseInfiniteQueryOptions<
       MessageShape<O>,
       ConnectError,
@@ -94,7 +97,7 @@ export type CreateSuspenseInfiniteQueryOptions<
       ConnectInfiniteQueryKey<I>,
       MessageInitShape<I>[ParamKey]
     >,
-    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
+    "queryKey"
   >;
 
 function createUnaryInfiniteQueryFn<
@@ -103,7 +106,7 @@ function createUnaryInfiniteQueryFn<
   ParamKey extends keyof MessageInitShape<I>,
 >(
   schema: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | MessageInitShape<I>,
+  input: MessageInitShape<I>,
   {
     callOptions,
     transport,
@@ -119,7 +122,6 @@ function createUnaryInfiniteQueryFn<
   MessageInitShape<I>[ParamKey]
 > {
   return async (context) => {
-    assert(input !== disableQuery, "Disabled query cannot be fetched");
     assert("pageParam" in context, "pageParam must be part of context");
 
     const inputCombinedWithPageParam = {
@@ -138,9 +140,6 @@ function createUnaryInfiniteQueryFn<
 
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
- *
- * @param schema
- * @returns
  */
 export function createUseInfiniteQueryOptions<
   I extends DescMessage,
@@ -149,7 +148,7 @@ export function createUseInfiniteQueryOptions<
 >(
   schema: MethodUnaryDescriptor<I, O>,
   input:
-    | DisableQuery
+    | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
   {
     transport,
@@ -164,18 +163,19 @@ export function createUseInfiniteQueryOptions<
     ParamKey
   >["getNextPageParam"];
   queryKey: ConnectInfiniteQueryKey<I>;
-  queryFn: QueryFunction<
-    MessageShape<O>,
-    ConnectInfiniteQueryKey<I>,
-    MessageInitShape<I>[ParamKey]
-  >;
-  structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  queryFn:
+    | QueryFunction<
+        MessageShape<O>,
+        ConnectInfiniteQueryKey<I>,
+        MessageInitShape<I>[ParamKey]
+      >
+    | SkipToken;
+  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   initialPageParam: MessageInitShape<I>[ParamKey];
-  enabled?: false;
 } {
   const queryKey = createConnectInfiniteQueryKey(
     schema,
-    input === disableQuery
+    input === skipToken
       ? undefined
       : {
           ...input,
@@ -183,19 +183,22 @@ export function createUseInfiniteQueryOptions<
         },
   );
   const structuralSharing = createStructuralSharing(schema.output);
+  const queryFn =
+    input === skipToken
+      ? skipToken
+      : createUnaryInfiniteQueryFn(schema, input, {
+          transport,
+          callOptions,
+          pageParamKey,
+        });
   return {
     getNextPageParam,
     initialPageParam:
-      input === disableQuery
+      input === skipToken
         ? (undefined as MessageInitShape<I>[ParamKey])
         : (input[pageParamKey] as MessageInitShape<I>[ParamKey]),
     queryKey,
-    queryFn: createUnaryInfiniteQueryFn(schema, input, {
-      transport,
-      callOptions,
-      pageParamKey,
-    }),
+    queryFn,
     structuralSharing,
-    ...(input === disableQuery ? { enabled: false } : undefined),
   };
 }

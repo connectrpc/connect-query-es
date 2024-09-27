@@ -19,17 +19,19 @@ import type {
 } from "@bufbuild/protobuf";
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
+  Optional,
   QueryFunction,
+  SkipToken,
   UseQueryOptions,
   UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
+import { skipToken } from "@tanstack/react-query";
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
-import { assert, type DisableQuery, disableQuery } from "./utils.js";
 
 export interface ConnectQueryOptions {
   /** The transport to be used for the fetching. */
@@ -46,14 +48,14 @@ export type CreateQueryOptions<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 > = ConnectQueryOptions &
-  Omit<
+  Optional<
     UseQueryOptions<
       MessageShape<O>,
       ConnectError,
       SelectOutData,
       ConnectQueryKey<I>
     >,
-    "queryFn" | "queryKey"
+    "queryKey"
   >;
 
 /**
@@ -64,19 +66,19 @@ export type CreateSuspenseQueryOptions<
   O extends DescMessage,
   SelectOutData = 0,
 > = ConnectQueryOptions &
-  Omit<
+  Optional<
     UseSuspenseQueryOptions<
       MessageShape<O>,
       ConnectError,
       SelectOutData,
       ConnectQueryKey<I>
     >,
-    "queryFn" | "queryKey"
+    "queryKey"
   >;
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   schema: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | MessageInitShape<I> | undefined,
+  input: MessageInitShape<I> | undefined,
   {
     callOptions,
     transport,
@@ -86,7 +88,6 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   },
 ): QueryFunction<MessageShape<O>, ConnectQueryKey<I>> {
   return async (context) => {
-    assert(input !== disableQuery, "Disabled query cannot be fetched");
     return callUnaryMethod(schema, input, {
       callOptions: {
         ...callOptions,
@@ -105,7 +106,7 @@ export function createUseQueryOptions<
   O extends DescMessage,
 >(
   schema: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | MessageInitShape<I> | undefined,
+  input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
     callOptions,
@@ -114,19 +115,18 @@ export function createUseQueryOptions<
   },
 ): {
   queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>>;
-  structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
-  enabled?: false;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
+  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
 } {
   const queryKey = createConnectQueryKey(schema, input);
   const structuralSharing = createStructuralSharing(schema.output);
+  const queryFn =
+    input === skipToken
+      ? skipToken
+      : createUnaryQueryFn(schema, input, { transport, callOptions });
   return {
     queryKey,
-    queryFn: createUnaryQueryFn(schema, input, {
-      transport,
-      callOptions,
-    }),
+    queryFn,
     structuralSharing,
-    ...(input === disableQuery ? { enabled: false } : undefined),
   };
 }

@@ -19,6 +19,7 @@ import type {
 } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
+  SkipToken,
   UseQueryResult,
   UseSuspenseQueryResult,
 } from "@tanstack/react-query";
@@ -34,7 +35,6 @@ import type {
 import { createUseQueryOptions } from "./create-use-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
-import type { DisableQuery } from "./utils.js";
 
 /**
  * Query the method provided. Maps to useQuery on tanstack/react-query
@@ -45,7 +45,7 @@ export function useQuery<
   SelectOutData = MessageShape<O>,
 >(
   schema: MethodUnaryDescriptor<I, O>,
-  input?: DisableQuery | MessageInitShape<I>,
+  input?: SkipToken | MessageInitShape<I>,
   {
     transport,
     callOptions,
@@ -60,8 +60,8 @@ export function useQuery<
     callOptions,
   });
   return tsUseQuery({
-    ...queryOptions,
     ...baseOptions,
+    ...queryOptions,
   });
 }
 
@@ -89,7 +89,7 @@ export function useSuspenseQuery<
     callOptions,
   });
   return tsUseSuspenseQuery({
-    ...queryOptions,
     ...baseOptions,
+    ...queryOptions,
   });
 }
