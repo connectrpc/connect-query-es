@@ -23,7 +23,7 @@ import type { CallOptions, Transport } from "@connectrpc/connect";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
- * Call a unary method given it's signature and input.
+ * Call a unary method given its signature and input.
  */
 export async function callUnaryMethod<
   I extends DescMessage,
@@ -45,6 +45,9 @@ export async function callUnaryMethod<
     callOptions?.timeoutMs,
     callOptions?.headers,
     input ?? create(schema.input),
+    callOptions?.contextValues,
   );
+  callOptions?.onHeader?.(result.header);
+  callOptions?.onTrailer?.(result.trailer);
   return result.message;
 }
