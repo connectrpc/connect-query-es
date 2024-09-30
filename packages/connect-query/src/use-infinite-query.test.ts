@@ -341,7 +341,7 @@ describe("useSuspenseInfiniteQuery", () => {
     });
   });
 
-  it("can be disabled without explicit disableQuery", () => {
+  it("can be disabled without explicit skipToken", () => {
     const { result } = renderHook(
       () => {
         return useInfiniteQuery(

@@ -191,7 +191,7 @@ Use this helper to get the default transport that's currently attached to the Re
 ```ts
 function useQuery<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input?: DisableQuery | PartialMessage<I>,
+  input?: SkipToken | PartialMessage<I>,
   options?: {
     transport?: Transport;
     callOptions?: CallOptions;
@@ -217,7 +217,7 @@ function useInfiniteQuery<
   Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | Input,
+  input: SkipToken | Input,
   options: {
     pageParamKey: ParamKey;
     transport?: Transport;
@@ -256,7 +256,7 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 ```ts
 function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: DisableQuery | PartialMessage<I> | undefined,
+  input?: SkipToken | PartialMessage<I> | undefined,
 ): ConnectQueryKey<I>;
 ```
 
@@ -270,7 +270,7 @@ function createConnectInfiniteQueryKey<
   O extends Message<O>,
 >(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input: DisableQuery | PartialMessage<I>,
+  input: SkipToken | PartialMessage<I>,
   pageParamKey: keyof PartialMessage<I>,
 ): ConnectInfiniteQueryKey<I>;
 ```
@@ -322,7 +322,7 @@ queryClient.setQueryData(
 ```ts
 function createQueryOptions<I extends Message<I>, O extends Message<O>>(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | PartialMessage<I> | undefined,
+  input: SkipToken | PartialMessage<I> | undefined,
   {
     transport,
     callOptions,
@@ -365,7 +365,7 @@ function createInfiniteQueryOptions<
   Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
 >(
   methodSig: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | Input,
+  input: SkipToken | Input,
   {
     transport,
     getNextPageParam,

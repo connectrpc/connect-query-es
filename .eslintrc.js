@@ -71,7 +71,6 @@ const config = {
     "@typescript-eslint/prefer-readonly-parameter-types": "off", // not realistic
     "@typescript-eslint/explicit-module-boundary-types": "off", // inference and conformance testing cover this well
     "@typescript-eslint/explicit-function-return-type": "off", // inference and conformance testing cover this well
-    "@typescript-eslint/no-unused-expressions": "off", // necessary component of some exports, e.g. DisableQuery
     "@typescript-eslint/no-type-alias": "off", // this rule turns off things that are absolutely required by this project such as conditional types and literals
     "@typescript-eslint/no-throw-literal": "off", // unfortunately this rule doesn't understand returns from `unreachableCase`
     "@typescript-eslint/no-magic-numbers": "off", // literal values are used in CSS-in-JS, tests, and library constants
