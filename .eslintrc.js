@@ -28,7 +28,6 @@ const config = {
   },
   plugins: [
     "@typescript-eslint",
-    "jsdoc",
     "import",
     "simple-import-sort",
     "vitest",
@@ -43,12 +42,6 @@ const config = {
     "prettier",
   ],
   settings: {
-    jsdoc: {
-      mode: "typescript",
-      noDefaultExampleRules: false,
-      checkProperties: true,
-      minLines: 1,
-    },
     "import/resolver": {
       typescript: {},
     },
@@ -79,18 +72,6 @@ const config = {
       { "ts-expect-error": { descriptionFormat: "^\\(\\d+\\) .+$" } },
     ],
 
-    "jsdoc/require-jsdoc": [
-      "error",
-      {
-        contexts: [
-          "TSTypeAliasDeclaration",
-          { context: "TSPropertySignature", inlineCommentBlock: true },
-        ],
-        publicOnly: true,
-        require: { ArrowFunctionExpression: true },
-      },
-    ],
-
     "simple-import-sort/imports": "error",
   },
   overrides: [
@@ -115,7 +96,6 @@ const config = {
           "error",
           {
             vars: "all",
-            varsIgnorePattern: "ExpectType_.*", // necessary for TypeScript type tests
             argsIgnorePattern: "_",
           },
         ],
