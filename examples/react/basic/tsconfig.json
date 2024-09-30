@@ -19,6 +19,5 @@
     "types": ["node"],
     "declaration": true // necessary to check if generated code can be published
   },
-  "include": ["src", "./*.config.ts", "__mocks__"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "./*.config.ts", "__mocks__"]
 }
