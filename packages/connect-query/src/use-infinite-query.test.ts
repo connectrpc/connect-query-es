@@ -369,6 +369,7 @@ describe("useSuspenseInfiniteQuery", () => {
     expect(result.current.isFetching).toBeFalsy();
   });
 
+  // eslint-disable-next-line vitest/expect-expect -- We are asserting via @ts-expect-error
   it("does not allow excess properties", () => {
     renderHook(
       () => {
