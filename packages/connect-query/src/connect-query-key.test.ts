@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
+import { skipToken } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";
-import { disableQuery } from "./utils.js";
 
 describe("makeQueryKey", () => {
   const methodDescriptor = {
@@ -46,8 +46,8 @@ describe("makeQueryKey", () => {
     ]);
   });
 
-  it("makes a query key with a disabled input", () => {
-    const key = createConnectQueryKey(methodDescriptor, disableQuery);
+  it("makes a query key with a skipToken", () => {
+    const key = createConnectQueryKey(methodDescriptor, skipToken);
     expect(key).toStrictEqual([
       ElizaService.typeName,
       "name",

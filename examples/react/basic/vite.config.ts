@@ -20,5 +20,10 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
+    typecheck: {
+      enabled: true,
+      // Mofidied to typecheck definition files as well as source files
+      include: ["**/*.{test,spec}?(-d).?(c|m)[jt]s?(x)"],
+    },
   },
 });

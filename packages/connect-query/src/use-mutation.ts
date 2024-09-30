@@ -36,9 +36,11 @@ export type UseMutationOptions<
   I extends DescMessage,
   O extends DescMessage,
   Ctx = unknown,
-> = Omit<
-  TSUseMutationOptions<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx>,
-  "mutationFn"
+> = TSUseMutationOptions<
+  MessageShape<O>,
+  ConnectError,
+  MessageInitShape<I>,
+  Ctx
 > & {
   transport?: Transport;
   callOptions?: Omit<CallOptions, "signal">;

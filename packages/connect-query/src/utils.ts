@@ -22,16 +22,6 @@ import { create } from "@bufbuild/protobuf";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
- * Pass this value as an input to signal that you want to disable the query.
- */
-export const disableQuery = Symbol("disableQuery");
-
-/**
- * Use this type in situations where you want to disable a query from use.
- */
-export type DisableQuery = typeof disableQuery;
-
-/**
  * Throws an error with the provided message when the condition is `false`
  */
 export function assert(condition: boolean, message: string): asserts condition {

@@ -20,6 +20,7 @@ import type {
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   InfiniteData,
+  SkipToken,
   UseInfiniteQueryResult,
   UseSuspenseInfiniteQueryResult,
 } from "@tanstack/react-query";
@@ -35,7 +36,6 @@ import type {
 import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
-import type { DisableQuery } from "./utils.js";
 
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
@@ -47,7 +47,7 @@ export function useInfiniteQuery<
 >(
   schema: MethodUnaryDescriptor<I, O>,
   input:
-    | DisableQuery
+    | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
   {
     transport,
@@ -67,8 +67,8 @@ export function useInfiniteQuery<
     callOptions,
   });
   return tsUseInfiniteQuery({
-    ...queryOptions,
     ...baseOptions,
+    ...queryOptions,
   });
 }
 
@@ -100,7 +100,7 @@ export function useSuspenseInfiniteQuery<
     callOptions,
   });
   return tsUseSuspenseInfiniteQuery({
-    ...queryOptions,
     ...baseOptions,
+    ...queryOptions,
   });
 }

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { QueryCache } from "@tanstack/react-query";
+import { QueryCache, skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -29,7 +29,6 @@ import {
   useSuspenseInfiniteQuery,
 } from "./use-infinite-query.js";
 import { useQuery } from "./use-query.js";
-import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const methodDescriptor = ListService.method.list;
@@ -93,10 +92,10 @@ describe("useInfiniteQuery", () => {
     });
   });
 
-  it("can be disabled", () => {
+  it("can be disabled with skipToken", () => {
     const { result } = renderHook(
       () => {
-        return useInfiniteQuery(methodDescriptor, disableQuery, {
+        return useInfiniteQuery(methodDescriptor, skipToken, {
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
         });
@@ -342,7 +341,7 @@ describe("useSuspenseInfiniteQuery", () => {
     });
   });
 
-  it("can be disabled without explicit disableQuery", () => {
+  it("can be disabled without explicit skipToken", () => {
     const { result } = renderHook(
       () => {
         return useInfiniteQuery(
