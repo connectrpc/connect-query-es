@@ -21,7 +21,6 @@ import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
   InfiniteData,
-  Optional,
   QueryFunction,
   SkipToken,
   UseInfiniteQueryOptions,
@@ -68,7 +67,7 @@ export type CreateInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Optional<
+  Omit<
     UseInfiniteQueryOptions<
       MessageShape<O>,
       ConnectError,
@@ -77,7 +76,7 @@ export type CreateInfiniteQueryOptions<
       ConnectInfiniteQueryKey<I>,
       MessageInitShape<I>[ParamKey]
     >,
-    "queryKey"
+    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
   >;
 
 /**
@@ -88,7 +87,7 @@ export type CreateSuspenseInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 > = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Optional<
+  Omit<
     UseSuspenseInfiniteQueryOptions<
       MessageShape<O>,
       ConnectError,
@@ -97,7 +96,7 @@ export type CreateSuspenseInfiniteQueryOptions<
       ConnectInfiniteQueryKey<I>,
       MessageInitShape<I>[ParamKey]
     >,
-    "queryKey"
+    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
   >;
 
 function createUnaryInfiniteQueryFn<

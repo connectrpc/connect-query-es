@@ -19,7 +19,6 @@ import type {
 } from "@bufbuild/protobuf";
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
-  Optional,
   QueryFunction,
   SkipToken,
   UseQueryOptions,
@@ -48,14 +47,14 @@ export type CreateQueryOptions<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 > = ConnectQueryOptions &
-  Optional<
+  Omit<
     UseQueryOptions<
       MessageShape<O>,
       ConnectError,
       SelectOutData,
       ConnectQueryKey<I>
     >,
-    "queryKey"
+    "queryFn" | "queryKey"
   >;
 
 /**
@@ -66,14 +65,14 @@ export type CreateSuspenseQueryOptions<
   O extends DescMessage,
   SelectOutData = 0,
 > = ConnectQueryOptions &
-  Optional<
+  Omit<
     UseSuspenseQueryOptions<
       MessageShape<O>,
       ConnectError,
       SelectOutData,
       ConnectQueryKey<I>
     >,
-    "queryKey"
+    "queryFn" | "queryKey"
   >;
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
