@@ -42,9 +42,6 @@ const config = {
     "plugin:import/typescript",
     "prettier",
   ],
-  rules: {
-    ...vitest.configs.recommended.rules,
-  },
   settings: {
     jsdoc: {
       mode: "typescript",
@@ -57,6 +54,7 @@ const config = {
     },
   },
   rules: {
+    ...vitest.configs.recommended.rules,
     "eslint-comments/no-unused-enable": "error",
     "eslint-comments/no-unused-disable": "error",
     "eslint-comments/no-aggregating-enable": "off",
