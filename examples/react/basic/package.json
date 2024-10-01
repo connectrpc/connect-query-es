@@ -13,13 +13,13 @@
     "format": "prettier . --write && eslint . --fix && license-header"
   },
   "dependencies": {
-    "@bufbuild/buf": "1.39.0",
+    "@bufbuild/buf": "1.43.0",
     "@bufbuild/protobuf": "^1.10.0",
     "@bufbuild/protoc-gen-es": "^1.10.0",
-    "@connectrpc/connect": "^1.4.0",
+    "@connectrpc/connect": "^1.5.0",
     "@connectrpc/connect-query": "workspace:*",
-    "@connectrpc/connect-web": "^1.4.0",
-    "@connectrpc/protoc-gen-connect-es": "^1.4.0",
+    "@connectrpc/connect-web": "^1.5.0",
+    "@connectrpc/protoc-gen-connect-es": "^1.5.0",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
     "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-query-devtools": "^5.58.0",
