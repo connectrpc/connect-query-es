@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { describe, expect, it } from "@jest/globals";
+import { describe, expect, it } from "vitest";
 
 import { SayRequestSchema, SayResponseSchema } from "./gen/eliza_pb.js";
 import { createStructuralSharing } from "./structural-sharing.js";

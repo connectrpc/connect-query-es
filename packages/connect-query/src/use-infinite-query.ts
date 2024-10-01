@@ -20,6 +20,7 @@ import type {
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   InfiniteData,
+  SkipToken,
   UseInfiniteQueryResult,
   UseSuspenseInfiniteQueryResult,
 } from "@tanstack/react-query";
@@ -35,13 +36,9 @@ import type {
 import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
-import type { DisableQuery } from "./utils.js";
 
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
- *
- * @param schema
- * @returns
  */
 export function useInfiniteQuery<
   I extends DescMessage,
@@ -50,14 +47,14 @@ export function useInfiniteQuery<
 >(
   schema: MethodUnaryDescriptor<I, O>,
   input:
-    | DisableQuery
+    | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
   {
     transport,
     callOptions,
     pageParamKey,
     getNextPageParam,
-    ...options
+    ...queryOptions
   }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
@@ -69,17 +66,14 @@ export function useInfiniteQuery<
     pageParamKey,
     callOptions,
   });
-  // The query cannot be enabled if the base options are disabled, regardless of
-  // incoming query options.
-  const enabled = baseOptions.enabled && (options.enabled ?? true);
-  return tsUseInfiniteQuery({ ...options, ...baseOptions, enabled });
+  return tsUseInfiniteQuery({
+    ...baseOptions,
+    ...queryOptions,
+  });
 }
 
 /**
  * Query the method provided. Maps to useSuspenseInfiniteQuery on tanstack/react-query
- *
- * @param schema
- * @returns
  */
 export function useSuspenseInfiniteQuery<
   I extends DescMessage,
@@ -93,7 +87,7 @@ export function useSuspenseInfiniteQuery<
     callOptions,
     pageParamKey,
     getNextPageParam,
-    ...options
+    ...queryOptions
   }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
@@ -105,6 +99,8 @@ export function useSuspenseInfiniteQuery<
     pageParamKey,
     callOptions,
   });
-
-  return tsUseSuspenseInfiniteQuery({ ...options, ...baseOptions });
+  return tsUseSuspenseInfiniteQuery({
+    ...baseOptions,
+    ...queryOptions,
+  });
 }

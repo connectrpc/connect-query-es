@@ -25,29 +25,29 @@ import type {
 import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
+import { callUnaryMethod } from "./call-unary-method.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
 /**
- * Options for useQuery
+ * Options for useMutation
  */
 export type UseMutationOptions<
   I extends DescMessage,
   O extends DescMessage,
   Ctx = unknown,
-> = Omit<
-  TSUseMutationOptions<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx>,
-  "mutationFn"
+> = TSUseMutationOptions<
+  MessageShape<O>,
+  ConnectError,
+  MessageInitShape<I>,
+  Ctx
 > & {
   transport?: Transport;
-  callOptions?: CallOptions;
+  callOptions?: Omit<CallOptions, "signal">;
 };
 
 /**
  * Query the method provided. Maps to useMutation on tanstack/react-query
- *
- * @param schema
- * @returns
  */
 export function useMutation<
   I extends DescMessage,
@@ -65,16 +65,11 @@ export function useMutation<
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
-    async (input: MessageInitShape<I>) => {
-      const result = await transportToUse.unary(
-        schema,
-        callOptions?.signal,
-        callOptions?.timeoutMs,
-        callOptions?.headers,
-        input,
-      );
-      return result.message;
-    },
+    async (input: MessageInitShape<I>) =>
+      callUnaryMethod(schema, input, {
+        transport: transportToUse,
+        callOptions,
+      }),
     [transportToUse, callOptions, schema],
   );
   return tsUseMutation({

@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { describe, expect, it, jest } from "@jest/globals";
-import { QueryCache } from "@tanstack/react-query";
+import { QueryCache, skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   createConnectInfiniteQueryKey,
@@ -23,13 +23,12 @@ import {
 } from "./connect-query-key.js";
 import { defaultOptions } from "./default-options.js";
 import { ListResponseSchema, ListService } from "./gen/list_pb.js";
-import { mockPaginatedTransport, wrapper } from "./jest/test-utils.js";
+import { mockPaginatedTransport, wrapper } from "./test/test-utils.js";
 import {
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from "./use-infinite-query.js";
 import { useQuery } from "./use-query.js";
-import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const methodDescriptor = ListService.method.list;
@@ -93,10 +92,10 @@ describe("useInfiniteQuery", () => {
     });
   });
 
-  it("can be disabled", () => {
+  it("can be disabled with skipToken", () => {
     const { result } = renderHook(
       () => {
-        return useInfiniteQuery(methodDescriptor, disableQuery, {
+        return useInfiniteQuery(methodDescriptor, skipToken, {
           getNextPageParam: (lastPage) => lastPage.page + 1n,
           pageParamKey: "page",
         });
@@ -247,7 +246,7 @@ describe("useInfiniteQuery", () => {
   });
 
   it("cache can be invalidated with the shared, non-infinite key", async () => {
-    const onSuccessSpy = jest.fn();
+    const onSuccessSpy = vi.fn();
     const spiedQueryCache = new QueryCache({
       onSuccess: onSuccessSpy,
     });
@@ -342,7 +341,7 @@ describe("useSuspenseInfiniteQuery", () => {
     });
   });
 
-  it("can be disabled without explicit disableQuery", () => {
+  it("can be disabled without explicit skipToken", () => {
     const { result } = renderHook(
       () => {
         return useInfiniteQuery(
@@ -370,7 +369,7 @@ describe("useSuspenseInfiniteQuery", () => {
     expect(result.current.isFetching).toBeFalsy();
   });
 
-  // eslint-disable-next-line jest/expect-expect -- We are asserting via @ts-expect-error
+  // eslint-disable-next-line vitest/expect-expect -- We are asserting via @ts-expect-error
   it("does not allow excess properties", () => {
     renderHook(
       () => {

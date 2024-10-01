@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { describe, expect, it } from "@jest/globals";
+import { skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { ElizaService } from "./gen/eliza_pb.js";
-import { mockEliza, wrapper } from "./jest/test-utils.js";
+import { mockEliza, wrapper } from "./test/test-utils.js";
 import { useQuery, useSuspenseQuery } from "./use-query.js";
-import { disableQuery } from "./utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const sayMethodDescriptor = ElizaService.method.say;
@@ -49,7 +49,7 @@ describe("useQuery", () => {
   it("can be disabled", () => {
     const { result } = renderHook(
       () => {
-        return useQuery(sayMethodDescriptor, disableQuery);
+        return useQuery(sayMethodDescriptor, skipToken);
       },
       wrapper(undefined, mockedElizaTransport),
     );
@@ -119,7 +119,7 @@ describe("useQuery", () => {
     expect(result.current.data).toBe(6);
   });
 
-  it("can be disabled without explicit disableQuery", () => {
+  it("can be disabled with enabled: false", () => {
     const { result } = renderHook(
       () => {
         return useQuery(
@@ -140,7 +140,7 @@ describe("useQuery", () => {
     expect(result.current.isFetching).toBeFalsy();
   });
 
-  it("can be disabled with QueryClient default options", () => {
+  it("can be disabled with enabled: false in QueryClient default options", () => {
     const { result } = renderHook(
       () => {
         return useQuery(sayMethodDescriptor, {
@@ -164,34 +164,10 @@ describe("useQuery", () => {
     expect(result.current.isFetching).toBeFalsy();
   });
 
-  it("cannot be enabled with QueryClient default options with explicit disableQuery", () => {
+  it("can be disabled with skipToken", () => {
     const { result } = renderHook(
       () => {
-        return useQuery(sayMethodDescriptor, disableQuery);
-      },
-      wrapper(
-        {
-          defaultOptions: {
-            queries: {
-              enabled: true,
-            },
-          },
-        },
-        mockedElizaTransport,
-      ),
-    );
-
-    expect(result.current.data).toBeUndefined();
-    expect(result.current.isPending).toBeTruthy();
-    expect(result.current.isFetching).toBeFalsy();
-  });
-
-  it("disableQuery will override explicit enabled", () => {
-    const { result } = renderHook(
-      () => {
-        return useQuery(sayMethodDescriptor, disableQuery, {
-          enabled: true,
-        });
+        return useQuery(sayMethodDescriptor, skipToken);
       },
       wrapper({}, mockedElizaTransport),
     );

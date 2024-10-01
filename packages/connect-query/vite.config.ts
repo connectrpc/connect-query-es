@@ -12,18 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Config } from "jest";
+import { defineConfig } from "vitest/config";
 
-const config: Config = {
-  preset: "../../../jest-preset.js",
-  testEnvironment: "@bufbuild/jest-environment-jsdom",
-  moduleNameMapper: {
-    "(.+)\\.js": "$1", // https://connectrpc.com/docs/web/supported-browsers-and-frameworks/#jest
-    "\\.(css|less)$": "<rootDir>/__mocks__/style.js",
+// https://vitejs.dev/config/
+export default defineConfig({
+  test: {
+    environment: "jsdom",
+    typecheck: {
+      enabled: true,
+      // Mofidied to typecheck definition files as well as source files
+      include: ["**/*.{test,spec}?(-d).?(c|m)[jt]s?(x)"],
+    },
+    coverage: {
+      provider: "istanbul",
+      thresholds: {
+        branches: 100,
+        functions: 100,
+        lines: 100,
+        statements: 100,
+      },
+    },
   },
-  testMatch: ["<rootDir>/**/*.test.ts?(x)"],
-  collectCoverage: false,
-  injectGlobals: true,
-};
-
-export default config;
+});

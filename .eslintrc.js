@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const vitest = require("eslint-plugin-vitest");
+
 /** @type { import('@typescript-eslint/utils/dist/index').TSESLint.Linter.Config } */
 const config = {
   env: {
@@ -26,33 +28,26 @@ const config = {
   },
   plugins: [
     "@typescript-eslint",
-    "jsdoc",
-    "jest",
     "import",
     "simple-import-sort",
+    "vitest",
   ],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/all",
     "plugin:eslint-comments/recommended",
-    "plugin:jest/recommended",
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "prettier",
   ],
   settings: {
-    jsdoc: {
-      mode: "typescript",
-      noDefaultExampleRules: false,
-      checkProperties: true,
-      minLines: 1,
-    },
     "import/resolver": {
       typescript: {},
     },
   },
   rules: {
+    ...vitest.configs.recommended.rules,
     "eslint-comments/no-unused-enable": "error",
     "eslint-comments/no-unused-disable": "error",
     "eslint-comments/no-aggregating-enable": "off",
@@ -67,7 +62,6 @@ const config = {
     "@typescript-eslint/prefer-readonly-parameter-types": "off", // not realistic
     "@typescript-eslint/explicit-module-boundary-types": "off", // inference and conformance testing cover this well
     "@typescript-eslint/explicit-function-return-type": "off", // inference and conformance testing cover this well
-    "@typescript-eslint/no-unused-expressions": "off", // necessary component of some exports, e.g. DisableQuery
     "@typescript-eslint/no-type-alias": "off", // this rule turns off things that are absolutely required by this project such as conditional types and literals
     "@typescript-eslint/no-throw-literal": "off", // unfortunately this rule doesn't understand returns from `unreachableCase`
     "@typescript-eslint/no-magic-numbers": "off", // literal values are used in CSS-in-JS, tests, and library constants
@@ -75,18 +69,6 @@ const config = {
     "@typescript-eslint/ban-ts-comment": [
       "error",
       { "ts-expect-error": { descriptionFormat: "^\\(\\d+\\) .+$" } },
-    ],
-
-    "jsdoc/require-jsdoc": [
-      "error",
-      {
-        contexts: [
-          "TSTypeAliasDeclaration",
-          { context: "TSPropertySignature", inlineCommentBlock: true },
-        ],
-        publicOnly: true,
-        require: { ArrowFunctionExpression: true },
-      },
     ],
 
     "simple-import-sort/imports": "error",
@@ -105,7 +87,7 @@ const config = {
       files: ["**/*.d.ts"],
     },
     {
-      files: ["**/*.test.ts", "**/*.test.tsx", "jest.config.ts"],
+      files: ["**/*.test.ts", "**/*.test.tsx", "vite.config.ts"],
       rules: {
         "@typescript-eslint/no-empty-function": "off", // noops are commonly needed in tests
         "@typescript-eslint/unbound-method": "off", // functors are commonly necessary for tests
@@ -113,7 +95,6 @@ const config = {
           "error",
           {
             vars: "all",
-            varsIgnorePattern: "ExpectType_.*", // necessary for TypeScript type tests
             argsIgnorePattern: "_",
           },
         ],

@@ -70,48 +70,6 @@ export const wrapper = (
 };
 
 /**
- * Asserts X and Y are equal
- */
-export type Equal<X, Y> =
-  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
-    ? true
-    : false;
-
-/**
- * Asserts X and Y are not equal
- */
-export type NotEqual<X, Y> = true extends Equal<X, Y> ? false : true;
-
-/**
- * Helper for `Alike`
- */
-type MergeInsertions<T> = T extends object
-  ? { [K in keyof T]: MergeInsertions<T[K]> }
-  : T;
-
-/**
- * Similar to `Equal`, but will contend with unions
- */
-export type Alike<X, Y> = Equal<MergeInsertions<X>, MergeInsertions<Y>>;
-
-/**
- * Will error if the condition is false
- */
-export type Expect<T extends true> = T;
-
-/**
- * Will error if the condition is true
- */
-export type ExpectFalse<T extends false> = T;
-
-/**
- * Asserts that a given type is any
- *
- * see https://stackoverflow.com/questions/49927523/disallow-call-with-any/49928360#49928360
- */
-export type IsAny<T> = 0 extends T & 1 ? true : false;
-
-/**
  * A test-only helper to increase time (necessary for testing react-query)
  */
 export const sleep = async (timeout: number) =>

@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import { ConnectError } from "@connectrpc/connect";
-import { describe, expect, it } from "@jest/globals";
 import { renderHook, waitFor } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { ElizaService } from "./gen/eliza_pb.js";
-import { mockBigInt, wrapper } from "./jest/test-utils.js";
+import { mockBigInt, wrapper } from "./test/test-utils.js";
 import { useQuery } from "./use-query.js";
 import { TransportProvider, useTransport } from "./use-transport.js";
 

@@ -20,16 +20,17 @@ import type {
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
+  SkipToken,
   UseQueryOptions,
   UseSuspenseQueryOptions,
 } from "@tanstack/react-query";
+import { skipToken } from "@tanstack/react-query";
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
-import { assert, type DisableQuery, disableQuery } from "./utils.js";
 
 export interface ConnectQueryOptions {
   /** The transport to be used for the fetching. */
@@ -44,7 +45,7 @@ export interface ConnectQueryOptions {
 export type CreateQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  SelectOutData = 0,
+  SelectOutData = MessageShape<O>,
 > = ConnectQueryOptions &
   Omit<
     UseQueryOptions<
@@ -76,7 +77,7 @@ export type CreateSuspenseQueryOptions<
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   schema: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | MessageInitShape<I> | undefined,
+  input: MessageInitShape<I> | undefined,
   {
     callOptions,
     transport,
@@ -86,7 +87,6 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   },
 ): QueryFunction<MessageShape<O>, ConnectQueryKey<I>> {
   return async (context) => {
-    assert(input !== disableQuery, "Disabled query cannot be fetched");
     return callUnaryMethod(schema, input, {
       callOptions: {
         ...callOptions,
@@ -105,7 +105,7 @@ export function createUseQueryOptions<
   O extends DescMessage,
 >(
   schema: MethodUnaryDescriptor<I, O>,
-  input: DisableQuery | MessageInitShape<I> | undefined,
+  input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
     callOptions,
@@ -114,19 +114,18 @@ export function createUseQueryOptions<
   },
 ): {
   queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>>;
-  structuralSharing?: Exclude<UseQueryOptions["structuralSharing"], undefined>;
-  enabled: boolean | undefined;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
+  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
 } {
   const queryKey = createConnectQueryKey(schema, input);
   const structuralSharing = createStructuralSharing(schema.output);
+  const queryFn =
+    input === skipToken
+      ? skipToken
+      : createUnaryQueryFn(schema, input, { transport, callOptions });
   return {
     queryKey,
-    queryFn: createUnaryQueryFn(schema, input, {
-      transport,
-      callOptions,
-    }),
+    queryFn,
     structuralSharing,
-    enabled: input === disableQuery ? false : undefined,
   };
 }

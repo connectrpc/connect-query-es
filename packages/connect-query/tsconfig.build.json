@@ -7,5 +7,5 @@
     "outDir": "./dist/esm"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["**/*.test.ts", "**/*.test.tsx", "src/jest/**"]
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "src/test/**"]
 }
