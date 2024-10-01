@@ -27,11 +27,11 @@
   },
   "preferUnplugged": true,
   "devDependencies": {
-    "@bufbuild/buf": "1.39.0",
+    "@bufbuild/buf": "1.43.0",
     "@bufbuild/protoc-gen-es": "^2.1.0",
     "@connectrpc/connect": "^2.0.0-beta.1",
     "@connectrpc/connect-query": "workspace:*",
-    "@tanstack/react-query": "^5.53.3",
+    "@tanstack/react-query": "^5.56.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {

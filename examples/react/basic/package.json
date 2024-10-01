@@ -13,15 +13,15 @@
     "format": "prettier --write . '!src/gen' && eslint . --fix && license-header"
   },
   "dependencies": {
-    "@bufbuild/buf": "1.39.0",
+    "@bufbuild/buf": "1.43.0",
     "@bufbuild/protobuf": "^2.1.0",
     "@bufbuild/protoc-gen-es": "^2.1.0",
     "@connectrpc/connect": "^2.0.0-beta.1",
     "@connectrpc/connect-query": "workspace:*",
     "@connectrpc/connect-web": "^2.0.0-beta.1",
     "@connectrpc/protoc-gen-connect-query": "workspace:*",
-    "@tanstack/react-query": "^5.53.3",
-    "@tanstack/react-query-devtools": "^5.54.0",
+    "@tanstack/react-query": "^5.56.2",
+    "@tanstack/react-query-devtools": "^5.58.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@types/react": "^18.3.5",
