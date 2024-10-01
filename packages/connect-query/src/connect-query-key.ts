@@ -53,22 +53,11 @@ export function createConnectQueryKey<
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
   input?: SkipToken | MessageInitShape<I> | undefined
 ): ConnectQueryKey {
-  if (input === skipToken || input === undefined) {
-    // TODO: figure out what to do if no input
-    return [
-      schema.parent.typeName,
-      schema.name,
-      createMessageKey(
-        schema.input,
-        {} as unknown as MessageInitShape<DescMessage & I>
-      ),
-    ];
-  }
-  return [
-    schema.parent.typeName,
-    schema.name,
-    createMessageKey(schema.input, input),
-  ];
+  const key =
+    input === skipToken || input === undefined
+      ? createMessageKey(schema.input, {} as MessageInitShape<DescMessage & I>)
+      : createMessageKey(schema.input, input);
+  return [schema.parent.typeName, schema.name, key];
 }
 
 /**
