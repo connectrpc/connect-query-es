@@ -34,8 +34,8 @@
     "@bufbuild/buf": "1.43.0",
     "@arethetypeswrong/cli": "^0.15.4",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
-    "@bufbuild/protobuf": "^2.1.0",
-    "@bufbuild/protoc-gen-es": "^2.1.0",
+    "@bufbuild/protobuf": "^1.10.0",
+    "@bufbuild/protoc-gen-es": "^1.10.0",
     "@connectrpc/connect": "^1.5.0",
     "@connectrpc/connect-web": "^1.5.0",
     "@connectrpc/protoc-gen-connect-es": "^1.5.0",
@@ -48,7 +48,7 @@
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "@bufbuild/protobuf": "^2.1.0",
+    "@bufbuild/protobuf": "^1.10.0",
     "@connectrpc/connect": "^1.1.2",
     "@tanstack/react-query": "5.x",
     "react": "^18.3.1",

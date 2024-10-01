@@ -75,23 +75,23 @@ importers:
         specifier: 1.43.0
         version: 1.43.0
       '@bufbuild/protobuf':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^1.10.0
+        version: 1.10.0
       '@bufbuild/protoc-gen-es':
-        specifier: ^2.1.0
-        version: 2.1.0(@bufbuild/protobuf@2.1.0)
+        specifier: ^1.10.0
+        version: 1.10.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protobuf@2.1.0)
+        version: 1.5.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect-query':
         specifier: workspace:*
         version: link:../../../packages/connect-query
       '@connectrpc/connect-web':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protobuf@2.1.0)(@connectrpc/connect@1.5.0)
+        version: 1.5.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.5.0)
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protoc-gen-es@2.1.0)(@connectrpc/connect@1.5.0)
+        version: 1.5.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.5.0)
       '@connectrpc/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -145,20 +145,20 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1(jest-environment-jsdom@29.7.0)
       '@bufbuild/protobuf':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^1.10.0
+        version: 1.10.0
       '@bufbuild/protoc-gen-es':
-        specifier: ^2.1.0
-        version: 2.1.0(@bufbuild/protobuf@2.1.0)
+        specifier: ^1.10.0
+        version: 1.10.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protobuf@2.1.0)
+        version: 1.5.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect-web':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protobuf@2.1.0)(@connectrpc/connect@1.5.0)
+        version: 1.5.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.5.0)
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protoc-gen-es@2.1.0)(@connectrpc/connect@1.5.0)
+        version: 1.5.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.5.0)
       '@tanstack/react-query':
         specifier: ^5.56.2
         version: 5.56.2(react@18.3.1)
@@ -184,27 +184,27 @@ importers:
   packages/protoc-gen-connect-query:
     dependencies:
       '@bufbuild/protobuf':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^1.10.0
+        version: 1.10.0
       '@bufbuild/protoplugin':
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^1.10.0
+        version: 1.10.0
     devDependencies:
       '@bufbuild/buf':
         specifier: 1.43.0
         version: 1.43.0
       '@bufbuild/protoc-gen-es':
-        specifier: ^2.1.0
-        version: 2.1.0(@bufbuild/protobuf@2.1.0)
+        specifier: ^1.10.0
+        version: 1.10.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protobuf@2.1.0)
+        version: 1.5.0(@bufbuild/protobuf@1.10.0)
       '@connectrpc/connect-query':
         specifier: workspace:*
         version: link:../connect-query
       '@connectrpc/protoc-gen-connect-es':
         specifier: ^1.5.0
-        version: 1.5.0(@bufbuild/protoc-gen-es@2.1.0)(@connectrpc/connect@1.5.0)
+        version: 1.5.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.5.0)
       '@tanstack/react-query':
         specifier: ^5.56.2
         version: 5.56.2(react@18.3.1)
@@ -567,21 +567,18 @@ packages:
   /@bufbuild/protobuf@1.10.0:
     resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
 
-  /@bufbuild/protobuf@2.1.0:
-    resolution: {integrity: sha512-+2Mx67Y3skJ4NCD/qNSdBJNWtu6x6Qr53jeNg+QcwiL6mt0wK+3jwHH2x1p7xaYH6Ve2JKOVn0OxU35WsmqI9A==}
-
-  /@bufbuild/protoc-gen-es@2.1.0(@bufbuild/protobuf@2.1.0):
-    resolution: {integrity: sha512-xGadPol0k8cdDNSbMdHMo0QEK0JvebxGD6KQl5hCVfLTFbpMM4dfMiubyT9gdcwqfwstRe5Tin0Us3dyOzHtag==}
+  /@bufbuild/protoc-gen-es@1.10.0(@bufbuild/protobuf@1.10.0):
+    resolution: {integrity: sha512-zBYBsVT/ul4uZb6F+kD7/k4sWNHVVbEPfJwKi0FDr+9VJo8MKIofI6pkr5ksBLr4fi/74r+e/75Xi/0clL5dXg==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
-      '@bufbuild/protobuf': 2.1.0
+      '@bufbuild/protobuf': 1.10.0
     peerDependenciesMeta:
       '@bufbuild/protobuf':
         optional: true
     dependencies:
-      '@bufbuild/protobuf': 2.1.0
-      '@bufbuild/protoplugin': 2.1.0
+      '@bufbuild/protobuf': 1.10.0
+      '@bufbuild/protoplugin': 1.10.0
     transitivePeerDependencies:
       - supports-color
 
@@ -594,15 +591,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@bufbuild/protoplugin@2.1.0:
-    resolution: {integrity: sha512-8bE6/bAA0UCDa7ZplKhJq4TU/YFgIH04U4x6hhCQP1FXGuTtRk/FH5tiS7y+3kbjpM97Zlk9DwmFhW0BusF4ew==}
-    dependencies:
-      '@bufbuild/protobuf': 2.1.0
-      '@typescript/vfs': 1.6.0(typescript@5.4.5)
-      typescript: 5.4.5
-    transitivePeerDependencies:
-      - supports-color
-
   /@colors/colors@1.5.0:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
@@ -610,23 +598,23 @@ packages:
     dev: true
     optional: true
 
-  /@connectrpc/connect-web@1.5.0(@bufbuild/protobuf@2.1.0)(@connectrpc/connect@1.5.0):
+  /@connectrpc/connect-web@1.5.0(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.5.0):
     resolution: {integrity: sha512-xjiiQ932Kibddaka18fGZ6yQL7xjXuLcYFYh/cU+q1WWEIrFPkZfViG/Ee6yrZbrlZkjcBuDibng+q7baTndfg==}
     peerDependencies:
       '@bufbuild/protobuf': ^1.10.0
       '@connectrpc/connect': 1.5.0
     dependencies:
-      '@bufbuild/protobuf': 2.1.0
-      '@connectrpc/connect': 1.5.0(@bufbuild/protobuf@2.1.0)
+      '@bufbuild/protobuf': 1.10.0
+      '@connectrpc/connect': 1.5.0(@bufbuild/protobuf@1.10.0)
 
-  /@connectrpc/connect@1.5.0(@bufbuild/protobuf@2.1.0):
+  /@connectrpc/connect@1.5.0(@bufbuild/protobuf@1.10.0):
     resolution: {integrity: sha512-1gGg0M6c2Y3lnr5itis9dNj9r8hbOIuBMqoGSbUy7L7Vjw4MAttjJzJfj9HCDgytGCJkGanYEYI6MQVDijdVQw==}
     peerDependencies:
       '@bufbuild/protobuf': ^1.10.0
     dependencies:
-      '@bufbuild/protobuf': 2.1.0
+      '@bufbuild/protobuf': 1.10.0
 
-  /@connectrpc/protoc-gen-connect-es@1.5.0(@bufbuild/protoc-gen-es@2.1.0)(@connectrpc/connect@1.5.0):
+  /@connectrpc/protoc-gen-connect-es@1.5.0(@bufbuild/protoc-gen-es@1.10.0)(@connectrpc/connect@1.5.0):
     resolution: {integrity: sha512-W3FX/mFPEY3rOIiIbxxUnIpQOPeFrwyhNL5m/JGBJ1lh5PAF0FH4WImJsnN9UAJR1HMkwf6RMfKVLuxFqu3KTA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -640,9 +628,9 @@ packages:
         optional: true
     dependencies:
       '@bufbuild/protobuf': 1.10.0
-      '@bufbuild/protoc-gen-es': 2.1.0(@bufbuild/protobuf@2.1.0)
+      '@bufbuild/protoc-gen-es': 1.10.0(@bufbuild/protobuf@1.10.0)
       '@bufbuild/protoplugin': 1.10.0
-      '@connectrpc/connect': 1.5.0(@bufbuild/protobuf@2.1.0)
+      '@connectrpc/connect': 1.5.0(@bufbuild/protobuf@1.10.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -1786,16 +1774,6 @@ packages:
     dependencies:
       debug: 4.3.7
       typescript: 4.5.2
-    transitivePeerDependencies:
-      - supports-color
-
-  /@typescript/vfs@1.6.0(typescript@5.4.5):
-    resolution: {integrity: sha512-hvJUjNVeBMp77qPINuUvYXj4FyWeeMMKZkxEATEU3hqBAQ7qdTBCUFT7Sp0Zu0faeEtFf+ldXxMEDr/bk73ISg==}
-    peerDependencies:
-      typescript: '*'
-    dependencies:
-      debug: 4.3.7
-      typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
 
@@ -4825,11 +4803,6 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
-
-  /typescript@5.4.5:
-    resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
-    engines: {node: '>=14.17'}
-    hasBin: true
 
   /typescript@5.5.4:
     resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
