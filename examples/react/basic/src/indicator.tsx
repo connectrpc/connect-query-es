@@ -19,12 +19,12 @@ import { border, borderRadius, boxShadow, margin } from "./css";
 /**
  * a single Indicator
  */
-export const Indicator = <T extends string, U extends T>({
+export const Indicator = ({
   label,
   parent,
 }: {
-  label: U;
-  parent: T;
+  label: string;
+  parent: string;
 }) => {
   const height = "50px";
   const active = label === parent;

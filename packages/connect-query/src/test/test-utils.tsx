@@ -83,8 +83,8 @@ export const mockEliza = (
   override?: PartialMessage<SayRequest>,
   addDelay = false,
 ) =>
-  createRouterTransport(({ service }) => {
-    service(ElizaService, {
+  createRouterTransport((router) => {
+    router.service(ElizaService, {
       say: async (input: SayRequest) => {
         if (addDelay) {
           await sleep(1000);
@@ -100,17 +100,19 @@ export const mockEliza = (
  * a stateless mock for BigIntService
  */
 export const mockBigInt = () =>
-  createRouterTransport(({ service }) => {
-    service(BigIntService, { count: () => new CountResponse({ count: 1n }) });
+  createRouterTransport((router) => {
+    router.service(BigIntService, {
+      count: () => new CountResponse({ count: 1n }),
+    });
   });
 
 /**
  * a mock for BigIntService that acts as an impromptu database
  */
 export const mockStatefulBigIntTransport = (addDelay = false) =>
-  createRouterTransport(({ service }) => {
+  createRouterTransport((router) => {
     let count = 0n;
-    service(BigIntService, {
+    router.service(BigIntService, {
       count: async (request?: CountRequest) => {
         if (addDelay) {
           await sleep(1000);
@@ -131,8 +133,8 @@ export const mockPaginatedTransport = (
   override?: PartialMessage<ListResponse>,
   addDelay = false,
 ) =>
-  createRouterTransport(({ service }) => {
-    service(PaginatedService, {
+  createRouterTransport((router) => {
+    router.service(PaginatedService, {
       list: async (request) => {
         if (addDelay) {
           await sleep(1000);
