@@ -12,15 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type {
-  DescMessage,
-  MessageInitShape,
-  // MessageShape,
-} from "@bufbuild/protobuf";
-import { create } from "@bufbuild/protobuf";
+import type { DescMessage, MessageInitShape } from "@bufbuild/protobuf";
 import type { SkipToken } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
+import { createMessageKey } from "./message-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
@@ -37,10 +33,9 @@ import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
  *   { sentence: "hello there" },
  * ]
  */
-export type ConnectQueryKey<I extends DescMessage> = [
+export type ConnectQueryKey = [
   serviceTypeName: string,
   methodName: string,
-  // input: MessageShape<I>,
   input: Record<string, unknown>,
 ];
 
@@ -57,25 +52,31 @@ export function createConnectQueryKey<
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
   input?: SkipToken | MessageInitShape<I> | undefined
-): ConnectQueryKey<I> {
-  const message = create(
-    schema.input,
-    input === disableQuery || !input ? undefined : input
-  );
+): ConnectQueryKey {
+  if (input === skipToken || input === undefined) {
+    // TODO: figure out what to do if no input
+    return [
+      schema.parent.typeName,
+      schema.name,
+      createMessageKey(
+        schema.input,
+        {} as unknown as MessageInitShape<DescMessage & I>
+      ),
+    ];
+  }
   return [
     schema.parent.typeName,
     schema.name,
-    create(schema.input, input === skipToken || !input ? undefined : input),
+    createMessageKey(schema.input, input),
   ];
 }
 
 /**
  * Similar to @see ConnectQueryKey, but for infinite queries.
  */
-export type ConnectInfiniteQueryKey<I extends DescMessage> = [
+export type ConnectInfiniteQueryKey = [
   serviceTypeName: string,
   methodName: string,
-  // input: MessageShape<I>,
   input: Record<string, unknown>,
   "infinite",
 ];
@@ -89,6 +90,6 @@ export function createConnectInfiniteQueryKey<
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
   input?: SkipToken | MessageInitShape<I> | undefined
-): ConnectInfiniteQueryKey<I> {
+): ConnectInfiniteQueryKey {
   return [...createConnectQueryKey(schema, input), "infinite"];
 }

@@ -43,7 +43,6 @@ export interface ConnectQueryOptions {
  * Options for useQuery
  */
 export type CreateQueryOptions<
-  I extends DescMessage,
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 > = ConnectQueryOptions &
@@ -52,7 +51,7 @@ export type CreateQueryOptions<
       MessageShape<O>,
       ConnectError,
       SelectOutData,
-      ConnectQueryKey<I>
+      ConnectQueryKey
     >,
     "queryFn" | "queryKey"
   >;
@@ -61,7 +60,6 @@ export type CreateQueryOptions<
  * Options for useQuery
  */
 export type CreateSuspenseQueryOptions<
-  I extends DescMessage,
   O extends DescMessage,
   SelectOutData = 0,
 > = ConnectQueryOptions &
@@ -70,7 +68,7 @@ export type CreateSuspenseQueryOptions<
       MessageShape<O>,
       ConnectError,
       SelectOutData,
-      ConnectQueryKey<I>
+      ConnectQueryKey
     >,
     "queryFn" | "queryKey"
   >;
@@ -85,7 +83,7 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
     transport: Transport;
     callOptions?: CallOptions | undefined;
   },
-): QueryFunction<MessageShape<O>, ConnectQueryKey<I>> {
+): QueryFunction<MessageShape<O>, ConnectQueryKey> {
   return async (context) => {
     return callUnaryMethod(schema, input, {
       callOptions: {
@@ -113,8 +111,8 @@ export function createUseQueryOptions<
     transport: Transport;
   },
 ): {
-  queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
+  queryKey: ConnectQueryKey;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
   structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
 } {
   const queryKey = createConnectQueryKey(schema, input);

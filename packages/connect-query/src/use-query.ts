@@ -50,7 +50,7 @@ export function useQuery<
     transport,
     callOptions,
     ...queryOptions
-  }: Omit<CreateQueryOptions<I, O, SelectOutData>, "transport"> & {
+  }: Omit<CreateQueryOptions<O, SelectOutData>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
@@ -79,7 +79,7 @@ export function useSuspenseQuery<
     transport,
     callOptions,
     ...queryOptions
-  }: Omit<CreateSuspenseQueryOptions<I, O, SelectOutData>, "transport"> & {
+  }: Omit<CreateSuspenseQueryOptions<O, SelectOutData>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {

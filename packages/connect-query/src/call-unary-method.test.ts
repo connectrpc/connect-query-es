@@ -21,7 +21,7 @@ import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { defaultOptions } from "./default-options.js";
-import type { SayRequestSchema } from "./gen/eliza_pb.js";
+// import type { SayRequestSchema } from "./gen/eliza_pb.js";
 import { ElizaService } from "./gen/eliza_pb.js";
 import { mockEliza, wrapper } from "./test/test-utils.js";
 
@@ -38,9 +38,7 @@ describe("callUnaryMethod", () => {
               queryFn: async ({
                 queryKey,
                 signal,
-              }: QueryFunctionContext<
-                ConnectQueryKey<typeof SayRequestSchema>
-              >) => {
+              }: QueryFunctionContext<ConnectQueryKey>) => {
                 const res = await callUnaryMethod(
                   ElizaService.method.say,
                   queryKey[2],

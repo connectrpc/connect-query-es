@@ -73,7 +73,7 @@ export type CreateInfiniteQueryOptions<
       ConnectError,
       InfiniteData<MessageShape<O>>,
       MessageShape<O>,
-      ConnectInfiniteQueryKey<I>,
+      ConnectInfiniteQueryKey,
       MessageInitShape<I>[ParamKey]
     >,
     "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
@@ -93,7 +93,7 @@ export type CreateSuspenseInfiniteQueryOptions<
       ConnectError,
       InfiniteData<MessageShape<O>>,
       MessageShape<O>,
-      ConnectInfiniteQueryKey<I>,
+      ConnectInfiniteQueryKey,
       MessageInitShape<I>[ParamKey]
     >,
     "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
@@ -117,7 +117,7 @@ function createUnaryInfiniteQueryFn<
   },
 ): QueryFunction<
   MessageShape<O>,
-  ConnectInfiniteQueryKey<I>,
+  ConnectInfiniteQueryKey,
   MessageInitShape<I>[ParamKey]
 > {
   return async (context) => {
@@ -161,11 +161,11 @@ export function createUseInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectInfiniteQueryKey<I>;
+  queryKey: ConnectInfiniteQueryKey;
   queryFn:
     | QueryFunction<
         MessageShape<O>,
-        ConnectInfiniteQueryKey<I>,
+        ConnectInfiniteQueryKey,
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
