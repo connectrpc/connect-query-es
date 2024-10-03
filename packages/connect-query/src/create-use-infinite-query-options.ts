@@ -17,7 +17,7 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
+import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
   InfiniteData,
@@ -50,8 +50,6 @@ export interface ConnectInfiniteQueryOptions<
   pageParamKey: ParamKey;
   /** Transport can be overridden here.*/
   transport: Transport;
-  /** Additional call options */
-  callOptions?: Omit<CallOptions, "signal"> | undefined;
   /** Determines the next page. */
   getNextPageParam: GetNextPageParamFunction<
     MessageInitShape<I>[ParamKey],
@@ -99,20 +97,18 @@ export type CreateSuspenseInfiniteQueryOptions<
     "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
   >;
 
+// eslint-disable-next-line @typescript-eslint/max-params -- we have 4 required arguments
 function createUnaryInfiniteQueryFn<
   I extends DescMessage,
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
+  transport: Transport,
   schema: MethodUnaryDescriptor<I, O>,
   input: MessageInitShape<I>,
   {
-    callOptions,
-    transport,
     pageParamKey,
   }: {
-    transport: Transport;
-    callOptions?: CallOptions | undefined;
     pageParamKey: ParamKey;
   },
 ): QueryFunction<
@@ -127,12 +123,8 @@ function createUnaryInfiniteQueryFn<
       ...input,
       [pageParamKey]: context.pageParam,
     };
-    return callUnaryMethod(schema, inputCombinedWithPageParam, {
-      callOptions: {
-        ...callOptions,
-        signal: callOptions?.signal ?? context.signal,
-      },
-      transport,
+    return callUnaryMethod(transport, schema, inputCombinedWithPageParam, {
+      signal: context.signal,
     });
   };
 }
@@ -153,7 +145,6 @@ export function createUseInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
-    callOptions,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -185,9 +176,7 @@ export function createUseInfiniteQueryOptions<
   const queryFn =
     input === skipToken
       ? skipToken
-      : createUnaryInfiniteQueryFn(schema, input, {
-          transport,
-          callOptions,
+      : createUnaryInfiniteQueryFn(transport, schema, input, {
           pageParamKey,
         });
   return {

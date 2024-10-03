@@ -17,7 +17,7 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
+import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   UseMutationOptions as TSUseMutationOptions,
   UseMutationResult,
@@ -42,8 +42,8 @@ export type UseMutationOptions<
   MessageInitShape<I>,
   Ctx
 > & {
+  /** The transport to be used for the fetching. */
   transport?: Transport;
-  callOptions?: Omit<CallOptions, "signal">;
 };
 
 /**
@@ -55,22 +55,14 @@ export function useMutation<
   Ctx = unknown,
 >(
   schema: MethodUnaryDescriptor<I, O>,
-  // istanbul ignore next
-  {
-    transport,
-    callOptions,
-    ...queryOptions
-  }: UseMutationOptions<I, O, Ctx> = {},
+  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx> {
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
     async (input: MessageInitShape<I>) =>
-      callUnaryMethod(schema, input, {
-        transport: transportToUse,
-        callOptions,
-      }),
-    [transportToUse, callOptions, schema],
+      callUnaryMethod(transportToUse, schema, input),
+    [transportToUse, schema],
   );
   return tsUseMutation({
     ...queryOptions,

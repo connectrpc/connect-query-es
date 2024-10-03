@@ -17,7 +17,7 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
+import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
   SkipToken,
@@ -32,13 +32,6 @@ import { createConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
 
-export interface ConnectQueryOptions {
-  /** The transport to be used for the fetching. */
-  transport: Transport;
-  /** Any additional call options to provide the transport on call. */
-  callOptions?: Omit<CallOptions, "signal"> | undefined;
-}
-
 /**
  * Options for useQuery
  */
@@ -46,16 +39,18 @@ export type CreateQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
-> = ConnectQueryOptions &
-  Omit<
-    UseQueryOptions<
-      MessageShape<O>,
-      ConnectError,
-      SelectOutData,
-      ConnectQueryKey<I>
-    >,
-    "queryFn" | "queryKey"
-  >;
+> = Omit<
+  UseQueryOptions<
+    MessageShape<O>,
+    ConnectError,
+    SelectOutData,
+    ConnectQueryKey<I>
+  >,
+  "queryFn" | "queryKey"
+> & {
+  /** The transport to be used for the fetching. */
+  transport: Transport;
+};
 
 /**
  * Options for useQuery
@@ -64,35 +59,27 @@ export type CreateSuspenseQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
   SelectOutData = 0,
-> = ConnectQueryOptions &
-  Omit<
-    UseSuspenseQueryOptions<
-      MessageShape<O>,
-      ConnectError,
-      SelectOutData,
-      ConnectQueryKey<I>
-    >,
-    "queryFn" | "queryKey"
-  >;
+> = Omit<
+  UseSuspenseQueryOptions<
+    MessageShape<O>,
+    ConnectError,
+    SelectOutData,
+    ConnectQueryKey<I>
+  >,
+  "queryFn" | "queryKey"
+> & {
+  /** The transport to be used for the fetching. */
+  transport: Transport;
+};
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
+  transport: Transport,
   schema: MethodUnaryDescriptor<I, O>,
   input: MessageInitShape<I> | undefined,
-  {
-    callOptions,
-    transport,
-  }: {
-    transport: Transport;
-    callOptions?: CallOptions | undefined;
-  },
 ): QueryFunction<MessageShape<O>, ConnectQueryKey<I>> {
   return async (context) => {
-    return callUnaryMethod(schema, input, {
-      callOptions: {
-        ...callOptions,
-        signal: callOptions?.signal ?? context.signal,
-      },
-      transport,
+    return callUnaryMethod(transport, schema, input, {
+      signal: context.signal,
     });
   };
 }
@@ -108,8 +95,7 @@ export function createUseQueryOptions<
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
-    callOptions,
-  }: ConnectQueryOptions & {
+  }: {
     transport: Transport;
   },
 ): {
@@ -122,7 +108,7 @@ export function createUseQueryOptions<
   const queryFn =
     input === skipToken
       ? skipToken
-      : createUnaryQueryFn(schema, input, { transport, callOptions });
+      : createUnaryQueryFn(transport, schema, input);
   return {
     queryKey,
     queryFn,

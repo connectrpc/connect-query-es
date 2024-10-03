@@ -51,7 +51,6 @@ export function useInfiniteQuery<
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
   {
     transport,
-    callOptions,
     pageParamKey,
     getNextPageParam,
     ...queryOptions
@@ -64,7 +63,6 @@ export function useInfiniteQuery<
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
-    callOptions,
   });
   return tsUseInfiniteQuery({
     ...baseOptions,
@@ -84,7 +82,6 @@ export function useSuspenseInfiniteQuery<
   input: MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>,
   {
     transport,
-    callOptions,
     pageParamKey,
     getNextPageParam,
     ...queryOptions
@@ -97,7 +94,6 @@ export function useSuspenseInfiniteQuery<
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
-    callOptions,
   });
   return tsUseSuspenseInfiniteQuery({
     ...baseOptions,

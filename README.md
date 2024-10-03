@@ -189,14 +189,16 @@ Use this helper to get the default transport that's currently attached to the Re
 ### `useQuery`
 
 ```ts
-function useQuery<I extends Message<I>, O extends Message<O>>(
-  methodSig: MethodUnaryDescriptor<I, O>,
-  input?: SkipToken | PartialMessage<I>,
-  options?: {
+function useQuery<I extends DescMessage, O extends DescMessage, SelectOutData = MessageShape<O>>(
+  schema: MethodUnaryDescriptor<I, O>,
+  input?: SkipToken | MessageInitShape<I>,
+  {
+    transport,
+    ...queryOptions
+  }: Omit<CreateQueryOptions<I, O, SelectOutData>, "transport"> & {
     transport?: Transport;
-    callOptions?: CallOptions;
-  } & UseQueryOptions,
-): UseQueryResult<O, ConnectError>;
+  } = {},
+): UseQueryResult<SelectOutData, ConnectError>;
 ```
 
 The `useQuery` hook is the primary way to make a unary request. It's a wrapper around TanStack Query's [`useQuery`](https://tanstack.com/query/v5/docs/react/reference/useQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
@@ -211,20 +213,23 @@ Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack 
 
 ```ts
 function useInfiniteQuery<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
-  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
-  input: SkipToken | Input,
-  options: {
-    pageParamKey: ParamKey;
+  schema: MethodUnaryDescriptor<I, O>,
+  input:
+    | SkipToken
+    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
+  {
+    transport,
+    pageParamKey,
+    getNextPageParam,
+    ...queryOptions
+  }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
-    callOptions?: CallOptions;
-    getNextPageParam: GetNextPageParamFunction<PartialMessage<I>[ParamKey], O>;
   },
-): UseInfiniteQueryResult<InfiniteData<O>, ConnectError>;
+): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError>;
 ```
 
 The `useInfiniteQuery` is a wrapper around TanStack Query's [`useInfiniteQuery`](https://tanstack.com/query/v5/docs/react/reference/useInfiniteQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
@@ -238,13 +243,10 @@ Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook
 ### `useMutation`
 
 ```ts
-function useMutation<I extends Message<I>, O extends Message<O>>(
-  methodSig: MethodUnaryDescriptor<I, O>,
-  options?: {
-    transport?: Transport;,
-    callOptions?: CallOptions;
-  },
-): UseMutationResult<O, ConnectError, PartialMessage<I>>
+function useMutation<I extends DescMessage, O extends DescMessage>(
+  schema: MethodUnaryDescriptor<I, O>,
+  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
+): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>
 ```
 
 The `useMutation` is a wrapper around TanStack Query's [`useMutation`](https://tanstack.com/query/v5/docs/react/reference/useMutation) hook, but it's preconfigured with the correct `mutationFn` for the given method.
@@ -280,15 +282,12 @@ This function is not really necessary unless you are manually creating infinite 
 ### `callUnaryMethod`
 
 ```ts
-function callUnaryMethod<I extends Message<I>, O extends Message<O>>(
-  methodType: MethodUnaryDescriptor<I, O>,
-  input: PartialMessage<I> | undefined,
-  {
-    callOptions,
-    transport,
-  }: {
-    transport: Transport;
-    callOptions?: CallOptions | undefined;
+function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
+  transport: Transport,
+  schema: MethodUnaryDescriptor<I, O>,
+  input: MessageInitShape<I> | undefined,
+  options?: {
+    signal?: AbortSignal;
   },
 ): Promise<O>;
 ```
@@ -320,23 +319,22 @@ queryClient.setQueryData(
 ### `createQueryOptions`
 
 ```ts
-function createQueryOptions<I extends Message<I>, O extends Message<O>>(
-  methodSig: MethodUnaryDescriptor<I, O>,
+function createQueryOptions<I extends DescMessage, O extends DescMessage>(
+  schema: MethodUnaryDescriptor<I, O>,
   input: SkipToken | PartialMessage<I> | undefined,
   {
     transport,
-    callOptions,
-  }: ConnectQueryOptions & {
+  }: {
     transport: Transport;
   },
 ): {
   queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<O, ConnectQueryKey<I>>;
-  enabled: boolean;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
+  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
 };
 ```
 
-A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `enabled` flag. This is useful when interacting with `useQueries` API or queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flag. This is useful when interacting with `useQueries` API or queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
 
 An example of how to use this function with `useQueries`:
 
@@ -359,18 +357,18 @@ const MyComponent = () => {
 
 ```ts
 function createInfiniteQueryOptions<
-  I extends Message<I>,
-  O extends Message<O>,
-  ParamKey extends keyof PartialMessage<I>,
-  Input extends PartialMessage<I> & Required<Pick<PartialMessage<I>, ParamKey>>,
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
-  input: SkipToken | Input,
+  schema: MethodUnaryDescriptor<I, O>,
+  input:
+    | SkipToken
+    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
   {
     transport,
     getNextPageParam,
     pageParamKey,
-    callOptions,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -379,17 +377,19 @@ function createInfiniteQueryOptions<
     ParamKey
   >["getNextPageParam"];
   queryKey: ConnectInfiniteQueryKey<I>;
-  queryFn: QueryFunction<
-    O,
+  queryFn:
+    | QueryFunction<
+    MessageShape<O>,
     ConnectInfiniteQueryKey<I>,
-    PartialMessage<I>[ParamKey]
-  >;
+    MessageInitShape<I>[ParamKey]
+  >
+    | SkipToken;
+  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   initialPageParam: PartialMessage<I>[ParamKey];
-  enabled: boolean;
 };
 ```
 
-A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `enabled` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
 
 ### `ConnectQueryKey`
 
@@ -534,7 +534,7 @@ function prefetch() {
   return queryClient.prefetchQuery({
     queryKey: createConnectQueryKey(say, { sentence: "Hello" }),
     queryFn: () =>
-      callUnaryMethod(say, { sentence: "Hello" }, { transport: myTransport }),
+      callUnaryMethod(myTransport, say, { sentence: "Hello" }),
   });
 }
 ```

@@ -41,16 +41,15 @@ describe("callUnaryMethod", () => {
               }: QueryFunctionContext<
                 ConnectQueryKey<typeof SayRequestSchema>
               >) => {
+                const transport = mockEliza({
+                  sentence: "Response 1",
+                });
                 const res = await callUnaryMethod(
+                  transport,
                   ElizaService.method.say,
                   queryKey[2],
                   {
-                    transport: mockEliza({
-                      sentence: "Response 1",
-                    }),
-                    callOptions: {
-                      signal,
-                    },
+                    signal,
                   },
                 );
                 return res;
