@@ -21,7 +21,9 @@ import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   InfiniteData,
   SkipToken,
+  UseInfiniteQueryOptions as TanStackUseInfiniteQueryOptions,
   UseInfiniteQueryResult,
+  UseSuspenseInfiniteQueryOptions as TanStackUseSuspenseInfiniteQueryOptions,
   UseSuspenseInfiniteQueryResult,
 } from "@tanstack/react-query";
 import {
@@ -29,13 +31,31 @@ import {
   useSuspenseInfiniteQuery as tsUseSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 
-import type {
-  UseInfiniteQueryOptions,
-  UseSuspenseInfiniteQueryOptions,
-} from "./create-infinite-query-options.js";
+import type { ConnectInfiniteQueryKey } from "./connect-query-key.js";
+import type { ConnectInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
+
+/**
+ * Options for useInfiniteQuery
+ */
+export type UseInfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> = ConnectInfiniteQueryOptions<I, O, ParamKey> &
+  Omit<
+    TanStackUseInfiniteQueryOptions<
+      MessageShape<O>,
+      ConnectError,
+      InfiniteData<MessageShape<O>>,
+      MessageShape<O>,
+      ConnectInfiniteQueryKey<I>,
+      MessageInitShape<I>[ParamKey]
+    >,
+    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
+  >;
 
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
@@ -69,6 +89,26 @@ export function useInfiniteQuery<
     ...queryOptions,
   });
 }
+
+/**
+ * Options for useSuspenseInfiniteQuery
+ */
+export type UseSuspenseInfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> = ConnectInfiniteQueryOptions<I, O, ParamKey> &
+  Omit<
+    TanStackUseSuspenseInfiniteQueryOptions<
+      MessageShape<O>,
+      ConnectError,
+      InfiniteData<MessageShape<O>>,
+      MessageShape<O>,
+      ConnectInfiniteQueryKey<I>,
+      MessageInitShape<I>[ParamKey]
+    >,
+    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
+  >;
 
 /**
  * Query the method provided. Maps to useSuspenseInfiniteQuery on tanstack/react-query

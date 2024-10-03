@@ -17,15 +17,12 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
-import type { ConnectError, Transport } from "@connectrpc/connect";
+import type { Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
-  InfiniteData,
   QueryFunction,
   SkipToken,
-  UseInfiniteQueryOptions as TanStackUseInfiniteQueryOptions,
   UseQueryOptions,
-  UseSuspenseInfiniteQueryOptions as TanStackUseSuspenseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
@@ -56,46 +53,6 @@ export interface ConnectInfiniteQueryOptions<
     MessageShape<O>
   >;
 }
-
-/**
- * Options for useInfiniteQuery
- */
-export type UseInfiniteQueryOptions<
-  I extends DescMessage,
-  O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
-> = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Omit<
-    TanStackUseInfiniteQueryOptions<
-      MessageShape<O>,
-      ConnectError,
-      InfiniteData<MessageShape<O>>,
-      MessageShape<O>,
-      ConnectInfiniteQueryKey<I>,
-      MessageInitShape<I>[ParamKey]
-    >,
-    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
-  >;
-
-/**
- * Options for useSuspenseInfiniteQuery
- */
-export type UseSuspenseInfiniteQueryOptions<
-  I extends DescMessage,
-  O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
-> = ConnectInfiniteQueryOptions<I, O, ParamKey> &
-  Omit<
-    TanStackUseSuspenseInfiniteQueryOptions<
-      MessageShape<O>,
-      ConnectError,
-      InfiniteData<MessageShape<O>>,
-      MessageShape<O>,
-      ConnectInfiniteQueryKey<I>,
-      MessageInitShape<I>[ParamKey]
-    >,
-    "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
-  >;
 
 // eslint-disable-next-line @typescript-eslint/max-params -- we have 4 required arguments
 function createUnaryInfiniteQueryFn<

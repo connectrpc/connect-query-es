@@ -17,12 +17,11 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
-import type { ConnectError, Transport } from "@connectrpc/connect";
+import type { Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
   SkipToken,
   UseQueryOptions as TanStackUseQueryOptions,
-  UseSuspenseQueryOptions as TanStackUseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
@@ -31,46 +30,6 @@ import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
-
-/**
- * Options for useQuery
- */
-export type UseQueryOptions<
-  I extends DescMessage,
-  O extends DescMessage,
-  SelectOutData = MessageShape<O>,
-> = Omit<
-  TanStackUseQueryOptions<
-    MessageShape<O>,
-    ConnectError,
-    SelectOutData,
-    ConnectQueryKey<I>
-  >,
-  "queryFn" | "queryKey"
-> & {
-  /** The transport to be used for the fetching. */
-  transport: Transport;
-};
-
-/**
- * Options for useSuspenseQuery
- */
-export type UseSuspenseQueryOptions<
-  I extends DescMessage,
-  O extends DescMessage,
-  SelectOutData = 0,
-> = Omit<
-  TanStackUseSuspenseQueryOptions<
-    MessageShape<O>,
-    ConnectError,
-    SelectOutData,
-    ConnectQueryKey<I>
-  >,
-  "queryFn" | "queryKey"
-> & {
-  /** The transport to be used for the fetching. */
-  transport: Transport;
-};
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,

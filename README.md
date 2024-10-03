@@ -192,12 +192,7 @@ Use this helper to get the default transport that's currently attached to the Re
 function useQuery<I extends DescMessage, O extends DescMessage, SelectOutData = MessageShape<O>>(
   schema: MethodUnaryDescriptor<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  {
-    transport,
-    ...queryOptions
-  }: Omit<CreateQueryOptions<I, O, SelectOutData>, "transport"> & {
-    transport?: Transport;
-  } = {},
+  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError>;
 ```
 
