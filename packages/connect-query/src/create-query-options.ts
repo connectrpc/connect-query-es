@@ -21,8 +21,8 @@ import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
   SkipToken,
-  UseQueryOptions,
-  UseSuspenseQueryOptions,
+  UseQueryOptions as TanStackUseQueryOptions,
+  UseSuspenseQueryOptions as TanStackUseSuspenseQueryOptions,
 } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
@@ -35,12 +35,12 @@ import { createStructuralSharing } from "./structural-sharing.js";
 /**
  * Options for useQuery
  */
-export type CreateQueryOptions<
+export type UseQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 > = Omit<
-  UseQueryOptions<
+  TanStackUseQueryOptions<
     MessageShape<O>,
     ConnectError,
     SelectOutData,
@@ -60,7 +60,7 @@ export type CreateSuspenseQueryOptions<
   O extends DescMessage,
   SelectOutData = 0,
 > = Omit<
-  UseSuspenseQueryOptions<
+  TanStackUseSuspenseQueryOptions<
     MessageShape<O>,
     ConnectError,
     SelectOutData,
@@ -87,7 +87,7 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
 /**
  * Creates all options required to make a query. Useful in combination with `useQueries` from tanstack/react-query.
  */
-export function createUseQueryOptions<
+export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
 >(
@@ -101,7 +101,10 @@ export function createUseQueryOptions<
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
-  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  structuralSharing: Exclude<
+    TanStackUseQueryOptions["structuralSharing"],
+    undefined
+  >;
 } {
   const queryKey = createConnectQueryKey(schema, input);
   const structuralSharing = createStructuralSharing(schema.output);

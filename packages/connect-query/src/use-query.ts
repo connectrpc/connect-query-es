@@ -29,10 +29,10 @@ import {
 } from "@tanstack/react-query";
 
 import type {
-  CreateQueryOptions,
   CreateSuspenseQueryOptions,
-} from "./create-use-query-options.js";
-import { createUseQueryOptions } from "./create-use-query-options.js";
+  UseQueryOptions,
+} from "./create-query-options.js";
+import { createQueryOptions } from "./create-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
@@ -49,12 +49,12 @@ export function useQuery<
   {
     transport,
     ...queryOptions
-  }: Omit<CreateQueryOptions<I, O, SelectOutData>, "transport"> & {
+  }: Omit<UseQueryOptions<I, O, SelectOutData>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(schema, input, {
+  const baseOptions = createQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
   });
   return tsUseQuery({
@@ -81,7 +81,7 @@ export function useSuspenseQuery<
   } = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(schema, input, {
+  const baseOptions = createQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
   });
   return tsUseSuspenseQuery({

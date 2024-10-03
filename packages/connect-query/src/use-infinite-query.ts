@@ -30,10 +30,10 @@ import {
 } from "@tanstack/react-query";
 
 import type {
-  CreateInfiniteQueryOptions,
-  CreateSuspenseInfiniteQueryOptions,
-} from "./create-use-infinite-query-options.js";
-import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
+  UseInfiniteQueryOptions,
+  UseSuspenseInfiniteQueryOptions,
+} from "./create-infinite-query-options.js";
+import { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
@@ -54,12 +54,12 @@ export function useInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
+  }: Omit<UseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseInfiniteQueryOptions(schema, input, {
+  const baseOptions = createInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
@@ -85,12 +85,12 @@ export function useSuspenseInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
+  }: Omit<UseSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
     transport?: Transport;
   },
 ): UseSuspenseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseInfiniteQueryOptions(schema, input, {
+  const baseOptions = createInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
