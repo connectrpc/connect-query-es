@@ -25,8 +25,8 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`createConnectQueryKey`](#createconnectquerykey)
   - [`callUnaryMethod`](#callunarymethod)
   - [`createProtobufSafeUpdater`](#createprotobufsafeupdater)
-  - [`createUseQueryOptions`](#createusequeryoptions)
-  - [`createUseInfiniteQueryOptions`](#createuseinfinitequeryoptions)
+  - [`createQueryOptions`](#createqueryoptions)
+  - [`createInfiniteQueryOptions`](#createinfinitequeryoptions)
   - [`ConnectQueryKey`](#connectquerykey)
 
 ## Quickstart
@@ -316,10 +316,10 @@ queryClient.setQueryData(
 
 ```
 
-### `createUseQueryOptions`
+### `createQueryOptions`
 
 ```ts
-function createUseQueryOptions<I extends DescMessage, O extends DescMessage>(
+function createQueryOptions<I extends DescMessage, O extends DescMessage>(
   schema: MethodUnaryDescriptor<I, O>,
   input: SkipToken | PartialMessage<I> | undefined,
   {
@@ -340,23 +340,23 @@ An example of how to use this function with `useQueries`:
 
 ```ts
 import { useQueries } from "@tanstack/react-query";
-import { createUseQueryOptions, useTransport } from "@connectrpc/connect-query";
+import { createQueryOptions, useTransport } from "@connectrpc/connect-query";
 import { example } from "your-generated-code/example-ExampleService_connectquery";
 
 const MyComponent = () => {
   const transport = useTransport();
   const [query1, query2] = useQueries([
-    createUseQueryOptions(example, { sentence: "First query" }, { transport }),
-    createUseQueryOptions(example, { sentence: "Second query" }, { transport }),
+    createQueryOptions(example, { sentence: "First query" }, { transport }),
+    createQueryOptions(example, { sentence: "Second query" }, { transport }),
   ]);
   ...
 };
 ```
 
-### `createUseInfiniteQueryOptions`
+### `createInfiniteQueryOptions`
 
 ```ts
-function createUseInfiniteQueryOptions<
+function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
