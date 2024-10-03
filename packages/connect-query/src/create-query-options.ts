@@ -17,12 +17,11 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
-import type { ConnectError, Transport } from "@connectrpc/connect";
+import type { Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
   SkipToken,
-  UseQueryOptions,
-  UseSuspenseQueryOptions,
+  UseQueryOptions as TanStackUseQueryOptions,
 } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
@@ -31,46 +30,6 @@ import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
-
-/**
- * Options for useQuery
- */
-export type CreateQueryOptions<
-  I extends DescMessage,
-  O extends DescMessage,
-  SelectOutData = MessageShape<O>,
-> = Omit<
-  UseQueryOptions<
-    MessageShape<O>,
-    ConnectError,
-    SelectOutData,
-    ConnectQueryKey<I>
-  >,
-  "queryFn" | "queryKey"
-> & {
-  /** The transport to be used for the fetching. */
-  transport: Transport;
-};
-
-/**
- * Options for useQuery
- */
-export type CreateSuspenseQueryOptions<
-  I extends DescMessage,
-  O extends DescMessage,
-  SelectOutData = 0,
-> = Omit<
-  UseSuspenseQueryOptions<
-    MessageShape<O>,
-    ConnectError,
-    SelectOutData,
-    ConnectQueryKey<I>
-  >,
-  "queryFn" | "queryKey"
-> & {
-  /** The transport to be used for the fetching. */
-  transport: Transport;
-};
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
@@ -87,7 +46,7 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
 /**
  * Creates all options required to make a query. Useful in combination with `useQueries` from tanstack/react-query.
  */
-export function createUseQueryOptions<
+export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
 >(
@@ -101,7 +60,10 @@ export function createUseQueryOptions<
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
-  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  structuralSharing: Exclude<
+    TanStackUseQueryOptions["structuralSharing"],
+    undefined
+  >;
 } {
   const queryKey = createConnectQueryKey(schema, input);
   const structuralSharing = createStructuralSharing(schema.output);

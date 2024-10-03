@@ -22,12 +22,10 @@ export {
 } from "./connect-query-key.js";
 export { createProtobufSafeUpdater } from "./utils.js";
 export { useTransport, TransportProvider } from "./use-transport.js";
-export type { CreateInfiniteQueryOptions as UseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
 export {
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from "./use-infinite-query.js";
-export type { CreateQueryOptions as UseQueryOptions } from "./create-use-query-options.js";
 export { useQuery, useSuspenseQuery } from "./use-query.js";
 export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";
@@ -35,5 +33,7 @@ export { defaultOptions } from "./default-options.js";
 export type { ConnectUpdater } from "./utils.js";
 export { callUnaryMethod } from "./call-unary-method.js";
 export type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
-export { createUseInfiniteQueryOptions as createInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
-export { createUseQueryOptions as createQueryOptions } from "./create-use-query-options.js";
+export { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
+export { createQueryOptions } from "./create-query-options.js";
+export type { UseInfiniteQueryOptions } from "./use-infinite-query.js";
+export type { UseQueryOptions } from "./use-query.js";

@@ -21,7 +21,9 @@ import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   InfiniteData,
   SkipToken,
+  UseInfiniteQueryOptions as TanStackUseInfiniteQueryOptions,
   UseInfiniteQueryResult,
+  UseSuspenseInfiniteQueryOptions as TanStackUseSuspenseInfiniteQueryOptions,
   UseSuspenseInfiniteQueryResult,
 } from "@tanstack/react-query";
 import {
@@ -29,13 +31,34 @@ import {
   useSuspenseInfiniteQuery as tsUseSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 
-import type {
-  CreateInfiniteQueryOptions,
-  CreateSuspenseInfiniteQueryOptions,
-} from "./create-use-infinite-query-options.js";
-import { createUseInfiniteQueryOptions } from "./create-use-infinite-query-options.js";
+import type { ConnectInfiniteQueryKey } from "./connect-query-key.js";
+import type { ConnectInfiniteQueryOptions } from "./create-infinite-query-options.js";
+import { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
+
+/**
+ * Options for useInfiniteQuery
+ */
+export type UseInfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> = Omit<
+  TanStackUseInfiniteQueryOptions<
+    MessageShape<O>,
+    ConnectError,
+    InfiniteData<MessageShape<O>>,
+    MessageShape<O>,
+    ConnectInfiniteQueryKey<I>,
+    MessageInitShape<I>[ParamKey]
+  >,
+  "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
+> &
+  ConnectInfiniteQueryOptions<I, O, ParamKey> & {
+    /** The transport to be used for the fetching. */
+    transport?: Transport;
+  };
 
 /**
  * Query the method provided. Maps to useInfiniteQuery on tanstack/react-query
@@ -54,12 +77,10 @@ export function useInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
-    transport?: Transport;
-  },
+  }: UseInfiniteQueryOptions<I, O, ParamKey>,
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseInfiniteQueryOptions(schema, input, {
+  const baseOptions = createInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
@@ -69,6 +90,29 @@ export function useInfiniteQuery<
     ...queryOptions,
   });
 }
+
+/**
+ * Options for useSuspenseInfiniteQuery
+ */
+export type UseSuspenseInfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> = Omit<
+  TanStackUseSuspenseInfiniteQueryOptions<
+    MessageShape<O>,
+    ConnectError,
+    InfiniteData<MessageShape<O>>,
+    MessageShape<O>,
+    ConnectInfiniteQueryKey<I>,
+    MessageInitShape<I>[ParamKey]
+  >,
+  "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
+> &
+  ConnectInfiniteQueryOptions<I, O, ParamKey> & {
+    /** The transport to be used for the fetching. */
+    transport?: Transport;
+  };
 
 /**
  * Query the method provided. Maps to useSuspenseInfiniteQuery on tanstack/react-query
@@ -85,12 +129,10 @@ export function useSuspenseInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: Omit<CreateSuspenseInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
-    transport?: Transport;
-  },
+  }: UseSuspenseInfiniteQueryOptions<I, O, ParamKey>,
 ): UseSuspenseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseInfiniteQueryOptions(schema, input, {
+  const baseOptions = createInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,

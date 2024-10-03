@@ -16,7 +16,7 @@ import { skipToken } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { createUseQueryOptions } from "./create-use-query-options.js";
+import { createQueryOptions } from "./create-query-options.js";
 import { ElizaService } from "./gen/eliza_pb.js";
 import { mockEliza } from "./test/test-utils.js";
 
@@ -27,14 +27,14 @@ const mockedElizaTransport = mockEliza();
 
 describe("createUseQueryOptions", () => {
   it("honors skipToken", () => {
-    const opt = createUseQueryOptions(sayMethodDescriptor, skipToken, {
+    const opt = createQueryOptions(sayMethodDescriptor, skipToken, {
       transport: mockedElizaTransport,
     });
     expect(opt.queryFn).toBe(skipToken);
   });
   it("sets queryKey", () => {
     const want = createConnectQueryKey(sayMethodDescriptor, { sentence: "hi" });
-    const opt = createUseQueryOptions(
+    const opt = createQueryOptions(
       sayMethodDescriptor,
       { sentence: "hi" },
       {

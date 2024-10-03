@@ -20,7 +20,9 @@ import type {
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   SkipToken,
+  UseQueryOptions as TanStackUseQueryOptions,
   UseQueryResult,
+  UseSuspenseQueryOptions as TanStackUseSuspenseQueryOptions,
   UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import {
@@ -28,13 +30,30 @@ import {
   useSuspenseQuery as tsUseSuspenseQuery,
 } from "@tanstack/react-query";
 
-import type {
-  CreateQueryOptions,
-  CreateSuspenseQueryOptions,
-} from "./create-use-query-options.js";
-import { createUseQueryOptions } from "./create-use-query-options.js";
+import type { ConnectQueryKey } from "./connect-query-key.js";
+import { createQueryOptions } from "./create-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
+
+/**
+ * Options for useQuery
+ */
+export type UseQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  SelectOutData = MessageShape<O>,
+> = Omit<
+  TanStackUseQueryOptions<
+    MessageShape<O>,
+    ConnectError,
+    SelectOutData,
+    ConnectQueryKey<I>
+  >,
+  "queryFn" | "queryKey"
+> & {
+  /** The transport to be used for the fetching. */
+  transport?: Transport;
+};
 
 /**
  * Query the method provided. Maps to useQuery on tanstack/react-query
@@ -46,15 +65,10 @@ export function useQuery<
 >(
   schema: MethodUnaryDescriptor<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  {
-    transport,
-    ...queryOptions
-  }: Omit<CreateQueryOptions<I, O, SelectOutData>, "transport"> & {
-    transport?: Transport;
-  } = {},
+  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(schema, input, {
+  const baseOptions = createQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
   });
   return tsUseQuery({
@@ -62,6 +76,26 @@ export function useQuery<
     ...queryOptions,
   });
 }
+
+/**
+ * Options for useSuspenseQuery
+ */
+export type UseSuspenseQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  SelectOutData = 0,
+> = Omit<
+  TanStackUseSuspenseQueryOptions<
+    MessageShape<O>,
+    ConnectError,
+    SelectOutData,
+    ConnectQueryKey<I>
+  >,
+  "queryFn" | "queryKey"
+> & {
+  /** The transport to be used for the fetching. */
+  transport?: Transport;
+};
 
 /**
  * Query the method provided. Maps to useSuspenseQuery on tanstack/react-query
@@ -76,12 +110,10 @@ export function useSuspenseQuery<
   {
     transport,
     ...queryOptions
-  }: Omit<CreateSuspenseQueryOptions<I, O, SelectOutData>, "transport"> & {
-    transport?: Transport;
-  } = {},
+  }: UseSuspenseQueryOptions<I, O, SelectOutData> = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
-  const baseOptions = createUseQueryOptions(schema, input, {
+  const baseOptions = createQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
   });
   return tsUseSuspenseQuery({
