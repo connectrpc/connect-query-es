@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { create } from "@bufbuild/protobuf";
 import { skipToken } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";
+import { createMessageKey } from "./message-key.js";
 
 describe("makeQueryKey", () => {
   const methodDescriptor = {
@@ -33,7 +33,7 @@ describe("makeQueryKey", () => {
     expect(key).toStrictEqual([
       ElizaService.typeName,
       "name",
-      create(SayRequestSchema, { sentence: "someValue" }),
+      createMessageKey(SayRequestSchema, { sentence: "someValue" }),
     ]);
   });
 
@@ -42,7 +42,7 @@ describe("makeQueryKey", () => {
     expect(key).toStrictEqual([
       ElizaService.typeName,
       "name",
-      create(methodDescriptor.input),
+      createMessageKey(methodDescriptor.input, {}),
     ]);
   });
 
@@ -51,7 +51,7 @@ describe("makeQueryKey", () => {
     expect(key).toStrictEqual([
       ElizaService.typeName,
       "name",
-      create(methodDescriptor.input),
+      createMessageKey(methodDescriptor.input, {}),
     ]);
   });
 
