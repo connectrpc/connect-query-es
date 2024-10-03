@@ -53,9 +53,9 @@ export type UseQueryOptions<
 };
 
 /**
- * Options for useQuery
+ * Options for useSuspenseQuery
  */
-export type CreateSuspenseQueryOptions<
+export type UseSuspenseQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
   SelectOutData = 0,

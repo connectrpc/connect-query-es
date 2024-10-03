@@ -29,7 +29,7 @@ import {
 } from "@tanstack/react-query";
 
 import type {
-  CreateSuspenseQueryOptions,
+  UseSuspenseQueryOptions,
   UseQueryOptions,
 } from "./create-query-options.js";
 import { createQueryOptions } from "./create-query-options.js";
@@ -76,7 +76,7 @@ export function useSuspenseQuery<
   {
     transport,
     ...queryOptions
-  }: Omit<CreateSuspenseQueryOptions<I, O, SelectOutData>, "transport"> & {
+  }: Omit<UseSuspenseQueryOptions<I, O, SelectOutData>, "transport"> & {
     transport?: Transport;
   } = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
