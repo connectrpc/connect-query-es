@@ -51,7 +51,7 @@ export function createConnectQueryKey<
   O extends DescMessage,
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: SkipToken | MessageInitShape<I> | undefined
+  input?: SkipToken | MessageInitShape<I> | undefined,
 ): ConnectQueryKey {
   const key =
     input === skipToken || input === undefined
@@ -78,7 +78,7 @@ export function createConnectInfiniteQueryKey<
   O extends DescMessage,
 >(
   schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: SkipToken | MessageInitShape<I> | undefined
+  input?: SkipToken | MessageInitShape<I> | undefined,
 ): ConnectInfiniteQueryKey {
   return [...createConnectQueryKey(schema, input), "infinite"];
 }

@@ -20,6 +20,7 @@ import type {
 import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
+  QueryKey,
   SkipToken,
   UseQueryOptions,
   UseSuspenseQueryOptions,
@@ -114,6 +115,7 @@ export function createUseQueryOptions<
   queryKey: ConnectQueryKey;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
   structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
   const queryKey = createConnectQueryKey(schema, input);
   const structuralSharing = createStructuralSharing(schema.output);
@@ -125,5 +127,6 @@ export function createUseQueryOptions<
     queryKey,
     queryFn,
     structuralSharing,
+    queryKeyHashFn: JSON.stringify,
   };
 }

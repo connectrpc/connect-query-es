@@ -22,6 +22,7 @@ import type {
   GetNextPageParamFunction,
   InfiniteData,
   QueryFunction,
+  QueryKey,
   SkipToken,
   UseInfiniteQueryOptions,
   UseQueryOptions,
@@ -171,6 +172,7 @@ export function createUseInfiniteQueryOptions<
     | SkipToken;
   structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   initialPageParam: MessageInitShape<I>[ParamKey];
+  queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
   const queryKey = createConnectInfiniteQueryKey(
     schema,
@@ -199,5 +201,6 @@ export function createUseInfiniteQueryOptions<
     queryKey,
     queryFn,
     structuralSharing,
+    queryKeyHashFn: JSON.stringify,
   };
 }
