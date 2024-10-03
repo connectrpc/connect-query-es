@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import type { DefaultOptions } from "@tanstack/react-query";
-import stableHash from "stable-hash";
 
 /**
  * These default options are required for proper query key hashing.
@@ -25,9 +24,5 @@ import stableHash from "stable-hash";
  * when TanStack Query tries to serialize the value.
  */
 export const defaultOptions = {
-  queries: {
-    // TODO remove once we use createMessageKey()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- stableHash is a function but doesn't seem to satisfy the type. Likely a node16 compat problem.
-    queryKeyHashFn: stableHash as any as (object: any) => string,
-  },
+  queries: {},
 } satisfies DefaultOptions;

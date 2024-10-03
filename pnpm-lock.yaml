@@ -124,10 +124,6 @@ importers:
         version: 5.4.7(@types/node@22.5.1)
 
   packages/connect-query:
-    dependencies:
-      stable-hash:
-        specifier: ^0.0.4
-        version: 0.0.4
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.15.4
@@ -4308,10 +4304,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /stable-hash@0.0.4:
-    resolution: {integrity: sha512-LjdcbuBeLcdETCrPn9i8AYAZ1eCtu4ECAWtP7UleOiZ9LzVxRzzUZEoZ8zB24nhkQnDWyET0I+3sWokSDS3E7g==}
-    dev: false
 
   /stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}

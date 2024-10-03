@@ -21,6 +21,7 @@ import type { Transport } from "@connectrpc/connect";
 import type {
   GetNextPageParamFunction,
   QueryFunction,
+  QueryKey,
   SkipToken,
   UseQueryOptions,
 } from "@tanstack/react-query";
@@ -68,7 +69,7 @@ function createUnaryInfiniteQueryFn<
   },
 ): QueryFunction<
   MessageShape<O>,
-  ConnectInfiniteQueryKey<I>,
+  ConnectInfiniteQueryKey,
   MessageInitShape<I>[ParamKey]
 > {
   return async (context) => {
@@ -107,16 +108,17 @@ export function createInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectInfiniteQueryKey<I>;
+  queryKey: ConnectInfiniteQueryKey;
   queryFn:
     | QueryFunction<
         MessageShape<O>,
-        ConnectInfiniteQueryKey<I>,
+        ConnectInfiniteQueryKey,
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
   structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   initialPageParam: MessageInitShape<I>[ParamKey];
+  queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
   const queryKey = createConnectInfiniteQueryKey(
     schema,
@@ -143,5 +145,6 @@ export function createInfiniteQueryOptions<
     queryKey,
     queryFn,
     structuralSharing,
+    queryKeyHashFn: JSON.stringify,
   };
 }

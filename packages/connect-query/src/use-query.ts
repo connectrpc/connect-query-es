@@ -39,7 +39,6 @@ import { useTransport } from "./use-transport.js";
  * Options for useQuery
  */
 export type UseQueryOptions<
-  I extends DescMessage,
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 > = Omit<
@@ -47,7 +46,7 @@ export type UseQueryOptions<
     MessageShape<O>,
     ConnectError,
     SelectOutData,
-    ConnectQueryKey<I>
+    ConnectQueryKey
   >,
   "queryFn" | "queryKey"
 > & {
@@ -65,7 +64,7 @@ export function useQuery<
 >(
   schema: MethodUnaryDescriptor<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
+  { transport, ...queryOptions }: UseQueryOptions<O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createQueryOptions(schema, input, {
@@ -81,7 +80,6 @@ export function useQuery<
  * Options for useSuspenseQuery
  */
 export type UseSuspenseQueryOptions<
-  I extends DescMessage,
   O extends DescMessage,
   SelectOutData = 0,
 > = Omit<
@@ -89,7 +87,7 @@ export type UseSuspenseQueryOptions<
     MessageShape<O>,
     ConnectError,
     SelectOutData,
-    ConnectQueryKey<I>
+    ConnectQueryKey
   >,
   "queryFn" | "queryKey"
 > & {
@@ -110,7 +108,7 @@ export function useSuspenseQuery<
   {
     transport,
     ...queryOptions
-  }: UseSuspenseQueryOptions<I, O, SelectOutData> = {},
+  }: UseSuspenseQueryOptions<O, SelectOutData> = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createQueryOptions(schema, input, {
