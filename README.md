@@ -221,9 +221,7 @@ function useInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: Omit<CreateInfiniteQueryOptions<I, O, ParamKey>, "transport"> & {
-    transport?: Transport;
-  },
+  }: UseInfiniteQueryOptions<I, O, ParamKey>,
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError>;
 ```
 
