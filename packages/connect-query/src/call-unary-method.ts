@@ -18,36 +18,32 @@ import type {
   MessageShape,
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
-import type { CallOptions, Transport } from "@connectrpc/connect";
+import type { Transport } from "@connectrpc/connect";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
  * Call a unary method given its signature and input.
  */
+// eslint-disable-next-line @typescript-eslint/max-params -- 4th param is optional
 export async function callUnaryMethod<
   I extends DescMessage,
   O extends DescMessage,
 >(
+  transport: Transport,
   schema: MethodUnaryDescriptor<I, O>,
   input: MessageInitShape<I> | undefined,
-  {
-    callOptions,
-    transport,
-  }: {
-    transport: Transport;
-    callOptions?: CallOptions | undefined;
+  options?: {
+    signal?: AbortSignal;
   },
 ): Promise<MessageShape<O>> {
   const result = await transport.unary(
     schema,
-    callOptions?.signal,
-    callOptions?.timeoutMs,
-    callOptions?.headers,
+    options?.signal,
+    undefined,
+    undefined,
     input ?? create(schema.input),
-    callOptions?.contextValues,
+    undefined,
   );
-  callOptions?.onHeader?.(result.header);
-  callOptions?.onTrailer?.(result.trailer);
   return result.message;
 }

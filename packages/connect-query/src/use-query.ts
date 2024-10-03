@@ -48,7 +48,6 @@ export function useQuery<
   input?: SkipToken | MessageInitShape<I>,
   {
     transport,
-    callOptions,
     ...queryOptions
   }: Omit<CreateQueryOptions<I, O, SelectOutData>, "transport"> & {
     transport?: Transport;
@@ -57,7 +56,6 @@ export function useQuery<
   const transportFromCtx = useTransport();
   const baseOptions = createUseQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
-    callOptions,
   });
   return tsUseQuery({
     ...baseOptions,
@@ -77,7 +75,6 @@ export function useSuspenseQuery<
   input?: MessageInitShape<I>,
   {
     transport,
-    callOptions,
     ...queryOptions
   }: Omit<CreateSuspenseQueryOptions<I, O, SelectOutData>, "transport"> & {
     transport?: Transport;
@@ -86,7 +83,6 @@ export function useSuspenseQuery<
   const transportFromCtx = useTransport();
   const baseOptions = createUseQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
-    callOptions,
   });
   return tsUseSuspenseQuery({
     ...baseOptions,
