@@ -45,8 +45,6 @@ export interface ConnectInfiniteQueryOptions<
 > {
   /** Defines which part of the input should be considered the page param */
   pageParamKey: ParamKey;
-  /** Transport can be overridden here.*/
-  transport: Transport;
   /** Determines the next page. */
   getNextPageParam: GetNextPageParamFunction<
     MessageInitShape<I>[ParamKey],
@@ -102,7 +100,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
-  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
     I,
