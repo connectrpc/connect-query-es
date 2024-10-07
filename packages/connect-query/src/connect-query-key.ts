@@ -24,23 +24,28 @@ import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
 
 /**
- * TanStack Query requires query keys in order to decide when the query should automatically update.
+ * TanStack Query manages query caching for you based on query keys. `QueryKey`s in TanStack Query are arrays with arbitrary JSON-serializable data - typically handwritten for each endpoint.
  *
- *
- * TODO
- *
- * `QueryKey`s in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
- *
- * For example, for a query key might look like this:
+ * In Connect Query, query keys are more structured, since queries are always tied to a service, RPC, input message, and transport. For example, for a query key might look like this:
  *
  * @example
  * [
- *   "connectrpc.eliza.v1.ElizaService",
- *   "Say",
- *   { sentence: "hello there" },
+ *   "connect-query",
+ *   {
+ *     transport: "t1",
+ *     serviceName: "connectrpc.eliza.v1.ElizaService",
+ *     methodName: "Say",
+ *     input: {
+ *       sentence: "hello there",
+ *     },
+ *     cardinality: "finite",
+ *   }
  * ]
  */
 export type ConnectQueryKey = [
+  /**
+   * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
+   */
   "connect-query",
   {
     /**
@@ -56,14 +61,14 @@ export type ConnectQueryKey = [
      */
     methodName?: string;
     /**
-     * Whether this is an infinite query, or a regular one.
-     */
-    cardinality?: "infinite" | "finite";
-    /**
      * A key for the request message, created with createMessageKey(),
      * or "skipped".
      */
     input?: Record<string, unknown> | "skipped";
+    /**
+     * Whether this is an infinite query, or a regular one.
+     */
+    cardinality?: "infinite" | "finite";
   },
 ];
 
@@ -109,9 +114,53 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
     };
 
 /**
- * TanStack Query requires query keys in order to decide when the query should automatically update.
+ * TanStack Query manages query caching for you based on query keys. In Connect Query, keys are structured, and can easily be created using this factory function.
  *
- * In Connect-Query, much of this is handled automatically by this function.
+ * When you make a query, a unique key is automatically created from the schema, input message, and transport. For example:
+ *
+ * ```ts
+ * import { useQuery } from "@connectrpc/connect-query";
+ *
+ * useQuery(ElizaService.method.say, { sentence: "hello" });
+ *
+ * // creates the key:
+ * [
+ *   "connect-query",
+ *   {
+ *     transport: "t1",
+ *     serviceName: "connectrpc.eliza.v1.ElizaService",
+ *     methodName: "Say",
+ *     input: { sentence: "hello" },
+ *     cardinality: "finite",
+ *   }
+ * ]
+ * ```
+ *
+ * The same key can be created manually with this factory:
+ *
+ * ```ts
+ * createConnectQueryKey({
+ *   transport: myTransportReference,
+ *   method: ElizaService.method.say,
+ *   input: { sentence: "hello" }
+ * });
+ * ```
+ *
+ * Note that the factory allows to create partial keys that can be used to filter queries. For example:
+ *
+ * ```ts
+ * createConnectQueryKey({
+ *   service: ElizaService,
+ * });
+ *
+ * // creates the key:
+ * [
+ *   "connect-query",
+ *   {
+ *     serviceName: "connectrpc.eliza.v1.ElizaService",
+ *   }
+ * ]
+ * ```
  *
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */

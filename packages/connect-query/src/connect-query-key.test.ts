@@ -73,4 +73,22 @@ describe("createConnectQueryKey", () => {
     });
     expect(key[1].input).toBe("skipped");
   });
+
+  it("creates an example key", () => {
+    const key = createConnectQueryKey({
+      method: ElizaService.method.say,
+      input: { sentence: "hello there" },
+    });
+    expect(key).toStrictEqual([
+      "connect-query",
+      {
+        serviceName: "connectrpc.eliza.v1.ElizaService",
+        methodName: "Say",
+        input: {
+          sentence: "hello there",
+        },
+        cardinality: "finite",
+      },
+    ]);
+  });
 });
