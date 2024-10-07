@@ -48,7 +48,7 @@ export function createTransportKey(transport: TransportWithStaticKey): string {
  */
 export function addStaticKeyToTransport(
   transport: Transport,
-  key: string
+  key: string,
 ): TransportWithStaticKey {
   return { ...transport, [staticKeySymbol]: key };
 }

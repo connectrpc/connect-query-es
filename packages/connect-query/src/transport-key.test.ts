@@ -45,7 +45,7 @@ describe("transport key", () => {
       createConnectTransport({
         baseUrl: "https://example.com",
       }),
-      "static-key"
+      "static-key",
     );
     const key1 = createTransportKey(transport1);
     expect(key1).toBe("static-key");

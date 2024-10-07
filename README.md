@@ -197,7 +197,7 @@ function useQuery<
 >(
   schema: MethodUnaryDescriptor<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {}
+  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError>;
 ```
 
@@ -226,7 +226,7 @@ function useInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: UseInfiniteQueryOptions<I, O, ParamKey>
+  }: UseInfiniteQueryOptions<I, O, ParamKey>,
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError>;
 ```
 
@@ -243,7 +243,7 @@ Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook
 ```ts
 function useMutation<I extends DescMessage, O extends DescMessage>(
   schema: MethodUnaryDescriptor<I, O>,
-  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {}
+  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>;
 ```
 
@@ -255,7 +255,7 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 
 ```ts
 function createConnectQueryKey<Desc extends DescMethod | DescService>(
-  params: KeyParams<Desc>
+  params: KeyParams<Desc>,
 ): ConnectQueryKey;
 ```
 
@@ -270,7 +270,7 @@ function createConnectInfiniteQueryKey<
 >(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
   input: SkipToken | PartialMessage<I>,
-  pageParamKey: keyof PartialMessage<I>
+  pageParamKey: keyof PartialMessage<I>,
 ): ConnectInfiniteQueryKey<I>;
 ```
 
@@ -285,7 +285,7 @@ function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
-  }
+  },
 ): Promise<O>;
 ```
 
@@ -323,7 +323,7 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
     transport,
   }: {
     transport: Transport;
-  }
+  },
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
@@ -366,7 +366,7 @@ function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
-  }: ConnectInfiniteQueryOptions<I, O, ParamKey>
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
     I,
