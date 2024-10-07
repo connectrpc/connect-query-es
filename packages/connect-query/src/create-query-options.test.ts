@@ -34,7 +34,7 @@ describe("createQueryOptions", () => {
   });
   it("sets queryKey", () => {
     const want = createConnectQueryKey({
-      method: sayMethodDescriptor,
+      schema: sayMethodDescriptor,
       input: { sentence: "hi" },
       transport: mockedElizaTransport,
     });

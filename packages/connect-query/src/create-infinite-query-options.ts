@@ -122,7 +122,7 @@ export function createInfiniteQueryOptions<
 } {
   const queryKey = createConnectQueryKey({
     cardinality: "infinite",
-    method: schema,
+    schema,
     transport,
     input,
   });

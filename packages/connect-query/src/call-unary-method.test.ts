@@ -40,7 +40,7 @@ describe("callUnaryMethod", () => {
           queries: [
             {
               queryKey: createConnectQueryKey({
-                method: ElizaService.method.say,
+                schema: ElizaService.method.say,
                 input,
                 transport,
               }),

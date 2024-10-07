@@ -77,7 +77,7 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
       /**
        * Set `serviceName` and `methodName` in the key.
        */
-      method: Desc;
+      schema: Desc;
       /**
        * Set `input` in the key:
        * - If a SkipToken is provided, `input` is "skipped".
@@ -102,7 +102,7 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
       /**
        * Set `serviceName` in the key, and omit `methodName`.
        */
-      service: Desc;
+      schema: Desc;
       /**
        * Set `transport` in the key.
        */
@@ -141,7 +141,7 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
  * ```ts
  * createConnectQueryKey({
  *   transport: myTransportReference,
- *   method: ElizaService.method.say,
+ *   schema: ElizaService.method.say,
  *   input: { sentence: "hello" }
  * });
  * ```
@@ -150,7 +150,7 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
  *
  * ```ts
  * createConnectQueryKey({
- *   service: ElizaService,
+ *   schema: ElizaService,
  * });
  *
  * // creates the key:
@@ -168,13 +168,13 @@ export function createConnectQueryKey<Desc extends DescMethod | DescService>(
   params: KeyParams<Desc>,
 ): ConnectQueryKey {
   const props: ConnectQueryKey[1] =
-    "method" in params
+    params.schema.kind == "rpc"
       ? {
-          serviceName: params.method.parent.typeName,
-          methodName: params.method.name,
+          serviceName: params.schema.parent.typeName,
+          methodName: params.schema.name,
         }
       : {
-          serviceName: params.service.typeName,
+          serviceName: params.schema.typeName,
         };
   if (params.transport !== undefined) {
     props.transport = createTransportKey(params.transport);
@@ -191,15 +191,12 @@ export function createConnectQueryKey<Desc extends DescMethod | DescService>(
     case "any":
       break;
   }
-  if ("method" in params && typeof params.input == "symbol") {
-    props.input = "skipped";
-  }
-  if ("method" in params) {
+  if (params.schema.kind == "rpc" && "input" in params) {
     if (typeof params.input == "symbol") {
       props.input = "skipped";
     } else if (params.input !== undefined) {
       props.input = createMessageKey(
-        params.method.input,
+        params.schema.input,
         params.input,
         params.pageParamKey,
       );

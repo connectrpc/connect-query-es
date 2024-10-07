@@ -23,7 +23,7 @@ import { createMessageKey } from "./message-key.js";
 describe("createConnectQueryKey", () => {
   it("makes a query key with input", () => {
     const key = createConnectQueryKey({
-      method: ElizaService.method.say,
+      schema: ElizaService.method.say,
       input: create(SayRequestSchema, { sentence: "hi" }),
     });
     expect(key).toStrictEqual([
@@ -39,7 +39,7 @@ describe("createConnectQueryKey", () => {
 
   it("allows input: undefined", () => {
     const key = createConnectQueryKey({
-      method: ElizaService.method.say,
+      schema: ElizaService.method.say,
       input: undefined,
     });
     expect(key).toStrictEqual([
@@ -54,7 +54,7 @@ describe("createConnectQueryKey", () => {
 
   it("allows to omit input", () => {
     const key = createConnectQueryKey({
-      method: ElizaService.method.say,
+      schema: ElizaService.method.say,
     });
     expect(key).toStrictEqual([
       "connect-query",
@@ -68,7 +68,7 @@ describe("createConnectQueryKey", () => {
 
   it("skipToken sets input: 'skipped'", () => {
     const key = createConnectQueryKey({
-      method: ElizaService.method.say,
+      schema: ElizaService.method.say,
       input: skipToken,
     });
     expect(key[1].input).toBe("skipped");
@@ -76,7 +76,7 @@ describe("createConnectQueryKey", () => {
 
   it("creates an example key", () => {
     const key = createConnectQueryKey({
-      method: ElizaService.method.say,
+      schema: ElizaService.method.say,
       input: { sentence: "hello there" },
     });
     expect(key).toStrictEqual([

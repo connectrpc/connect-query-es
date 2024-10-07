@@ -69,7 +69,7 @@ export function createQueryOptions<
   queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
   const queryKey = createConnectQueryKey({
-    method: schema,
+    schema,
     input: input ?? create(schema.input),
     transport,
   });

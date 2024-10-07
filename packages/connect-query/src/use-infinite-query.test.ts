@@ -195,7 +195,7 @@ describe("useInfiniteQuery", () => {
     expect(cache).toHaveLength(1);
     expect(cache[0].queryKey).toEqual(
       createConnectQueryKey({
-        method: methodDescriptor,
+        schema: methodDescriptor,
         transport: mockedPaginatedTransport,
         cardinality: "infinite",
         pageParamKey: "page",
@@ -282,7 +282,7 @@ describe("useInfiniteQuery", () => {
 
     await queryClient.invalidateQueries({
       queryKey: createConnectQueryKey({
-        method: methodDescriptor,
+        schema: methodDescriptor,
         transport: mockedPaginatedTransport,
         cardinality: "any",
         pageParamKey: "page",
@@ -329,7 +329,7 @@ describe("useInfiniteQuery", () => {
     await queryClient.invalidateQueries({
       exact: false,
       queryKey: createConnectQueryKey({
-        method: methodDescriptor,
+        schema: methodDescriptor,
         cardinality: "infinite",
       }),
     });
