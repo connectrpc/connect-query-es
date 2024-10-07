@@ -146,21 +146,7 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
  * });
  * ```
  *
- * Note that the factory allows to create partial keys that can be used to filter queries. For example:
- *
- * ```ts
- * createConnectQueryKey({
- *   schema: ElizaService,
- * });
- *
- * // creates the key:
- * [
- *   "connect-query",
- *   {
- *     serviceName: "connectrpc.eliza.v1.ElizaService",
- *   }
- * ]
- * ```
+ * Note that the factory allows to create partial keys that can be used to filter queries. For example, you can create a key without a transport, any cardinality, any input message, or with a partial input message.
  *
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */

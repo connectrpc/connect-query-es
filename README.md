@@ -249,13 +249,12 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 ### `createConnectQueryKey`
 
 ```ts
-function createConnectQueryKey<I extends Message<I>, O extends Message<O>>(
-  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input?: SkipToken | PartialMessage<I> | undefined,
-): ConnectQueryKey<I>;
+function createConnectQueryKey<Desc extends DescMethod | DescService>(
+  params: KeyParams<Desc>,
+): ConnectQueryKey;
 ```
 
-This helper is useful to manually compute the [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) sent to TanStack Query. This function has no side effects.
+This function is used under the hood of `useQuery` and other hooks to compute a [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) for TanStack Query. You can use it to create (partial) keys yourself to filter queries.
 
 ### `createConnectInfiniteQueryKey`
 
