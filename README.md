@@ -27,6 +27,7 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`createProtobufSafeUpdater`](#createprotobufsafeupdater)
   - [`createQueryOptions`](#createqueryoptions)
   - [`createInfiniteQueryOptions`](#createinfinitequeryoptions)
+  - [`addStaticKeyToTransport`](#addstatickeytotransport)
   - [`ConnectQueryKey`](#connectquerykey)
 
 ## Quickstart
@@ -189,10 +190,14 @@ Use this helper to get the default transport that's currently attached to the Re
 ### `useQuery`
 
 ```ts
-function useQuery<I extends DescMessage, O extends DescMessage, SelectOutData = MessageShape<O>>(
+function useQuery<
+  I extends DescMessage,
+  O extends DescMessage,
+  SelectOutData = MessageShape<O>,
+>(
   schema: MethodUnaryDescriptor<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
+  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {}
 ): UseQueryResult<SelectOutData, ConnectError>;
 ```
 
@@ -221,7 +226,7 @@ function useInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: UseInfiniteQueryOptions<I, O, ParamKey>,
+  }: UseInfiniteQueryOptions<I, O, ParamKey>
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError>;
 ```
 
@@ -238,8 +243,8 @@ Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook
 ```ts
 function useMutation<I extends DescMessage, O extends DescMessage>(
   schema: MethodUnaryDescriptor<I, O>,
-  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
-): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>
+  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {}
+): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>;
 ```
 
 The `useMutation` is a wrapper around TanStack Query's [`useMutation`](https://tanstack.com/query/v5/docs/react/reference/useMutation) hook, but it's preconfigured with the correct `mutationFn` for the given method.
@@ -250,7 +255,7 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 
 ```ts
 function createConnectQueryKey<Desc extends DescMethod | DescService>(
-  params: KeyParams<Desc>,
+  params: KeyParams<Desc>
 ): ConnectQueryKey;
 ```
 
@@ -265,7 +270,7 @@ function createConnectInfiniteQueryKey<
 >(
   methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
   input: SkipToken | PartialMessage<I>,
-  pageParamKey: keyof PartialMessage<I>,
+  pageParamKey: keyof PartialMessage<I>
 ): ConnectInfiniteQueryKey<I>;
 ```
 
@@ -280,7 +285,7 @@ function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
-  },
+  }
 ): Promise<O>;
 ```
 
@@ -318,7 +323,7 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
     transport,
   }: {
     transport: Transport;
-  },
+  }
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
@@ -361,7 +366,7 @@ function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
-  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey>
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
     I,
@@ -371,10 +376,10 @@ function createInfiniteQueryOptions<
   queryKey: ConnectInfiniteQueryKey<I>;
   queryFn:
     | QueryFunction<
-    MessageShape<O>,
-    ConnectInfiniteQueryKey<I>,
-    MessageInitShape<I>[ParamKey]
-  >
+        MessageShape<O>,
+        ConnectInfiniteQueryKey<I>,
+        MessageInitShape<I>[ParamKey]
+      >
     | SkipToken;
   structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
   initialPageParam: PartialMessage<I>[ParamKey];
@@ -382,6 +387,10 @@ function createInfiniteQueryOptions<
 ```
 
 A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+
+### `addStaticKeyToTransport`
+
+Transports are taken into consideration when building query keys for associated queries. This can cause issues with SSR since the transport on the server is not the same transport that gets executed on the client (cannot be tracked by reference). To bypass this, you can use this method to add an explicit key to the transport that will be used in the query key.
 
 ### `ConnectQueryKey`
 
@@ -525,8 +534,7 @@ import { say } from "./gen/eliza-ElizaService_connectquery";
 function prefetch() {
   return queryClient.prefetchQuery({
     queryKey: createConnectQueryKey(say, { sentence: "Hello" }),
-    queryFn: () =>
-      callUnaryMethod(myTransport, say, { sentence: "Hello" }),
+    queryFn: () => callUnaryMethod(myTransport, say, { sentence: "Hello" }),
   });
 }
 ```

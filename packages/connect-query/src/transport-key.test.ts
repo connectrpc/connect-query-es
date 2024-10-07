@@ -15,7 +15,10 @@
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { describe, expect, it } from "vitest";
 
-import { createTransportKey } from "./transport-key.js";
+import {
+  addStaticKeyToTransport,
+  createTransportKey,
+} from "./transport-key.js";
 
 describe("transport key", () => {
   it("returns the same key for the same reference", () => {
@@ -36,5 +39,15 @@ describe("transport key", () => {
     const key1 = createTransportKey(transport1);
     const key2 = createTransportKey(transport2);
     expect(key1).not.toBe(key2);
+  });
+  it("allows override of key transport property", () => {
+    const transport1 = addStaticKeyToTransport(
+      createConnectTransport({
+        baseUrl: "https://example.com",
+      }),
+      "static-key"
+    );
+    const key1 = createTransportKey(transport1);
+    expect(key1).toBe("static-key");
   });
 });
