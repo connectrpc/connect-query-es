@@ -13,26 +13,60 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
+import type { Transport } from "@connectrpc/connect";
 import { skipToken } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";
+import { ListRequestSchema, ListService } from "./gen/list_pb.js";
 import { createMessageKey } from "./message-key.js";
+import { createTransportKey } from "./transport-key.js";
 
 describe("createConnectQueryKey", () => {
-  it("makes a query key with input", () => {
+  const fakeTransport: Transport = {
+    async stream() {
+      return Promise.reject(new Error("unexpected"));
+    },
+    async unary() {
+      return Promise.reject(new Error("unexpected"));
+    },
+  };
+
+  it("creates a full key", () => {
     const key = createConnectQueryKey({
+      transport: fakeTransport,
       schema: ElizaService.method.say,
       input: create(SayRequestSchema, { sentence: "hi" }),
     });
     expect(key).toStrictEqual([
       "connect-query",
       {
-        serviceName: ElizaService.typeName,
-        methodName: ElizaService.method.say.name,
+        transport: createTransportKey(fakeTransport),
+        serviceName: "connectrpc.eliza.v1.ElizaService",
+        methodName: "Say",
         cardinality: "finite",
         input: createMessageKey(SayRequestSchema, { sentence: "hi" }),
+      },
+    ]);
+  });
+
+  it("creates a full infinite key", () => {
+    const key = createConnectQueryKey({
+      transport: fakeTransport,
+      schema: ListService.method.list,
+      input: create(ListRequestSchema, { page: 0n }),
+      pageParamKey: "page",
+      cardinality: "infinite",
+    });
+    expect(key).toStrictEqual([
+      "connect-query",
+      {
+        transport: createTransportKey(fakeTransport),
+        serviceName: "ListService",
+        methodName: "List",
+        cardinality: "infinite",
+        input: createMessageKey(ListRequestSchema, {}),
       },
     ]);
   });
@@ -42,31 +76,17 @@ describe("createConnectQueryKey", () => {
       schema: ElizaService.method.say,
       input: undefined,
     });
-    expect(key).toStrictEqual([
-      "connect-query",
-      {
-        serviceName: ElizaService.typeName,
-        methodName: ElizaService.method.say.name,
-        cardinality: "finite",
-      },
-    ]);
+    expect(key[1].input).toBeUndefined();
   });
 
   it("allows to omit input", () => {
     const key = createConnectQueryKey({
       schema: ElizaService.method.say,
     });
-    expect(key).toStrictEqual([
-      "connect-query",
-      {
-        serviceName: ElizaService.typeName,
-        methodName: ElizaService.method.say.name,
-        cardinality: "finite",
-      },
-    ]);
+    expect(key[1].input).toBeUndefined();
   });
 
-  it("skipToken sets input: 'skipped'", () => {
+  it("allows input: skipToken", () => {
     const key = createConnectQueryKey({
       schema: ElizaService.method.say,
       input: skipToken,
@@ -74,21 +94,34 @@ describe("createConnectQueryKey", () => {
     expect(key[1].input).toBe("skipped");
   });
 
-  it("creates an example key", () => {
+  it("sets cardinality finite by default", () => {
     const key = createConnectQueryKey({
       schema: ElizaService.method.say,
-      input: { sentence: "hello there" },
     });
-    expect(key).toStrictEqual([
-      "connect-query",
-      {
-        serviceName: "connectrpc.eliza.v1.ElizaService",
-        methodName: "Say",
-        input: {
-          sentence: "hello there",
-        },
-        cardinality: "finite",
-      },
-    ]);
+    expect(key[1].cardinality).toBe("finite");
+  });
+
+  it("allows to set cardinality: finite", () => {
+    const key = createConnectQueryKey({
+      schema: ElizaService.method.say,
+      cardinality: "finite",
+    });
+    expect(key[1].cardinality).toBe("finite");
+  });
+
+  it("allows to set cardinality: any", () => {
+    const key = createConnectQueryKey({
+      schema: ElizaService.method.say,
+      cardinality: "any",
+    });
+    expect(key[1].cardinality).toBeUndefined();
+  });
+
+  it("allows to set a service schema", () => {
+    const key = createConnectQueryKey({
+      schema: ElizaService,
+    });
+    expect(key[1].serviceName).toBe(ElizaService.typeName);
+    expect(key[1].methodName).toBeUndefined();
   });
 });
