@@ -12,14 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export type {
-  ConnectQueryKey,
-  ConnectInfiniteQueryKey,
-} from "./connect-query-key.js";
-export {
-  createConnectQueryKey,
-  createConnectInfiniteQueryKey,
-} from "./connect-query-key.js";
+export type { ConnectQueryKey } from "./connect-query-key.js";
+export { createConnectQueryKey } from "./connect-query-key.js";
 export { createProtobufSafeUpdater } from "./utils.js";
 export { useTransport, TransportProvider } from "./use-transport.js";
 export {

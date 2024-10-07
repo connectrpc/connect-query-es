@@ -17,6 +17,7 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
+import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
 import type {
   QueryFunction,
@@ -67,7 +68,11 @@ export function createQueryOptions<
   >;
   queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
-  const queryKey = createConnectQueryKey(schema, input);
+  const queryKey = createConnectQueryKey({
+    method: schema,
+    input: input ?? create(schema.input),
+    transport,
+  });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =
     input === skipToken

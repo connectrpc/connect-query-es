@@ -17,10 +17,7 @@ import { QueryCache, skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import {
-  createConnectInfiniteQueryKey,
-  createConnectQueryKey,
-} from "./connect-query-key.js";
+import { createConnectQueryKey } from "./connect-query-key.js";
 import { defaultOptions } from "./default-options.js";
 import { ListResponseSchema, ListService } from "./gen/list_pb.js";
 import { mockPaginatedTransport, wrapper } from "./test/test-utils.js";
@@ -107,6 +104,10 @@ describe("useInfiniteQuery", () => {
   });
 
   it("can be provided a custom transport", async () => {
+    const customTransport = mockPaginatedTransport({
+      items: ["Intercepted!"],
+      page: 0n,
+    });
     const { result } = renderHook(
       () => {
         return useInfiniteQuery(
@@ -117,10 +118,7 @@ describe("useInfiniteQuery", () => {
           {
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
-            transport: mockPaginatedTransport({
-              items: ["Intercepted!"],
-              page: 0n,
-            }),
+            transport: customTransport,
           },
         );
       },
@@ -196,7 +194,13 @@ describe("useInfiniteQuery", () => {
 
     expect(cache).toHaveLength(1);
     expect(cache[0].queryKey).toEqual(
-      createConnectInfiniteQueryKey(methodDescriptor, {}),
+      createConnectQueryKey({
+        method: methodDescriptor,
+        transport: mockedPaginatedTransport,
+        cardinality: "infinite",
+        pageParamKey: "page",
+        input: {},
+      }),
     );
 
     await waitFor(() => {
@@ -277,7 +281,57 @@ describe("useInfiniteQuery", () => {
     expect(onSuccessSpy).toHaveBeenCalledTimes(1);
 
     await queryClient.invalidateQueries({
-      queryKey: createConnectQueryKey(methodDescriptor),
+      queryKey: createConnectQueryKey({
+        method: methodDescriptor,
+        transport: mockedPaginatedTransport,
+        cardinality: "any",
+        pageParamKey: "page",
+        input: {
+          page: 0n,
+        },
+      }),
+    });
+
+    expect(onSuccessSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("cache can be invalidated with a non-exact key", async () => {
+    const onSuccessSpy = vi.fn();
+    const spiedQueryCache = new QueryCache({
+      onSuccess: onSuccessSpy,
+    });
+    const { queryClient, ...remainingWrapper } = wrapper(
+      {
+        defaultOptions,
+        queryCache: spiedQueryCache,
+      },
+      mockedPaginatedTransport,
+    );
+    const { result } = renderHook(() => {
+      return useInfiniteQuery(
+        methodDescriptor,
+        {
+          page: 0n,
+        },
+        {
+          getNextPageParam: (lastPage) => lastPage.page + 1n,
+          pageParamKey: "page",
+        },
+      );
+    }, remainingWrapper);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(onSuccessSpy).toHaveBeenCalledTimes(1);
+
+    await queryClient.invalidateQueries({
+      exact: false,
+      queryKey: createConnectQueryKey({
+        method: methodDescriptor,
+        cardinality: "infinite",
+      }),
     });
 
     expect(onSuccessSpy).toHaveBeenCalledTimes(2);

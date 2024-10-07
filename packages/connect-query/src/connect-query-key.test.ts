@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { create } from "@bufbuild/protobuf";
 import { skipToken } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
 
@@ -19,45 +20,57 @@ import { createConnectQueryKey } from "./connect-query-key.js";
 import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";
 import { createMessageKey } from "./message-key.js";
 
-describe("makeQueryKey", () => {
-  const methodDescriptor = {
-    input: SayRequestSchema,
-    name: "name",
-    parent: ElizaService,
-  };
-
+describe("createConnectQueryKey", () => {
   it("makes a query key with input", () => {
-    const key = createConnectQueryKey(methodDescriptor, {
-      sentence: "someValue",
+    const key = createConnectQueryKey({
+      method: ElizaService.method.say,
+      input: create(SayRequestSchema, { sentence: "hi" }),
     });
     expect(key).toStrictEqual([
-      ElizaService.typeName,
-      "name",
-      createMessageKey(SayRequestSchema, { sentence: "someValue" }),
+      "connect-query",
+      {
+        serviceName: ElizaService.typeName,
+        methodName: ElizaService.method.say.name,
+        cardinality: "finite",
+        input: createMessageKey(SayRequestSchema, { sentence: "hi" }),
+      },
     ]);
   });
 
-  it("allows empty inputs", () => {
-    const key = createConnectQueryKey(methodDescriptor);
+  it("allows input: undefined", () => {
+    const key = createConnectQueryKey({
+      method: ElizaService.method.say,
+      input: undefined,
+    });
     expect(key).toStrictEqual([
-      ElizaService.typeName,
-      "name",
-      createMessageKey(methodDescriptor.input, {}),
+      "connect-query",
+      {
+        serviceName: ElizaService.typeName,
+        methodName: ElizaService.method.say.name,
+        cardinality: "finite",
+      },
     ]);
   });
 
-  it("makes a query key with a skipToken", () => {
-    const key = createConnectQueryKey(methodDescriptor, skipToken);
+  it("allows to omit input", () => {
+    const key = createConnectQueryKey({
+      method: ElizaService.method.say,
+    });
     expect(key).toStrictEqual([
-      ElizaService.typeName,
-      "name",
-      createMessageKey(methodDescriptor.input, {}),
+      "connect-query",
+      {
+        serviceName: ElizaService.typeName,
+        methodName: ElizaService.method.say.name,
+        cardinality: "finite",
+      },
     ]);
   });
 
-  it("generates identical keys when input is empty or the default is explicitly sent", () => {
-    const key1 = createConnectQueryKey(methodDescriptor, {});
-    const key2 = createConnectQueryKey(methodDescriptor, { sentence: "" });
-    expect(key1).toStrictEqual(key2);
+  it("skipToken sets input: 'skipped'", () => {
+    const key = createConnectQueryKey({
+      method: ElizaService.method.say,
+      input: skipToken,
+    });
+    expect(key[1].input).toBe("skipped");
   });
 });

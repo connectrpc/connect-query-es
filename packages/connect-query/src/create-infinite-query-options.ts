@@ -29,8 +29,8 @@ import { skipToken } from "@tanstack/react-query";
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import {
-  type ConnectInfiniteQueryKey,
-  createConnectInfiniteQueryKey,
+  type ConnectQueryKey,
+  createConnectQueryKey,
 } from "./connect-query-key.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
@@ -69,7 +69,7 @@ function createUnaryInfiniteQueryFn<
   },
 ): QueryFunction<
   MessageShape<O>,
-  ConnectInfiniteQueryKey,
+  ConnectQueryKey,
   MessageInitShape<I>[ParamKey]
 > {
   return async (context) => {
@@ -108,11 +108,11 @@ export function createInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectInfiniteQueryKey;
+  queryKey: ConnectQueryKey;
   queryFn:
     | QueryFunction<
         MessageShape<O>,
-        ConnectInfiniteQueryKey,
+        ConnectQueryKey,
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
@@ -120,15 +120,12 @@ export function createInfiniteQueryOptions<
   initialPageParam: MessageInitShape<I>[ParamKey];
   queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
-  const queryKey = createConnectInfiniteQueryKey(
-    schema,
-    input === skipToken
-      ? undefined
-      : {
-          ...input,
-          [pageParamKey]: undefined,
-        },
-  );
+  const queryKey = createConnectQueryKey({
+    cardinality: "infinite",
+    method: schema,
+    transport,
+    input,
+  });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =
     input === skipToken

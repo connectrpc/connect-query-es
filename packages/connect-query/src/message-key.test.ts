@@ -32,6 +32,17 @@ describe("message key", () => {
     const key = createMessageKey(schema, message);
     expect(key).toStrictEqual({});
   });
+  it("omits the pageParamKey", () => {
+    const schema = Proto3MessageSchema;
+    const message = create(schema, {
+      int32Field: 123,
+      stringField: "abc",
+    });
+    const key = createMessageKey(schema, message, "int32Field");
+    expect(key).toStrictEqual({
+      stringField: "abc",
+    });
+  });
   it("converts as expected", () => {
     const key = createMessageKey(Proto3MessageSchema, {
       int64Field: 123n,

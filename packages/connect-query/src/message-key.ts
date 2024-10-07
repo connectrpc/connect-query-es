@@ -32,13 +32,22 @@ import { base64Encode } from "@bufbuild/protobuf/wire";
  * - BigInt values are converted to a string.
  * - Properties are sorted by Protobuf source order.
  * - Map keys are sorted with Array.sort.
+ *
+ * If pageParamKey is provided, omit the field with this name from the key.
  */
-export function createMessageKey<Desc extends DescMessage>(
+export function createMessageKey<
+  Desc extends DescMessage,
+  PageParamKey extends keyof MessageInitShape<Desc>,
+>(
   schema: Desc,
   value: MessageInitShape<Desc>,
+  pageParamKey?: PageParamKey,
 ): Record<string, unknown> {
   // eslint-disable-next-line @typescript-eslint/no-use-before-define -- circular reference
-  return messageKey(reflect(schema, create(schema, value)));
+  return messageKey(
+    reflect(schema, create(schema, value)),
+    pageParamKey?.toString(),
+  );
 }
 
 function scalarKey(value: unknown): unknown {
@@ -62,7 +71,7 @@ function listKey(list: ReflectList): unknown[] {
   }
   if (listKind == "message") {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define -- circular reference
-    return (arr as ReflectMessage[]).map(messageKey);
+    return (arr as ReflectMessage[]).map((m) => messageKey(m));
   }
   return arr;
 }
@@ -88,10 +97,16 @@ function mapKey(map: ReflectMap): Record<string, unknown> {
     }, {});
 }
 
-function messageKey(message: ReflectMessage): Record<string, unknown> {
+function messageKey(
+  message: ReflectMessage,
+  pageParamKey?: string,
+): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const f of message.sortedFields) {
     if (!message.isSet(f)) {
+      continue;
+    }
+    if (f.localName === pageParamKey) {
       continue;
     }
     switch (f.fieldKind) {
