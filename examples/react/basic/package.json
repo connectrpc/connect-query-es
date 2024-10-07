@@ -7,7 +7,6 @@
     "dev": "vite",
     "generate": "rm -rf src/gen && buf generate --path eliza.proto",
     "license-header": "license-header",
-    "preview": "vite preview",
     "test": "vitest --run",
     "test:watch": "vitest --watch --ui",
     "format": "prettier . --write && eslint . --fix && license-header"
