@@ -20,6 +20,7 @@ service ListService {
 
 message ListRequest {
   int64 page = 1;
+  bool preview = 2;
 }
 
 message ListResponse {

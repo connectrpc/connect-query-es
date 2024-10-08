@@ -261,20 +261,76 @@ function createConnectQueryKey<Desc extends DescMethod | DescService>(
 
 This function is used under the hood of `useQuery` and other hooks to compute a [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) for TanStack Query. You can use it to create (partial) keys yourself to filter queries.
 
-### `createConnectInfiniteQueryKey`
+`useQuery` creates a query key with the following parameters:
+1. The qualified name of the RPC.
+2. The transport being used.
+3. The request message.
+
+To create the same key manually, you simply provide the same parameters:
+
 
 ```ts
-function createConnectInfiniteQueryKey<
-  I extends Message<I>,
-  O extends Message<O>,
->(
-  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input: SkipToken | PartialMessage<I>,
-  pageParamKey: keyof PartialMessage<I>,
-): ConnectInfiniteQueryKey<I>;
+import { createConnectQueryKey, useTransport } from "@connectrpc/connect-query";
+import { ElizaService } from "./gen/eliza_pb";
+
+const myTransport = useTransport();
+const queryKey = createConnectQueryKey({
+  // The schema is the only required parameter. 
+  schema: ElizaService.method.say,
+  transport: myTransport,
+  // You can provide a partial message here.
+  input: { sentence: "hello" },
+});
+
+// queryKey:
+[
+  "conect-query",
+  {
+    transport: "t1",
+    serviceName: "connectrpc.eliza.v1.ElizaService",
+    methodName: "Say",
+    input: { sentence: "hello" },
+    cardinality: "finite",
+  }
+]
 ```
 
-This function is not really necessary unless you are manually creating infinite query keys. When invalidating queries, it usually makes more sense to use the `createConnectQueryKey` function instead since it will also invalidate the regular queries (as well as the infinite queries).
+You can create a partial key that matches all RPCs of a service:
+
+```ts
+import { createConnectQueryKey } from "@connectrpc/connect-query";
+import { ElizaService } from "./gen/eliza_pb";
+
+const queryKey = createConnectQueryKey({
+  schema: ElizaService,
+});
+
+// queryKey:
+[
+  "conect-query",
+  {
+    serviceName: "connectrpc.eliza.v1.ElizaService",
+    cardinality: "finite",
+  }
+]
+```
+
+Infinite queries have distinct keys. To create a key for an infinite query, use the parameter `cardinality`:
+
+```ts
+import { createConnectQueryKey } from "@connectrpc/connect-query";
+import { ListService } from "./gen/list_pb";
+
+// The hook useInfiniteQuery() creates a query key with cardinality: "infinite",
+// and passes on the pageParamKey.
+const queryKey = createConnectQueryKey({
+  schema: ListService.method.list,
+  cardinality: "infinite", // "any" matches infinite and finite queries
+  pageParamKey: "page",
+  input: { preview: true },
+});
+```
+
 
 ### `callUnaryMethod`
 
@@ -398,45 +454,56 @@ Transports are taken into consideration when building query keys for associated 
 ### `ConnectQueryKey`
 
 ```ts
-type ConnectQueryKey<I extends Message<I>> = [
-  serviceTypeName: string,
-  methodName: string,
-  input: PartialMessage<I>,
+type ConnectQueryKey = [
+  /**
+   * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
+   */
+  "connect-query",
+  {
+    /**
+     * A key for a Transport reference, created with createTransportKey().
+     */
+    transport?: string;
+    /**
+     * The name of the service, e.g. connectrpc.eliza.v1.ElizaService
+     */
+    serviceName: string;
+    /**
+     * The name of the method, e.g. Say.
+     */
+    methodName?: string;
+    /**
+     * A key for the request message, created with createMessageKey(),
+     * or "skipped".
+     */
+    input?: Record<string, unknown> | "skipped";
+    /**
+     * Whether this is an infinite query, or a regular one.
+     */
+    cardinality?: "infinite" | "finite";
+  },
 ];
 ```
 
-TanStack Query requires query keys in order to decide when the query should automatically update.
-
-[`QueryKey`s](https://tanstack.com/query/v4/docs/react/guides/query-keys) in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
-
-For example, a query key might look like this:
+TanStack Query manages query caching for you based on query keys. [`QueryKey`s](https://tanstack.com/query/v4/docs/react/guides/query-keys) in TanStack Query are arrays with arbitrary JSON-serializable data - typically handwritten for each endpoint. In Connect-Query, query keys are more structured, since queries are always tied to a service, RPC, input message, and transport. For example, a query key might look like this:
 
 ```ts
 [
-  "example.v1.ExampleService",
-  "GetTodos",
-  { id: "0fdf2ebe-9a0c-4366-9772-cfb21346c3f9" },
-];
+  "connect-query",
+  {
+    transport: "t1",
+    serviceName: "connectrpc.eliza.v1.ElizaService",
+    methodName: "Say",
+    input: {
+      sentence: "hello there",
+    },
+    cardinality: "finite",
+  }
+]
 ```
 
-For example, a partial query key might look like this:
+The factory [`createConnectQueryKey`](#createconnectquerykey) makes it easy to create a key for an RPC query.
 
-```ts
-["example.v1.ExampleService", "GetTodos"];
-```
-
-### `ConnectInfiniteQueryKey`
-
-Similar to `ConnectQueryKey`, but for infinite queries.
-
-```ts
-type ConnectInfiniteQueryKey<I extends Message<I>> = [
-  serviceTypeName: string,
-  methodName: string,
-  input: PartialMessage<I>,
-  "infinite",
-];
-```
 
 ## Testing
 
@@ -521,11 +588,20 @@ import { say } from "./gen/eliza-ElizaService_connectquery";
 
 function prefetch() {
   return queryClient.prefetchQuery({
-    queryKey: createConnectQueryKey(say, { sentence: "Hello" }),
+    queryKey: createConnectQueryKey({
+      schema: say,
+      transport: myTransport,
+      input: { sentence: "Hello" },
+    }),
     queryFn: () => callUnaryMethod(myTransport, say, { sentence: "Hello" }),
   });
 }
 ```
+
+> [!TIP]
+>
+> Transports are taken into consideration when building query keys. If you want to prefetch queries on the server, and hydrate them in the client, make sure to use the same transport key on both sides with [`addStaticKeyToTransport`](#addstatickeytotransport).
+
 
 ### What about Streaming?
 
