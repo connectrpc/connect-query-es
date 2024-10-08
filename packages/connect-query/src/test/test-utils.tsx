@@ -21,7 +21,6 @@ import type { QueryClientConfig } from "@tanstack/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { JSXElementConstructor, PropsWithChildren } from "react";
 
-import { defaultOptions } from "../default-options.js";
 import {
   BigIntService,
   type CountRequest,
@@ -49,10 +48,7 @@ export const wrapper = (
   transport: Transport;
   queryClientWrapper: JSXElementConstructor<PropsWithChildren>;
 } => {
-  const queryClient = new QueryClient({
-    defaultOptions,
-    ...config,
-  });
+  const queryClient = new QueryClient(config);
   return {
     wrapper: ({ children }) => (
       <TransportProvider transport={transport}>

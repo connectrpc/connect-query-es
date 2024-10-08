@@ -16,7 +16,6 @@ import { create } from "@bufbuild/protobuf";
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { defaultOptions } from "./default-options.js";
 import { ListResponseSchema, ListService } from "./gen/list_pb.js";
 import { mockPaginatedTransport, wrapper } from "./test/test-utils.js";
 import { useMutation } from "./use-mutation.js";
@@ -35,12 +34,7 @@ describe("useMutation", () => {
           onSuccess,
         });
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     result.current.mutate({
@@ -73,12 +67,7 @@ describe("useMutation", () => {
           }),
         });
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     result.current.mutate({
@@ -109,12 +98,7 @@ describe("useMutation", () => {
           },
         });
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     result.current.mutate({

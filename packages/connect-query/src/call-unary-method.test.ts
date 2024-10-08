@@ -21,7 +21,6 @@ import { describe, expect, it } from "vitest";
 import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { defaultOptions } from "./default-options.js";
 import type { SayRequest } from "./gen/eliza_pb.js";
 import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";
 import { mockEliza, wrapper } from "./test/test-utils.js";
@@ -31,43 +30,38 @@ describe("callUnaryMethod", () => {
     const transport = mockEliza({
       sentence: "Response 1",
     });
-    const { result } = renderHook(
-      () => {
-        const input: SayRequest = create(SayRequestSchema, {
-          sentence: "query 1",
-        });
-        const [query1] = useQueries({
-          queries: [
-            {
-              queryKey: createConnectQueryKey({
-                schema: ElizaService.method.say,
-                input,
+    const { result } = renderHook(() => {
+      const input: SayRequest = create(SayRequestSchema, {
+        sentence: "query 1",
+      });
+      const [query1] = useQueries({
+        queries: [
+          {
+            queryKey: createConnectQueryKey({
+              schema: ElizaService.method.say,
+              input,
+              transport,
+            }),
+            queryFn: async ({
+              signal,
+            }: QueryFunctionContext<ConnectQueryKey>) => {
+              const res = await callUnaryMethod(
                 transport,
-              }),
-              queryFn: async ({
-                signal,
-              }: QueryFunctionContext<ConnectQueryKey>) => {
-                const res = await callUnaryMethod(
-                  transport,
-                  ElizaService.method.say,
-                  input,
-                  {
-                    signal,
-                  },
-                );
-                return res;
-              },
+                ElizaService.method.say,
+                input,
+                {
+                  signal,
+                },
+              );
+              return res;
             },
-          ],
-        });
-        return {
-          query1,
-        };
-      },
-      wrapper({
-        defaultOptions,
-      }),
-    );
+          },
+        ],
+      });
+      return {
+        query1,
+      };
+    }, wrapper());
 
     await waitFor(() => {
       expect(result.current.query1.isSuccess).toBeTruthy();

@@ -23,7 +23,6 @@ export {
 export { useQuery, useSuspenseQuery } from "./use-query.js";
 export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";
-export { defaultOptions } from "./default-options.js";
 export type { ConnectUpdater } from "./utils.js";
 export { callUnaryMethod } from "./call-unary-method.js";
 export type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
