@@ -12,14 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { create, type MessageInitShape } from "@bufbuild/protobuf";
-import { describe, expect, expectTypeOf, it, vi } from "vitest";
+import { create, isMessage } from "@bufbuild/protobuf";
+import { describe, expect, it } from "vitest";
 
-import {
-  BigIntService,
-  type CountResponse,
-  type CountResponseSchema,
-} from "./gen/bigint_pb.js";
+import { Proto2MessageSchema } from "./gen/proto2_pb.js";
 import {
   assert,
   createProtobufSafeUpdater,
@@ -79,57 +75,80 @@ describe("isAbortController", () => {
   });
 });
 
-describe("protobufSafeUpdater", () => {
-  const { count: methodInfo } = BigIntService.method;
-  const input: MessageInitShape<typeof CountResponseSchema> = {
-    count: 1n,
-  };
-  const wrappedInput = create(methodInfo.output, input);
-
-  const output: MessageInitShape<typeof CountResponseSchema> = {
-    count: 2n,
-  };
-  const wrappedOutput = create(methodInfo.output, output);
-
-  it("handles a MessageInitShape updater", () => {
-    const updater = output;
-    const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
-
-    expectTypeOf(safeUpdater).toEqualTypeOf<
-      (prev?: CountResponse) => CountResponse
-    >();
-    expect(typeof safeUpdater).toStrictEqual("function");
-
-    const result = safeUpdater(wrappedInput);
-    expectTypeOf(result).toEqualTypeOf<CountResponse>();
-    expect(result).not.toStrictEqual(wrappedInput);
-
-    expectTypeOf(result.count).toEqualTypeOf<bigint>();
-    expect(wrappedInput.count).toStrictEqual(1n);
-    expect(result.count).toStrictEqual(2n);
-    expect(result).toStrictEqual(wrappedOutput);
-    expect(result).toHaveProperty("$typeName");
+describe("createProtobufSafeUpdater", () => {
+  describe("with update message", () => {
+    const schema = { output: Proto2MessageSchema };
+    const update = create(Proto2MessageSchema, {
+      int32Field: 999,
+    });
+    const safeUpdater = createProtobufSafeUpdater(schema, update);
+    it("returns update message for previous value undefined", () => {
+      const next = safeUpdater(undefined);
+      expect(next).toBe(update);
+    });
+    it("returns update message for previous value", () => {
+      const prev = create(Proto2MessageSchema, {
+        int32Field: 123,
+      });
+      const next = safeUpdater(prev);
+      expect(next).toBe(update);
+    });
   });
 
-  it("handles a function updater", () => {
-    const updater = vi.fn(() => create(methodInfo.output, { count: 2n }));
-    const safeUpdater = createProtobufSafeUpdater(methodInfo, updater);
+  describe("with update message init", () => {
+    const schema = { output: Proto2MessageSchema };
+    const update = {
+      int32Field: 999,
+    };
+    const safeUpdater = createProtobufSafeUpdater(schema, update);
+    it("returns update message for previous value undefined", () => {
+      const next = safeUpdater(undefined);
+      expect(next?.int32Field).toBe(999);
+    });
+    it("returns update message for previous value", () => {
+      const prev = create(Proto2MessageSchema, {
+        int32Field: 123,
+      });
+      const next = safeUpdater(prev);
+      expect(next?.$typeName).toBe(Proto2MessageSchema.typeName);
+      expect(next?.int32Field).toBe(999);
+    });
+  });
 
-    expectTypeOf(safeUpdater).toEqualTypeOf<
-      (prev?: CountResponse) => CountResponse
-    >();
-    expect(typeof safeUpdater).toStrictEqual("function");
-
-    const result = safeUpdater(wrappedInput);
-    expect(updater).toHaveBeenCalledWith(wrappedInput);
-    expectTypeOf(result).toEqualTypeOf<CountResponse>();
-    expect(result).not.toStrictEqual(wrappedInput);
-
-    expectTypeOf(result.count).toEqualTypeOf<bigint>();
-
-    expect(wrappedInput.count).toStrictEqual(1n);
-    expect(result.count).toStrictEqual(2n);
-    expect(result).toStrictEqual(wrappedOutput);
-    expect(result).toHaveProperty("$typeName");
+  describe("with updater function", () => {
+    const schema = { output: Proto2MessageSchema };
+    const safeUpdater = createProtobufSafeUpdater(schema, (prev) => {
+      if (prev === undefined) {
+        return undefined;
+      }
+      return {
+        ...prev,
+        int32Field: 999,
+      };
+    });
+    it("accepts undefined", () => {
+      const next = safeUpdater(undefined);
+      expect(next).toBeUndefined();
+    });
+    it("accepts previous message", () => {
+      const prev = create(Proto2MessageSchema, {
+        int32Field: 123,
+      });
+      const next = safeUpdater(prev);
+      expect(next).toBeDefined();
+    });
+    it("updates message", () => {
+      const prev = create(Proto2MessageSchema);
+      const next = safeUpdater(prev);
+      expect(isMessage(next, Proto2MessageSchema)).toBe(true);
+      expect(next?.int32Field).toBe(999);
+    });
+    it("keeps existing fields", () => {
+      const prev = create(Proto2MessageSchema, {
+        stringField: "abc",
+      });
+      const next = safeUpdater(prev);
+      expect(next?.stringField).toBe("abc");
+    });
   });
 });
