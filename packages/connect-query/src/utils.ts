@@ -17,7 +17,7 @@ import type {
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
-import { create } from "@bufbuild/protobuf";
+import { create, isMessage } from "@bufbuild/protobuf";
 
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
@@ -56,25 +56,26 @@ export const isAbortController = (input: unknown): input is AbortController => {
  */
 export type ConnectUpdater<O extends DescMessage> =
   | MessageInitShape<O>
-  | ((prev?: MessageShape<O>) => MessageInitShape<O> | undefined);
+  | undefined
+  | ((prev?: MessageShape<O>) => MessageShape<O> | undefined);
 
 /**
- * This helper makes sure that the Class for the original data is returned, even if what's provided is a partial message or a plain JavaScript object representing the underlying values.
+ * This helper makes sure that the type for the original response message is returned.
  */
 export const createProtobufSafeUpdater =
-  <I extends DescMessage, O extends DescMessage>(
-    schema: Pick<MethodUnaryDescriptor<I, O>, "output">,
+  <O extends DescMessage>(
+    schema: Pick<MethodUnaryDescriptor<never, O>, "output">,
     updater: ConnectUpdater<O>,
   ) =>
-  (prev?: MessageShape<O>): MessageShape<O> => {
-    if (typeof updater === "function") {
-      return create(
-        schema.output,
-        (
-          updater as (prev?: MessageShape<O>) => MessageInitShape<O> | undefined
-        )(prev),
-      );
+  (prev?: MessageShape<O>): MessageShape<O> | undefined => {
+    if (typeof updater !== "function") {
+      if (updater === undefined) {
+        return undefined;
+      }
+      if (isMessage(updater, schema.output)) {
+        return updater;
+      }
+      return create(schema.output, updater);
     }
-
-    return create(schema.output, updater);
+    return updater(prev);
   };

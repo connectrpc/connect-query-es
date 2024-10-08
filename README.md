@@ -304,6 +304,9 @@ const queryClient = useQueryClient();
 queryClient.setQueryData(
   createConnectQueryKey(example),
   createProtobufSafeUpdater(example, (prev) => {
+    if (prev === undefined) {
+      return undefined;
+    }
     return {
       ...prev,
       completed: true,
