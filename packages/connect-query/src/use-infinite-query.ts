@@ -14,6 +14,7 @@
 
 import type {
   DescMessage,
+  DescMethodUnary,
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
@@ -34,7 +35,6 @@ import {
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import type { ConnectInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
 /**
@@ -68,7 +68,7 @@ export function useInfiniteQuery<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input:
     | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
@@ -122,7 +122,7 @@ export function useSuspenseInfiniteQuery<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>,
   {
     transport,

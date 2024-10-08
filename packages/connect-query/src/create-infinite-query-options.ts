@@ -14,6 +14,7 @@
 
 import type {
   DescMessage,
+  DescMethodUnary,
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
@@ -32,7 +33,6 @@ import {
   type ConnectQueryKey,
   createConnectQueryKey,
 } from "./connect-query-key.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
 import { assert } from "./utils.js";
 
@@ -60,7 +60,7 @@ function createUnaryInfiniteQueryFn<
   ParamKey extends keyof MessageInitShape<I>,
 >(
   transport: Transport,
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I>,
   {
     pageParamKey,
@@ -93,7 +93,7 @@ export function createInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input:
     | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),

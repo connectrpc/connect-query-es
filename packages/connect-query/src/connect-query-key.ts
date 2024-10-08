@@ -150,9 +150,10 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
  *
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */
-export function createConnectQueryKey<Desc extends DescMethod | DescService>(
-  params: KeyParams<Desc>,
-): ConnectQueryKey {
+export function createConnectQueryKey<
+  Desc extends DescMethod | DescService,
+  Params extends KeyParams<Desc>,
+>(params: Params): ConnectQueryKey {
   const props: ConnectQueryKey[1] =
     params.schema.kind == "rpc"
       ? {

@@ -14,13 +14,12 @@
 
 import type {
   DescMessage,
+  DescMethodUnary,
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
  * Call a unary method given its signature and input.
@@ -31,7 +30,7 @@ export async function callUnaryMethod<
   O extends DescMessage,
 >(
   transport: Transport,
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
