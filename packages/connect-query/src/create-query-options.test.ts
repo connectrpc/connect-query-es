@@ -25,7 +25,7 @@ const sayMethodDescriptor = ElizaService.method.say;
 
 const mockedElizaTransport = mockEliza();
 
-describe("createUseQueryOptions", () => {
+describe("createQueryOptions", () => {
   it("honors skipToken", () => {
     const opt = createQueryOptions(sayMethodDescriptor, skipToken, {
       transport: mockedElizaTransport,
@@ -33,7 +33,11 @@ describe("createUseQueryOptions", () => {
     expect(opt.queryFn).toBe(skipToken);
   });
   it("sets queryKey", () => {
-    const want = createConnectQueryKey(sayMethodDescriptor, { sentence: "hi" });
+    const want = createConnectQueryKey({
+      schema: sayMethodDescriptor,
+      input: { sentence: "hi" },
+      transport: mockedElizaTransport,
+    });
     const opt = createQueryOptions(
       sayMethodDescriptor,
       { sentence: "hi" },

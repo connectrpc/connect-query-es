@@ -12,73 +12,181 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { DescMessage, MessageInitShape } from "@bufbuild/protobuf";
+import type {
+  DescMethod,
+  DescService,
+  MessageInitShape,
+} from "@bufbuild/protobuf";
+import type { Transport } from "@connectrpc/connect";
 import type { SkipToken } from "@tanstack/react-query";
-import { skipToken } from "@tanstack/react-query";
 
 import { createMessageKey } from "./message-key.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
+import { createTransportKey } from "./transport-key.js";
 
 /**
- * TanStack Query requires query keys in order to decide when the query should automatically update.
+ * TanStack Query manages query caching for you based on query keys. `QueryKey`s in TanStack Query are arrays with arbitrary JSON-serializable data - typically handwritten for each endpoint.
  *
- * `QueryKey`s in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
- *
- * For example, for a query key might look like this:
+ * In Connect Query, query keys are more structured, since queries are always tied to a service, RPC, input message, and transport. For example, for a query key might look like this:
  *
  * @example
  * [
- *   "connectrpc.eliza.v1.ElizaService",
- *   "Say",
- *   { sentence: "hello there" },
+ *   "connect-query",
+ *   {
+ *     transport: "t1",
+ *     serviceName: "connectrpc.eliza.v1.ElizaService",
+ *     methodName: "Say",
+ *     input: {
+ *       sentence: "hello there",
+ *     },
+ *     cardinality: "finite",
+ *   }
  * ]
  */
 export type ConnectQueryKey = [
-  serviceTypeName: string,
-  methodName: string,
-  input: Record<string, unknown>,
+  /**
+   * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
+   */
+  "connect-query",
+  {
+    /**
+     * A key for a Transport reference, created with createTransportKey().
+     */
+    transport?: string;
+    /**
+     * The name of the service, e.g. connectrpc.eliza.v1.ElizaService
+     */
+    serviceName: string;
+    /**
+     * The name of the method, e.g. Say.
+     */
+    methodName?: string;
+    /**
+     * A key for the request message, created with createMessageKey(),
+     * or "skipped".
+     */
+    input?: Record<string, unknown> | "skipped";
+    /**
+     * Whether this is an infinite query, or a regular one.
+     */
+    cardinality?: "infinite" | "finite";
+  },
 ];
 
+type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
+  ? {
+      /**
+       * Set `serviceName` and `methodName` in the key.
+       */
+      schema: Desc;
+      /**
+       * Set `input` in the key:
+       * - If a SkipToken is provided, `input` is "skipped".
+       * - If an init shape is provided, `input` is set to a message key.
+       * - If omitted or undefined, `input` is not set in the key.
+       */
+      input?: MessageInitShape<Desc["input"]> | SkipToken | undefined;
+      /**
+       * Set `transport` in the key.
+       */
+      transport?: Transport;
+      /**
+       * Set `cardinality` in the key - "finite" by default.
+       */
+      cardinality?: "finite" | "infinite" | "any";
+      /**
+       * If omit the field with this name from the key for infinite queries.
+       */
+      pageParamKey?: keyof MessageInitShape<Desc["input"]>;
+    }
+  : {
+      /**
+       * Set `serviceName` in the key, and omit `methodName`.
+       */
+      schema: Desc;
+      /**
+       * Set `transport` in the key.
+       */
+      transport?: Transport;
+      /**
+       * Set `cardinality` in the key - "finite" by default.
+       */
+      cardinality?: "finite" | "infinite" | "any";
+    };
+
 /**
- * TanStack Query requires query keys in order to decide when the query should automatically update.
+ * TanStack Query manages query caching for you based on query keys. In Connect Query, keys are structured, and can easily be created using this factory function.
  *
- * In Connect-Query, much of this is handled automatically by this function.
+ * When you make a query, a unique key is automatically created from the schema, input message, and transport. For example:
+ *
+ * ```ts
+ * import { useQuery } from "@connectrpc/connect-query";
+ *
+ * useQuery(ElizaService.method.say, { sentence: "hello" });
+ *
+ * // creates the key:
+ * [
+ *   "connect-query",
+ *   {
+ *     transport: "t1",
+ *     serviceName: "connectrpc.eliza.v1.ElizaService",
+ *     methodName: "Say",
+ *     input: { sentence: "hello" },
+ *     cardinality: "finite",
+ *   }
+ * ]
+ * ```
+ *
+ * The same key can be created manually with this factory:
+ *
+ * ```ts
+ * createConnectQueryKey({
+ *   transport: myTransportReference,
+ *   schema: ElizaService.method.say,
+ *   input: { sentence: "hello" }
+ * });
+ * ```
+ *
+ * Note that the factory allows to create partial keys that can be used to filter queries. For example, you can create a key without a transport, any cardinality, any input message, or with a partial input message.
  *
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */
-export function createConnectQueryKey<
-  I extends DescMessage,
-  O extends DescMessage,
->(
-  schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: SkipToken | MessageInitShape<I> | undefined,
+export function createConnectQueryKey<Desc extends DescMethod | DescService>(
+  params: KeyParams<Desc>,
 ): ConnectQueryKey {
-  const key =
-    input === skipToken || input === undefined
-      ? createMessageKey(schema.input, {} as MessageInitShape<DescMessage & I>)
-      : createMessageKey(schema.input, input);
-  return [schema.parent.typeName, schema.name, key];
-}
-
-/**
- * Similar to @see ConnectQueryKey, but for infinite queries.
- */
-export type ConnectInfiniteQueryKey = [
-  serviceTypeName: string,
-  methodName: string,
-  input: Record<string, unknown>,
-  "infinite",
-];
-
-/**
- * Similar to @see createConnectQueryKey, but for infinite queries.
- */
-export function createConnectInfiniteQueryKey<
-  I extends DescMessage,
-  O extends DescMessage,
->(
-  schema: Pick<MethodUnaryDescriptor<I, O>, "input" | "parent" | "name">,
-  input?: SkipToken | MessageInitShape<I> | undefined,
-): ConnectInfiniteQueryKey {
-  return [...createConnectQueryKey(schema, input), "infinite"];
+  const props: ConnectQueryKey[1] =
+    params.schema.kind == "rpc"
+      ? {
+          serviceName: params.schema.parent.typeName,
+          methodName: params.schema.name,
+        }
+      : {
+          serviceName: params.schema.typeName,
+        };
+  if (params.transport !== undefined) {
+    props.transport = createTransportKey(params.transport);
+  }
+  // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check -- "Cases not matched: undefined" 🤷
+  switch (params.cardinality) {
+    case undefined:
+    case "finite":
+      props.cardinality = "finite";
+      break;
+    case "infinite":
+      props.cardinality = "infinite";
+      break;
+    case "any":
+      break;
+  }
+  if (params.schema.kind == "rpc" && "input" in params) {
+    if (typeof params.input == "symbol") {
+      props.input = "skipped";
+    } else if (params.input !== undefined) {
+      props.input = createMessageKey(
+        params.schema.input,
+        params.input,
+        params.pageParamKey,
+      );
+    }
+  }
+  return ["connect-query", props];
 }

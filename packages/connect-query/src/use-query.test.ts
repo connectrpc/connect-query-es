@@ -58,15 +58,16 @@ describe("useQuery", () => {
   });
 
   it("can be provided a custom transport", async () => {
+    const transport = mockEliza({
+      sentence: "Intercepted!",
+    });
     const { result } = renderHook(
       () => {
         return useQuery(
           sayMethodDescriptor,
           {},
           {
-            transport: mockEliza({
-              sentence: "Intercepted!",
-            }),
+            transport,
           },
         );
       },

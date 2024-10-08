@@ -31,7 +31,7 @@ import {
   useSuspenseInfiniteQuery as tsUseSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 
-import type { ConnectInfiniteQueryKey } from "./connect-query-key.js";
+import type { ConnectQueryKey } from "./connect-query-key.js";
 import type { ConnectInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
@@ -50,7 +50,7 @@ export type UseInfiniteQueryOptions<
     ConnectError,
     InfiniteData<MessageShape<O>>,
     MessageShape<O>,
-    ConnectInfiniteQueryKey,
+    ConnectQueryKey,
     MessageInitShape<I>[ParamKey]
   >,
   "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
@@ -104,7 +104,7 @@ export type UseSuspenseInfiniteQueryOptions<
     ConnectError,
     InfiniteData<MessageShape<O>>,
     MessageShape<O>,
-    ConnectInfiniteQueryKey,
+    ConnectQueryKey,
     MessageInitShape<I>[ParamKey]
   >,
   "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
