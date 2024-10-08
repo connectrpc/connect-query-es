@@ -449,7 +449,19 @@ A functional version of the options that can be passed to the `useInfiniteQuery`
 
 ### `addStaticKeyToTransport`
 
-Transports are taken into consideration when building query keys for associated queries. This can cause issues with SSR since the transport on the server is not the same transport that gets executed on the client (cannot be tracked by reference). To bypass this, you can use this method to add an explicit key to the transport that will be used in the query key.
+Transports are taken into consideration when building query keys for associated queries. This can cause issues with SSR since the transport on the server is not the same transport that gets executed on the client (cannot be tracked by reference). To bypass this, you can use this method to add an explicit key to the transport that will be used in the query key. For example:
+
+```ts
+import { addStaticKeyToTransport } from "@connectrpc/connect-query";
+import { createConnectTransport } from "@connectrpc/connect-web";
+
+const transport = addStaticKeyToTransport(
+  createConnectTransport({
+    baseUrl: "https://demo.connectrpc.com",
+  }),
+  "demo",
+);
+```
 
 ### `ConnectQueryKey`
 
