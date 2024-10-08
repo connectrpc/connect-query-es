@@ -352,13 +352,19 @@ This API allows you to directly call the method using the provided transport. Us
 Creates a typesafe updater that can be used to update data in a query cache. Used in combination with a queryClient.
 
 ```ts
-import { createProtobufSafeUpdater } from '@connectrpc/connect-query';
+import { createProtobufSafeUpdater, useTransport } from '@connectrpc/connect-query';
 import { useQueryClient } from "@tanstack/react-query";
 
 ...
+
 const queryClient = useQueryClient();
+const transport = useTransport();
 queryClient.setQueryData(
-  createConnectQueryKey(example),
+  createConnectQueryKey({
+    schema: example,
+    transport,
+    input: {},
+  }),
   createProtobufSafeUpdater(example, (prev) => {
     if (prev === undefined) {
       return undefined;
