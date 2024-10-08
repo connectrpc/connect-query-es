@@ -14,8 +14,14 @@
 
 import type { Transport } from "@connectrpc/connect";
 
+const staticKeySymbol = Symbol("static-key");
+
 const transportKeys = new WeakMap<Transport, string>();
 let counter = 0;
+
+interface TransportWithStaticKey extends Transport {
+  [staticKeySymbol]?: string;
+}
 
 /**
  * For a given Transport, create a string key that is suitable for a Query Key
@@ -23,11 +29,26 @@ let counter = 0;
  *
  * This function will return a unique string for every reference.
  */
-export function createTransportKey(transport: Transport): string {
+export function createTransportKey(transport: TransportWithStaticKey): string {
+  if (transport[staticKeySymbol] !== undefined) {
+    return transport[staticKeySymbol];
+  }
   let key = transportKeys.get(transport);
   if (key === undefined) {
     key = `t${++counter}`;
     transportKeys.set(transport, key);
   }
   return key;
+}
+
+/**
+ * Enhances a given transport with a static query key that is used in any associated queries. This may be necessary
+ * in SSR contexts where transports are used on both client and server but they need to be considered
+ * the same when it comes to the query cache.
+ */
+export function addStaticKeyToTransport(
+  transport: Transport,
+  key: string,
+): TransportWithStaticKey {
+  return { ...transport, [staticKeySymbol]: key };
 }

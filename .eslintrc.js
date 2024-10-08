@@ -26,12 +26,7 @@ const config = {
   parserOptions: {
     project: true,
   },
-  plugins: [
-    "@typescript-eslint",
-    "import",
-    "simple-import-sort",
-    "vitest",
-  ],
+  plugins: ["@typescript-eslint", "import", "simple-import-sort", "vitest"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/all",

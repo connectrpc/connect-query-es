@@ -31,3 +31,4 @@ export { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 export { createQueryOptions } from "./create-query-options.js";
 export type { UseInfiniteQueryOptions } from "./use-infinite-query.js";
 export type { UseQueryOptions } from "./use-query.js";
+export { addStaticKeyToTransport } from "./transport-key.js";
