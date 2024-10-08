@@ -18,7 +18,6 @@ import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { defaultOptions } from "./default-options.js";
 import { ListResponseSchema, ListService } from "./gen/list_pb.js";
 import { mockPaginatedTransport, wrapper } from "./test/test-utils.js";
 import {
@@ -47,12 +46,7 @@ describe("useInfiniteQuery", () => {
           },
         );
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     await waitFor(() => {
@@ -122,12 +116,7 @@ describe("useInfiniteQuery", () => {
           },
         );
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
     await waitFor(() => {
       expect(result.current.isSuccess).toBeTruthy();
@@ -160,21 +149,14 @@ describe("useInfiniteQuery", () => {
           },
         );
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
     expect(result.current.data?.pages[0].page).toEqual(-1n);
   });
 
   it("page param doesn't persist to the query cache", async () => {
     const { queryClient, ...remainingWrapper } = wrapper(
-      {
-        defaultOptions,
-      },
+      {},
       mockedPaginatedTransport,
     );
     const { result } = renderHook(() => {
@@ -211,12 +193,7 @@ describe("useInfiniteQuery", () => {
   });
 
   it("doesn't share data with a similar non-infinite query", async () => {
-    const remainingWrapper = wrapper(
-      {
-        defaultOptions,
-      },
-      mockedPaginatedTransport,
-    );
+    const remainingWrapper = wrapper({}, mockedPaginatedTransport);
     const { result } = renderHook(() => {
       return useInfiniteQuery(
         methodDescriptor,
@@ -255,10 +232,7 @@ describe("useInfiniteQuery", () => {
       onSuccess: onSuccessSpy,
     });
     const { queryClient, ...remainingWrapper } = wrapper(
-      {
-        defaultOptions,
-        queryCache: spiedQueryCache,
-      },
+      { queryCache: spiedQueryCache },
       mockedPaginatedTransport,
     );
     const { result } = renderHook(() => {
@@ -301,10 +275,7 @@ describe("useInfiniteQuery", () => {
       onSuccess: onSuccessSpy,
     });
     const { queryClient, ...remainingWrapper } = wrapper(
-      {
-        defaultOptions,
-        queryCache: spiedQueryCache,
-      },
+      { queryCache: spiedQueryCache },
       mockedPaginatedTransport,
     );
     const { result } = renderHook(() => {
@@ -353,12 +324,7 @@ describe("useSuspenseInfiniteQuery", () => {
           },
         );
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     await waitFor(() => {
@@ -410,12 +376,7 @@ describe("useSuspenseInfiniteQuery", () => {
           },
         );
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     expect(result.current.data).toBeUndefined();
@@ -440,12 +401,7 @@ describe("useSuspenseInfiniteQuery", () => {
           },
         );
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
   });
 });
