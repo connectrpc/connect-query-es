@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { create, isMessage } from "@bufbuild/protobuf";
+import { create, isFieldSet, isMessage } from "@bufbuild/protobuf";
 import { describe, expect, it } from "vitest";
 
 import { Proto2MessageSchema } from "./gen/proto2_pb.js";
@@ -137,10 +137,14 @@ describe("createProtobufSafeUpdater", () => {
       const next = safeUpdater(prev);
       expect(next).toBeDefined();
     });
-    it("updates message", () => {
+    it("returns message", () => {
       const prev = create(Proto2MessageSchema);
       const next = safeUpdater(prev);
       expect(isMessage(next, Proto2MessageSchema)).toBe(true);
+    });
+    it("updates field", () => {
+      const prev = create(Proto2MessageSchema);
+      const next = safeUpdater(prev);
       expect(next?.int32Field).toBe(999);
     });
     it("keeps existing fields", () => {
@@ -149,6 +153,34 @@ describe("createProtobufSafeUpdater", () => {
       });
       const next = safeUpdater(prev);
       expect(next?.stringField).toBe("abc");
+    });
+    describe("keeps field presence", () => {
+      it("for unset field", () => {
+        const prev = create(Proto2MessageSchema);
+        expect(isFieldSet(prev, Proto2MessageSchema.field.stringField)).toBe(
+          false,
+        );
+        const next = safeUpdater(prev);
+        const hasStringField =
+          next === undefined
+            ? undefined
+            : isFieldSet(next, Proto2MessageSchema.field.stringField);
+        expect(hasStringField).toBe(false);
+      });
+      it("for set field", () => {
+        const prev = create(Proto2MessageSchema, {
+          stringField: "abc",
+        });
+        expect(isFieldSet(prev, Proto2MessageSchema.field.stringField)).toBe(
+          true,
+        );
+        const next = safeUpdater(prev);
+        const hasStringField =
+          next === undefined
+            ? undefined
+            : isFieldSet(next, Proto2MessageSchema.field.stringField);
+        expect(hasStringField).toBe(true);
+      });
     });
   });
 });
