@@ -56,7 +56,6 @@ export const isAbortController = (input: unknown): input is AbortController => {
  */
 export type ConnectUpdater<O extends DescMessage> =
   | MessageInitShape<O>
-  | MessageShape<O>
   | undefined
   | ((prev?: MessageShape<O>) => MessageShape<O> | undefined);
 
