@@ -14,7 +14,6 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [Usage](#usage)
   - [Generated Code](#generated-code)
 - [Connect-Query API](#connect-query-api)
-  - [`MethodUnaryDescriptor`](#methodunarydescriptor)
   - [`TransportProvider`](#transportprovider)
   - [`useTransport`](#usetransport)
   - [`useQuery`](#usequery)
@@ -112,19 +111,6 @@ For more information on code generation, see the [documentation](./packages/prot
 
 ## Connect-Query API
 
-### `MethodUnaryDescriptor`
-
-A type that describes a single unary method. It describes the following properties:
-
-- `name`: The name of the method.
-- `kind`: The kind of method. In this case, it's usually `MethodKind.Unary`.
-- `I`: The input message type.
-- `O`: The output message type.
-- `service.typeName`: The fully qualified name of the service the method exists on.
-
-This type is core to how connect-query can stay lightweight and
-limit the amount of code actually generated. The descriptor is expected to be passed to almost all the methods in this library.
-
 ### `TransportProvider`
 
 ```ts
@@ -195,7 +181,7 @@ function useQuery<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input?: SkipToken | MessageInitShape<I>,
   { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError>;
@@ -217,7 +203,7 @@ function useInfiniteQuery<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input:
     | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
@@ -242,7 +228,7 @@ Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook
 
 ```ts
 function useMutation<I extends DescMessage, O extends DescMessage>(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>;
 ```
@@ -337,7 +323,7 @@ const queryKey = createConnectQueryKey({
 ```ts
 function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
@@ -382,7 +368,7 @@ queryClient.setQueryData(
 
 ```ts
 function createQueryOptions<I extends DescMessage, O extends DescMessage>(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: SkipToken | PartialMessage<I> | undefined,
   {
     transport,
@@ -423,7 +409,7 @@ function createInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input:
     | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
