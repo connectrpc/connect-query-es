@@ -74,14 +74,14 @@ This file creates an RPC service with the following:
 Add a new configuration file `buf.gen.yaml`
 
 ```yaml
-version: v1
+version: v2
 plugins:
   # This will invoke protoc-gen-es and write output to src/gen
-  - name: es
+  - local: protoc-gen-es
     out: src/gen
     opt: target=ts
     # This will invoke protoc-gen-connect-query
-  - name: connect-query
+  - local: protoc-gen-connect-query
     out: src/gen
     opt: target=ts
 ```
