@@ -41,6 +41,7 @@ describe("callUnaryMethod", () => {
               schema: ElizaService.method.say,
               input,
               transport,
+              cardinality: "finite",
             }),
             queryFn: async ({
               signal,

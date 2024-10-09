@@ -38,9 +38,9 @@ npm install @connectrpc/connect-query @connectrpc/connect-web
 ```
 
 > [!TIP]
-> 
+>
 > If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed. `@connectrpc/connect-web` is required for defining
-the transport to be used by the client.
+> the transport to be used by the client.
 
 ### Usage
 
@@ -106,8 +106,8 @@ export declare const ElizaService: GenService<{
     methodKind: "unary";
     input: typeof SayRequestSchema;
     output: typeof SayResponseSchema;
-  },
-}>
+  };
+}>;
 ```
 
 [`protoc-gen-connect-query`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) is an optional additional plugin that exports every RPC individually for convenience:
@@ -120,7 +120,7 @@ import { ElizaService } from "./eliza_pb";
  *
  * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
  */
-export const say: typeof ElizaService["method"]["say"];
+export const say: (typeof ElizaService)["method"]["say"];
 ```
 
 For more information on code generation, see the [documentation for `protoc-gen-connect-query`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) and the [documentation for `protoc-gen-es`](https://www.npmjs.com/package/@bufbuild/protoc-gen-es).
@@ -268,6 +268,7 @@ function createConnectQueryKey<Desc extends DescMethod | DescService>(
 This function is used under the hood of `useQuery` and other hooks to compute a [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) for TanStack Query. You can use it to create (partial) keys yourself to filter queries.
 
 `useQuery` creates a query key with the following parameters:
+
 1. The qualified name of the RPC.
 2. The transport being used.
 3. The request message.
@@ -280,24 +281,25 @@ import { ElizaService } from "./gen/eliza_pb";
 
 const myTransport = useTransport();
 const queryKey = createConnectQueryKey({
-  // The schema is the only required parameter. 
   schema: ElizaService.method.say,
   transport: myTransport,
   // You can provide a partial message here.
   input: { sentence: "hello" },
+  // This defines what kind of request it is (either for an infinite or finite query).
+  cardinality: "finite",
 });
 
 // queryKey:
 [
-  "conect-query",
+  "connect-query",
   {
     transport: "t1",
     serviceName: "connectrpc.eliza.v1.ElizaService",
     methodName: "Say",
     input: { sentence: "hello" },
     cardinality: "finite",
-  }
-]
+  },
+];
 ```
 
 You can create a partial key that matches all RPCs of a service:
@@ -308,16 +310,17 @@ import { ElizaService } from "./gen/eliza_pb";
 
 const queryKey = createConnectQueryKey({
   schema: ElizaService,
+  cardinality: "finite",
 });
 
 // queryKey:
 [
-  "conect-query",
+  "connect-query",
   {
     serviceName: "connectrpc.eliza.v1.ElizaService",
     cardinality: "finite",
-  }
-]
+  },
+];
 ```
 
 Infinite queries have distinct keys. To create a key for an infinite query, use the parameter `cardinality`:
@@ -330,7 +333,7 @@ import { ListService } from "./gen/list_pb";
 // and passes on the pageParamKey.
 const queryKey = createConnectQueryKey({
   schema: ListService.method.list,
-  cardinality: "infinite", // "any" matches infinite and finite queries
+  cardinality: "infinite",
   pageParamKey: "page",
   input: { preview: true },
 });
@@ -368,6 +371,7 @@ queryClient.setQueryData(
     schema: example,
     transport,
     input: {},
+    cardinality: "finite",
   }),
   createProtobufSafeUpdater(example, (prev) => {
     if (prev === undefined) {
@@ -520,12 +524,11 @@ TanStack Query manages query caching for you based on query keys. [`QueryKey`s](
       sentence: "hello there",
     },
     cardinality: "finite",
-  }
-]
+  },
+];
 ```
 
 The factory [`createConnectQueryKey`](#createconnectquerykey) makes it easy to create a `ConnectQueryKey`, including partial keys for query filters.
-
 
 ## Testing
 
@@ -606,6 +609,7 @@ function prefetch() {
       schema: say,
       transport: myTransport,
       input: { sentence: "Hello" },
+      cardinality: "finite",
     }),
     queryFn: () => callUnaryMethod(myTransport, say, { sentence: "Hello" }),
   });
@@ -615,7 +619,6 @@ function prefetch() {
 > [!TIP]
 >
 > Transports are taken into consideration when building query keys. If you want to prefetch queries on the server, and hydrate them in the client, make sure to use the same transport key on both sides with [`addStaticKeyToTransport`](#addstatickeytotransport).
-
 
 ### What about Streaming?
 
