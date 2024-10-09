@@ -68,7 +68,7 @@ export type ConnectQueryKey = [
     /**
      * Whether this is an infinite query, or a regular one.
      */
-    cardinality?: "infinite" | "finite";
+    cardinality?: "infinite" | "finite" | undefined;
   },
 ];
 
@@ -90,9 +90,9 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
        */
       transport?: Transport;
       /**
-       * Set `cardinality` in the key - "finite" by default.
+       * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
        */
-      cardinality?: "finite" | "infinite" | "any";
+      cardinality: "finite" | "infinite" | undefined;
       /**
        * If omit the field with this name from the key for infinite queries.
        */
@@ -108,9 +108,9 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
        */
       transport?: Transport;
       /**
-       * Set `cardinality` in the key - "finite" by default.
+       * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
        */
-      cardinality?: "finite" | "infinite" | "any";
+      cardinality: "finite" | "infinite" | undefined;
     };
 
 /**
@@ -166,17 +166,8 @@ export function createConnectQueryKey<
   if (params.transport !== undefined) {
     props.transport = createTransportKey(params.transport);
   }
-  // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check -- "Cases not matched: undefined" 🤷
-  switch (params.cardinality) {
-    case undefined:
-    case "finite":
-      props.cardinality = "finite";
-      break;
-    case "infinite":
-      props.cardinality = "infinite";
-      break;
-    case "any":
-      break;
+  if (params.cardinality !== undefined) {
+    props.cardinality = params.cardinality;
   }
   if (params.schema.kind == "rpc" && "input" in params) {
     if (typeof params.input == "symbol") {

@@ -37,6 +37,7 @@ describe("createQueryOptions", () => {
       schema: sayMethodDescriptor,
       input: { sentence: "hi" },
       transport: mockedElizaTransport,
+      cardinality: "finite",
     });
     const opt = createQueryOptions(
       sayMethodDescriptor,

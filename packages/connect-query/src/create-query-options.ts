@@ -64,6 +64,7 @@ export function createQueryOptions<
     schema,
     input: input ?? create(schema.input),
     transport,
+    cardinality: "finite",
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =

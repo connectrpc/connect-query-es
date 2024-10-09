@@ -258,7 +258,7 @@ describe("useInfiniteQuery", () => {
       queryKey: createConnectQueryKey({
         schema: methodDescriptor,
         transport: mockedPaginatedTransport,
-        cardinality: "any",
+        cardinality: undefined,
         pageParamKey: "page",
         input: {
           page: 0n,

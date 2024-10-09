@@ -38,6 +38,7 @@ describe("createConnectQueryKey", () => {
       transport: fakeTransport,
       schema: ElizaService.method.say,
       input: create(SayRequestSchema, { sentence: "hi" }),
+      cardinality: "finite",
     });
     expect(key).toStrictEqual([
       "connect-query",
@@ -75,6 +76,7 @@ describe("createConnectQueryKey", () => {
     const key = createConnectQueryKey({
       schema: ElizaService.method.say,
       input: undefined,
+      cardinality: "finite",
     });
     expect(key[1].input).toBeUndefined();
   });
@@ -82,6 +84,7 @@ describe("createConnectQueryKey", () => {
   it("allows to omit input", () => {
     const key = createConnectQueryKey({
       schema: ElizaService.method.say,
+      cardinality: "finite",
     });
     expect(key[1].input).toBeUndefined();
   });
@@ -90,15 +93,9 @@ describe("createConnectQueryKey", () => {
     const key = createConnectQueryKey({
       schema: ElizaService.method.say,
       input: skipToken,
+      cardinality: "finite",
     });
     expect(key[1].input).toBe("skipped");
-  });
-
-  it("sets cardinality finite by default", () => {
-    const key = createConnectQueryKey({
-      schema: ElizaService.method.say,
-    });
-    expect(key[1].cardinality).toBe("finite");
   });
 
   it("allows to set cardinality: finite", () => {
@@ -109,10 +106,10 @@ describe("createConnectQueryKey", () => {
     expect(key[1].cardinality).toBe("finite");
   });
 
-  it("allows to set cardinality: any", () => {
+  it("allows to set cardinality: undefined", () => {
     const key = createConnectQueryKey({
       schema: ElizaService.method.say,
-      cardinality: "any",
+      cardinality: undefined,
     });
     expect(key[1].cardinality).toBeUndefined();
   });
@@ -120,6 +117,7 @@ describe("createConnectQueryKey", () => {
   it("allows to set a service schema", () => {
     const key = createConnectQueryKey({
       schema: ElizaService,
+      cardinality: "finite",
     });
     expect(key[1].serviceName).toBe(ElizaService.typeName);
     expect(key[1].methodName).toBeUndefined();
