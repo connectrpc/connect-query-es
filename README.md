@@ -394,7 +394,7 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
 ): {
   queryKey: ConnectQueryKey<I>;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
-  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
 };
 ```
 
@@ -448,7 +448,7 @@ function createInfiniteQueryOptions<
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
-  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
   initialPageParam: PartialMessage<I>[ParamKey];
 };
 ```
