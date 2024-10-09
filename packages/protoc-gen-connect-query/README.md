@@ -123,7 +123,7 @@ Add a line to the `scripts` section of your `package.json` to run `buf generate`
 ```json
 "scripts": {
     ...
-    "buf:generate": "npx @bufbuild/buf generate example.proto"
+    "buf:generate": "buf generate"
 },
 ```
 
