@@ -14,6 +14,7 @@
 
 import type {
   DescMessage,
+  DescMethodUnary,
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
@@ -32,7 +33,6 @@ import {
 
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createQueryOptions } from "./create-query-options.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
 /**
@@ -62,7 +62,7 @@ export function useQuery<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input?: SkipToken | MessageInitShape<I>,
   { transport, ...queryOptions }: UseQueryOptions<O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
@@ -103,7 +103,7 @@ export function useSuspenseQuery<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input?: MessageInitShape<I>,
   {
     transport,

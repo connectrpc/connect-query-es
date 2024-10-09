@@ -25,7 +25,6 @@ export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";
 export type { ConnectUpdater } from "./utils.js";
 export { callUnaryMethod } from "./call-unary-method.js";
-export type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 export { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 export { createQueryOptions } from "./create-query-options.js";
 export type { UseInfiniteQueryOptions } from "./use-infinite-query.js";

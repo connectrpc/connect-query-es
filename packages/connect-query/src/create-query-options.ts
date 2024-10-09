@@ -14,6 +14,7 @@
 
 import type {
   DescMessage,
+  DescMethodUnary,
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
@@ -30,12 +31,11 @@ import { skipToken } from "@tanstack/react-query";
 import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { createStructuralSharing } from "./structural-sharing.js";
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I> | undefined,
 ): QueryFunction<MessageShape<O>, ConnectQueryKey> {
   return async (context) => {
@@ -52,7 +52,7 @@ export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
