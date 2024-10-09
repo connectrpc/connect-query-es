@@ -14,12 +14,11 @@
 
 import type {
   DescMessage,
+  DescMethodUnary,
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
 import { create, isMessage } from "@bufbuild/protobuf";
-
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 
 /**
  * Throws an error with the provided message when the condition is `false`
@@ -64,7 +63,7 @@ export type ConnectUpdater<O extends DescMessage> =
  */
 export const createProtobufSafeUpdater =
   <O extends DescMessage>(
-    schema: Pick<MethodUnaryDescriptor<never, O>, "output">,
+    schema: Pick<DescMethodUnary<never, O>, "output">,
     updater: ConnectUpdater<O>,
   ) =>
   (prev?: MessageShape<O>): MessageShape<O> | undefined => {

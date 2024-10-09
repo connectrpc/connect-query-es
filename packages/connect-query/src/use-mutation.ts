@@ -14,6 +14,7 @@
 
 import type {
   DescMessage,
+  DescMethodUnary,
   MessageInitShape,
   MessageShape,
 } from "@bufbuild/protobuf";
@@ -26,7 +27,6 @@ import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
 import { callUnaryMethod } from "./call-unary-method.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
 /**
@@ -54,7 +54,7 @@ export function useMutation<
   O extends DescMessage,
   Ctx = unknown,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx> {
   const transportFromCtx = useTransport();
