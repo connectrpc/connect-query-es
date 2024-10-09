@@ -203,7 +203,7 @@ function useQuery<
 >(
   schema: DescMethodUnary<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {}
+  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError>;
 ```
 
@@ -232,7 +232,7 @@ function useInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: UseInfiniteQueryOptions<I, O, ParamKey>
+  }: UseInfiniteQueryOptions<I, O, ParamKey>,
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError>;
 ```
 
@@ -249,7 +249,7 @@ Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook
 ```ts
 function useMutation<I extends DescMessage, O extends DescMessage>(
   schema: DescMethodUnary<I, O>,
-  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {}
+  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>;
 ```
 
@@ -261,7 +261,7 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 
 ```ts
 function createConnectQueryKey<Desc extends DescMethod | DescService>(
-  params: KeyParams<Desc>
+  params: KeyParams<Desc>,
 ): ConnectQueryKey;
 ```
 
@@ -348,7 +348,7 @@ function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
-  }
+  },
 ): Promise<O>;
 ```
 
@@ -396,7 +396,7 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
     transport,
   }: {
     transport: Transport;
-  }
+  },
 ): {
   queryKey: ConnectQueryKey;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
@@ -439,7 +439,7 @@ function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
-  }: ConnectInfiniteQueryOptions<I, O, ParamKey>
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey>,
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
     I,
@@ -473,7 +473,7 @@ const transport = addStaticKeyToTransport(
   createConnectTransport({
     baseUrl: "https://demo.connectrpc.com",
   }),
-  "demo"
+  "demo",
 );
 ```
 
