@@ -583,10 +583,6 @@ Connect-Query also supports gRPC-web! All you need to do is make sure you call `
 
 That said, we encourage you to check out the [Connect protocol](https://connectrpc.com/docs/protocol/), a simple, POST-only protocol that works over HTTP/1.1 or HTTP/2. It supports server-streaming methods just like gRPC-Web, but is easy to debug in the network inspector.
 
-### Do I have to use a code generator?
-
-No. The code generator just generates the method descriptors, but you are free to do that yourself if you wish.
-
 ### What if I have a custom `Transport`?
 
 If the `Transport` attached to React Context via the `TransportProvider` isn't working for you, then you can override transport at every level. For example, you can pass a custom transport directly to the lowest-level API like `useQuery` or `callUnaryMethod`.
