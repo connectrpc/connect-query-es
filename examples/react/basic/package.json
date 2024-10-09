@@ -7,7 +7,6 @@
     "dev": "vite",
     "generate": "buf generate",
     "license-header": "license-header",
-    "preview": "vite preview",
     "test": "vitest --run",
     "test:watch": "vitest --watch --ui",
     "format": "prettier --write . '!src/gen' && eslint . --fix && license-header"
