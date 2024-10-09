@@ -550,10 +550,6 @@ export const Example: FC = () => {
 };
 ```
 
-> Why was this changed from the previous version of Connect-Query?
->
-> Originally, all we did was pass options to TanStack Query. This was done as an intentional way to keep ourselves separate from TanStack Query. However, as usage increased, it became obvious that were still tied to the API of TanStack Query, and it only meant that we increased the burden on the developer to understand that underlying connection. This new API removes most of that burden and reduces the surface area of the API significantly.
-
 ### What is Connect-Query's relationship to Connect-Web and Protobuf-ES?
 
 Here is a high-level overview of how Connect-Query fits in with Connect-Web and Protobuf-ES:
