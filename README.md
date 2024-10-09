@@ -189,6 +189,10 @@ const useTransport: () => Transport;
 
 Use this helper to get the default transport that's currently attached to the React context for the calling component.
 
+> [!TIP]
+>
+> All hooks accept a `transport` in the options. You can use the Transport from the context, or create one dynamically. If you create a Transport dynamically, make sure to memoize it, because it is taken into consideration when building query keys.
+
 ### `useQuery`
 
 ```ts
@@ -270,7 +274,6 @@ This function is used under the hood of `useQuery` and other hooks to compute a 
 
 To create the same key manually, you simply provide the same parameters:
 
-
 ```ts
 import { createConnectQueryKey, useTransport } from "@connectrpc/connect-query";
 import { ElizaService } from "./gen/eliza_pb";
@@ -332,7 +335,6 @@ const queryKey = createConnectQueryKey({
   input: { preview: true },
 });
 ```
-
 
 ### `callUnaryMethod`
 
