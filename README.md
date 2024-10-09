@@ -281,11 +281,11 @@ import { ElizaService } from "./gen/eliza_pb";
 
 const myTransport = useTransport();
 const queryKey = createConnectQueryKey({
-  // The schema is the only required parameter.
   schema: ElizaService.method.say,
   transport: myTransport,
   // You can provide a partial message here.
   input: { sentence: "hello" },
+  // This defines what kind of request it is (either for an infinite or finite query).
   cardinality: "finite",
 });
 
