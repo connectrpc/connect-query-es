@@ -24,7 +24,6 @@ import type {
   QueryFunction,
   QueryKey,
   SkipToken,
-  UseQueryOptions,
 } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
@@ -116,7 +115,7 @@ export function createInfiniteQueryOptions<
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
-  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
   initialPageParam: MessageInitShape<I>[ParamKey];
   queryKeyHashFn: (queryKey: QueryKey) => string;
 } {

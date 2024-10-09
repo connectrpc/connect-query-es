@@ -24,7 +24,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file list.proto.
  */
 export const file_list: GenFile = /*@__PURE__*/
-  fileDesc("CgpsaXN0LnByb3RvIhsKC0xpc3RSZXF1ZXN0EgwKBHBhZ2UYASABKAMiKwoMTGlzdFJlc3BvbnNlEgwKBHBhZ2UYASABKAMSDQoFaXRlbXMYAiADKAkyMgoLTGlzdFNlcnZpY2USIwoETGlzdBIMLkxpc3RSZXF1ZXN0Gg0uTGlzdFJlc3BvbnNlYgZwcm90bzM");
+  fileDesc("CgpsaXN0LnByb3RvIiwKC0xpc3RSZXF1ZXN0EgwKBHBhZ2UYASABKAMSDwoHcHJldmlldxgCIAEoCCIrCgxMaXN0UmVzcG9uc2USDAoEcGFnZRgBIAEoAxINCgVpdGVtcxgCIAMoCTIyCgtMaXN0U2VydmljZRIjCgRMaXN0EgwuTGlzdFJlcXVlc3QaDS5MaXN0UmVzcG9uc2ViBnByb3RvMw");
 
 /**
  * @generated from message ListRequest
@@ -34,6 +34,11 @@ export type ListRequest = Message<"ListRequest"> & {
    * @generated from field: int64 page = 1;
    */
   page: bigint;
+
+  /**
+   * @generated from field: bool preview = 2;
+   */
+  preview: boolean;
 };
 
 /**

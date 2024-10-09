@@ -14,7 +14,6 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [Usage](#usage)
   - [Generated Code](#generated-code)
 - [Connect-Query API](#connect-query-api)
-  - [`MethodUnaryDescriptor`](#methodunarydescriptor)
   - [`TransportProvider`](#transportprovider)
   - [`useTransport`](#usetransport)
   - [`useQuery`](#usequery)
@@ -38,7 +37,9 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
 npm install @connectrpc/connect-query @connectrpc/connect-web
 ```
 
-Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed. `@connectrpc/connect-web` is required for defining
+> [!TIP]
+> 
+> If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed. `@connectrpc/connect-web` is required for defining
 the transport to be used by the client.
 
 ### Usage
@@ -73,57 +74,58 @@ With configuration completed, you can now use the `useQuery` hook to make a requ
 
 ```ts
 import { useQuery } from '@connectrpc/connect-query';
-import { example } from 'your-generated-code/example-ExampleService_connectquery';
+import { say } from 'your-generated-code/eliza-ElizaService_connectquery';
 
 export const Example: FC = () => {
-  const { data } = useQuery(example);
+  const { data } = useQuery(say);
   return <div>{data}</div>;
 };
 ```
 
 **_That's it!_**
 
-The [code generator](packages/protoc-gen-connect-query/README.md) does all the work of turning your Protobuf file into something you can easily import. TypeScript types all populate out-of-the-box. Your documentation is also converted to [TSDoc](https://tsdoc.org/).
+The code generator does all the work of turning your Protobuf file into something you can easily import. TypeScript types all populate out-of-the-box. Your documentation is also converted to [TSDoc](https://tsdoc.org/).
 
 One of the best features of this library is that once you write your schema in Protobuf form, the TypeScript types are generated and then inferred. You never again need to specify the types of your data since the library does it automatically.
 
 ### Generated Code
 
-This example shows the best developer experience using code generation. Here's what that generated code looks like:
+To make a query, you need a schema for a remote procedure call (RPC). A typed schema can be generated with [`protoc-gen-es`](https://www.npmjs.com/package/@bufbuild/protoc-gen-es). It generates an export for every service:
 
-```ts title="your-generated-code/example-ExampleService_connectquery"
-import { MethodKind } from "@bufbuild/protobuf";
-import { ExampleRequest, ExampleResponse } from "./example_pb.js";
-
-export const example = {
-  name: "Example",
-  kind: MethodKind.Unary,
-  I: ExampleRequest,
-  O: ExampleResponse,
-  service: {
-    typeName: "your.company.com.example.v1.ExampleService",
+```ts
+/**
+ * @generated from service connectrpc.eliza.v1.ElizaService
+ */
+export declare const ElizaService: GenService<{
+  /**
+   * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
+   *
+   * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
+   */
+  say: {
+    methodKind: "unary";
+    input: typeof SayRequestSchema;
+    output: typeof SayResponseSchema;
   },
-};
+}>
 ```
 
-The above code doesn't have to be generated and can be manually used to describe any given endpoint.
+[`protoc-gen-connect-query`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) is an optional additional plugin that exports every RPC individually for convenience:
 
-For more information on code generation, see the [documentation](./packages/protoc-gen-connect-query/README.md) for `protoc-gen-connect-query`.
+```ts
+import { ElizaService } from "./eliza_pb";
+
+/**
+ * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
+ *
+ * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
+ */
+export const say: typeof ElizaService["method"]["say"];
+```
+
+For more information on code generation, see the [documentation for `protoc-gen-connect-query`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) and the [documentation for `protoc-gen-es`](https://www.npmjs.com/package/@bufbuild/protoc-gen-es).
 
 ## Connect-Query API
-
-### `MethodUnaryDescriptor`
-
-A type that describes a single unary method. It describes the following properties:
-
-- `name`: The name of the method.
-- `kind`: The kind of method. In this case, it's usually `MethodKind.Unary`.
-- `I`: The input message type.
-- `O`: The output message type.
-- `service.typeName`: The fully qualified name of the service the method exists on.
-
-This type is core to how connect-query can stay lightweight and
-limit the amount of code actually generated. The descriptor is expected to be passed to almost all the methods in this library.
 
 ### `TransportProvider`
 
@@ -187,6 +189,10 @@ const useTransport: () => Transport;
 
 Use this helper to get the default transport that's currently attached to the React context for the calling component.
 
+> [!TIP]
+>
+> All hooks accept a `transport` in the options. You can use the Transport from the context, or create one dynamically. If you create a Transport dynamically, make sure to memoize it, because it is taken into consideration when building query keys.
+
 ### `useQuery`
 
 ```ts
@@ -195,7 +201,7 @@ function useQuery<
   O extends DescMessage,
   SelectOutData = MessageShape<O>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input?: SkipToken | MessageInitShape<I>,
   { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError>;
@@ -217,7 +223,7 @@ function useInfiniteQuery<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input:
     | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
@@ -242,7 +248,7 @@ Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook
 
 ```ts
 function useMutation<I extends DescMessage, O extends DescMessage>(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>;
 ```
@@ -261,27 +267,81 @@ function createConnectQueryKey<Desc extends DescMethod | DescService>(
 
 This function is used under the hood of `useQuery` and other hooks to compute a [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) for TanStack Query. You can use it to create (partial) keys yourself to filter queries.
 
-### `createConnectInfiniteQueryKey`
+`useQuery` creates a query key with the following parameters:
+1. The qualified name of the RPC.
+2. The transport being used.
+3. The request message.
+
+To create the same key manually, you simply provide the same parameters:
 
 ```ts
-function createConnectInfiniteQueryKey<
-  I extends Message<I>,
-  O extends Message<O>,
->(
-  methodDescriptor: Pick<MethodUnaryDescriptor<I, O>, "I" | "name" | "service">,
-  input: SkipToken | PartialMessage<I>,
-  pageParamKey: keyof PartialMessage<I>,
-): ConnectInfiniteQueryKey<I>;
+import { createConnectQueryKey, useTransport } from "@connectrpc/connect-query";
+import { ElizaService } from "./gen/eliza_pb";
+
+const myTransport = useTransport();
+const queryKey = createConnectQueryKey({
+  // The schema is the only required parameter. 
+  schema: ElizaService.method.say,
+  transport: myTransport,
+  // You can provide a partial message here.
+  input: { sentence: "hello" },
+});
+
+// queryKey:
+[
+  "conect-query",
+  {
+    transport: "t1",
+    serviceName: "connectrpc.eliza.v1.ElizaService",
+    methodName: "Say",
+    input: { sentence: "hello" },
+    cardinality: "finite",
+  }
+]
 ```
 
-This function is not really necessary unless you are manually creating infinite query keys. When invalidating queries, it usually makes more sense to use the `createConnectQueryKey` function instead since it will also invalidate the regular queries (as well as the infinite queries).
+You can create a partial key that matches all RPCs of a service:
+
+```ts
+import { createConnectQueryKey } from "@connectrpc/connect-query";
+import { ElizaService } from "./gen/eliza_pb";
+
+const queryKey = createConnectQueryKey({
+  schema: ElizaService,
+});
+
+// queryKey:
+[
+  "conect-query",
+  {
+    serviceName: "connectrpc.eliza.v1.ElizaService",
+    cardinality: "finite",
+  }
+]
+```
+
+Infinite queries have distinct keys. To create a key for an infinite query, use the parameter `cardinality`:
+
+```ts
+import { createConnectQueryKey } from "@connectrpc/connect-query";
+import { ListService } from "./gen/list_pb";
+
+// The hook useInfiniteQuery() creates a query key with cardinality: "infinite",
+// and passes on the pageParamKey.
+const queryKey = createConnectQueryKey({
+  schema: ListService.method.list,
+  cardinality: "infinite", // "any" matches infinite and finite queries
+  pageParamKey: "page",
+  input: { preview: true },
+});
+```
 
 ### `callUnaryMethod`
 
 ```ts
 function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
@@ -296,13 +356,19 @@ This API allows you to directly call the method using the provided transport. Us
 Creates a typesafe updater that can be used to update data in a query cache. Used in combination with a queryClient.
 
 ```ts
-import { createProtobufSafeUpdater } from '@connectrpc/connect-query';
+import { createProtobufSafeUpdater, useTransport } from '@connectrpc/connect-query';
 import { useQueryClient } from "@tanstack/react-query";
 
 ...
+
 const queryClient = useQueryClient();
+const transport = useTransport();
 queryClient.setQueryData(
-  createConnectQueryKey(example),
+  createConnectQueryKey({
+    schema: example,
+    transport,
+    input: {},
+  }),
   createProtobufSafeUpdater(example, (prev) => {
     if (prev === undefined) {
       return undefined;
@@ -320,7 +386,7 @@ queryClient.setQueryData(
 
 ```ts
 function createQueryOptions<I extends DescMessage, O extends DescMessage>(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input: SkipToken | PartialMessage<I> | undefined,
   {
     transport,
@@ -328,9 +394,9 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
     transport: Transport;
   },
 ): {
-  queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
-  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  queryKey: ConnectQueryKey;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
 };
 ```
 
@@ -361,7 +427,7 @@ function createInfiniteQueryOptions<
   O extends DescMessage,
   ParamKey extends keyof MessageInitShape<I>,
 >(
-  schema: MethodUnaryDescriptor<I, O>,
+  schema: DescMethodUnary<I, O>,
   input:
     | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
@@ -384,7 +450,7 @@ function createInfiniteQueryOptions<
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
-  structuralSharing: Exclude<UseQueryOptions["structuralSharing"], undefined>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
   initialPageParam: PartialMessage<I>[ParamKey];
 };
 ```
@@ -393,50 +459,73 @@ A functional version of the options that can be passed to the `useInfiniteQuery`
 
 ### `addStaticKeyToTransport`
 
-Transports are taken into consideration when building query keys for associated queries. This can cause issues with SSR since the transport on the server is not the same transport that gets executed on the client (cannot be tracked by reference). To bypass this, you can use this method to add an explicit key to the transport that will be used in the query key.
+Transports are taken into consideration when building query keys for associated queries. This can cause issues with SSR since the transport on the server is not the same transport that gets executed on the client (cannot be tracked by reference). To bypass this, you can use this method to add an explicit key to the transport that will be used in the query key. For example:
+
+```ts
+import { addStaticKeyToTransport } from "@connectrpc/connect-query";
+import { createConnectTransport } from "@connectrpc/connect-web";
+
+const transport = addStaticKeyToTransport(
+  createConnectTransport({
+    baseUrl: "https://demo.connectrpc.com",
+  }),
+  "demo",
+);
+```
 
 ### `ConnectQueryKey`
 
 ```ts
-type ConnectQueryKey<I extends Message<I>> = [
-  serviceTypeName: string,
-  methodName: string,
-  input: PartialMessage<I>,
+type ConnectQueryKey = [
+  /**
+   * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
+   */
+  "connect-query",
+  {
+    /**
+     * A key for a Transport reference, created with createTransportKey().
+     */
+    transport?: string;
+    /**
+     * The name of the service, e.g. connectrpc.eliza.v1.ElizaService
+     */
+    serviceName: string;
+    /**
+     * The name of the method, e.g. Say.
+     */
+    methodName?: string;
+    /**
+     * A key for the request message, created with createMessageKey(),
+     * or "skipped".
+     */
+    input?: Record<string, unknown> | "skipped";
+    /**
+     * Whether this is an infinite query, or a regular one.
+     */
+    cardinality?: "infinite" | "finite";
+  },
 ];
 ```
 
-TanStack Query requires query keys in order to decide when the query should automatically update.
-
-[`QueryKey`s](https://tanstack.com/query/v4/docs/react/guides/query-keys) in TanStack Query are usually arbitrary, but Connect-Query uses the approach of creating a query key that begins with the least specific information: the service's `typeName`, followed by the method name, and ending with the most specific information to identify a particular request: the input message itself.
-
-For example, a query key might look like this:
+TanStack Query manages query caching for you based on query keys. [`QueryKey`s](https://tanstack.com/query/v4/docs/react/guides/query-keys) in TanStack Query are arrays with arbitrary JSON-serializable data - typically handwritten for each endpoint. In Connect-Query, query keys are more structured, since queries are always tied to a service, RPC, input message, and transport. For example, a query key might look like this:
 
 ```ts
 [
-  "example.v1.ExampleService",
-  "GetTodos",
-  { id: "0fdf2ebe-9a0c-4366-9772-cfb21346c3f9" },
-];
+  "connect-query",
+  {
+    transport: "t1",
+    serviceName: "connectrpc.eliza.v1.ElizaService",
+    methodName: "Say",
+    input: {
+      sentence: "hello there",
+    },
+    cardinality: "finite",
+  }
+]
 ```
 
-For example, a partial query key might look like this:
+The factory [`createConnectQueryKey`](#createconnectquerykey) makes it easy to create a `ConnectQueryKey`, including partial keys for query filters.
 
-```ts
-["example.v1.ExampleService", "GetTodos"];
-```
-
-### `ConnectInfiniteQueryKey`
-
-Similar to `ConnectQueryKey`, but for infinite queries.
-
-```ts
-type ConnectInfiniteQueryKey<I extends Message<I>> = [
-  serviceTypeName: string,
-  methodName: string,
-  input: PartialMessage<I>,
-  "infinite",
-];
-```
 
 ## Testing
 
@@ -462,10 +551,6 @@ export const Example: FC = () => {
   return <div>{data}</div>;
 };
 ```
-
-> Why was this changed from the previous version of Connect-Query?
->
-> Originally, all we did was pass options to TanStack Query. This was done as an intentional way to keep ourselves separate from TanStack Query. However, as usage increased, it became obvious that were still tied to the API of TanStack Query, and it only meant that we increased the burden on the developer to understand that underlying connection. This new API removes most of that burden and reduces the surface area of the API significantly.
 
 ### What is Connect-Query's relationship to Connect-Web and Protobuf-ES?
 
@@ -500,10 +585,6 @@ Connect-Query also supports gRPC-web! All you need to do is make sure you call `
 
 That said, we encourage you to check out the [Connect protocol](https://connectrpc.com/docs/protocol/), a simple, POST-only protocol that works over HTTP/1.1 or HTTP/2. It supports server-streaming methods just like gRPC-Web, but is easy to debug in the network inspector.
 
-### Do I have to use a code generator?
-
-No. The code generator just generates the method descriptors, but you are free to do that yourself if you wish.
-
 ### What if I have a custom `Transport`?
 
 If the `Transport` attached to React Context via the `TransportProvider` isn't working for you, then you can override transport at every level. For example, you can pass a custom transport directly to the lowest-level API like `useQuery` or `callUnaryMethod`.
@@ -521,11 +602,20 @@ import { say } from "./gen/eliza-ElizaService_connectquery";
 
 function prefetch() {
   return queryClient.prefetchQuery({
-    queryKey: createConnectQueryKey(say, { sentence: "Hello" }),
+    queryKey: createConnectQueryKey({
+      schema: say,
+      transport: myTransport,
+      input: { sentence: "Hello" },
+    }),
     queryFn: () => callUnaryMethod(myTransport, say, { sentence: "Hello" }),
   });
 }
 ```
+
+> [!TIP]
+>
+> Transports are taken into consideration when building query keys. If you want to prefetch queries on the server, and hydrate them in the client, make sure to use the same transport key on both sides with [`addStaticKeyToTransport`](#addstatickeytotransport).
+
 
 ### What about Streaming?
 

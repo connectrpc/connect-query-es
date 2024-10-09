@@ -20,12 +20,7 @@ import type {
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-import type {
-  QueryFunction,
-  QueryKey,
-  SkipToken,
-  UseQueryOptions as TanStackUseQueryOptions,
-} from "@tanstack/react-query";
+import type { QueryFunction, QueryKey, SkipToken } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
 import { callUnaryMethod } from "./call-unary-method.js";
@@ -62,10 +57,7 @@ export function createQueryOptions<
 ): {
   queryKey: ConnectQueryKey;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
-  structuralSharing: Exclude<
-    TanStackUseQueryOptions["structuralSharing"],
-    undefined
-  >;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
   queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
   const queryKey = createConnectQueryKey({
