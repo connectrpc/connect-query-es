@@ -37,7 +37,9 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
 npm install @connectrpc/connect-query @connectrpc/connect-web
 ```
 
-Note: If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed. `@connectrpc/connect-web` is required for defining
+> [!TIP]
+> 
+> If you are using something that doesn't automatically install peerDependencies (npm older than v7), you'll want to make sure you also have `@bufbuild/protobuf`, `@connectrpc/connect`, and `@tanstack/react-query` installed. `@connectrpc/connect-web` is required for defining
 the transport to be used by the client.
 
 ### Usage
