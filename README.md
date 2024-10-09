@@ -74,42 +74,56 @@ With configuration completed, you can now use the `useQuery` hook to make a requ
 
 ```ts
 import { useQuery } from '@connectrpc/connect-query';
-import { example } from 'your-generated-code/example-ExampleService_connectquery';
+import { say } from 'your-generated-code/eliza-ElizaService_connectquery';
 
 export const Example: FC = () => {
-  const { data } = useQuery(example);
+  const { data } = useQuery(say);
   return <div>{data}</div>;
 };
 ```
 
 **_That's it!_**
 
-The [code generator](packages/protoc-gen-connect-query/README.md) does all the work of turning your Protobuf file into something you can easily import. TypeScript types all populate out-of-the-box. Your documentation is also converted to [TSDoc](https://tsdoc.org/).
+The code generator does all the work of turning your Protobuf file into something you can easily import. TypeScript types all populate out-of-the-box. Your documentation is also converted to [TSDoc](https://tsdoc.org/).
 
 One of the best features of this library is that once you write your schema in Protobuf form, the TypeScript types are generated and then inferred. You never again need to specify the types of your data since the library does it automatically.
 
 ### Generated Code
 
-This example shows the best developer experience using code generation. Here's what that generated code looks like:
+To make a query, you need a schema for a remote procedure call (RPC). A typed schema can be generated with [`protoc-gen-es`](https://www.npmjs.com/package/@bufbuild/protoc-gen-es). It generates an export for every service:
 
-```ts title="your-generated-code/example-ExampleService_connectquery"
-import { MethodKind } from "@bufbuild/protobuf";
-import { ExampleRequest, ExampleResponse } from "./example_pb.js";
-
-export const example = {
-  name: "Example",
-  kind: MethodKind.Unary,
-  I: ExampleRequest,
-  O: ExampleResponse,
-  service: {
-    typeName: "your.company.com.example.v1.ExampleService",
+```ts
+/**
+ * @generated from service connectrpc.eliza.v1.ElizaService
+ */
+export declare const ElizaService: GenService<{
+  /**
+   * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
+   *
+   * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
+   */
+  say: {
+    methodKind: "unary";
+    input: typeof SayRequestSchema;
+    output: typeof SayResponseSchema;
   },
-};
+}>
 ```
 
-The above code doesn't have to be generated and can be manually used to describe any given endpoint.
+[`protoc-gen-connect-query`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) is an optional additional plugin that exports every RPC individually for convenience:
 
-For more information on code generation, see the [documentation](./packages/protoc-gen-connect-query/README.md) for `protoc-gen-connect-query`.
+```ts
+import { ElizaService } from "./eliza_pb";
+
+/**
+ * Say is a unary RPC. Eliza responds to the prompt with a single sentence.
+ *
+ * @generated from rpc connectrpc.eliza.v1.ElizaService.Say
+ */
+export const say: typeof ElizaService["method"]["say"];
+```
+
+For more information on code generation, see the [documentation for `protoc-gen-connect-query`](https://www.npmjs.com/package/@connectrpc/protoc-gen-connect-query) and the [documentation for `protoc-gen-es`](https://www.npmjs.com/package/@bufbuild/protoc-gen-es).
 
 ## Connect-Query API
 
