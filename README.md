@@ -392,8 +392,8 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
     transport: Transport;
   },
 ): {
-  queryKey: ConnectQueryKey<I>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<I>> | SkipToken;
+  queryKey: ConnectQueryKey;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
 };
 ```
