@@ -522,7 +522,7 @@ TanStack Query manages query caching for you based on query keys. [`QueryKey`s](
 ]
 ```
 
-The factory [`createConnectQueryKey`](#createconnectquerykey) makes it easy to create a key for an RPC query.
+The factory [`createConnectQueryKey`](#createconnectquerykey) makes it easy to create a `ConnectQueryKey`, including partial keys for query filters.
 
 
 ## Testing
