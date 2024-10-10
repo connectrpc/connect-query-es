@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/protoc-gen-connect-query",
-  "version": "1.4.2",
+  "version": "2.0.0-beta.1",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
