@@ -44,8 +44,8 @@
     "typescript": "^5.5.4"
   },
   "peerDependencies": {
-    "@bufbuild/protobuf": "^1.10.0",
-    "@connectrpc/connect": "^1.1.2",
+    "@bufbuild/protobuf": "2.x",
+    "@connectrpc/connect": "2.x",
     "@tanstack/react-query": "5.x",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
