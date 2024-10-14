@@ -29,7 +29,7 @@
   "devDependencies": {
     "@bufbuild/buf": "1.43.0",
     "@bufbuild/protoc-gen-es": "^2.2.0",
-    "@connectrpc/connect": "^2.0.0-beta.1",
+    "@connectrpc/connect": "^2.0.0-beta.2",
     "@connectrpc/connect-query": "workspace:*",
     "@tanstack/react-query": "^5.56.2",
     "typescript": "^5.5.4"
