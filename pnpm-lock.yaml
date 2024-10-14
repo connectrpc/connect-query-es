@@ -78,14 +78,14 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(@bufbuild/protobuf@2.2.0)
       '@connectrpc/connect':
-        specifier: ^2.0.0-beta.1
-        version: 2.0.0-beta.1(@bufbuild/protobuf@2.2.0)
+        specifier: ^2.0.0-beta.2
+        version: 2.0.0-beta.2(@bufbuild/protobuf@2.2.0)
       '@connectrpc/connect-query':
         specifier: workspace:*
         version: link:../../../packages/connect-query
       '@connectrpc/connect-web':
-        specifier: ^2.0.0-beta.1
-        version: 2.0.0-beta.1(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-beta.1)
+        specifier: ^2.0.0-beta.2
+        version: 2.0.0-beta.2(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-beta.2)
       '@connectrpc/protoc-gen-connect-query':
         specifier: workspace:*
         version: link:../../../packages/protoc-gen-connect-query
@@ -141,11 +141,11 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(@bufbuild/protobuf@2.2.0)
       '@connectrpc/connect':
-        specifier: ^2.0.0-beta.1
-        version: 2.0.0-beta.1(@bufbuild/protobuf@2.2.0)
+        specifier: ^2.0.0-beta.2
+        version: 2.0.0-beta.2(@bufbuild/protobuf@2.2.0)
       '@connectrpc/connect-web':
-        specifier: ^2.0.0-beta.1
-        version: 2.0.0-beta.1(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-beta.1)
+        specifier: ^2.0.0-beta.2
+        version: 2.0.0-beta.2(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-beta.2)
       '@tanstack/react-query':
         specifier: ^5.53.3
         version: 5.56.2(react@18.3.1)
@@ -184,8 +184,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(@bufbuild/protobuf@2.2.0)
       '@connectrpc/connect':
-        specifier: ^2.0.0-beta.1
-        version: 2.0.0-beta.1(@bufbuild/protobuf@2.2.0)
+        specifier: ^2.0.0-beta.2
+        version: 2.0.0-beta.2(@bufbuild/protobuf@2.2.0)
       '@connectrpc/connect-query':
         specifier: workspace:*
         version: link:../connect-query
@@ -544,19 +544,19 @@ packages:
     dev: true
     optional: true
 
-  /@connectrpc/connect-web@2.0.0-beta.1(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-beta.1):
-    resolution: {integrity: sha512-+RPl6Hpv9mygjsudIDMep2UCh8QLmNg9d56GYH4GOkGbx+7Q+rAPH8wKKZMkoVHepUh53+WFzPNV13ZNqRKqJw==}
+  /@connectrpc/connect-web@2.0.0-beta.2(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-beta.2):
+    resolution: {integrity: sha512-d3xs/u95FRqQ2WsrOpMCiDQ3CbvRsI3kU4armnZ0WLS5k7vcHqVNY7N1pU5HRR4p1c1Hs/oSeM25hw6gGepVWg==}
     peerDependencies:
-      '@bufbuild/protobuf': ^2.1.0
-      '@connectrpc/connect': 2.0.0-beta.1
+      '@bufbuild/protobuf': ^2.2.0
+      '@connectrpc/connect': 2.0.0-beta.2
     dependencies:
       '@bufbuild/protobuf': 2.2.0
-      '@connectrpc/connect': 2.0.0-beta.1(@bufbuild/protobuf@2.2.0)
+      '@connectrpc/connect': 2.0.0-beta.2(@bufbuild/protobuf@2.2.0)
 
-  /@connectrpc/connect@2.0.0-beta.1(@bufbuild/protobuf@2.2.0):
-    resolution: {integrity: sha512-3zr+mHusBrEqhFGjOpbCF7GrFBLZUQEk2/3Aa8lNEQt5hZhT2uXAOJhyroxs5mNTI5yWhAA/g6ua6RoSnTXoKQ==}
+  /@connectrpc/connect@2.0.0-beta.2(@bufbuild/protobuf@2.2.0):
+    resolution: {integrity: sha512-7Ok40XsVfFqeIXM2++hvDTQNqBJP8dv9mfj9YrAU3Z37vWQONmImImU6suIjy22x+qqyAZ9Y/zjbT+92DcwxYg==}
     peerDependencies:
-      '@bufbuild/protobuf': ^2.1.0
+      '@bufbuild/protobuf': ^2.2.0
     dependencies:
       '@bufbuild/protobuf': 2.2.0
 
