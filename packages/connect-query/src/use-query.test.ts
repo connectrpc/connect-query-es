@@ -40,7 +40,7 @@ describe("useQuery", () => {
           sentence: "hello",
         });
       },
-      wrapper({}, mockedElizaTransport)
+      wrapper({}, mockedElizaTransport),
     );
 
     await waitFor(() => {
@@ -55,7 +55,7 @@ describe("useQuery", () => {
       () => {
         return useQuery(sayMethodDescriptor, skipToken);
       },
-      wrapper(undefined, mockedElizaTransport)
+      wrapper(undefined, mockedElizaTransport),
     );
     expect(result.current.isPending).toBeTruthy();
     expect(result.current.isFetching).toBeFalsy();
@@ -72,10 +72,10 @@ describe("useQuery", () => {
           {},
           {
             transport,
-          }
+          },
         );
       },
-      wrapper(undefined, mockedElizaTransport)
+      wrapper(undefined, mockedElizaTransport),
     );
     await waitFor(() => {
       expect(result.current.isSuccess).toBeTruthy();
@@ -95,10 +95,10 @@ describe("useQuery", () => {
             placeholderData: create(sayMethodDescriptor.output, {
               sentence: "placeholder!",
             }),
-          }
+          },
         );
       },
-      wrapper(undefined, mockedElizaTransport)
+      wrapper(undefined, mockedElizaTransport),
     );
     expect(result.current.data?.sentence).toBe("placeholder!");
   });
@@ -111,10 +111,10 @@ describe("useQuery", () => {
           {},
           {
             select: (data) => data.sentence.length,
-          }
+          },
         );
       },
-      wrapper(undefined, mockedElizaTransport)
+      wrapper(undefined, mockedElizaTransport),
     );
 
     await waitFor(() => {
@@ -134,10 +134,10 @@ describe("useQuery", () => {
           },
           {
             enabled: false,
-          }
+          },
         );
       },
-      wrapper({}, mockedElizaTransport)
+      wrapper({}, mockedElizaTransport),
     );
 
     expect(result.current.data).toBeUndefined();
@@ -160,8 +160,8 @@ describe("useQuery", () => {
             },
           },
         },
-        mockedElizaTransport
-      )
+        mockedElizaTransport,
+      ),
     );
 
     expect(result.current.data).toBeUndefined();
@@ -174,7 +174,7 @@ describe("useQuery", () => {
       () => {
         return useQuery(sayMethodDescriptor, skipToken);
       },
-      wrapper({}, mockedElizaTransport)
+      wrapper({}, mockedElizaTransport),
     );
 
     expect(result.current.data).toBeUndefined();
@@ -189,7 +189,7 @@ describe("useQuery", () => {
           add: 2n,
         });
       },
-      wrapper({}, bigintTransport)
+      wrapper({}, bigintTransport),
     );
 
     await waitFor(() => {
@@ -216,8 +216,8 @@ describe("useQuery", () => {
           input: {},
           transport: bigintTransport,
           cardinality: "finite",
-        })
-      )
+        }),
+      ),
     ).toBe(result.current.data);
   });
 });
@@ -230,7 +230,7 @@ describe("useSuspenseQuery", () => {
           sentence: "hello",
         });
       },
-      wrapper({}, mockedElizaTransport)
+      wrapper({}, mockedElizaTransport),
     );
 
     await waitFor(() => {
@@ -250,10 +250,10 @@ describe("useSuspenseQuery", () => {
           },
           {
             select: (data) => data.sentence.length,
-          }
+          },
         );
       },
-      wrapper({}, mockedElizaTransport)
+      wrapper({}, mockedElizaTransport),
     );
 
     await waitFor(() => {
