@@ -17,14 +17,18 @@ import { skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
+import { createConnectQueryKey } from "./connect-query-key.js";
+import { BigIntService } from "./gen/bigint_pb.js";
 import { ElizaService } from "./gen/eliza_pb.js";
-import { mockEliza, wrapper } from "./test/test-utils.js";
+import { mockBigInt, mockEliza, wrapper } from "./test/test-utils.js";
 import { useQuery, useSuspenseQuery } from "./use-query.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const sayMethodDescriptor = ElizaService.method.say;
 
 const mockedElizaTransport = mockEliza();
+
+const bigintTransport = mockBigInt();
 
 const elizaWithDelayTransport = mockEliza(undefined, true);
 
@@ -36,7 +40,7 @@ describe("useQuery", () => {
           sentence: "hello",
         });
       },
-      wrapper({}, mockedElizaTransport),
+      wrapper({}, mockedElizaTransport)
     );
 
     await waitFor(() => {
@@ -51,7 +55,7 @@ describe("useQuery", () => {
       () => {
         return useQuery(sayMethodDescriptor, skipToken);
       },
-      wrapper(undefined, mockedElizaTransport),
+      wrapper(undefined, mockedElizaTransport)
     );
     expect(result.current.isPending).toBeTruthy();
     expect(result.current.isFetching).toBeFalsy();
@@ -68,10 +72,10 @@ describe("useQuery", () => {
           {},
           {
             transport,
-          },
+          }
         );
       },
-      wrapper(undefined, mockedElizaTransport),
+      wrapper(undefined, mockedElizaTransport)
     );
     await waitFor(() => {
       expect(result.current.isSuccess).toBeTruthy();
@@ -91,10 +95,10 @@ describe("useQuery", () => {
             placeholderData: create(sayMethodDescriptor.output, {
               sentence: "placeholder!",
             }),
-          },
+          }
         );
       },
-      wrapper(undefined, mockedElizaTransport),
+      wrapper(undefined, mockedElizaTransport)
     );
     expect(result.current.data?.sentence).toBe("placeholder!");
   });
@@ -107,10 +111,10 @@ describe("useQuery", () => {
           {},
           {
             select: (data) => data.sentence.length,
-          },
+          }
         );
       },
-      wrapper(undefined, mockedElizaTransport),
+      wrapper(undefined, mockedElizaTransport)
     );
 
     await waitFor(() => {
@@ -130,10 +134,10 @@ describe("useQuery", () => {
           },
           {
             enabled: false,
-          },
+          }
         );
       },
-      wrapper({}, mockedElizaTransport),
+      wrapper({}, mockedElizaTransport)
     );
 
     expect(result.current.data).toBeUndefined();
@@ -156,8 +160,8 @@ describe("useQuery", () => {
             },
           },
         },
-        mockedElizaTransport,
-      ),
+        mockedElizaTransport
+      )
     );
 
     expect(result.current.data).toBeUndefined();
@@ -170,12 +174,51 @@ describe("useQuery", () => {
       () => {
         return useQuery(sayMethodDescriptor, skipToken);
       },
-      wrapper({}, mockedElizaTransport),
+      wrapper({}, mockedElizaTransport)
     );
 
     expect(result.current.data).toBeUndefined();
     expect(result.current.isPending).toBeTruthy();
     expect(result.current.isFetching).toBeFalsy();
+  });
+
+  it("supports schemas with bigint keys", async () => {
+    const { result } = renderHook(
+      () => {
+        return useQuery(BigIntService.method.count, {
+          add: 2n,
+        });
+      },
+      wrapper({}, bigintTransport)
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(result.current.data?.count).toBe(1n);
+  });
+
+  it("data can be fetched from cache", async () => {
+    const { queryClient, ...rest } = wrapper({}, bigintTransport);
+    const { result } = renderHook(() => {
+      return useQuery(BigIntService.method.count, {});
+    }, rest);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(
+      queryClient.getQueryData(
+        createConnectQueryKey({
+          schema: BigIntService.method.count,
+          input: {},
+          transport: bigintTransport,
+          cardinality: "finite",
+        })
+      )
+    ).toBe(result.current.data);
   });
 });
 
@@ -187,7 +230,7 @@ describe("useSuspenseQuery", () => {
           sentence: "hello",
         });
       },
-      wrapper({}, mockedElizaTransport),
+      wrapper({}, mockedElizaTransport)
     );
 
     await waitFor(() => {
@@ -207,10 +250,10 @@ describe("useSuspenseQuery", () => {
           },
           {
             select: (data) => data.sentence.length,
-          },
+          }
         );
       },
-      wrapper({}, mockedElizaTransport),
+      wrapper({}, mockedElizaTransport)
     );
 
     await waitFor(() => {

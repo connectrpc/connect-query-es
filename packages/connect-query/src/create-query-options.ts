@@ -20,7 +20,7 @@ import type {
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-import type { QueryFunction, QueryKey, SkipToken } from "@tanstack/react-query";
+import type { QueryFunction, SkipToken } from "@tanstack/react-query";
 import { skipToken } from "@tanstack/react-query";
 
 import { callUnaryMethod } from "./call-unary-method.js";
@@ -31,7 +31,7 @@ import { createStructuralSharing } from "./structural-sharing.js";
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
   schema: DescMethodUnary<I, O>,
-  input: MessageInitShape<I> | undefined,
+  input: MessageInitShape<I> | undefined
 ): QueryFunction<MessageShape<O>, ConnectQueryKey> {
   return async (context) => {
     return callUnaryMethod(transport, schema, input, {
@@ -53,12 +53,11 @@ export function createQueryOptions<
     transport,
   }: {
     transport: Transport;
-  },
+  }
 ): {
   queryKey: ConnectQueryKey;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-  queryKeyHashFn: (queryKey: QueryKey) => string;
 } {
   const queryKey = createConnectQueryKey({
     schema,
@@ -75,6 +74,5 @@ export function createQueryOptions<
     queryKey,
     queryFn,
     structuralSharing,
-    queryKeyHashFn: JSON.stringify,
   };
 }
