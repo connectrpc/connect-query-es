@@ -56,7 +56,7 @@ export function useQuery<
     callOptions,
   });
   const { enabled: baseEnabled, ...baseRest } = baseOptions;
-  const tsOpts = {
+  const tsOptions = {
     ...queryOptions,
     ...baseRest,
   };
@@ -64,9 +64,9 @@ export function useQuery<
   // incoming query options.
   const enabled = baseEnabled ?? queryOptions.enabled;
   if (enabled !== undefined) {
-    tsOpts.enabled = enabled;
+    tsOptions.enabled = enabled;
   }
-  return tsUseQuery(tsOpts);
+  return tsUseQuery(tsOptions);
 }
 
 /**
