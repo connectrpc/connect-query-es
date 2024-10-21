@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { skipToken } from "@tanstack/react-query";
+import { skipToken as tanstackSkipToken } from "@tanstack/query-core";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { createQueryOptions } from "./create-query-options.js";
 import { ElizaService } from "./gen/eliza_pb.js";
+import { skipToken } from "./index.js";
 import { mockEliza } from "./test/test-utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
@@ -32,6 +33,14 @@ describe("createQueryOptions", () => {
     });
     expect(opt.queryFn).toBe(skipToken);
   });
+
+  it("honors skipToken directly from tanstack", () => {
+    const opt = createQueryOptions(sayMethodDescriptor, tanstackSkipToken, {
+      transport: mockedElizaTransport,
+    });
+    expect(opt.queryFn).toBe(tanstackSkipToken);
+  });
+
   it("sets queryKey", () => {
     const want = createConnectQueryKey({
       schema: sayMethodDescriptor,

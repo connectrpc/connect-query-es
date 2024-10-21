@@ -13,11 +13,13 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { skipToken } from "@tanstack/react-query";
+import {
+  createConnectQueryKey,
+  skipToken,
+} from "@connectrpc/connect-query-core";
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { createConnectQueryKey } from "./connect-query-key.js";
 import { BigIntService } from "./gen/bigint_pb.js";
 import { ElizaService } from "./gen/eliza_pb.js";
 import { mockBigInt, mockEliza, wrapper } from "./test/test-utils.js";

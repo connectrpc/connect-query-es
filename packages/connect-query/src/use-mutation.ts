@@ -19,6 +19,7 @@ import type {
   MessageShape,
 } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
+import { callUnaryMethod } from "@connectrpc/connect-query-core";
 import type {
   UseMutationOptions as TSUseMutationOptions,
   UseMutationResult,
@@ -26,7 +27,6 @@ import type {
 import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
-import { callUnaryMethod } from "./call-unary-method.js";
 import { useTransport } from "./use-transport.js";
 
 /**

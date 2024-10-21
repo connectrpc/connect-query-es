@@ -24,8 +24,8 @@ import type {
   QueryFunction,
   QueryKey,
   SkipToken,
-} from "@tanstack/react-query";
-import { skipToken } from "@tanstack/react-query";
+} from "@tanstack/query-core";
+import { skipToken } from "@tanstack/query-core";
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import {

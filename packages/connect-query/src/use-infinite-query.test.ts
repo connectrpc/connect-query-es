@@ -13,11 +13,11 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
+import { createConnectQueryKey } from "@connectrpc/connect-query-core";
 import { QueryCache, skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { createConnectQueryKey } from "./connect-query-key.js";
 import { ListResponseSchema, ListService } from "./gen/list_pb.js";
 import { mockPaginatedTransport, wrapper } from "./test/test-utils.js";
 import {

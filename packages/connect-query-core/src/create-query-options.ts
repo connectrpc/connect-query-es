@@ -20,8 +20,8 @@ import type {
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-import type { QueryFunction, SkipToken } from "@tanstack/react-query";
-import { skipToken } from "@tanstack/react-query";
+import type { QueryFunction, SkipToken } from "@tanstack/query-core";
+import { skipToken } from "@tanstack/query-core";
 
 import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
