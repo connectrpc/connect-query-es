@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { skipToken as tanstackSkipToken } from "@tanstack/query-core";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
@@ -32,6 +33,14 @@ describe("createQueryOptions", () => {
     });
     expect(opt.queryFn).toBe(skipToken);
   });
+
+  it("honors skipToken directly from tanstack", () => {
+    const opt = createQueryOptions(sayMethodDescriptor, tanstackSkipToken, {
+      transport: mockedElizaTransport,
+    });
+    expect(opt.queryFn).toBe(tanstackSkipToken);
+  });
+
   it("sets queryKey", () => {
     const want = createConnectQueryKey({
       schema: sayMethodDescriptor,
