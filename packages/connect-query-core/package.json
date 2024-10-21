@@ -36,7 +36,6 @@
     "@bufbuild/protoc-gen-es": "^2.2.0",
     "@connectrpc/connect": "^2.0.0-rc.1",
     "@connectrpc/connect-web": "^2.0.0-rc.1",
-    "@testing-library/react": "^16.0.1",
     "typescript": "^5.5.4"
   },
   "peerDependencies": {

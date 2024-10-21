@@ -199,9 +199,6 @@ importers:
       '@connectrpc/connect-web':
         specifier: ^2.0.0-rc.1
         version: 2.0.0-rc.1(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-rc.1)
-      '@testing-library/react':
-        specifier: ^16.0.1
-        version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1)(react@18.3.1)
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
