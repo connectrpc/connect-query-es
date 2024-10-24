@@ -1,6 +1,6 @@
 import type { MessageShape } from "@bufbuild/protobuf";
 import type { Query } from "@tanstack/query-core";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import type { SayResponseSchema } from "./gen/eliza_pb.js";
