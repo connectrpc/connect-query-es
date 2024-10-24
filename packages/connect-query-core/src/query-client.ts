@@ -1,3 +1,17 @@
+// Copyright 2021-2023 The Connect Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import type {
   DescMessage,
   DescMethod,
@@ -10,15 +24,15 @@ import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   FetchInfiniteQueryOptions as TanstackFetchInfiniteQueryOptions,
   FetchQueryOptions as TanstackFetchQueryOptions,
+  InfiniteData,
   InvalidateOptions,
   InvalidateQueryFilters,
   QueryFilters,
+  QueryState,
   RefetchOptions,
   RefetchQueryFilters,
   ResetOptions,
   SetDataOptions,
-  InfiniteData,
-  QueryState,
 } from "@tanstack/query-core";
 import { QueryClient as TSQueryClient } from "@tanstack/query-core";
 
@@ -95,7 +109,7 @@ export class QueryClient extends TSQueryClient {
   >(
     params: Desc | Params,
     filterOptions?: Omit<InvalidateQueryFilters, "queryKey">,
-    options?: InvalidateOptions
+    options?: InvalidateOptions,
   ) {
     if ("schema" in params) {
       return this.invalidateQueries(
@@ -106,7 +120,7 @@ export class QueryClient extends TSQueryClient {
             cardinality: params.cardinality,
           }),
         },
-        options
+        options,
       );
     }
     return this.invalidateQueries(
@@ -117,7 +131,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: undefined,
         }),
       },
-      options
+      options,
     );
   }
 
@@ -133,7 +147,7 @@ export class QueryClient extends TSQueryClient {
   >(
     params: Params,
     filterOptions?: Omit<RefetchQueryFilters, "queryKey">,
-    options?: RefetchOptions
+    options?: RefetchOptions,
   ) {
     return this.refetchQueries(
       {
@@ -143,7 +157,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: params.cardinality,
         }),
       },
-      options
+      options,
     );
   }
 
@@ -162,7 +176,7 @@ export class QueryClient extends TSQueryClient {
     },
     updater: ConnectUpdater<Desc["output"]>,
 
-    options?: SetDataOptions | undefined
+    options?: SetDataOptions | undefined,
   ) {
     return this.setQueryData(
       createConnectQueryKey({
@@ -171,7 +185,7 @@ export class QueryClient extends TSQueryClient {
         input: keyDescriptor.input ?? {},
       }),
       createProtobufSafeUpdater<Desc["output"]>(keyDescriptor.schema, updater),
-      options
+      options,
     );
   }
 
@@ -228,7 +242,7 @@ export class QueryClient extends TSQueryClient {
       | (SetDataOptions & {
           exact?: boolean;
         })
-      | undefined
+      | undefined,
   ) {
     return this.setQueriesData(
       {
@@ -239,7 +253,7 @@ export class QueryClient extends TSQueryClient {
         exact: options?.exact ?? false,
       },
       createProtobufSafeUpdater<Desc["output"]>(keyDescriptor.schema, updater),
-      options
+      options,
     );
   }
 
@@ -260,7 +274,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ) {
     return this.fetchQuery({
       ...createQueryOptions(schema, input, { transport }),
@@ -285,7 +299,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ) {
     return this.fetchInfiniteQuery({
       ...createInfiniteQueryOptions(schema, input, {
@@ -314,7 +328,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ) {
     return this.prefetchQuery({
       ...createQueryOptions(schema, input, { transport }),
@@ -339,7 +353,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ) {
     return this.prefetchInfiniteQuery({
       ...createInfiniteQueryOptions(schema, input, {
@@ -396,7 +410,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ) {
     return this.ensureQueryData({
       ...createQueryOptions(schema, input, { transport }),
@@ -422,7 +436,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ) {
     return this.ensureInfiniteQueryData({
       ...createInfiniteQueryOptions(schema, input, {
@@ -532,7 +546,7 @@ export class QueryClient extends TSQueryClient {
   >(
     params: Desc | Params,
     filterOptions?: Omit<QueryFilters, "queryKey">,
-    options?: ResetOptions
+    options?: ResetOptions,
   ) {
     if ("schema" in params) {
       return this.resetQueries(
@@ -543,7 +557,7 @@ export class QueryClient extends TSQueryClient {
             cardinality: params.cardinality,
           }),
         },
-        options
+        options,
       );
     }
     return this.resetQueries(
@@ -554,7 +568,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: undefined,
         }),
       },
-      options
+      options,
     );
   }
 }
