@@ -31,7 +31,7 @@ import { createStructuralSharing } from "./structural-sharing.js";
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
   schema: DescMethodUnary<I, O>,
-  input: MessageInitShape<I> | undefined
+  input: MessageInitShape<I> | undefined,
 ): QueryFunction<MessageShape<O>, ConnectQueryKey> {
   return async (context) => {
     return callUnaryMethod(transport, schema, input, {
@@ -53,7 +53,7 @@ export function createQueryOptions<
     transport,
   }: {
     transport: Transport;
-  }
+  },
 ): {
   queryKey: ConnectQueryKey;
   queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;

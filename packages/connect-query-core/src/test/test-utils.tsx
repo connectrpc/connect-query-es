@@ -36,7 +36,7 @@ export const sleep = async (timeout: number) =>
  */
 export const mockEliza = (
   override?: MessageInitShape<typeof SayResponseSchema>,
-  addDelay = false
+  addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
@@ -46,7 +46,7 @@ export const mockEliza = (
         }
         return create(
           SayResponseSchema,
-          override ?? { sentence: `Hello ${input.sentence}` }
+          override ?? { sentence: `Hello ${input.sentence}` },
         );
       },
     });
@@ -57,7 +57,7 @@ export const mockEliza = (
  */
 export const mockPaginatedTransport = (
   override?: MessageInitShape<typeof ListResponseSchema>,
-  addDelay = false
+  addDelay = false,
 ) =>
   createRouterTransport(({ service }) => {
     service(ListService, {

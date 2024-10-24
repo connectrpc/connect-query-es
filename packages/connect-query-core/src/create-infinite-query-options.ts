@@ -64,7 +64,7 @@ function createUnaryInfiniteQueryFn<
     pageParamKey,
   }: {
     pageParamKey: ParamKey;
-  }
+  },
 ): QueryFunction<
   MessageShape<O>,
   ConnectQueryKey,
@@ -99,7 +99,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
-  }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport }
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
     I,

@@ -1,3 +1,17 @@
+// Copyright 2021-2023 The Connect Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import type { MessageShape } from "@bufbuild/protobuf";
 import type { Query } from "@tanstack/query-core";
 import { describe, expect, it } from "vitest";
@@ -33,21 +47,21 @@ describe("prefetch APIs", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     const item = queryClient.getConnectQueryData({
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(item?.sentence).toBe("Hello Pablo");
+    expect(item.sentence).toBe("Hello Pablo");
 
     const queryState = queryClient.getConnectQueryState({
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState?.status).toBe("success");
-    expect(queryState?.fetchStatus).toBe("idle");
-    expect(queryState?.dataUpdateCount).toBe(1);
+    expect(queryState.status).toBe("success");
+    expect(queryState.fetchStatus).toBe("idle");
+    expect(queryState.dataUpdateCount).toBe(1);
   });
 
   it("populates an infinite query cache", async () => {
@@ -65,7 +79,7 @@ describe("prefetch APIs", () => {
         transport: paginatedTransport,
         pageParamKey: "page",
         getNextPageParam: (data) => data.page,
-      }
+      },
     );
 
     const details = {
@@ -81,12 +95,12 @@ describe("prefetch APIs", () => {
 
     const nextItems = queryClient.getQueryCache().findAll();
     expect(nextItems).toHaveLength(1);
-    expect(item?.pages[0].items).toHaveLength(3);
+    expect(item.pages[0].items).toHaveLength(3);
 
     const queryState = queryClient.getConnectQueryState(details);
-    expect(queryState?.status).toBe("success");
-    expect(queryState?.fetchStatus).toBe("idle");
-    expect(queryState?.dataUpdateCount).toBe(1);
+    expect(queryState.status).toBe("success");
+    expect(queryState.fetchStatus).toBe("idle");
+    expect(queryState.dataUpdateCount).toBe(1);
   });
 });
 
@@ -96,14 +110,14 @@ describe("invalidateConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     await queryClient.invalidateConnectQueries(queryDetails);
     const queryState = queryClient.getConnectQueryState({
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState?.isInvalidated).toBe(true);
+    expect(queryState.isInvalidated).toBe(true);
   });
 
   it("invalidate all methods for a given service", async () => {
@@ -111,7 +125,7 @@ describe("invalidateConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     await queryClient.invalidateConnectQueries({
@@ -122,7 +136,7 @@ describe("invalidateConnectQueries", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState?.isInvalidated).toBe(true);
+    expect(queryState.isInvalidated).toBe(true);
   });
 });
 
@@ -132,14 +146,14 @@ describe("refetchConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     await queryClient.refetchConnectQueries(queryDetails);
     const queryState = queryClient.getConnectQueryState({
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState?.dataUpdateCount).toBe(2);
+    expect(queryState.dataUpdateCount).toBe(2);
   });
 
   it("refetch all methods for a given service", async () => {
@@ -147,7 +161,7 @@ describe("refetchConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     await queryClient.refetchConnectQueries({
@@ -158,7 +172,7 @@ describe("refetchConnectQueries", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState?.dataUpdateCount).toBe(2);
+    expect(queryState.dataUpdateCount).toBe(2);
   });
 });
 
@@ -168,15 +182,15 @@ describe("setConnectQueryData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     const queryState = queryClient.getConnectQueryState({
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState?.dataUpdateCount).toBe(1);
-    expect(queryState?.data?.sentence).toBe("Hello Pablo");
+    expect(queryState.dataUpdateCount).toBe(1);
+    expect(queryState.data?.sentence).toBe("Hello Pablo");
 
     queryClient.setConnectQueryData(
       {
@@ -185,7 +199,7 @@ describe("setConnectQueryData", () => {
       },
       {
         sentence: "Hello Stu",
-      }
+      },
     );
 
     const newQueryState = queryClient.getConnectQueryState({
@@ -193,8 +207,8 @@ describe("setConnectQueryData", () => {
       cardinality: "finite",
     });
 
-    expect(newQueryState?.dataUpdateCount).toBe(2);
-    expect(newQueryState?.data?.sentence).toBe("Hello Stu");
+    expect(newQueryState.dataUpdateCount).toBe(2);
+    expect(newQueryState.data?.sentence).toBe("Hello Stu");
   });
 
   it("updates locally fetched data with a callback", async () => {
@@ -202,15 +216,15 @@ describe("setConnectQueryData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     const queryState = queryClient.getConnectQueryState({
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState?.dataUpdateCount).toBe(1);
-    expect(queryState?.data?.sentence).toBe("Hello Pablo");
+    expect(queryState.dataUpdateCount).toBe(1);
+    expect(queryState.data?.sentence).toBe("Hello Pablo");
 
     queryClient.setConnectQueryData(
       {
@@ -226,7 +240,7 @@ describe("setConnectQueryData", () => {
           ...prev,
           sentence: "Hello Stu",
         };
-      }
+      },
     );
 
     const newQueryState = queryClient.getConnectQueryState({
@@ -234,8 +248,8 @@ describe("setConnectQueryData", () => {
       cardinality: "finite",
     });
 
-    expect(newQueryState?.dataUpdateCount).toBe(2);
-    expect(newQueryState?.data?.sentence).toBe("Hello Stu");
+    expect(newQueryState.dataUpdateCount).toBe(2);
+    expect(newQueryState.data?.sentence).toBe("Hello Stu");
   });
 });
 
@@ -245,14 +259,14 @@ describe("setConnectQueriesData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       {
         sentence: "Stu",
       },
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     const cachedItems = queryClient.getQueryCache().findAll({
@@ -276,7 +290,7 @@ describe("setConnectQueriesData", () => {
           ...prev,
           sentence: prev.sentence + "!",
         };
-      }
+      },
     );
 
     const newCachedItems = queryClient.getQueryCache().findAll() as Query<
@@ -303,7 +317,7 @@ describe("fetchConnectInfiniteQuery", () => {
           return data.page + 1n;
         },
         pageParamKey: "page",
-      }
+      },
     );
 
     expect(result).toBeDefined();
@@ -328,7 +342,7 @@ describe("getConnectQueryState", () => {
           return data.page + 1n;
         },
         pageParamKey: "page",
-      }
+      },
     );
 
     const state = queryClient.getConnectQueryState({
@@ -340,9 +354,9 @@ describe("getConnectQueryState", () => {
       cardinality: "infinite",
     });
 
-    expect(state?.status).toBe("success");
-    expect(state?.fetchStatus).toBe("idle");
-    expect(state?.dataUpdateCount).toBe(1);
+    expect(state.status).toBe("success");
+    expect(state.fetchStatus).toBe("idle");
+    expect(state.dataUpdateCount).toBe(1);
   });
 });
 
@@ -357,12 +371,12 @@ describe("ensure APIs", () => {
       },
       {
         transport: paginatedTransport,
-        getNextPageParam: (data) => {
-          return data.page + 1n;
+        getNextPageParam: (localData) => {
+          return localData.page + 1n;
         },
         pageParamKey: "page",
         staleTime: 1000,
-      }
+      },
     );
 
     const state = queryClient.getConnectQueryState({
@@ -373,9 +387,9 @@ describe("ensure APIs", () => {
       },
       cardinality: "infinite",
     });
-    expect(state?.status).toBe("success");
-    expect(state?.fetchStatus).toBe("idle");
-    expect(state?.dataUpdateCount).toBe(1);
-    expect(data.pages[0]).toBe(state?.data?.pages[0]);
+    expect(state.status).toBe("success");
+    expect(state.fetchStatus).toBe("idle");
+    expect(state.dataUpdateCount).toBe(1);
+    expect(data.pages[0]).toBe(state.data?.pages[0]);
   });
 });
