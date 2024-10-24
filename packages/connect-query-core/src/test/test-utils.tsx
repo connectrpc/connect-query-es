@@ -21,6 +21,7 @@ import {
   type SayRequest,
   SayResponseSchema,
 } from "../gen/eliza_pb.js";
+import { type ListResponseSchema, ListService } from "../gen/list_pb.js";
 
 /**
  * A test-only helper to increase time (necessary for testing react-query)
@@ -47,6 +48,36 @@ export const mockEliza = (
           SayResponseSchema,
           override ?? { sentence: `Hello ${input.sentence}` },
         );
+      },
+    });
+  });
+
+/**
+ * a mock for PaginatedService that acts as an impromptu database
+ */
+export const mockPaginatedTransport = (
+  override?: MessageInitShape<typeof ListResponseSchema>,
+  addDelay = false,
+) =>
+  createRouterTransport(({ service }) => {
+    service(ListService, {
+      list: async (request) => {
+        if (addDelay) {
+          await sleep(1000);
+        }
+        if (override !== undefined) {
+          return override;
+        }
+        const base = (request.page - 1n) * 3n;
+        const result = {
+          page: request.page,
+          items: [
+            `${base + 1n} Item`,
+            `${base + 2n} Item`,
+            `${base + 3n} Item`,
+          ],
+        };
+        return result;
       },
     });
   });
