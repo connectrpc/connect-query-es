@@ -40,6 +40,9 @@ const config = {
     "import/resolver": {
       typescript: {},
     },
+    vitest: {
+      typecheck: true,
+    },
   },
   rules: {
     ...vitest.configs.recommended.rules,

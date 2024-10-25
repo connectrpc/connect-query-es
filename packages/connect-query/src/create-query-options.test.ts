@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import { skipToken } from "@tanstack/react-query";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { createQueryOptions } from "./create-query-options.js";
@@ -31,6 +31,7 @@ describe("createQueryOptions", () => {
       transport: mockedElizaTransport,
     });
     expect(opt.queryFn).toBe(skipToken);
+    expectTypeOf(opt.queryFn).toEqualTypeOf(skipToken);
   });
   it("sets queryKey", () => {
     const want = createConnectQueryKey({
