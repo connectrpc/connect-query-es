@@ -54,7 +54,7 @@ describe("createQueryOptions", () => {
       { sentence: "hi" },
       {
         transport: mockedElizaTransport,
-      }
+      },
     );
     expect(opt.queryKey).toStrictEqual(want);
   });
