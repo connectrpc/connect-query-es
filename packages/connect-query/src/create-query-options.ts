@@ -48,6 +48,54 @@ export function createQueryOptions<
   O extends DescMessage,
 >(
   schema: DescMethodUnary<I, O>,
+  input: MessageInitShape<I> | undefined,
+  {
+    transport,
+  }: {
+    transport: Transport;
+  },
+): {
+  queryKey: ConnectQueryKey;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+};
+export function createQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+>(
+  schema: DescMethodUnary<I, O>,
+  input: SkipToken,
+  {
+    transport,
+  }: {
+    transport: Transport;
+  },
+): {
+  queryKey: ConnectQueryKey;
+  queryFn: SkipToken;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+};
+export function createQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+>(
+  schema: DescMethodUnary<I, O>,
+  input: SkipToken | MessageInitShape<I> | undefined,
+  {
+    transport,
+  }: {
+    transport: Transport;
+  },
+): {
+  queryKey: ConnectQueryKey;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+};
+export function createQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+>(
+  schema: DescMethodUnary<I, O>,
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
