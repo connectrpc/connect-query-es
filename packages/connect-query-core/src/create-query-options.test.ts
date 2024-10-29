@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import { skipToken as tanstackSkipToken } from "@tanstack/query-core";
+import { mockEliza } from "test-utils";
+import { ElizaService } from "test-utils/gen/eliza_pb.js";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { createQueryOptions } from "./create-query-options.js";
-import { ElizaService } from "./gen/eliza_pb.js";
 import { skipToken } from "./index.js";
-import { mockEliza } from "./test/test-utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const sayMethodDescriptor = ElizaService.method.say;

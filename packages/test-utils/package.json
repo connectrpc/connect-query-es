@@ -1,0 +1,16 @@
+{
+  "name": "test-utils",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "buf generate"
+  },
+  "devDependencies": {
+    "@bufbuild/protobuf": "^2.2.0",
+    "@bufbuild/protoc-gen-es": "^2.2.0",
+    "@connectrpc/connect": "^2.0.0-rc.1",
+    "@connectrpc/connect-web": "^2.0.0-rc.1",
+    "@types/react": "18.3.12",
+    "react": "^18.3.1"
+  }
+}

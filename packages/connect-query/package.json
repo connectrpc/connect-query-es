@@ -13,7 +13,6 @@
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --project tsconfig.build.json --module commonjs --moduleResolution node10 --verbatimModuleSyntax false --outDir ./dist/cjs --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
     "build:esm": "tsc --project tsconfig.build.json",
-    "generate": "buf generate",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
@@ -45,6 +44,7 @@
     "@types/react-dom": "^18.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "test-utils": "workspace:*",
     "typescript": "^5.5.4"
   },
   "peerDependencies": {

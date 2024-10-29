@@ -13,10 +13,10 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
+import { Proto2MessageSchema } from "test-utils/gen/proto2_pb.js";
+import { Proto3Enum, Proto3MessageSchema } from "test-utils/gen/proto3_pb.js";
 import { describe, expect, it } from "vitest";
 
-import { Proto2MessageSchema } from "./gen/proto2_pb.js";
-import { Proto3Enum, Proto3MessageSchema } from "./gen/proto3_pb.js";
 import { createMessageKey } from "./message-key.js";
 
 describe("message key", () => {

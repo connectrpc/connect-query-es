@@ -99,7 +99,7 @@ const config = {
       },
     },
     {
-      files: ["**/eliza/*", "**/gen/**", "**/snapshots/**"], // generated code
+      files: ["**/eliza/*", "gen/**", "**/gen/**", "**/snapshots/**"], // generated code
       rules: {
         "eslint-comments/no-unused-enable": "off",
         "eslint-comments/no-unused-disable": "off",

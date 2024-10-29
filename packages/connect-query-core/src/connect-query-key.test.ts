@@ -14,11 +14,11 @@
 
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
+import { ElizaService, SayRequestSchema } from "test-utils/gen/eliza_pb.js";
+import { ListRequestSchema, ListService } from "test-utils/gen/list_pb.js";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { ElizaService, SayRequestSchema } from "./gen/eliza_pb.js";
-import { ListRequestSchema, ListService } from "./gen/list_pb.js";
 import { skipToken } from "./index.js";
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";

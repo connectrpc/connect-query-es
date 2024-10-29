@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import { create, isFieldSet, isMessage } from "@bufbuild/protobuf";
+import { Proto2MessageSchema } from "test-utils/gen/proto2_pb.js";
 import { describe, expect, it } from "vitest";
 
-import { Proto2MessageSchema } from "./gen/proto2_pb.js";
 import {
   assert,
   createProtobufSafeUpdater,
