@@ -6,6 +6,7 @@
     "generate": "buf generate"
   },
   "devDependencies": {
+    "@bufbuild/buf": "^1.45.0",
     "@bufbuild/protobuf": "^2.2.0",
     "@bufbuild/protoc-gen-es": "^2.2.0",
     "@connectrpc/connect": "^2.0.0-rc.1",
