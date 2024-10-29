@@ -1,7 +1,7 @@
 {
   "name": "@connectrpc/connect-query-core",
   "version": "2.0.0-rc.2",
-  "description": "Core of connect-query, framework agnostic helpers for typescript safe queries.",
+  "description": "Core of Connect-Query, framework agnostic helpers for type-safe queries.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
