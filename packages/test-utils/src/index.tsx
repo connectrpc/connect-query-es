@@ -14,56 +14,19 @@
 
 import type { MessageInitShape } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
-import type { CallOptions, Transport } from "@connectrpc/connect";
 import { createRouterTransport } from "@connectrpc/connect";
-import { createConnectTransport } from "@connectrpc/connect-web";
-import type { QueryClientConfig } from "@tanstack/react-query";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { JSXElementConstructor, PropsWithChildren } from "react";
 
 import {
   BigIntService,
   type CountRequest,
   CountResponseSchema,
-} from "../gen/bigint_pb.js";
+} from "./gen/bigint_pb.js";
 import {
   ElizaService,
   type SayRequest,
   SayResponseSchema,
-} from "../gen/eliza_pb.js";
-import { type ListResponseSchema, ListService } from "../gen/list_pb.js";
-import { TransportProvider } from "../use-transport.js";
-
-/**
- * A utils wrapper that supplies Tanstack Query's `QueryClientProvider` as well as Connect-Query's `TransportProvider`.
- */
-export const wrapper = (
-  config?: QueryClientConfig,
-  transport = createConnectTransport({
-    baseUrl: "https://demo.connectrpc.com",
-  }),
-): {
-  wrapper: JSXElementConstructor<PropsWithChildren>;
-  queryClient: QueryClient;
-  transport: Transport;
-  queryClientWrapper: JSXElementConstructor<PropsWithChildren>;
-} => {
-  const queryClient = new QueryClient(config);
-  return {
-    wrapper: ({ children }) => (
-      <TransportProvider transport={transport}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </TransportProvider>
-    ),
-    queryClient,
-    transport,
-    queryClientWrapper: ({ children }) => (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    ),
-  };
-};
+} from "./gen/eliza_pb.js";
+import { type ListResponseSchema, ListService } from "./gen/list_pb.js";
 
 /**
  * A test-only helper to increase time (necessary for testing react-query)
@@ -78,7 +41,7 @@ export const sleep = async (timeout: number) =>
  */
 export const mockEliza = (
   override?: MessageInitShape<typeof SayResponseSchema>,
-  addDelay = false,
+  addDelay = false
 ) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
@@ -88,7 +51,7 @@ export const mockEliza = (
         }
         return create(
           SayResponseSchema,
-          override ?? { sentence: `Hello ${input.sentence}` },
+          override ?? { sentence: `Hello ${input.sentence}` }
         );
       },
     });
@@ -129,7 +92,7 @@ export const mockStatefulBigIntTransport = (addDelay = false) =>
  */
 export const mockPaginatedTransport = (
   override?: MessageInitShape<typeof ListResponseSchema>,
-  addDelay = false,
+  addDelay = false
 ) =>
   createRouterTransport(({ service }) => {
     service(ListService, {
@@ -153,11 +116,3 @@ export const mockPaginatedTransport = (
       },
     });
   });
-
-export const mockCallOptions = {
-  signal: new AbortController().signal,
-  timeoutMs: 9000,
-  headers: new Headers({
-    "Content-Type": 'application/x-shockwave-flash; version="1"',
-  }),
-} satisfies CallOptions;

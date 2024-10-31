@@ -18,7 +18,7 @@ import type {
   MessageInitShape,
 } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-import type { SkipToken } from "@tanstack/react-query";
+import type { SkipToken } from "@tanstack/query-core";
 
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";

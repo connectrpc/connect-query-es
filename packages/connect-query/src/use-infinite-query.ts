@@ -20,6 +20,11 @@ import type {
 } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
+  ConnectInfiniteQueryOptions,
+  ConnectQueryKey,
+} from "@connectrpc/connect-query-core";
+import { createInfiniteQueryOptions } from "@connectrpc/connect-query-core";
+import type {
   InfiniteData,
   SkipToken,
   UseInfiniteQueryOptions as TanStackUseInfiniteQueryOptions,
@@ -32,9 +37,6 @@ import {
   useSuspenseInfiniteQuery as tsUseSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 
-import type { ConnectQueryKey } from "./connect-query-key.js";
-import type { ConnectInfiniteQueryOptions } from "./create-infinite-query-options.js";
-import { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import { useTransport } from "./use-transport.js";
 
 /**

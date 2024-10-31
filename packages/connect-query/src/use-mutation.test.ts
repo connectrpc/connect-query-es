@@ -14,10 +14,11 @@
 
 import { create } from "@bufbuild/protobuf";
 import { renderHook, waitFor } from "@testing-library/react";
+import { mockPaginatedTransport } from "test-utils";
+import { ListResponseSchema, ListService } from "test-utils/gen/list_pb.js";
 import { describe, expect, it, vi } from "vitest";
 
-import { ListResponseSchema, ListService } from "./gen/list_pb.js";
-import { mockPaginatedTransport, wrapper } from "./test/test-utils.js";
+import { wrapper } from "./test/test-wrapper.js";
 import { useMutation } from "./use-mutation.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.

@@ -20,7 +20,11 @@ import type {
 } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
+  ConnectQueryKey,
   SkipToken,
+} from "@connectrpc/connect-query-core";
+import { createQueryOptions } from "@connectrpc/connect-query-core";
+import type {
   UseQueryOptions as TanStackUseQueryOptions,
   UseQueryResult,
   UseSuspenseQueryOptions as TanStackUseSuspenseQueryOptions,
@@ -31,8 +35,6 @@ import {
   useSuspenseQuery as tsUseSuspenseQuery,
 } from "@tanstack/react-query";
 
-import type { ConnectQueryKey } from "./connect-query-key.js";
-import { createQueryOptions } from "./create-query-options.js";
 import { useTransport } from "./use-transport.js";
 
 /**

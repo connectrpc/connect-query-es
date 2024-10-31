@@ -13,14 +13,17 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import { skipToken } from "@tanstack/react-query";
+import {
+  createConnectQueryKey,
+  skipToken,
+} from "@connectrpc/connect-query-core";
 import { renderHook, waitFor } from "@testing-library/react";
+import { mockBigInt, mockEliza } from "test-utils";
+import { BigIntService } from "test-utils/gen/bigint_pb.js";
+import { ElizaService } from "test-utils/gen/eliza_pb.js";
 import { describe, expect, it } from "vitest";
 
-import { createConnectQueryKey } from "./connect-query-key.js";
-import { BigIntService } from "./gen/bigint_pb.js";
-import { ElizaService } from "./gen/eliza_pb.js";
-import { mockBigInt, mockEliza, wrapper } from "./test/test-utils.js";
+import { wrapper } from "./test/test-wrapper.js";
 import { useQuery, useSuspenseQuery } from "./use-query.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.

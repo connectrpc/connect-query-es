@@ -124,6 +124,10 @@ importers:
         version: 5.4.8(@types/node@22.5.1)
 
   packages/connect-query:
+    dependencies:
+      '@connectrpc/connect-query-core':
+        specifier: workspace:*
+        version: link:../connect-query-core
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.15.4
@@ -164,6 +168,43 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
+
+  packages/connect-query-core:
+    dependencies:
+      '@tanstack/query-core':
+        specifier: 5.x
+        version: 5.56.2
+    devDependencies:
+      '@arethetypeswrong/cli':
+        specifier: ^0.15.2
+        version: 0.15.2
+      '@bufbuild/buf':
+        specifier: 1.43.0
+        version: 1.43.0
+      '@bufbuild/jest-environment-jsdom':
+        specifier: ^0.1.1
+        version: 0.1.1(jest-environment-jsdom@29.7.0)
+      '@bufbuild/protobuf':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@bufbuild/protoc-gen-es':
+        specifier: ^2.2.0
+        version: 2.2.0(@bufbuild/protobuf@2.2.0)
+      '@connectrpc/connect':
+        specifier: ^2.0.0-rc.1
+        version: 2.0.0-rc.1(@bufbuild/protobuf@2.2.0)
+      '@connectrpc/connect-web':
+        specifier: ^2.0.0-rc.1
+        version: 2.0.0-rc.1(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-rc.1)
+      test-utils:
+        specifier: workspace:*
+        version: link:../test-utils
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
@@ -196,6 +237,30 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
 
+  packages/test-utils:
+    devDependencies:
+      '@bufbuild/buf':
+        specifier: ^1.45.0
+        version: 1.45.0
+      '@bufbuild/protobuf':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@bufbuild/protoc-gen-es':
+        specifier: ^2.2.0
+        version: 2.2.0(@bufbuild/protobuf@2.2.0)
+      '@connectrpc/connect':
+        specifier: ^2.0.0-rc.1
+        version: 2.0.0-rc.1(@bufbuild/protobuf@2.2.0)
+      '@connectrpc/connect-web':
+        specifier: ^2.0.0-rc.1
+        version: 2.0.0-rc.1(@bufbuild/protobuf@2.2.0)(@connectrpc/connect@2.0.0-rc.1)
+      '@types/react':
+        specifier: 18.3.12
+        version: 18.3.12
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+
 packages:
 
   /@adobe/css-tools@4.4.0:
@@ -212,6 +277,20 @@ packages:
 
   /@andrewbranch/untar.js@1.0.3:
     resolution: {integrity: sha512-Jh15/qVmrLGhkKJBdXlK1+9tY4lZruYjsgkDFj08ZmDiWVBLJcqkok7Z0/R0In+i1rScBpJlSvrTS2Lm41Pbnw==}
+    dev: true
+
+  /@arethetypeswrong/cli@0.15.2:
+    resolution: {integrity: sha512-YXKq7PyB+nv3KNCpmo384C+1f6DjCwJqSwxPpnFK/2shKy1Ug9RM8ma2eKlgfklyflNqtg1KJvTF2CxZmT0/ig==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      '@arethetypeswrong/core': 0.15.1
+      chalk: 4.1.2
+      cli-table3: 0.6.5
+      commander: 10.0.1
+      marked: 9.1.6
+      marked-terminal: 6.2.0(marked@9.1.6)
+      semver: 7.6.3
     dev: true
 
   /@arethetypeswrong/cli@0.15.4:
@@ -442,12 +521,30 @@ packages:
     requiresBuild: true
     optional: true
 
+  /@bufbuild/buf-darwin-arm64@1.45.0:
+    resolution: {integrity: sha512-yl0+fSnEAtGPUjvyC9a5UmzSc0izqeiL8il2ml1LmX3YbmOAQZ1Wn0TceCtDVFCuO/jtiZBj8/zYm3VAovwQqQ==}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@bufbuild/buf-darwin-x64@1.43.0:
     resolution: {integrity: sha512-XeuLdJIdOXzLpLA95k5NWhO6cJw5YW89IJW6OHENkxXkdf9aWzg9ozrhTpPzUoZmGZbNyXfpa7kbhJaJ5+F42w==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
+    optional: true
+
+  /@bufbuild/buf-darwin-x64@1.45.0:
+    resolution: {integrity: sha512-T4yNFZrOhxRkpSn8RgW2S6JPcmD58JYb7OqU+BNVpqK3zy3Zm2C3gIyIpVB5GWkyohhyZANLj3M4Xet9HW4cqA==}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
     optional: true
 
   /@bufbuild/buf-linux-aarch64@1.43.0:
@@ -458,12 +555,30 @@ packages:
     requiresBuild: true
     optional: true
 
+  /@bufbuild/buf-linux-aarch64@1.45.0:
+    resolution: {integrity: sha512-n3PkFXp6MiHmxMBMq60t38Ca7hyk0Yo1Un3Xg4PxljSrDNHZSoxT8+NY3eOI+jHnAwKebrAT72XAh/vkeKrC5g==}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@bufbuild/buf-linux-x64@1.43.0:
     resolution: {integrity: sha512-4mg6ZUNpW2C61vmPyQDolLRIsfAomd2Yv1PICC9XG1iQtf3xQ+6q5B/kihOadhG2AN31WeKdorvuyPL7vmbsDA==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
+    optional: true
+
+  /@bufbuild/buf-linux-x64@1.45.0:
+    resolution: {integrity: sha512-Bm5Zgv4CgJ8rursPLejhvfELMxtuFxMLR1ZXY2G6T7jLi5mxa/4CWmqEmQ67zyOoEXw7FvND2yBivGO+464wtw==}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
     optional: true
 
   /@bufbuild/buf-win32-arm64@1.43.0:
@@ -474,12 +589,30 @@ packages:
     requiresBuild: true
     optional: true
 
+  /@bufbuild/buf-win32-arm64@1.45.0:
+    resolution: {integrity: sha512-tuW+vaYaCQpl9y3dk4uuVSAyqs7opydejxJmqoQdt4AOswvKORasVkD5s9two+eScU165kSzkI2BN3Hd6r+P0g==}
+    engines: {node: '>=12'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@bufbuild/buf-win32-x64@1.43.0:
     resolution: {integrity: sha512-//t0ndbP7zkQDydwAXShCqsqgOGX/ktsS2g0+D9A5Aw/nyLTxBmfsN+7hPxL4o0qq2N4MKs6DJeP4TvjYKBaMA==}
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
+    optional: true
+
+  /@bufbuild/buf-win32-x64@1.45.0:
+    resolution: {integrity: sha512-ifTHY7pKrKd+8ogMksHmvVYJrHLm/OveyLXsMT1ts00nb1pPJzuCDKrEhg5T7k0oJhGBhpejlpizZ3It0pLmsg==}
+    engines: {node: '>=12'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
     optional: true
 
   /@bufbuild/buf@1.43.0:
@@ -494,6 +627,20 @@ packages:
       '@bufbuild/buf-linux-x64': 1.43.0
       '@bufbuild/buf-win32-arm64': 1.43.0
       '@bufbuild/buf-win32-x64': 1.43.0
+
+  /@bufbuild/buf@1.45.0:
+    resolution: {integrity: sha512-6VgwZDwBXWWrA8e8B0efKs3px6rbJRZVBpFt7wBAHU+SgcXONF2rVNA60S8F6/ixaW1EHkUhkIeVyCHs+wV1Bw==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      '@bufbuild/buf-darwin-arm64': 1.45.0
+      '@bufbuild/buf-darwin-x64': 1.45.0
+      '@bufbuild/buf-linux-aarch64': 1.45.0
+      '@bufbuild/buf-linux-x64': 1.45.0
+      '@bufbuild/buf-win32-arm64': 1.45.0
+      '@bufbuild/buf-win32-x64': 1.45.0
+    dev: true
 
   /@bufbuild/jest-environment-jsdom@0.1.1(jest-environment-jsdom@29.7.0):
     resolution: {integrity: sha512-lO4dke+l/LQAUT8CLmh0SKtY37gmax63eD7YSBQu48sqwAx4hgu1hRmoheRysaqR4bO6Vudhf6+nkBm0TbctvA==}
@@ -1520,6 +1667,13 @@ packages:
     dependencies:
       '@types/react': 18.3.5
 
+  /@types/react@18.3.12:
+    resolution: {integrity: sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==}
+    dependencies:
+      '@types/prop-types': 15.7.13
+      csstype: 3.1.3
+    dev: true
+
   /@types/react@18.3.5:
     resolution: {integrity: sha512-WeqMfGJLGuLCqHGYRGHxnKrXcTitc6L/nBUWfWPcTarG3t9PsquqUMuVeXZeca+mglY4Vo5GZjCi0A3Or2lnxA==}
     dependencies:
@@ -1829,6 +1983,11 @@ packages:
       uri-js: 4.4.1
     dev: true
 
+  /ansi-escapes@6.2.1:
+    resolution: {integrity: sha512-4nJ3yixlEthEJ9Rk4vPcdBRkZvQZlYyu8j4/Mqz5sgIkddmEnH2Yj2ZrnP9S3tQOvSNRUIgVNF/1yPpRAGNRig==}
+    engines: {node: '>=14.16'}
+    dev: true
+
   /ansi-escapes@7.0.0:
     resolution: {integrity: sha512-GdYO7a61mR0fOlAsvC9/rIHf7L96sBc6dEWzeOu+KAea5bZyQRPIpojrVoI4AXGJS/ycu/fBTdLrUkA4ODrvjw==}
     engines: {node: '>=18'}
@@ -1860,6 +2019,10 @@ packages:
   /ansi-styles@5.2.0:
     resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
     engines: {node: '>=10'}
+
+  /ansicolors@0.3.2:
+    resolution: {integrity: sha512-QXu7BPrP29VllRxH8GwB7x5iX5qWKAAMLqKQGWTeLWVlNHNOpVMJ91dsxQAIWXpjuW5wqvxu3Jd/nRjrJ+0pqg==}
+    dev: true
 
   /any-promise@1.3.0:
     resolution: {integrity: sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==}
@@ -2029,6 +2192,14 @@ packages:
   /caniuse-lite@1.0.30001667:
     resolution: {integrity: sha512-7LTwJjcRkzKFmtqGsibMeuXmvFDfZq/nzIjnmgCGzKKRVzjD72selLDK1oPF/Oxzmt4fNcPvTDvGqSDG4tCALw==}
     dev: false
+
+  /cardinal@2.1.1:
+    resolution: {integrity: sha512-JSr5eOgoEymtYHBjNWyjrMqet9Am2miJhlfKNdqLp6zoeAh0KN5dRAcxlecj5mAJrmQomgiOBj35xHLrFjqBpw==}
+    hasBin: true
+    dependencies:
+      ansicolors: 0.3.2
+      redeyed: 2.1.1
+    dev: true
 
   /chai@5.1.1:
     resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
@@ -3685,6 +3856,21 @@ packages:
       '@jridgewell/sourcemap-codec': 1.5.0
     dev: true
 
+  /marked-terminal@6.2.0(marked@9.1.6):
+    resolution: {integrity: sha512-ubWhwcBFHnXsjYNsu+Wndpg0zhY4CahSpPlA70PlO0rR9r2sZpkyU+rkCsOWH+KMEkx847UpALON+HWgxowFtw==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      marked: '>=1 <12'
+    dependencies:
+      ansi-escapes: 6.2.1
+      cardinal: 2.1.1
+      chalk: 5.3.0
+      cli-table3: 0.6.5
+      marked: 9.1.6
+      node-emoji: 2.1.3
+      supports-hyperlinks: 3.1.0
+    dev: true
+
   /marked-terminal@7.1.0(marked@9.1.6):
     resolution: {integrity: sha512-+pvwa14KZL74MVXjYdPR3nSInhGhNvPce/3mqLVZT2oUvt654sL1XImFuLZ1pkA866IYZ3ikDTOFUIC7XzpZZg==}
     engines: {node: '>=16.0.0'}
@@ -4053,6 +4239,12 @@ packages:
       indent-string: 4.0.0
       strip-indent: 3.0.0
     dev: false
+
+  /redeyed@2.1.1:
+    resolution: {integrity: sha512-FNpGGo1DycYAdnrKFxCMmKYgo/mILAqtRYbkdQD8Ep/Hk2PQ5+aEAEx+IU713RTDmuBaH0c8P5ZozurNu5ObRQ==}
+    dependencies:
+      esprima: 4.0.1
+    dev: true
 
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}

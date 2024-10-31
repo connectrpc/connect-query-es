@@ -7,6 +7,6 @@ inputs:
 clean: true
 plugins:
   - local: protoc-gen-es
-    out: src/gen
+    out: gen
     opt:
-      - target=ts
+      - target=dts+js

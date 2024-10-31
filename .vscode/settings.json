@@ -1,0 +1,5 @@
+{
+  "git.enableCommitSigning": true,
+  "git.alwaysSignOff": true,
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
