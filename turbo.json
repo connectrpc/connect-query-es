@@ -18,7 +18,7 @@
       "dependsOn": ["^build", "build"]
     },
     "test": {
-      "dependsOn": ["generate"],
+      "dependsOn": ["generate", "^generate"],
       "cache": false
     },
     "attw": {
