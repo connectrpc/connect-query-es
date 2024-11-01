@@ -31,21 +31,21 @@
     "@connectrpc/connect-query-core": "workspace:*"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.15.4",
-    "@bufbuild/buf": "1.43.0",
+    "@arethetypeswrong/cli": "^0.16.4",
+    "@bufbuild/buf": "1.46.0",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
-    "@bufbuild/protobuf": "^2.2.0",
-    "@bufbuild/protoc-gen-es": "^2.2.0",
-    "@connectrpc/connect": "^2.0.0-rc.1",
-    "@connectrpc/connect-web": "^2.0.0-rc.1",
-    "@tanstack/react-query": "^5.53.3",
+    "@bufbuild/protobuf": "^2.2.1",
+    "@bufbuild/protoc-gen-es": "^2.2.1",
+    "@connectrpc/connect": "^2.0.0-rc.2",
+    "@connectrpc/connect-web": "^2.0.0-rc.2",
+    "@tanstack/react-query": "^5.59.16",
     "@testing-library/react": "^16.0.1",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "test-utils": "workspace:*",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.3"
   },
   "peerDependencies": {
     "@bufbuild/protobuf": "2.x",
