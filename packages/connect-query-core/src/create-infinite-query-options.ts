@@ -92,6 +92,87 @@ export function createInfiniteQueryOptions<
   ParamKey extends keyof MessageInitShape<I>,
 >(
   schema: DescMethodUnary<I, O>,
+  input: MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>,
+  {
+    transport,
+    getNextPageParam,
+    pageParamKey,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
+): {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
+  queryKey: ConnectQueryKey;
+  queryFn: QueryFunction<
+    MessageShape<O>,
+    ConnectQueryKey,
+    MessageInitShape<I>[ParamKey]
+  >;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+  initialPageParam: MessageInitShape<I>[ParamKey];
+};
+export function createInfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+>(
+  schema: DescMethodUnary<I, O>,
+  input: SkipToken,
+  {
+    transport,
+    getNextPageParam,
+    pageParamKey,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
+): {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
+  queryKey: ConnectQueryKey;
+  queryFn: SkipToken;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+  initialPageParam: MessageInitShape<I>[ParamKey];
+};
+export function createInfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+>(
+  schema: DescMethodUnary<I, O>,
+  input:
+    | SkipToken
+    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
+  {
+    transport,
+    getNextPageParam,
+    pageParamKey,
+  }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
+): {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
+  queryKey: ConnectQueryKey;
+  queryFn:
+    | QueryFunction<
+        MessageShape<O>,
+        ConnectQueryKey,
+        MessageInitShape<I>[ParamKey]
+      >
+    | SkipToken;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+  initialPageParam: MessageInitShape<I>[ParamKey];
+};
+export function createInfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+>(
+  schema: DescMethodUnary<I, O>,
   input:
     | SkipToken
     | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
