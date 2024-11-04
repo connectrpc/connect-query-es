@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { Message, PartialMessage } from "@bufbuild/protobuf";
-import type { CallOptions, ConnectError, Transport } from "@connectrpc/connect";
+import type {
+  DescMessage,
+  DescMethodUnary,
+  MessageInitShape,
+  MessageShape,
+} from "@bufbuild/protobuf";
+import type { ConnectError, Transport } from "@connectrpc/connect";
+import { callUnaryMethod } from "@connectrpc/connect-query-core";
 import type {
   UseMutationOptions as TSUseMutationOptions,
   UseMutationResult,
@@ -21,50 +27,42 @@ import type {
 import { useMutation as tsUseMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
 
-import { callUnaryMethod } from "./call-unary-method.js";
-import type { MethodUnaryDescriptor } from "./method-unary-descriptor.js";
 import { useTransport } from "./use-transport.js";
 
 /**
- * Options for useQuery
+ * Options for useMutation
  */
 export type UseMutationOptions<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
   Ctx = unknown,
-> = Omit<
-  TSUseMutationOptions<O, ConnectError, PartialMessage<I>, Ctx>,
-  "mutationFn"
+> = TSUseMutationOptions<
+  MessageShape<O>,
+  ConnectError,
+  MessageInitShape<I>,
+  Ctx
 > & {
+  /** The transport to be used for the fetching. */
   transport?: Transport;
-  callOptions?: CallOptions;
 };
 
 /**
  * Query the method provided. Maps to useMutation on tanstack/react-query
  */
 export function useMutation<
-  I extends Message<I>,
-  O extends Message<O>,
+  I extends DescMessage,
+  O extends DescMessage,
   Ctx = unknown,
 >(
-  methodSig: MethodUnaryDescriptor<I, O>,
-  // istanbul ignore next
-  {
-    transport,
-    callOptions,
-    ...queryOptions
-  }: UseMutationOptions<I, O, Ctx> = {},
-): UseMutationResult<O, ConnectError, PartialMessage<I>, Ctx> {
+  schema: DescMethodUnary<I, O>,
+  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
+): UseMutationResult<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx> {
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
-    async (input: PartialMessage<I>) =>
-      callUnaryMethod(methodSig, input, {
-        transport: transportToUse,
-        callOptions,
-      }),
-    [transportToUse, callOptions, methodSig],
+    async (input: MessageInitShape<I>) =>
+      callUnaryMethod(transportToUse, schema, input),
+    [transportToUse, schema],
   );
   return tsUseMutation({
     ...queryOptions,

@@ -26,13 +26,7 @@ const config = {
   parserOptions: {
     project: true,
   },
-  plugins: [
-    "@typescript-eslint",
-    "jsdoc",
-    "import",
-    "simple-import-sort",
-    "vitest",
-  ],
+  plugins: ["@typescript-eslint", "import", "simple-import-sort", "vitest"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/all",
@@ -43,14 +37,11 @@ const config = {
     "prettier",
   ],
   settings: {
-    jsdoc: {
-      mode: "typescript",
-      noDefaultExampleRules: false,
-      checkProperties: true,
-      minLines: 1,
-    },
     "import/resolver": {
       typescript: {},
+    },
+    vitest: {
+      typecheck: true,
     },
   },
   rules: {
@@ -69,7 +60,6 @@ const config = {
     "@typescript-eslint/prefer-readonly-parameter-types": "off", // not realistic
     "@typescript-eslint/explicit-module-boundary-types": "off", // inference and conformance testing cover this well
     "@typescript-eslint/explicit-function-return-type": "off", // inference and conformance testing cover this well
-    "@typescript-eslint/no-unused-expressions": "off", // necessary component of some exports, e.g. DisableQuery
     "@typescript-eslint/no-type-alias": "off", // this rule turns off things that are absolutely required by this project such as conditional types and literals
     "@typescript-eslint/no-throw-literal": "off", // unfortunately this rule doesn't understand returns from `unreachableCase`
     "@typescript-eslint/no-magic-numbers": "off", // literal values are used in CSS-in-JS, tests, and library constants
@@ -77,18 +67,6 @@ const config = {
     "@typescript-eslint/ban-ts-comment": [
       "error",
       { "ts-expect-error": { descriptionFormat: "^\\(\\d+\\) .+$" } },
-    ],
-
-    "jsdoc/require-jsdoc": [
-      "error",
-      {
-        contexts: [
-          "TSTypeAliasDeclaration",
-          { context: "TSPropertySignature", inlineCommentBlock: true },
-        ],
-        publicOnly: true,
-        require: { ArrowFunctionExpression: true },
-      },
     ],
 
     "simple-import-sort/imports": "error",
@@ -115,14 +93,13 @@ const config = {
           "error",
           {
             vars: "all",
-            varsIgnorePattern: "ExpectType_.*", // necessary for TypeScript type tests
             argsIgnorePattern: "_",
           },
         ],
       },
     },
     {
-      files: ["**/eliza/*", "**/gen/**", "**/snapshots/**"], // generated code
+      files: ["**/eliza/*", "gen/**", "**/gen/**", "**/snapshots/**"], // generated code
       rules: {
         "eslint-comments/no-unused-enable": "off",
         "eslint-comments/no-unused-disable": "off",

@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/connect-query",
-  "version": "1.4.2",
+  "version": "2.0.0-rc.2",
   "description": "TypeScript-first expansion pack for TanStack Query that gives you Protobuf superpowers.",
   "license": "Apache-2.0",
   "repository": {
@@ -13,8 +13,8 @@
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --project tsconfig.build.json --module commonjs --moduleResolution node10 --verbatimModuleSyntax false --outDir ./dist/cjs --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
     "build:esm": "tsc --project tsconfig.build.json",
-    "generate": "buf generate --path eliza.proto",
     "test": "vitest --run",
+    "test:watch": "vitest --watch",
     "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
     "attw": "attw --pack"
   },
@@ -28,28 +28,28 @@
     }
   },
   "dependencies": {
-    "stable-hash": "^0.0.4"
+    "@connectrpc/connect-query-core": "workspace:*"
   },
   "devDependencies": {
-    "@bufbuild/buf": "1.43.0",
-    "@arethetypeswrong/cli": "^0.15.4",
+    "@arethetypeswrong/cli": "^0.16.4",
+    "@bufbuild/buf": "1.46.0",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
-    "@bufbuild/protobuf": "^1.10.0",
-    "@bufbuild/protoc-gen-es": "^1.10.0",
-    "@connectrpc/connect": "^1.5.0",
-    "@connectrpc/connect-web": "^1.5.0",
-    "@connectrpc/protoc-gen-connect-es": "^1.5.0",
+    "@bufbuild/protobuf": "^2.2.1",
+    "@bufbuild/protoc-gen-es": "^2.2.1",
+    "@connectrpc/connect": "^2.0.0-rc.2",
+    "@connectrpc/connect-web": "^2.0.0-rc.2",
     "@tanstack/react-query": "^5.59.16",
     "@testing-library/react": "^16.0.1",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "typescript": "^5.5.4"
+    "test-utils": "workspace:*",
+    "typescript": "^5.6.3"
   },
   "peerDependencies": {
-    "@bufbuild/protobuf": "^1.10.0",
-    "@connectrpc/connect": "^1.1.2",
+    "@bufbuild/protobuf": "2.x",
+    "@connectrpc/connect": "^2.0.0-rc.1",
     "@tanstack/react-query": "5.x",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

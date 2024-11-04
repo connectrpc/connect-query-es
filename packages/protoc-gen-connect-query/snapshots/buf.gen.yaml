@@ -1,32 +1,32 @@
-version: v1
+version: v2
+inputs:
+  - proto_file: test.proto
+clean: true
 plugins:
   # js
-  - plugin: es
+  - local: protoc-gen-es
     out: gen_js
-  - plugin: connect-query
-    path: ../bin/protoc-gen-connect-query
+  - local: ../bin/protoc-gen-connect-query
     out: gen_js
 
   # cjs
-  - plugin: es
+  - local: protoc-gen-es
     out: gen_cjs
     opt:
       - js_import_style=legacy_commonjs
-  - plugin: connect-query
-    path: ../bin/protoc-gen-connect-query
+      - import_extension=js
+  - local: ../bin/protoc-gen-connect-query
     out: gen_cjs
     opt:
       - js_import_style=legacy_commonjs
-      - ts_nocheck=false # we only set this for our tests
+      - import_extension=js
 
   # ts
-  - plugin: es
+  - local: protoc-gen-es
     out: gen_ts
     opt:
       - target=ts
-  - plugin: connect-query
-    path: ../bin/protoc-gen-connect-query
+  - local: ../bin/protoc-gen-connect-query
     out: gen_ts
     opt:
       - target=ts
-      - ts_nocheck=false # we only set this for our tests
