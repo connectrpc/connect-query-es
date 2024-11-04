@@ -362,27 +362,22 @@ describe("useSuspenseInfiniteQuery", () => {
     });
   });
 
-  it("can be disabled without explicit skipToken", () => {
-    const { result } = renderHook(
+  // eslint-disable-next-line vitest/expect-expect -- We are asserting via @ts-expect-error
+  it("can not be disabled with skipToken", () => {
+    renderHook(
       () => {
-        return useInfiniteQuery(
+        return useSuspenseInfiniteQuery(
           methodDescriptor,
-          {
-            page: 0n,
-          },
+          // @ts-expect-error(2345) skipToken is not allowed
+          skipToken,
           {
             getNextPageParam: (lastPage) => lastPage.page + 1n,
             pageParamKey: "page",
-            enabled: false,
           },
         );
       },
       wrapper({}, mockedPaginatedTransport),
     );
-
-    expect(result.current.data).toBeUndefined();
-    expect(result.current.isPending).toBeTruthy();
-    expect(result.current.isFetching).toBeFalsy();
   });
 
   // eslint-disable-next-line vitest/expect-expect -- We are asserting via @ts-expect-error
