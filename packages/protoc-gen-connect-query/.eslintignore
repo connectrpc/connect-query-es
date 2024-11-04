@@ -1,1 +1,4 @@
 dist
+snapshots
+.turbo
+.type-dump

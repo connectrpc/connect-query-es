@@ -1,0 +1,27 @@
+{
+  "name": "test-utils",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf ./dist/*",
+    "generate": "buf generate",
+    "build": "tsc --project tsconfig.build.json"
+  },
+  "exports": {
+    ".": "./dist/esm/index.js",
+    "./gen/*": "./dist/esm/gen/*"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.46.0",
+    "@bufbuild/protobuf": "^2.2.1",
+    "@bufbuild/protoc-gen-es": "^2.2.1",
+    "@connectrpc/connect": "^2.0.0-rc.2",
+    "@connectrpc/connect-web": "^2.0.0-rc.2",
+    "@types/react": "18.3.12",
+    "react": "^18.3.1"
+  },
+  "files": [
+    "dist/**"
+  ]
+}

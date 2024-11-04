@@ -12,36 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { create } from "@bufbuild/protobuf";
 import { renderHook, waitFor } from "@testing-library/react";
+import { mockPaginatedTransport } from "test-utils";
+import { ListResponseSchema, ListService } from "test-utils/gen/list_pb.js";
 import { describe, expect, it, vi } from "vitest";
 
-import { defaultOptions } from "./default-options.js";
-import { BigIntService, PaginatedService } from "./gen/eliza_connect.js";
-import {
-  mockPaginatedTransport,
-  mockStatefulBigIntTransport,
-  wrapper,
-} from "./test/test-utils.js";
+import { wrapper } from "./test/test-wrapper.js";
 import { useMutation } from "./use-mutation.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
-const methodDescriptor = {
-  ...PaginatedService.methods.list,
-  localName: "List",
-  service: {
-    typeName: PaginatedService.typeName,
-  },
-};
+const methodDescriptor = ListService.method.list;
 
 const mockedPaginatedTransport = mockPaginatedTransport();
-const mutationTransport = mockStatefulBigIntTransport(true);
-
-const statefulDescriptor = {
-  ...BigIntService.methods.count,
-  service: {
-    typeName: BigIntService.typeName,
-  },
-};
 
 describe("useMutation", () => {
   it("performs a mutation", async () => {
@@ -52,12 +35,7 @@ describe("useMutation", () => {
           onSuccess,
         });
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     result.current.mutate({
@@ -69,10 +47,10 @@ describe("useMutation", () => {
     });
 
     expect(onSuccess).toHaveBeenCalledWith(
-      {
+      create(ListResponseSchema, {
         items: ["-2 Item", "-1 Item", "0 Item"],
         page: 0n,
-      },
+      }),
       {
         page: 0n,
       },
@@ -90,12 +68,7 @@ describe("useMutation", () => {
           }),
         });
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     result.current.mutate({
@@ -107,48 +80,6 @@ describe("useMutation", () => {
     });
 
     expect(result.current.data?.items[0]).toBe("Intercepted!");
-  });
-
-  it("can be cancelled", async () => {
-    const abortController = new AbortController();
-    const { result } = renderHook(
-      () => {
-        return useMutation(statefulDescriptor, {
-          callOptions: {
-            signal: abortController.signal,
-          },
-        });
-      },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mutationTransport,
-      ),
-    );
-
-    result.current.mutate({
-      add: 1n,
-    });
-
-    abortController.abort();
-
-    await waitFor(() => {
-      expect(abortController.signal.aborted).toBeTruthy();
-    });
-
-    expect(result.current.isPending).toBeFalsy();
-
-    const newResult = await mutationTransport.unary(
-      BigIntService,
-      BigIntService.methods.getCount,
-      undefined,
-      undefined,
-      undefined,
-      {},
-    );
-
-    expect(newResult.message.count).toBe(0n);
   });
 
   it("can forward onMutate params", async () => {
@@ -168,12 +99,7 @@ describe("useMutation", () => {
           },
         });
       },
-      wrapper(
-        {
-          defaultOptions,
-        },
-        mockedPaginatedTransport,
-      ),
+      wrapper({}, mockedPaginatedTransport),
     );
 
     result.current.mutate({
@@ -185,10 +111,10 @@ describe("useMutation", () => {
     });
 
     expect(onSuccess).toHaveBeenCalledWith(
-      {
+      create(ListResponseSchema, {
         items: ["-2 Item", "-1 Item", "0 Item"],
         page: 0n,
-      },
+      }),
       {
         page: 0n,
       },

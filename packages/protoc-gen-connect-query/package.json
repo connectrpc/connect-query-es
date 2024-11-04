@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/protoc-gen-connect-query",
-  "version": "1.4.2",
+  "version": "2.0.0-rc.2",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
@@ -22,25 +22,24 @@
     "clean": "rm -rf dist",
     "build": "pnpm clean && tsc --project tsconfig.build.json",
     "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
-    "generate": "rm -rf snapshots/gen* && cd snapshots && buf generate buf.build/connectrpc/eliza:8b8b971d6fde4dc8ba5d96f9fda7d53c",
+    "generate": "cd snapshots && buf generate",
     "test": "tsc --declaration --declarationDir .type-dump --emitDeclarationOnly"
   },
   "preferUnplugged": true,
   "devDependencies": {
-    "@bufbuild/buf": "1.43.0",
-    "@bufbuild/protoc-gen-es": "^1.10.0",
-    "@connectrpc/connect": "^1.5.0",
+    "@bufbuild/buf": "1.46.0",
+    "@bufbuild/protoc-gen-es": "^2.2.1",
+    "@connectrpc/connect": "^2.0.0-rc.2",
     "@connectrpc/connect-query": "workspace:*",
-    "@connectrpc/protoc-gen-connect-es": "^1.5.0",
     "@tanstack/react-query": "^5.59.16",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^1.10.0",
-    "@bufbuild/protoplugin": "^1.10.0"
+    "@bufbuild/protobuf": "^2.2.1",
+    "@bufbuild/protoplugin": "^2.2.1"
   },
   "peerDependencies": {
-    "@bufbuild/protoc-gen-es": "1.x"
+    "@bufbuild/protoc-gen-es": "2.x"
   },
   "peerDependenciesMeta": {
     "@bufbuild/protoc-gen-es": {
