@@ -22,12 +22,12 @@
   },
   "devDependencies": {
     "@bufbuild/license-header": "^0.0.4",
-    "@types/node": "^22.5.1",
+    "@types/node": "^22.8.6",
     "@typescript-eslint/eslint-plugin": "7.15.0",
     "@typescript-eslint/parser": "7.15.0",
     "@typescript-eslint/utils": "7.15.0",
-    "@vitest/ui": "^2.1.2",
-    "cspell": "8.14.2",
+    "@vitest/ui": "^2.1.4",
+    "cspell": "8.15.5",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
@@ -37,9 +37,9 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-vitest": "0.5.4",
     "prettier": "3.3.3",
-    "turbo": "^2.1.1",
-    "typescript": "5.5.4",
-    "vitest": "^2.1.2"
+    "turbo": "^2.2.3",
+    "typescript": "5.6.3",
+    "vitest": "^2.1.4"
   },
   "engineStrict": true,
   "engines": {
