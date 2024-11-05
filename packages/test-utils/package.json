@@ -1,7 +1,7 @@
 {
   "name": "test-utils",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0-rc.3",
   "type": "module",
   "scripts": {
     "clean": "rm -rf ./dist/*",
@@ -16,8 +16,8 @@
     "@bufbuild/buf": "^1.46.0",
     "@bufbuild/protobuf": "^2.2.1",
     "@bufbuild/protoc-gen-es": "^2.2.1",
-    "@connectrpc/connect": "^2.0.0-rc.2",
-    "@connectrpc/connect-web": "^2.0.0-rc.2",
+    "@connectrpc/connect": "^2.0.0-rc.3",
+    "@connectrpc/connect-web": "^2.0.0-rc.3",
     "@types/react": "18.3.12",
     "react": "^18.3.1"
   },
