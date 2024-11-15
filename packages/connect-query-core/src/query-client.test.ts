@@ -14,14 +14,14 @@
 
 import type { MessageShape } from "@bufbuild/protobuf";
 import type { Query } from "@tanstack/query-core";
+import { mockEliza, mockPaginatedTransport } from "test-utils";
+import type { SayResponseSchema } from "test-utils/gen/eliza_pb.js";
+import { ElizaService } from "test-utils/gen/eliza_pb.js";
+import { ListService } from "test-utils/gen/list_pb.js";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import type { SayResponseSchema } from "./gen/eliza_pb.js";
-import { ElizaService } from "./gen/eliza_pb.js";
-import { ListService } from "./gen/list_pb.js";
 import { QueryClient } from "./query-client.js";
-import { mockEliza, mockPaginatedTransport } from "./test/test-utils.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const sayMethodDescriptor = ElizaService.method.say;
