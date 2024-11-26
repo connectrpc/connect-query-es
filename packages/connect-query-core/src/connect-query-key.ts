@@ -92,7 +92,7 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
       /**
        * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
        */
-      cardinality: "finite" | "infinite" | undefined;
+      cardinality?: "finite" | "infinite" | undefined;
       /**
        * If omit the field with this name from the key for infinite queries.
        */
@@ -110,7 +110,7 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
       /**
        * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
        */
-      cardinality: "finite" | "infinite" | undefined;
+      cardinality?: "finite" | "infinite" | undefined;
     };
 
 /**
