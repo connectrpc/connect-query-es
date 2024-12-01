@@ -199,8 +199,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(@bufbuild/protobuf@2.2.1)(@connectrpc/connect@2.0.0)
       '@tanstack/query-core':
-        specifier: ^5.59.16
-        version: 5.59.16
+        specifier: ^5.62.0
+        version: 5.62.0
       test-utils:
         specifier: workspace:*
         version: link:../test-utils
@@ -1450,6 +1450,10 @@ packages:
 
   /@tanstack/query-core@5.59.16:
     resolution: {integrity: sha512-crHn+G3ltqb5JG0oUv6q+PMz1m1YkjpASrXTU+sYWW9pLk0t2GybUHNRqYPZWhxgjPaVGC4yp92gSFEJgYEsPw==}
+
+  /@tanstack/query-core@5.62.0:
+    resolution: {integrity: sha512-sx38bGrqF9bop92AXOvzDr0L9fWDas5zXdPglxa9cuqeVSWS7lY6OnVyl/oodfXjgOGRk79IfCpgVmxrbHuFHg==}
+    dev: true
 
   /@tanstack/query-devtools@5.58.0:
     resolution: {integrity: sha512-iFdQEFXaYYxqgrv63ots+65FGI+tNp5ZS5PdMU1DWisxk3fez5HG3FyVlbUva+RdYS5hSLbxZ9aw3yEs97GNTw==}
