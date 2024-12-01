@@ -37,7 +37,7 @@
     "@connectrpc/connect-web": "^2.0.0",
     "test-utils": "workspace:*",
     "typescript": "^5.6.3",
-    "@tanstack/query-core": "^5.59.16"
+    "@tanstack/query-core": "^5.62.0"
   },
   "peerDependencies": {
     "@bufbuild/protobuf": "2.x",
