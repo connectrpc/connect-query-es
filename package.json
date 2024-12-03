@@ -3,11 +3,11 @@
   "name": "root",
   "type": "module",
   "workspaces": [
-    "packages/connect-query",
     "packages/connect-query-core",
+    "packages/connect-query",
+    "packages/examples/react/basic",
     "packages/protoc-gen-connect-query",
-    "packages/test-utils",
-    "packages/examples/react/basic"
+    "packages/test-utils"
   ],
   "scripts": {
     "all": "turbo run --ui tui build format test lint attw license-header",
