@@ -26,19 +26,19 @@ jobs:
       - name: Enable core pack
         run: |
           corepack enable
-          pnpm --version
+          npm --version
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: pnpm
+          cache: npm
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Run CI
-        run: pnpm run all
+        run: npm run all
 
       - name: Check changed files
         id: check_changed_files
