@@ -56,7 +56,7 @@ describe("createConnectQueryKey", () => {
     const key = createConnectQueryKey({
       transport: fakeTransport,
       schema: ListService.method.list,
-      input: create(ListRequestSchema, { page: BigInt(0) }),
+      input: create(ListRequestSchema, { page: 0n }),
       pageParamKey: "page",
       cardinality: "infinite",
     });
