@@ -15,7 +15,7 @@
     "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm --declaration --declarationDir ./dist/esm",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
-    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix",
+    "format": "prettier . --write --ignore-path ./.eslintignore",
     "license-header": "license-header",
     "lint": "eslint --max-warnings 0 .",
     "attw": "attw --pack"
