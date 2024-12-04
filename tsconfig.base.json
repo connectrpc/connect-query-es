@@ -5,8 +5,6 @@
       "ES2017",
       // DOM for the fetch and streams API
       "DOM",
-      // ES2018.AsyncIterable for AsyncIterator
-      "ES2018.AsyncIterable"
     ],
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
