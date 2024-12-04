@@ -22,7 +22,16 @@
     },
     "attw": {
       "dependsOn": ["build"]
+    },
+    "//#format": {
+      "inputs": ["$TURBO_DEFAULT$", "!packages/**", "package-lock.json"]
+    },
+    "//#license-header": {
+      "inputs": ["$TURBO_DEFAULT$", "!packages/**"]
+    },
+    "//#lint": {
+      "dependsOn": ["format"],
+      "inputs": ["$TURBO_DEFAULT$", "!packages/**", "package-lock.json"]
     }
-    
   }
 }
