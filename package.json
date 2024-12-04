@@ -1,20 +1,27 @@
 {
   "private": true,
   "name": "root",
-  "repository": "git@github.com:connectrpc/connect-query-es.git",
+  "type": "module",
+  "workspaces": [
+    "packages/connect-query-core",
+    "packages/connect-query",
+    "packages/examples/react/basic",
+    "packages/protoc-gen-connect-query",
+    "packages/test-utils"
+  ],
   "scripts": {
-    "build": "turbo run build",
-    "generate": "turbo run generate",
-    "test": "turbo run test",
-    "test:watch": "turbo run test:watch",
-    "format": "pnpm run format:root && turbo run format",
-    "attw": "turbo run attw",
-    "check:spelling": "cspell \"**\" --gitignore",
-    "all": "turbo run build generate format attw test",
-    "update-all": "pnpm update --recursive --latest",
-    "format:root": "pnpm run check:spelling && prettier \"*.js\" \"*.ts\" \"README.md\" --write --no-error-on-unmatched-pattern"
+    "all": "turbo run --ui tui build format test lint attw license-header",
+    "clean": "git clean -Xdf",
+    "setversion": "node scripts/set-workspace-version.js",
+    "postsetversion": "npm run all",
+    "release": "node scripts/release.js",
+    "prerelease": "npm run all",
+    "format": "prettier --write --ignore-unknown '.' '!packages' '!.turbo' '!node_modules'",
+    "license-header": "license-header --ignore 'packages/**'",
+    "lint": "eslint --max-warnings 0 . --ignore-pattern 'packages/**' && npm run check:spelling",
+    "check:spelling": "cspell \"**\" --gitignore"
   },
-  "license": "Apache-2.0",
+  "packageManager": "npm@10.1.0",
   "licenseHeader": {
     "licenseType": "apache",
     "yearRange": "2021-2023",
@@ -33,6 +40,7 @@
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-eslint-comments": "3.2.0",
     "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^17.10.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-vitest": "0.5.4",
@@ -45,6 +53,5 @@
   "engines": {
     "node": ">=16",
     "npm": ">=8"
-  },
-  "packageManager": "pnpm@8.6.7"
+  }
 }

@@ -1,52 +1,71 @@
 name: ci
+
 on:
   push:
-    branches:
-      - main
+    branches: [main, "v*"]
+    tags: ["v*"]
   pull_request:
-    types:
-      - opened
-      - synchronize
+    branches: [main, "v*"]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+env:
+  # https://consoledonottrack.com/
+  DO_NOT_TRACK: 1
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  tasks:
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 20]
+        task:
+          - format
+          - license-header
+          - lint
+          - attw
+          - build
+        include:
+          - task: format
+            diff-check: true
+          - task: license-header
+            diff-check: true
+    name: ${{ matrix.task }}
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
-
-      # Slightly fragile since it runs on the default node version
-      # but until setup-node supports corepack (https://github.com/actions/setup-node/issues/531)
-      # this is our best option
-      - name: Enable core pack
-        run: |
-          corepack enable
-          pnpm --version
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Run CI
-        run: pnpm run all
-
+          node-version-file: .nvmrc
+          cache: "npm"
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}/${{ matrix.task }}/${{ github.sha }}
+          restore-keys: ${{ runner.os }}/${{ matrix.task }}
+      - run: npm ci
+      - run: npx turbo run ${{ matrix.task }}
       - name: Check changed files
-        id: check_changed_files
-        run: |
-          if [[ -z $(git status --porcelain | tee /dev/stderr) ]]; then
-            echo "No changed files detected."
-          else
-            echo "::error::Formatting resulted in changed files. Please make sure this branch is up to date and run 'pnpm format'. Verify the changes are what you want and commit them."
-            git diff
-            exit 1
-          fi
+        if: ${{ matrix.diff-check }}
+        run: node scripts/gh-diffcheck.js
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22.7.0, 20.17.0, 18.20.4, 18.14.1]
+    name: "test on Node.js ${{ matrix.node-version }}"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "npm"
+      - uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}/test/${{ github.sha }}
+          restore-keys: ${{ runner.os }}/test
+      - run: npm ci
+      - run: npx turbo run test

@@ -1,26 +1,30 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "target": "ESNext",
-    "esModuleInterop": true,
+    "target": "ES2020",
+    "lib": [
+      "ES2017",
+      // DOM for the fetch and streams API
+      "DOM"
+    ],
+    "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
-    "resolveJsonModule": true,
-
     "strict": true,
-    "exactOptionalPropertyTypes": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
 
-    "verbatimModuleSyntax": true,
+    // We need node's module resolution, so we do not have to skip lib checks
     "moduleResolution": "Node16",
     "module": "Node16",
-
-    "skipLibCheck": false,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": false
   }
 }

@@ -1,7 +1,12 @@
 {
-  "extends": "./tsconfig.build.json",
-  "include": ["src", "snapshots", "./*.config.ts"],
+  "files": ["src/protoc-gen-connect-query-plugin.ts"],
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["DOM", "ESNext"]
+    // We import the plugin's version number from package.json
+    "resolveJsonModule": true,
+    // This package is CommonJS
+    "verbatimModuleSyntax": false,
+    "module": "CommonJS",
+    "moduleResolution": "Node10"
   }
 }

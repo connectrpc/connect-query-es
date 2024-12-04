@@ -14,7 +14,7 @@
    packages in this repository use the same version number.
 2. Make sure you are on the latest main, and create a new git branch.
 3. Set the new version for all packages within the monorepo with the following
-   commands:  
+   commands:
 
    ```bash
    pnpm --filter "./packages/*" exec pnpm version 1.2.3

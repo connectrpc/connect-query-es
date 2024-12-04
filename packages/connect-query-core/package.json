@@ -9,13 +9,15 @@
     "directory": "packages/connect-query-core"
   },
   "scripts": {
-    "clean": "rm -rf ./dist/*",
+    "prebuild": "rm -rf ./dist/*",
     "build": "npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc --project tsconfig.build.json --module commonjs --moduleResolution node10 --verbatimModuleSyntax false --outDir ./dist/cjs --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
-    "build:esm": "tsc --project tsconfig.build.json",
+    "build:cjs": "tsc --project tsconfig.build.json --module commonjs --verbatimModuleSyntax false --moduleResolution node10 --outDir ./dist/cjs --declaration --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
+    "build:esm": "tsc --project tsconfig.build.json --outDir ./dist/esm --declaration --declarationDir ./dist/esm",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
-    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
+    "format": "prettier --write --ignore-unknown '.' '!dist'",
+    "license-header": "license-header",
+    "lint": "eslint --max-warnings 0 .",
     "attw": "attw --pack"
   },
   "type": "module",
@@ -35,7 +37,7 @@
     "@bufbuild/protoc-gen-es": "^2.2.1",
     "@connectrpc/connect": "^2.0.0",
     "@connectrpc/connect-web": "^2.0.0",
-    "test-utils": "workspace:*",
+    "test-utils": "*",
     "typescript": "^5.6.3",
     "@tanstack/query-core": "^5.59.16"
   },
