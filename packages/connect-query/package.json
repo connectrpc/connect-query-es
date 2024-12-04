@@ -57,8 +57,6 @@
     "react-dom": "^18.3.1"
   },
   "files": [
-    "dist/**",
-    "!*.test.js",
-    "!*.test.d.ts"
+    "dist/**"
   ]
 }

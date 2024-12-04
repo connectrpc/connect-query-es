@@ -47,8 +47,6 @@
     "@tanstack/query-core": "5.x"
   },
   "files": [
-    "dist/**",
-    "!*.test.js",
-    "!*.test.d.ts"
+    "dist/**"
   ]
 }
