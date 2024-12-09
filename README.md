@@ -1,8 +1,5 @@
 <!-- markdownlint-disable-next-line MD041 MD033 -- 033: necessary for setting the width; 041: this is the style of bufbuild READMEs -->
 
-> [!IMPORTANT]  
-> You are looking at the release candidate for version 2. For the current stable version, see the branch [v1](https://github.com/connectrpc/connect-query-es/tree/v1).
-
 <img src="assets/connect-query@16x.png" width="15%" />
 
 <!-- omit in toc -->
