@@ -78,7 +78,7 @@ import { useQuery } from '@connectrpc/connect-query';
 import { say } from 'your-generated-code/eliza-ElizaService_connectquery';
 
 export const Example: FC = () => {
-  const { data } = useQuery(say);
+  const { data } = useQuery(say, { sentence: "Hello" });
   return <div>{data}</div>;
 };
 ```
