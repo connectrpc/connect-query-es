@@ -123,12 +123,11 @@ describe("createConnectQueryKey", () => {
     expect(key[1].methodName).toBeUndefined();
   });
 
-  // eslint-disable-next-line vitest/expect-expect -- using ts-expect-error
   it("cannot except invalid input", () => {
+    // @ts-expect-error(2322) cannot create a key with invalid input
     createConnectQueryKey({
       schema: ElizaService.method.say,
       input: {
-        // @ts-expect-error(2322) cannot create a key with invalid input
         sentence: 1,
       },
       cardinality: undefined,
