@@ -13,7 +13,9 @@
 // limitations under the License.
 
 import type {
+  DescMessage,
   DescMethod,
+  DescMethodUnary,
   DescService,
   MessageInitShape,
 } from "@bufbuild/protobuf";
@@ -72,46 +74,46 @@ export type ConnectQueryKey = [
   },
 ];
 
-type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
-  ? {
-      /**
-       * Set `serviceName` and `methodName` in the key.
-       */
-      schema: Desc;
-      /**
-       * Set `input` in the key:
-       * - If a SkipToken is provided, `input` is "skipped".
-       * - If an init shape is provided, `input` is set to a message key.
-       * - If omitted or undefined, `input` is not set in the key.
-       */
-      input?: MessageInitShape<Desc["input"]> | SkipToken | undefined;
-      /**
-       * Set `transport` in the key.
-       */
-      transport?: Transport;
-      /**
-       * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
-       */
-      cardinality: "finite" | "infinite" | undefined;
-      /**
-       * If omit the field with this name from the key for infinite queries.
-       */
-      pageParamKey?: keyof MessageInitShape<Desc["input"]>;
-    }
-  : {
-      /**
-       * Set `serviceName` in the key, and omit `methodName`.
-       */
-      schema: Desc;
-      /**
-       * Set `transport` in the key.
-       */
-      transport?: Transport;
-      /**
-       * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
-       */
-      cardinality: "finite" | "infinite" | undefined;
-    };
+type KeyParamsForMethod<Desc extends DescMethod> = {
+  /**
+   * Set `serviceName` and `methodName` in the key.
+   */
+  schema: Desc;
+  /**
+   * Set `input` in the key:
+   * - If a SkipToken is provided, `input` is "skipped".
+   * - If an init shape is provided, `input` is set to a message key.
+   * - If omitted or undefined, `input` is not set in the key.
+   */
+  input?: MessageInitShape<Desc["input"]> | SkipToken | undefined;
+  /**
+   * Set `transport` in the key.
+   */
+  transport?: Transport;
+  /**
+   * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
+   */
+  cardinality: "finite" | "infinite" | undefined;
+  /**
+   * If omit the field with this name from the key for infinite queries.
+   */
+  pageParamKey?: keyof MessageInitShape<Desc["input"]>;
+};
+
+type KeyParamsForService<Desc extends DescService> = {
+  /**
+   * Set `serviceName` in the key, and omit `methodName`.
+   */
+  schema: Desc;
+  /**
+   * Set `transport` in the key.
+   */
+  transport?: Transport;
+  /**
+   * Set `cardinality` in the key - undefined is used for filters to match both finite and infinite queries.
+   */
+  cardinality: "finite" | "infinite" | undefined;
+};
 
 /**
  * TanStack Query manages query caching for you based on query keys. In Connect Query, keys are structured, and can easily be created using this factory function.
@@ -151,9 +153,12 @@ type KeyParams<Desc extends DescMethod | DescService> = Desc extends DescMethod
  * @see ConnectQueryKey for information on the components of Connect-Query's keys.
  */
 export function createConnectQueryKey<
-  Desc extends DescMethod | DescService,
-  Params extends KeyParams<Desc>,
->(params: Params): ConnectQueryKey {
+  I extends DescMessage,
+  O extends DescMessage,
+  Desc extends DescService,
+>(
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>,
+): ConnectQueryKey {
   const props: ConnectQueryKey[1] =
     params.schema.kind == "rpc"
       ? {
