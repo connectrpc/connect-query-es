@@ -52,7 +52,7 @@ git rebase upstream/main
 git checkout -b cool_new_feature
 ```
 
-Make your changes, then ensure that `make` still passes.
+Make your changes, then ensure that `npm run all` still passes.
 When you're satisfied with your changes, push them to your fork.
 
 ```
