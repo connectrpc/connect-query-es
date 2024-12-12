@@ -59,7 +59,7 @@ function setVersion(packages, lock, newVersion) {
     if (typeof pkg.version !== "string") {
       continue;
     }
-    assert(pkg.name);
+    assert(pkg.name, "Missing package name");
     if (pkg.version === newVersion) {
       continue;
     }
@@ -68,8 +68,15 @@ function setVersion(packages, lock, newVersion) {
       const l = Array.from(Object.values(lock.packages)).find(
         (l) => l.name === pkg.name,
       );
-      assert(l);
-      l.version = newVersion;
+      if (!pkg.private) {
+        assert(
+          l,
+          `Cannot find lock entry for ${pkg.name} and it is not private`,
+        );
+      }
+      if (l) {
+        l.version = newVersion;
+      }
     }
     updates.push({
       package: pkg,
