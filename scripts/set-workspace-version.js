@@ -14,9 +14,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { readdirSync, readFileSync, writeFileSync } from "fs";
-import { join } from "path";
-import { existsSync } from "node:fs";
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
+import { readFileSync, writeFileSync, existsSync, globSync } from "node:fs";
+import { dirname, join } from "node:path";
 import assert from "node:assert";
 
 if (process.argv.length < 3) {
@@ -24,8 +24,8 @@ if (process.argv.length < 3) {
     [
       `USAGE: ${process.argv[1]} <new-version>`,
       "",
-      "Walks through all packages in the given workspace directory and",
-      "sets the version of each package to the given version.",
+      "Walks through all workspace packages and sets the version of each ",
+      "package to the given version.",
       "If a package depends on another package from the workspace, the",
       "dependency version is updated as well.",
       "",
@@ -36,15 +36,16 @@ if (process.argv.length < 3) {
 
 try {
   const newVersion = process.argv[2];
-  const packagesDir = "packages";
   const lockFile = "package-lock.json";
-  const packages = readPackages(packagesDir);
+  const workspaces = findWorkspacePackages("package.json");
   const lock = tryReadLock(lockFile);
-  const updates = setVersion(packages, lock, newVersion);
+  const updates = setVersion(workspaces, lock, newVersion);
   if (updates.length > 0) {
-    writePackages(packagesDir, packages);
+    for (const { path, pkg } of workspaces) {
+      writeJson(path, pkg);
+    }
     if (lock) {
-      writeLock(lockFile, lock);
+      writeJson(lockFile, lock);
     }
     process.stdout.write(formatUpdates(updates) + "\n");
   }
@@ -53,9 +54,22 @@ try {
   process.exit(1);
 }
 
-function setVersion(packages, lock, newVersion) {
+/**
+ * @typedef {{path: string; pkg: Package}} Workspace
+ * @typedef {{name: string; version?: string}} Package
+ * @typedef {{packages: Record<string, {name?: name; version?: string}>}} Lockfile
+ * @typedef {{message: string, pkg: Package}} Update
+ */
+
+/**
+ * @param {Workspace[]} workspaces
+ * @param {Lockfile | null} lock
+ * @param {string} newVersion
+ * @return {Update[]}
+ */
+function setVersion(workspaces, lock, newVersion) {
   const updates = [];
-  for (const pkg of packages) {
+  for (const { pkg } of workspaces) {
     if (typeof pkg.version !== "string") {
       continue;
     }
@@ -65,31 +79,39 @@ function setVersion(packages, lock, newVersion) {
     }
     pkg.version = newVersion;
     if (lock) {
-      const l = Array.from(Object.values(lock.packages)).find(
-        (l) => l.name === pkg.name,
-      );
-      if (!pkg.private) {
-        assert(
-          l,
-          `Cannot find lock entry for ${pkg.name} and it is not private`,
+      const l = Object.entries(lock.packages).find(([path, l]) => {
+        if ("name" in l) {
+          return l.name === pkg.name;
+        }
+        // In some situations, the entry for a local package doesn't have a "name" property.
+        // We check the path of the entry instead: If the last path element is the same as
+        // the package name without scope, it's the entry we are looking for.
+        return (
+          !path.startsWith("node_modules/") &&
+          path.split("/").pop() === pkg.name.split("/").pop()
         );
-      }
-      if (l) {
-        l.version = newVersion;
-      }
+      })?.[1];
+      assert(l, `Cannot find lock entry for ${pkg.name} and it is not private`);
+      l.version = newVersion;
     }
     updates.push({
-      package: pkg,
+      pkg,
       message: `updated version from ${pkg.version} to ${newVersion}`,
     });
   }
-  updates.push(...syncDeps(packages, packages));
+  const pkgs = workspaces.map(({ pkg }) => pkg);
+  updates.push(...syncDeps(pkgs, pkgs));
   if (lock) {
-    syncDeps(Object.values(lock.packages), packages);
+    syncDeps(Object.values(lock.packages), pkgs);
   }
   return updates;
 }
 
+/**
+ * @param {Record<string, unknown>} packages
+ * @param {Package[]} deps
+ * @return {Update[]}
+ */
 function syncDeps(packages, deps) {
   const updates = [];
   for (const pkg of packages) {
@@ -122,7 +144,7 @@ function syncDeps(packages, deps) {
         }
         pkg[key][name] = wantVersion;
         updates.push({
-          package: pkg,
+          pkg,
           message: `updated ${key}["${name}"] from ${version} to ${wantVersion}`,
         });
       }
@@ -131,45 +153,54 @@ function syncDeps(packages, deps) {
   return updates;
 }
 
-function readPackages(packagesDir) {
-  const packagesByPath = readPackagesByPath(packagesDir);
-  return Object.values(packagesByPath);
-}
-
-function writePackages(packagesDir, packages) {
-  const packagesByPath = readPackagesByPath(packagesDir);
-  for (const [path, oldPkg] of Object.entries(packagesByPath)) {
-    const newPkg = packages.find((p) => p.name === oldPkg.name);
-    writeFileSync(path, JSON.stringify(newPkg, null, 2) + "\n");
+/**
+ * Read the given root package.json file, and return an array of workspace
+ * packages.
+ *
+ * @param {string} rootPackageJsonPath
+ * @return {Workspace[]}
+ */
+function findWorkspacePackages(rootPackageJsonPath) {
+  const root = JSON.parse(readFileSync(rootPackageJsonPath, "utf-8"));
+  if (
+    !Array.isArray(root.workspaces) ||
+    root.workspaces.some((w) => typeof w !== "string")
+  ) {
+    throw new Error(
+      `Missing or malformed "workspaces" array in ${rootPackageJsonPath}`,
+    );
   }
-}
-
-function readPackagesByPath(packagesDir) {
-  const packages = {};
-  for (const entry of readdirSync(packagesDir, { withFileTypes: true })) {
-    if (!entry.isDirectory()) {
-      continue;
-    }
-    const path = join(packagesDir, entry.name, "package.json");
-    if (existsSync(path)) {
+  const rootDir = dirname(rootPackageJsonPath);
+  return root.workspaces
+    .flatMap((ws) => globSync(join(rootDir, ws, "package.json")))
+    .filter((path) => existsSync(path))
+    .map((path) => {
       const pkg = JSON.parse(readFileSync(path, "utf-8"));
-      if (!pkg.name) {
-        throw new Error(`${path} is missing "name"`);
-      }
-      packages[path] = pkg;
-    }
-  }
-  return packages;
+      return { path, pkg };
+    });
 }
 
+/**
+ * @param {string} path
+ * @param {Record<unknown, unknown>} json
+ */
+function writeJson(path, json) {
+  writeFileSync(path, JSON.stringify(json, null, 2) + "\n");
+}
+
+/**
+ *
+ * @param {Update[]} updates
+ * @return {string}
+ */
 function formatUpdates(updates) {
   const lines = [];
   const updatesByName = {};
   for (const update of updates) {
-    if (updatesByName[update.package.name] === undefined) {
-      updatesByName[update.package.name] = [];
+    if (updatesByName[update.pkg.name] === undefined) {
+      updatesByName[update.pkg.name] = [];
     }
-    updatesByName[update.package.name].push(update);
+    updatesByName[update.pkg.name].push(update);
   }
   for (const name of Object.keys(updatesByName).sort()) {
     lines.push(`${name}:`);
@@ -180,6 +211,10 @@ function formatUpdates(updates) {
   return lines.join("\n");
 }
 
+/**
+ * @param {string} lockFile
+ * @return {Lockfile | null}
+ */
 function tryReadLock(lockFile) {
   if (!existsSync(lockFile)) {
     return null;
@@ -189,8 +224,4 @@ function tryReadLock(lockFile) {
   assert(typeof lock.packages == "object");
   assert(lock.packages !== null);
   return lock;
-}
-
-function writeLock(lockFile, lock) {
-  writeFileSync(lockFile, JSON.stringify(lock, null, 2) + "\n");
 }
