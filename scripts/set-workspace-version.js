@@ -76,6 +76,10 @@ try {
 }
 
 /**
+ * @typedef {{path: string; pkg: Package}} Workspace
+ */
+
+/**
  * Read the given root package.json file, and return an array of workspace
  * packages.
  *
