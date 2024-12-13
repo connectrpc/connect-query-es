@@ -52,6 +52,7 @@
     "**/gen",
     "**/snapshots",
     "**/*.css",
-    "**/*.xml"
+    "**/*.xml",
+    "**/tsconfig.vitest-temp.json"
   ]
 }
