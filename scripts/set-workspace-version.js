@@ -17,9 +17,8 @@
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
 import { readFileSync, writeFileSync, existsSync, globSync } from "node:fs";
 import { dirname, join } from "node:path";
-import assert from "node:assert";
 
-if (process.argv.length < 3) {
+if (process.argv.length !== 3 || !/^\d+\.\d+\.\d+$/.test(process.argv[2])) {
   process.stderr.write(
     [
       `USAGE: ${process.argv[1]} <new-version>`,
@@ -33,21 +32,43 @@ if (process.argv.length < 3) {
   );
   process.exit(1);
 }
+const newVersion = process.argv[2];
+const rootPackagePath = "package.json";
+const lockFilePath = "package-lock.json";
 
 try {
-  const newVersion = process.argv[2];
-  const lockFile = "package-lock.json";
-  const workspaces = findWorkspacePackages("package.json");
-  const lock = tryReadLock(lockFile);
-  const updates = setVersion(workspaces, lock, newVersion);
-  if (updates.length > 0) {
+  const lock = readLockfile(lockFilePath);
+  const workspaces = readWorkspaces(rootPackagePath);
+  const allPackages = workspaces.map((ws) => ws.pkg);
+  const bumpPackages = allPackages.filter(
+    (pkg) => pkg.version !== undefined && pkg.version !== newVersion,
+  );
+  /** @type {Log[]} */
+  const log = [];
+  for (const pkg of bumpPackages) {
+    log.push({
+      pkg,
+      message: `updated version from ${pkg.version} to ${newVersion}`,
+    });
+    pkg.version = newVersion;
+    findLockPackage(lock, pkg.name).version = newVersion;
+  }
+  for (const pkg of bumpPackages) {
+    // update deps in workspace package.json
+    for (const other of allPackages) {
+      log.push(...updatePackageDep(other, pkg.name, newVersion));
+    }
+    // update deps in package-lock.json
+    for (const lockPkg of Object.values(lock.packages)) {
+      updatePackageDep(lockPkg, pkg.name, newVersion);
+    }
+  }
+  if (log.length > 0) {
     for (const { path, pkg } of workspaces) {
       writeJson(path, pkg);
     }
-    if (lock) {
-      writeJson(lockFile, lock);
-    }
-    process.stdout.write(formatUpdates(updates) + "\n");
+    writeJson(lockFilePath, lock);
+    process.stdout.write(formatLog(log) + "\n");
   }
 } catch (e) {
   process.stderr.write(String(e) + "\n");
@@ -56,151 +77,95 @@ try {
 
 /**
  * @typedef {{path: string; pkg: Package}} Workspace
- * @typedef {{name: string; version?: string}} Package
- * @typedef {{packages: Record<string, {name?: name; version?: string}>}} Lockfile
- * @typedef {{message: string, pkg: Package}} Update
  */
-
-/**
- * @param {Workspace[]} workspaces
- * @param {Lockfile | null} lock
- * @param {string} newVersion
- * @return {Update[]}
- */
-function setVersion(workspaces, lock, newVersion) {
-  const updates = [];
-  for (const { pkg } of workspaces) {
-    if (typeof pkg.version !== "string") {
-      continue;
-    }
-    assert(pkg.name, "Missing package name");
-    if (pkg.version === newVersion) {
-      continue;
-    }
-    pkg.version = newVersion;
-    if (lock) {
-      const l = Object.entries(lock.packages).find(([path, l]) => {
-        if ("name" in l) {
-          return l.name === pkg.name;
-        }
-        // In some situations, the entry for a local package doesn't have a "name" property.
-        // We check the path of the entry instead: If the last path element is the same as
-        // the package name without scope, it's the entry we are looking for.
-        return (
-          !path.startsWith("node_modules/") &&
-          path.split("/").pop() === pkg.name.split("/").pop()
-        );
-      })?.[1];
-      assert(l, `Cannot find lock entry for ${pkg.name} and it is not private`);
-      l.version = newVersion;
-    }
-    updates.push({
-      pkg,
-      message: `updated version from ${pkg.version} to ${newVersion}`,
-    });
-  }
-  const pkgs = workspaces.map(({ pkg }) => pkg);
-  updates.push(...syncDeps(pkgs, pkgs));
-  if (lock) {
-    syncDeps(Object.values(lock.packages), pkgs);
-  }
-  return updates;
-}
-
-/**
- * @param {Record<string, unknown>} packages
- * @param {Package[]} deps
- * @return {Update[]}
- */
-function syncDeps(packages, deps) {
-  const updates = [];
-  for (const pkg of packages) {
-    for (const key of [
-      "dependencies",
-      "devDependencies",
-      "peerDependencies",
-      "optionalDependencies",
-    ]) {
-      if (!Object.prototype.hasOwnProperty.call(pkg, key)) {
-        continue;
-      }
-      for (const [name, version] of Object.entries(pkg[key])) {
-        const dep = deps.find((x) => x.name === name);
-        if (!dep) {
-          continue;
-        }
-        let wantVersion = dep.version;
-        if (version.startsWith("^")) {
-          wantVersion = "^" + wantVersion;
-        } else if (version.startsWith("~")) {
-          wantVersion = "~" + wantVersion;
-        } else if (version.startsWith("=")) {
-          wantVersion = "=" + wantVersion;
-        } else if (version === "*") {
-          wantVersion = "*";
-        }
-        if (wantVersion === version) {
-          continue;
-        }
-        pkg[key][name] = wantVersion;
-        updates.push({
-          pkg,
-          message: `updated ${key}["${name}"] from ${version} to ${wantVersion}`,
-        });
-      }
-    }
-  }
-  return updates;
-}
 
 /**
  * Read the given root package.json file, and return an array of workspace
  * packages.
  *
- * @param {string} rootPackageJsonPath
+ * @param {string} rootPackagePath
  * @return {Workspace[]}
  */
-function findWorkspacePackages(rootPackageJsonPath) {
-  const root = JSON.parse(readFileSync(rootPackageJsonPath, "utf-8"));
-  if (
-    !Array.isArray(root.workspaces) ||
-    root.workspaces.some((w) => typeof w !== "string")
-  ) {
-    throw new Error(
-      `Missing or malformed "workspaces" array in ${rootPackageJsonPath}`,
-    );
-  }
-  const rootDir = dirname(rootPackageJsonPath);
+function readWorkspaces(rootPackagePath) {
+  const root = readRootPackage(rootPackagePath);
+  const rootDir = dirname(rootPackagePath);
   return root.workspaces
     .flatMap((ws) => globSync(join(rootDir, ws, "package.json")))
     .filter((path) => existsSync(path))
     .map((path) => {
-      const pkg = JSON.parse(readFileSync(path, "utf-8"));
-      return { path, pkg };
+      return { path, pkg: readPackage(path) };
     });
 }
 
 /**
- * @param {string} path
- * @param {Record<unknown, unknown>} json
+ * @typedef {{message: string, pkg: Package}} Log
  */
-function writeJson(path, json) {
-  writeFileSync(path, JSON.stringify(json, null, 2) + "\n");
+
+/**
+ * @param {Package|LockPackage} pkg
+ * @param {string} depName
+ * @param {string} toVersion
+ * @return {Log[]}
+ */
+function updatePackageDep(pkg, depName, toVersion) {
+  if (toVersion === undefined) {
+    throw new Error("toVersion undefined");
+  }
+  /** @type {Log[]} */
+  const log = [];
+  for (const key of [
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+    "optionalDependencies",
+  ]) {
+    // eslint-disable-next-line n/no-unsupported-features/es-builtins,n/no-unsupported-features/es-syntax
+    if (!Object.hasOwn(pkg, key)) {
+      continue;
+    }
+    /** @type { Record<string, string> } */
+    const deps = pkg[key];
+    const from = deps[depName];
+    if (from === undefined) {
+      continue;
+    }
+    let to;
+    if (from.startsWith("^")) {
+      to = `^${toVersion}`;
+    } else if (from.startsWith("~")) {
+      to = `~${toVersion}`;
+    } else if (from.startsWith("=")) {
+      to = `=${toVersion}`;
+    } else if (from === "*") {
+      to = `*`;
+    } else {
+      to = toVersion;
+    }
+    if (from === to) {
+      continue;
+    }
+    deps[depName] = to;
+    log.push({
+      pkg,
+      message: `updated ${key}["${depName}"] from ${from} to ${to}`,
+    });
+  }
+  return log;
 }
 
 /**
  *
- * @param {Update[]} updates
+ * @param {Log[]} log
  * @return {string}
  */
-function formatUpdates(updates) {
+function formatLog(log) {
   const lines = [];
   const updatesByName = {};
-  for (const update of updates) {
-    if (updatesByName[update.pkg.name] === undefined) {
-      updatesByName[update.pkg.name] = [];
+  for (const l of log) {
+    if (updatesByName[l.pkg.name] === undefined) {
+      updatesByName[l.pkg.name] = [];
     }
-    updatesByName[update.pkg.name].push(update);
+    updatesByName[l.pkg.name].push(l);
   }
   for (const name of Object.keys(updatesByName).sort()) {
     lines.push(`${name}:`);
@@ -212,16 +177,119 @@ function formatUpdates(updates) {
 }
 
 /**
- * @param {string} lockFile
- * @return {Lockfile | null}
+ * @typedef {{name: string; version?: string; private?: boolean}} Package
  */
-function tryReadLock(lockFile) {
-  if (!existsSync(lockFile)) {
-    return null;
+
+/**
+ * @param {string} path
+ * @return {Package}
+ */
+function readPackage(path) {
+  const json = JSON.parse(readFileSync(path, "utf-8"));
+  if (typeof json !== "object" || json === null) {
+    throw new Error(`Failed to parse ${path}`);
   }
-  const lock = JSON.parse(readFileSync(lockFile, "utf-8"));
-  assert(lock.lockfileVersion === 3);
-  assert(typeof lock.packages == "object");
-  assert(lock.packages !== null);
+  const lock = JSON.parse(readFileSync(path, "utf-8"));
+  if (typeof lock !== "object" || lock === null) {
+    throw new Error(`Failed to parse ${path}`);
+  }
+  if (!("name" in json) || typeof json.name != "string") {
+    throw new Error(`Missing "name" in ${path}`);
+  }
+  if ("version" in json) {
+    if (typeof json.version != "string") {
+      throw new Error(`Invalid "version" in ${path}`);
+    }
+  } else if (!("private" in json) || json.private !== true) {
+    throw new Error(`Need either "version" or "private":true in ${path}`);
+  }
   return lock;
+}
+
+/**
+ * @typedef {{packages: Record<string, LockPackage>}} Lockfile
+ */
+
+/**
+ * @typedef {{name?: string; version?: string}} LockPackage
+ */
+
+/**
+ * @param {string} path
+ * @return {Lockfile}
+ */
+function readLockfile(path) {
+  const lock = JSON.parse(readFileSync(path, "utf-8"));
+  if (typeof lock !== "object" || lock === null) {
+    throw new Error(`Failed to parse ${path}`);
+  }
+  if (!("lockfileVersion" in lock) || lock.lockfileVersion !== 3) {
+    throw new Error(`Unsupported lock file version in ${path}`);
+  }
+  if (typeof lock.packages != "object" || lock.packages == null) {
+    throw new Error(`Missing "packages" in ${path}`);
+  }
+  return lock;
+}
+
+/**
+ * Locates an entry for a local workspace package in a lock file.
+ * Throws an error if not found.
+ *
+ * @param {Lockfile} lock
+ * @param {string} packageName
+ * @return {LockPackage}
+ */
+function findLockPackage(lock, packageName) {
+  for (const [path, lockPkg] of Object.entries(lock.packages)) {
+    // eslint-disable-next-line n/no-unsupported-features/es-builtins,n/no-unsupported-features/es-syntax
+    if (Object.hasOwn(lockPkg, "name") && lockPkg.name === packageName) {
+      return lockPkg;
+    }
+    // In some situations, the entry for a local package doesn't have a "name" property.
+    // We check the path of the entry instead: If the last path element is the same as
+    // the package name without scope, it's the entry we are looking for.
+    if (path.startsWith("node_modules/")) {
+      // Not a local workspace package
+      continue;
+    }
+    const lastPathEle = path.split("/").pop();
+    const packageShortname = packageName.split("/").pop();
+    if (lastPathEle === packageShortname) {
+      return lockPkg;
+    }
+  }
+  throw new Error(
+    `Cannot find package ${packageName} in lock file. Run npm install?`,
+  );
+}
+
+/**
+ * @typedef {{ name?: string; version?: string; workspaces: string[] }} RootPackage
+ */
+
+/**
+ * @param {string} path
+ * @return {RootPackage}
+ */
+function readRootPackage(path) {
+  const json = JSON.parse(readFileSync(path, "utf-8"));
+  if (typeof json !== "object" || json === null) {
+    throw new Error(`Failed to parse ${path}`);
+  }
+  if (
+    !Array.isArray(json.workspaces) ||
+    json.workspaces.some((w) => typeof w !== "string")
+  ) {
+    throw new Error(`Missing or malformed "workspaces" array in ${path}`);
+  }
+  return json;
+}
+
+/**
+ * @param {string} path
+ * @param {any} json
+ */
+function writeJson(path, json) {
+  writeFileSync(path, JSON.stringify(json, null, 2) + "\n");
 }
