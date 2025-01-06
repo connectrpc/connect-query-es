@@ -1,31 +1,37 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "tsconfig.base.json",
-    ".eslintrc.js",
-    "package.json",
-    "scripts/*"
-  ],
   "tasks": {
-    "clean": {
-      "outputs": ["dist/**"]
-    },
     "build": {
-      "dependsOn": ["clean", "^build"],
+      "dependsOn": ["^build", "generate"],
       "outputs": ["dist/**"]
     },
     "generate": {
-      "dependsOn": ["^build", "build"]
+      "dependsOn": ["^build"],
+      "outputs": ["src/gen/**"]
     },
     "test": {
-      "dependsOn": ["generate", "^generate"],
+      "dependsOn": ["build"],
       "cache": false
+    },
+    "format": {},
+    "license-header": {
+      "dependsOn": ["generate"]
+    },
+    "lint": {
+      "dependsOn": ["format", "^build", "generate"]
     },
     "attw": {
       "dependsOn": ["build"]
     },
-    "format": {
-      "dependsOn": ["generate"]
+    "//#format": {
+      "inputs": ["$TURBO_DEFAULT$", "!packages/**", "package-lock.json"]
+    },
+    "//#license-header": {
+      "inputs": ["$TURBO_DEFAULT$", "!packages/**"]
+    },
+    "//#lint": {
+      "dependsOn": ["format"],
+      "inputs": ["$TURBO_DEFAULT$", "!packages/**", "package-lock.json"]
     }
   }
 }

@@ -58,4 +58,17 @@ describe("createQueryOptions", () => {
     );
     expect(opt.queryKey).toStrictEqual(want);
   });
+
+  it("ensures type safety of parameters", () => {
+    // @ts-expect-error(2322) cannot provide invalid parameters
+    createQueryOptions(
+      sayMethodDescriptor,
+      {
+        sentence: 1,
+      },
+      {
+        transport: mockedElizaTransport,
+      },
+    );
+  });
 });

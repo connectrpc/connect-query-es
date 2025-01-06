@@ -38,7 +38,21 @@
     "printables",
     "arethetypeswrong",
     "oneof",
-    "typesafe"
+    "typesafe",
+    "setversion",
+    "postsetversion",
+    "postgenerate",
+    "npmjs"
   ],
-  "ignorePaths": ["**/*.svg", "**/*.ai", "**/pnpm-lock.yaml", "*.excalidraw", "**/gen", "**/snapshots"]
+  "ignorePaths": [
+    "**/*.svg",
+    "**/*.ai",
+    "**/pnpm-lock.yaml",
+    "*.excalidraw",
+    "**/gen",
+    "**/snapshots",
+    "**/*.css",
+    "**/*.xml",
+    "**/tsconfig.vitest-temp.json"
+  ]
 }

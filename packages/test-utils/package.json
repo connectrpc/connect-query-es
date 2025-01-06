@@ -1,25 +1,37 @@
 {
   "name": "test-utils",
   "private": true,
-  "version": "2.0.0-rc.3",
+  "version": "2.0.1",
   "type": "module",
   "scripts": {
-    "clean": "rm -rf ./dist/*",
     "generate": "buf generate",
-    "build": "tsc --project tsconfig.build.json"
+    "postgenerate": "license-header gen",
+    "prebuild": "rm -rf ./dist/*",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc --project tsconfig.json --module commonjs --verbatimModuleSyntax false --moduleResolution node10 --outDir ./dist/cjs --declaration --declarationDir ./dist/cjs && echo >./dist/cjs/package.json '{\"type\":\"commonjs\"}'",
+    "build:esm": "tsc --project tsconfig.json --outDir ./dist/esm --declaration --declarationDir ./dist/esm",
+    "format": "prettier --write --ignore-unknown '.' '!dist' '!src/gen'",
+    "license-header": "license-header --ignore 'src/gen/**'",
+    "lint": "eslint --max-warnings 0 ."
   },
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
-    ".": "./dist/esm/index.js",
-    "./gen/*": "./dist/esm/gen/*"
+    ".": {
+      "import": "./dist/esm/index.js"
+    },
+    "./gen/*": {
+      "import": "./dist/esm/gen/*"
+    }
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.46.0",
     "@bufbuild/protobuf": "^2.2.1",
     "@bufbuild/protoc-gen-es": "^2.2.1",
-    "@connectrpc/connect": "^2.0.0-rc.3",
-    "@connectrpc/connect-web": "^2.0.0-rc.3",
-    "@types/react": "18.3.12",
-    "react": "^18.3.1"
+    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect-web": "^2.0.0",
+    "@types/react": "^19.0.1",
+    "react": "^19.0.0"
   },
   "files": [
     "dist/**"

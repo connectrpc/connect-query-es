@@ -1,6 +1,7 @@
+.turbo
+.wrangler
 node_modules
 /packages/*/dist
 /packages/*/coverage
 *.tsbuildinfo
-.turbo
 .vscode

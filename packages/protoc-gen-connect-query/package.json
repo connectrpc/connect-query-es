@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/protoc-gen-connect-query",
-  "version": "2.0.0-rc.3",
+  "version": "2.0.1",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
@@ -19,18 +19,18 @@
     "node": ">=16"
   },
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "pnpm clean && tsc --project tsconfig.build.json",
-    "format": "prettier . --write --ignore-path ./.eslintignore && eslint . --fix && license-header",
-    "generate": "cd snapshots && buf generate",
-    "test": "tsc --declaration --declarationDir .type-dump --emitDeclarationOnly"
+    "prebuild": "rm -rf ./dist/*",
+    "build": "tsc --project tsconfig.json --module commonjs --verbatimModuleSyntax false --moduleResolution node10 --outDir ./dist/cjs",
+    "format": "prettier --write --ignore-unknown '.' '!dist'",
+    "license-header": "license-header",
+    "lint": "eslint --max-warnings 0 ."
   },
   "preferUnplugged": true,
   "devDependencies": {
     "@bufbuild/buf": "1.46.0",
     "@bufbuild/protoc-gen-es": "^2.2.1",
-    "@connectrpc/connect": "^2.0.0-rc.3",
-    "@connectrpc/connect-query": "workspace:*",
+    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect-query": "^2.0.1",
     "@tanstack/react-query": "^5.59.16",
     "typescript": "^5.6.3"
   },

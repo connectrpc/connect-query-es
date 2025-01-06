@@ -213,11 +213,7 @@ describe("useInfiniteQuery", () => {
     expect(result.current.data?.pages[0].items).toHaveLength(3);
 
     const { result: useQueryResult } = renderHook(() => {
-      // @ts-expect-error(2345) this exception is intentional to simulate a pagination query
-      // that's based on a string | undefined page param.
-      return useQuery(methodDescriptor, {
-        page: undefined,
-      });
+      return useQuery(methodDescriptor);
     }, remainingWrapper);
 
     await waitFor(() => {
