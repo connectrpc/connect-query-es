@@ -30,7 +30,7 @@
     }
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.16.4",
+    "@arethetypeswrong/cli": "^0.17.3",
     "@bufbuild/buf": "1.46.0",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
     "@bufbuild/protobuf": "^2.2.1",
@@ -38,7 +38,7 @@
     "@connectrpc/connect": "^2.0.0",
     "@connectrpc/connect-web": "^2.0.0",
     "test-utils": "*",
-    "typescript": "^5.6.3",
+    "typescript": "^5.7.3",
     "@tanstack/query-core": "^5.62.7"
   },
   "peerDependencies": {

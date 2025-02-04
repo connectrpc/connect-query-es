@@ -40,7 +40,9 @@ updates:
           - "typescript"
           - "vite"
           - "vitest"
+          - "@vitest/*"
       reactQuery:
         patterns:
           - "@tanstack/react-query"
           - "@tanstack/react-query-devtools"
+          - "@tanstack/query-core"
