@@ -33,7 +33,7 @@
     "@typescript-eslint/eslint-plugin": "8.22.0",
     "@typescript-eslint/parser": "8.22.0",
     "@typescript-eslint/utils": "8.22.0",
-    "@vitest/ui": "^2.1.4",
+    "@vitest/ui": "^3.0.5",
     "cspell": "8.17.3",
     "eslint": "8.57.0",
     "eslint-config-prettier": "10.0.1",
