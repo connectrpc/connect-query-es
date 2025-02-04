@@ -31,19 +31,19 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
-    "@bufbuild/buf": "1.46.0",
+    "@bufbuild/buf": "1.50.0",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
-    "@bufbuild/protobuf": "^2.2.1",
-    "@bufbuild/protoc-gen-es": "^2.2.1",
-    "@connectrpc/connect": "^2.0.0",
-    "@connectrpc/connect-web": "^2.0.0",
+    "@bufbuild/protobuf": "^2.2.3",
+    "@bufbuild/protoc-gen-es": "^2.2.3",
+    "@connectrpc/connect": "^2.0.1",
+    "@connectrpc/connect-web": "^2.0.1",
     "test-utils": "*",
     "typescript": "^5.7.3",
     "@tanstack/query-core": "^5.62.7"
   },
   "peerDependencies": {
     "@bufbuild/protobuf": "2.x",
-    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect": "^2.0.1",
     "@tanstack/query-core": "5.x"
   },
   "files": [
