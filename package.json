@@ -30,9 +30,9 @@
   "devDependencies": {
     "@bufbuild/license-header": "^0.0.4",
     "@types/node": "^22.13.0",
-    "@typescript-eslint/eslint-plugin": "8.22.0",
-    "@typescript-eslint/parser": "8.22.0",
-    "@typescript-eslint/utils": "8.22.0",
+    "@typescript-eslint/eslint-plugin": "8.23.0",
+    "@typescript-eslint/parser": "8.23.0",
+    "@typescript-eslint/utils": "8.23.0",
     "@vitest/ui": "^3.0.5",
     "cspell": "8.17.3",
     "eslint": "8.57.0",
