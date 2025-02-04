@@ -30,7 +30,7 @@
     "@bufbuild/protoc-gen-es": "^2.2.1",
     "@connectrpc/connect": "^2.0.0",
     "@connectrpc/connect-web": "^2.0.0",
-    "@types/react": "^19.0.1",
+    "@types/react": "^19.0.8",
     "react": "^19.0.0"
   },
   "files": [
