@@ -18,6 +18,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   assert,
+  createProtobufSafeInfiniteUpdater,
   createProtobufSafeUpdater,
   isAbortController,
 } from "./utils.js";
@@ -57,7 +58,7 @@ describe("isAbortController", () => {
     expect(isAbortController({ signal: { aborted: undefined } })).toBeFalsy();
     expect(isAbortController({ signal: { aborted: true } })).toBeFalsy();
     expect(
-      isAbortController({ signal: { aborted: true }, abort: undefined }),
+      isAbortController({ signal: { aborted: true }, abort: undefined })
     ).toBeFalsy();
   });
 
@@ -68,7 +69,7 @@ describe("isAbortController", () => {
           aborted: false,
         },
         abort: () => {},
-      }),
+      })
     ).toBeTruthy();
 
     expect(isAbortController(new AbortController())).toBeTruthy();
@@ -158,7 +159,7 @@ describe("createProtobufSafeUpdater", () => {
       it("for unset field", () => {
         const prev = create(Proto2MessageSchema);
         expect(isFieldSet(prev, Proto2MessageSchema.field.stringField)).toBe(
-          false,
+          false
         );
         const next = safeUpdater(prev);
         const hasStringField =
@@ -172,7 +173,7 @@ describe("createProtobufSafeUpdater", () => {
           stringField: "abc",
         });
         expect(isFieldSet(prev, Proto2MessageSchema.field.stringField)).toBe(
-          true,
+          true
         );
         const next = safeUpdater(prev);
         const hasStringField =
@@ -181,6 +182,72 @@ describe("createProtobufSafeUpdater", () => {
             : isFieldSet(next, Proto2MessageSchema.field.stringField);
         expect(hasStringField).toBe(true);
       });
+    });
+  });
+});
+
+describe("createProtobufSafeInfiniteUpdater", () => {
+  describe("with update message", () => {
+    const schema = { output: Proto2MessageSchema };
+    const update = {
+      pageParams: [],
+      pages: [
+        {
+          int32Field: 999,
+        },
+      ],
+    };
+    const safeUpdater = createProtobufSafeInfiniteUpdater(schema, update);
+    it("returns update message for previous value undefined", () => {
+      const next = safeUpdater(undefined);
+      expect(next?.pages[0].$typeName).toBe("test.Proto2Message");
+    });
+  });
+
+  describe("with update message init", () => {
+    const schema = { output: Proto2MessageSchema };
+    const update = {
+      pageParams: [],
+      pages: [
+        {
+          int32Field: 999,
+        },
+      ],
+    };
+    const safeUpdater = createProtobufSafeInfiniteUpdater(schema, update);
+    it("returns update message for previous value undefined", () => {
+      const next = safeUpdater(undefined);
+      expect(next?.pages[0].int32Field).toBe(999);
+    });
+    it("returns update message for previous value", () => {
+      const prev = {
+        pageParams: [],
+        pages: [
+          create(Proto2MessageSchema, {
+            int32Field: 123,
+          }),
+        ],
+      };
+      const next = safeUpdater(prev);
+      expect(next?.pages[0].$typeName).toBe(Proto2MessageSchema.typeName);
+      expect(next?.pages[0].int32Field).toBe(999);
+    });
+  });
+
+  describe("with updater function", () => {
+    const schema = { output: Proto2MessageSchema };
+    const safeUpdater = createProtobufSafeInfiniteUpdater(schema, (prev) => {
+      if (prev === undefined) {
+        return undefined;
+      }
+      return {
+        ...prev,
+        int32Field: 999,
+      };
+    });
+    it("accepts undefined", () => {
+      const next = safeUpdater(undefined);
+      expect(next).toBeUndefined();
     });
   });
 });

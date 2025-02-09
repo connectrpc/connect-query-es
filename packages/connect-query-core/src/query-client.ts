@@ -41,8 +41,11 @@ import { createConnectQueryKey } from "./connect-query-key.js";
 import type { ConnectInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
 import { createQueryOptions } from "./create-query-options.js";
-import type { ConnectUpdater } from "./utils.js";
-import { createProtobufSafeUpdater } from "./utils.js";
+import type { ConnectInfiniteUpdater, ConnectUpdater } from "./utils.js";
+import {
+  createProtobufSafeInfiniteUpdater,
+  createProtobufSafeUpdater,
+} from "./utils.js";
 
 type FetchQueryOptions<
   O extends DescMessage,
@@ -109,7 +112,7 @@ export class QueryClient extends TSQueryClient {
   >(
     params: Desc | Params,
     filterOptions?: Omit<InvalidateQueryFilters, "queryKey">,
-    options?: InvalidateOptions,
+    options?: InvalidateOptions
   ) {
     if ("schema" in params) {
       return this.invalidateQueries(
@@ -120,7 +123,7 @@ export class QueryClient extends TSQueryClient {
             cardinality: params.cardinality,
           }),
         },
-        options,
+        options
       );
     }
     return this.invalidateQueries(
@@ -131,7 +134,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: undefined,
         }),
       },
-      options,
+      options
     );
   }
 
@@ -147,7 +150,7 @@ export class QueryClient extends TSQueryClient {
   >(
     params: Params,
     filterOptions?: Omit<RefetchQueryFilters, "queryKey">,
-    options?: RefetchOptions,
+    options?: RefetchOptions
   ) {
     return this.refetchQueries(
       {
@@ -157,7 +160,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: params.cardinality,
         }),
       },
-      options,
+      options
     );
   }
 
@@ -172,11 +175,33 @@ export class QueryClient extends TSQueryClient {
       schema: Desc;
       input?: MessageInitShape<Desc["input"]> | undefined;
       transport: Transport;
-      cardinality: "finite" | "infinite";
+      cardinality: "infinite";
+    },
+    updater: ConnectInfiniteUpdater<Desc["output"]>,
+    options?: SetDataOptions | undefined
+  ): Desc["output"];
+  public setConnectQueryData<Desc extends DescMethod>(
+    keyDescriptor: {
+      schema: Desc;
+      input?: MessageInitShape<Desc["input"]> | undefined;
+      transport: Transport;
+      cardinality: "finite";
     },
     updater: ConnectUpdater<Desc["output"]>,
+    options?: SetDataOptions | undefined
+  ): Desc["output"];
+  public setConnectQueryData<Desc extends DescMethod>(
+    keyDescriptor: {
+      schema: Desc;
+      input?: MessageInitShape<Desc["input"]> | undefined;
+      transport: Transport;
+      cardinality: "finite" | "infinite";
+    },
+    updater:
+      | ConnectUpdater<Desc["output"]>
+      | ConnectInfiniteUpdater<Desc["output"]>,
 
-    options?: SetDataOptions | undefined,
+    options?: SetDataOptions | undefined
   ) {
     return this.setQueryData(
       createConnectQueryKey({
@@ -184,8 +209,16 @@ export class QueryClient extends TSQueryClient {
         // Since we are matching on the exact input, we match what connect-query does in createQueryOptions
         input: keyDescriptor.input ?? {},
       }),
-      createProtobufSafeUpdater<Desc["output"]>(keyDescriptor.schema, updater),
-      options,
+      keyDescriptor.cardinality === "finite"
+        ? createProtobufSafeUpdater<Desc["output"]>(
+            keyDescriptor.schema,
+            updater as ConnectUpdater<Desc["output"]>
+          )
+        : createProtobufSafeInfiniteUpdater<Desc["output"]>(
+            keyDescriptor.schema,
+            updater as ConnectInfiniteUpdater<Desc["output"]>
+          ),
+      options
     );
   }
 
@@ -242,7 +275,7 @@ export class QueryClient extends TSQueryClient {
       | (SetDataOptions & {
           exact?: boolean;
         })
-      | undefined,
+      | undefined
   ) {
     return this.setQueriesData(
       {
@@ -253,7 +286,7 @@ export class QueryClient extends TSQueryClient {
         exact: options?.exact ?? false,
       },
       createProtobufSafeUpdater<Desc["output"]>(keyDescriptor.schema, updater),
-      options,
+      options
     );
   }
 
@@ -274,7 +307,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>,
+    } & FetchQueryOptions<O, SelectOutData>
   ) {
     return this.fetchQuery({
       ...createQueryOptions(schema, input, { transport }),
@@ -299,7 +332,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>
   ) {
     return this.fetchInfiniteQuery({
       ...createInfiniteQueryOptions(schema, input, {
@@ -328,7 +361,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>,
+    } & FetchQueryOptions<O, SelectOutData>
   ) {
     return this.prefetchQuery({
       ...createQueryOptions(schema, input, { transport }),
@@ -353,7 +386,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>
   ) {
     return this.prefetchInfiniteQuery({
       ...createInfiniteQueryOptions(schema, input, {
@@ -410,7 +443,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>,
+    } & FetchQueryOptions<O, SelectOutData>
   ) {
     return this.ensureQueryData({
       ...createQueryOptions(schema, input, { transport }),
@@ -436,7 +469,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>
   ) {
     return this.ensureInfiniteQueryData({
       ...createInfiniteQueryOptions(schema, input, {
@@ -546,7 +579,7 @@ export class QueryClient extends TSQueryClient {
   >(
     params: Desc | Params,
     filterOptions?: Omit<QueryFilters, "queryKey">,
-    options?: ResetOptions,
+    options?: ResetOptions
   ) {
     if ("schema" in params) {
       return this.resetQueries(
@@ -557,7 +590,7 @@ export class QueryClient extends TSQueryClient {
             cardinality: params.cardinality,
           }),
         },
-        options,
+        options
       );
     }
     return this.resetQueries(
@@ -568,7 +601,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: undefined,
         }),
       },
-      options,
+      options
     );
   }
 }

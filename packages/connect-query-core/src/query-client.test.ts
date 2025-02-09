@@ -47,7 +47,7 @@ describe("prefetch APIs", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
     const item = queryClient.getConnectQueryData({
       ...queryDetails,
@@ -79,7 +79,7 @@ describe("prefetch APIs", () => {
         transport: paginatedTransport,
         pageParamKey: "page",
         getNextPageParam: (data) => data.page,
-      },
+      }
     );
 
     const details = {
@@ -110,7 +110,7 @@ describe("invalidateConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
     await queryClient.invalidateConnectQueries(queryDetails);
     const queryState = queryClient.getConnectQueryState({
@@ -125,7 +125,7 @@ describe("invalidateConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
 
     await queryClient.invalidateConnectQueries({
@@ -146,7 +146,7 @@ describe("refetchConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
     await queryClient.refetchConnectQueries(queryDetails);
     const queryState = queryClient.getConnectQueryState({
@@ -161,7 +161,7 @@ describe("refetchConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
 
     await queryClient.refetchConnectQueries({
@@ -182,7 +182,7 @@ describe("setConnectQueryData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
 
     const queryState = queryClient.getConnectQueryState({
@@ -199,7 +199,7 @@ describe("setConnectQueryData", () => {
       },
       {
         sentence: "Hello Stu",
-      },
+      }
     );
 
     const newQueryState = queryClient.getConnectQueryState({
@@ -216,7 +216,7 @@ describe("setConnectQueryData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
 
     const queryState = queryClient.getConnectQueryState({
@@ -240,7 +240,7 @@ describe("setConnectQueryData", () => {
           ...prev,
           sentence: "Hello Stu",
         };
-      },
+      }
     );
 
     const newQueryState = queryClient.getConnectQueryState({
@@ -251,6 +251,65 @@ describe("setConnectQueryData", () => {
     expect(newQueryState.dataUpdateCount).toBe(2);
     expect(newQueryState.data?.sentence).toBe("Hello Stu");
   });
+
+  it("can update infinite paginated data", async () => {
+    const queryClient = new QueryClient();
+    await queryClient.prefetchConnectInfiniteQuery(
+      ListService.method.list,
+      {
+        page: 0n,
+      },
+      {
+        transport: paginatedTransport,
+        getNextPageParam: (l) => l.page + 1n,
+        pageParamKey: "page",
+      }
+    );
+
+    const queryState = queryClient.getConnectQueryState({
+      schema: ListService.method.list,
+      transport: paginatedTransport,
+      cardinality: "infinite",
+      input: {
+        page: 0n,
+      },
+    });
+    expect(queryState.dataUpdateCount).toBe(1);
+    expect(queryState.data?.pages).toHaveLength(1);
+
+    queryClient.setConnectQueryData(
+      {
+        schema: ListService.method.list,
+        transport: paginatedTransport,
+        cardinality: "infinite",
+      },
+      {
+        pageParams: [0n, 1n],
+        pages: [
+          {
+            page: 0n,
+            items: ["a", "b", "c"]
+          },
+          {
+            page: 1n,
+            items: ["x", "y", "z"]
+          }
+        ]
+      }
+    );
+
+    const newQueryState = queryClient.getConnectQueryState({
+      schema: ListService.method.list,
+      transport: paginatedTransport,
+      cardinality: "infinite",
+      input: {
+        page: 0n
+      }
+    });
+
+    expect(newQueryState.dataUpdateCount).toBe(2);
+    expect(newQueryState.data?.pages).toHaveLength(2);
+  });
 });
 
 describe("setConnectQueriesData", () => {
@@ -259,14 +318,14 @@ describe("setConnectQueriesData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       {
         sentence: "Stu",
       },
-      { transport: queryDetails.transport },
+      { transport: queryDetails.transport }
     );
 
     const cachedItems = queryClient.getQueryCache().findAll({
@@ -290,7 +349,7 @@ describe("setConnectQueriesData", () => {
           ...prev,
           sentence: prev.sentence + "!",
         };
-      },
+      }
     );
 
     const newCachedItems = queryClient.getQueryCache().findAll() as Query<
@@ -317,7 +376,7 @@ describe("fetchConnectInfiniteQuery", () => {
           return data.page + 1n;
         },
         pageParamKey: "page",
-      },
+      }
     );
 
     expect(result).toBeDefined();
@@ -342,7 +401,7 @@ describe("getConnectQueryState", () => {
           return data.page + 1n;
         },
         pageParamKey: "page",
-      },
+      }
     );
 
     const state = queryClient.getConnectQueryState({
@@ -376,7 +435,7 @@ describe("ensure APIs", () => {
         },
         pageParamKey: "page",
         staleTime: 1000,
-      },
+      }
     );
 
     const state = queryClient.getConnectQueryState({
