@@ -242,13 +242,29 @@ describe("createProtobufSafeInfiniteUpdater", () => {
         return undefined;
       }
       return {
-        ...prev,
-        int32Field: 999,
+        pageParams: [...prev.pageParams, 44],
+        pages: [
+          ...prev.pages,
+          {
+            int32Field: 33,
+            stringField: "whatever"
+          }
+        ]
       };
     });
     it("accepts undefined", () => {
       const next = safeUpdater(undefined);
       expect(next).toBeUndefined();
     });
+    it("can add a new page", () => {
+      const next = safeUpdater({
+        pageParams: [],
+        pages: []
+      });
+
+      expect(next?.pageParams).toHaveLength(1);
+      expect(next?.pages).toHaveLength(1);
+
+    })
   });
 });

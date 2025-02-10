@@ -65,7 +65,7 @@ export type ConnectUpdater<O extends DescMessage> =
 export type ConnectInfiniteUpdater<O extends DescMessage> =
   | InfiniteData<MessageInitShape<O>>
   | undefined
-  | ((prev?: InfiniteData<MessageShape<O>>) => InfiniteData<MessageShape<O>> | undefined);
+  | ((prev?: InfiniteData<MessageShape<O>>) => InfiniteData<MessageInitShape<O>> | undefined);
 
 /**
  * This helper makes sure that the type for the original response message is returned.
