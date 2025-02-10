@@ -390,7 +390,7 @@ queryClient.setQueryData(
 
 ### `createProtobufSafeInfiniteUpdater`
 
-Creates a typesafe updater for infinite queries. Identical to `createProtobufSafeUpdater` except the data recieved must be of the shape expected for infinite data.
+Creates a typesafe updater for infinite queries. Identical to `createProtobufSafeUpdater` except the data received must be of the shape expected for infinite data.
 
 ### `createQueryOptions`
 
