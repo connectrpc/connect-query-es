@@ -186,7 +186,6 @@ describe("createProtobufSafeUpdater", () => {
   });
 });
 
-
 describe("createProtobufSafeInfiniteUpdater", () => {
   describe("with update message", () => {
     const schema = { output: Proto2MessageSchema };
@@ -247,9 +246,9 @@ describe("createProtobufSafeInfiniteUpdater", () => {
           ...prev.pages,
           {
             int32Field: 33,
-            stringField: "whatever"
-          }
-        ]
+            stringField: "whatever",
+          },
+        ],
       };
     });
     it("accepts undefined", () => {
@@ -259,12 +258,11 @@ describe("createProtobufSafeInfiniteUpdater", () => {
     it("can add a new page", () => {
       const next = safeUpdater({
         pageParams: [],
-        pages: []
+        pages: [],
       });
 
       expect(next?.pageParams).toHaveLength(1);
       expect(next?.pages).toHaveLength(1);
-
-    })
+    });
   });
 });

@@ -65,7 +65,9 @@ export type ConnectUpdater<O extends DescMessage> =
 export type ConnectInfiniteUpdater<O extends DescMessage> =
   | InfiniteData<MessageInitShape<O>>
   | undefined
-  | ((prev?: InfiniteData<MessageShape<O>>) => InfiniteData<MessageInitShape<O>> | undefined);
+  | ((
+      prev?: InfiniteData<MessageShape<O>>,
+    ) => InfiniteData<MessageInitShape<O>> | undefined);
 
 /**
  * This helper makes sure that the type for the original response message is returned.
@@ -88,28 +90,29 @@ export const createProtobufSafeUpdater =
     return updater(prev);
   };
 
-
 export const createProtobufSafeInfiniteUpdater =
-<O extends DescMessage>(
-  schema: Pick<DescMethodUnary<never, O>, "output">,
-  updater: ConnectInfiniteUpdater<O>,
-) =>
-(prev?: InfiniteData<MessageShape<O>>): InfiniteData<MessageShape<O>> | undefined => {
-  if (typeof updater !== "function") {
-    if (updater === undefined) {
+  <O extends DescMessage>(
+    schema: Pick<DescMethodUnary<never, O>, "output">,
+    updater: ConnectInfiniteUpdater<O>,
+  ) =>
+  (
+    prev?: InfiniteData<MessageShape<O>>,
+  ): InfiniteData<MessageShape<O>> | undefined => {
+    if (typeof updater !== "function") {
+      if (updater === undefined) {
+        return undefined;
+      }
+      return {
+        pageParams: updater.pageParams,
+        pages: updater.pages.map((i) => create(schema.output, i)),
+      };
+    }
+    const result = updater(prev);
+    if (result === undefined) {
       return undefined;
     }
     return {
-      pageParams: updater.pageParams,
-      pages: updater.pages.map(i => create(schema.output, i))
-    }
-  }
-  const result = updater(prev);
-  if (result === undefined) {
-    return undefined;
-  }
-  return {
-    pageParams: result.pageParams,
-    pages: result.pages.map(i => create(schema.output, i))
-  }
-};
+      pageParams: result.pageParams,
+      pages: result.pages.map((i) => create(schema.output, i)),
+    };
+  };
