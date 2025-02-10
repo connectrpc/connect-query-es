@@ -25,6 +25,7 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`createConnectQueryKey`](#createconnectquerykey)
   - [`callUnaryMethod`](#callunarymethod)
   - [`createProtobufSafeUpdater`](#createprotobufsafeupdater)
+  - [`createProtobufSafeInfiniteUpdater`](#createprotobufsafeinfiniteupdater)
   - [`createQueryOptions`](#createqueryoptions)
   - [`createInfiniteQueryOptions`](#createinfinitequeryoptions)
   - [`addStaticKeyToTransport`](#addstatickeytotransport)
@@ -386,6 +387,10 @@ queryClient.setQueryData(
 );
 
 ```
+
+### `createProtobufSafeInfiniteUpdater`
+
+Creates a typesafe updater for infinite queries. Identical to `createProtobufSafeUpdater` except the data recieved must be of the shape expected for infinite data.
 
 ### `createQueryOptions`
 
