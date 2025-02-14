@@ -58,7 +58,7 @@ describe("isAbortController", () => {
     expect(isAbortController({ signal: { aborted: undefined } })).toBeFalsy();
     expect(isAbortController({ signal: { aborted: true } })).toBeFalsy();
     expect(
-      isAbortController({ signal: { aborted: true }, abort: undefined })
+      isAbortController({ signal: { aborted: true }, abort: undefined }),
     ).toBeFalsy();
   });
 
@@ -69,7 +69,7 @@ describe("isAbortController", () => {
           aborted: false,
         },
         abort: () => {},
-      })
+      }),
     ).toBeTruthy();
 
     expect(isAbortController(new AbortController())).toBeTruthy();
@@ -159,7 +159,7 @@ describe("createProtobufSafeUpdater", () => {
       it("for unset field", () => {
         const prev = create(Proto2MessageSchema);
         expect(isFieldSet(prev, Proto2MessageSchema.field.stringField)).toBe(
-          false
+          false,
         );
         const next = safeUpdater(prev);
         const hasStringField =
@@ -173,7 +173,7 @@ describe("createProtobufSafeUpdater", () => {
           stringField: "abc",
         });
         expect(isFieldSet(prev, Proto2MessageSchema.field.stringField)).toBe(
-          true
+          true,
         );
         const next = safeUpdater(prev);
         const hasStringField =

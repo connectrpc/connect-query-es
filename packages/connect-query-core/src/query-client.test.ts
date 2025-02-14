@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import type { MessageShape } from "@bufbuild/protobuf";
+import { type MessageShape } from "@bufbuild/protobuf";
 import type { Query } from "@tanstack/query-core";
 import { mockEliza, mockPaginatedTransport } from "test-utils";
 import type { SayResponseSchema } from "test-utils/gen/eliza_pb.js";
@@ -23,7 +23,6 @@ import { describe, expect, it } from "vitest";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { QueryClient } from "./query-client.js";
 
-// TODO: maybe create a helper to take a service and method and generate this.
 const sayMethodDescriptor = ElizaService.method.say;
 
 const mockedElizaTransport = mockEliza();
@@ -47,7 +46,7 @@ describe("prefetch APIs", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     const item = queryClient.getConnectQueryData({
       ...queryDetails,
@@ -79,7 +78,7 @@ describe("prefetch APIs", () => {
         transport: paginatedTransport,
         pageParamKey: "page",
         getNextPageParam: (data) => data.page,
-      }
+      },
     );
 
     const details = {
@@ -110,7 +109,7 @@ describe("invalidateConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     await queryClient.invalidateConnectQueries(queryDetails);
     const queryState = queryClient.getConnectQueryState({
@@ -125,7 +124,7 @@ describe("invalidateConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     await queryClient.invalidateConnectQueries({
@@ -146,7 +145,7 @@ describe("refetchConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     await queryClient.refetchConnectQueries(queryDetails);
     const queryState = queryClient.getConnectQueryState({
@@ -161,7 +160,7 @@ describe("refetchConnectQueries", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     await queryClient.refetchConnectQueries({
@@ -182,7 +181,7 @@ describe("setConnectQueryData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     const queryState = queryClient.getConnectQueryState({
@@ -199,7 +198,7 @@ describe("setConnectQueryData", () => {
       },
       {
         sentence: "Hello Stu",
-      }
+      },
     );
 
     const newQueryState = queryClient.getConnectQueryState({
@@ -216,7 +215,7 @@ describe("setConnectQueryData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     const queryState = queryClient.getConnectQueryState({
@@ -240,7 +239,7 @@ describe("setConnectQueryData", () => {
           ...prev,
           sentence: "Hello Stu",
         };
-      }
+      },
     );
 
     const newQueryState = queryClient.getConnectQueryState({
@@ -263,7 +262,7 @@ describe("setConnectQueryData", () => {
         transport: paginatedTransport,
         getNextPageParam: (l) => l.page + 1n,
         pageParamKey: "page",
-      }
+      },
     );
 
     const queryState = queryClient.getConnectQueryState({
@@ -288,14 +287,14 @@ describe("setConnectQueryData", () => {
         pages: [
           {
             page: 0n,
-            items: ["a", "b", "c"]
+            items: ["a", "b", "c"],
           },
           {
             page: 1n,
-            items: ["x", "y", "z"]
-          }
-        ]
-      }
+            items: ["x", "y", "z"],
+          },
+        ],
+      },
     );
 
     const newQueryState = queryClient.getConnectQueryState({
@@ -303,8 +302,8 @@ describe("setConnectQueryData", () => {
       transport: paginatedTransport,
       cardinality: "infinite",
       input: {
-        page: 0n
-      }
+        page: 0n,
+      },
     });
 
     expect(newQueryState.dataUpdateCount).toBe(2);
@@ -318,14 +317,14 @@ describe("setConnectQueriesData", () => {
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       {
         sentence: "Stu",
       },
-      { transport: queryDetails.transport }
+      { transport: queryDetails.transport },
     );
 
     const cachedItems = queryClient.getQueryCache().findAll({
@@ -340,6 +339,7 @@ describe("setConnectQueriesData", () => {
     queryClient.setConnectQueriesData(
       {
         schema: sayMethodDescriptor,
+        cardinality: "finite"
       },
       (prev) => {
         if (prev === undefined) {
@@ -349,7 +349,7 @@ describe("setConnectQueriesData", () => {
           ...prev,
           sentence: prev.sentence + "!",
         };
-      }
+      },
     );
 
     const newCachedItems = queryClient.getQueryCache().findAll() as Query<
@@ -376,7 +376,7 @@ describe("fetchConnectInfiniteQuery", () => {
           return data.page + 1n;
         },
         pageParamKey: "page",
-      }
+      },
     );
 
     expect(result).toBeDefined();
@@ -401,7 +401,7 @@ describe("getConnectQueryState", () => {
           return data.page + 1n;
         },
         pageParamKey: "page",
-      }
+      },
     );
 
     const state = queryClient.getConnectQueryState({
@@ -435,7 +435,7 @@ describe("ensure APIs", () => {
         },
         pageParamKey: "page",
         staleTime: 1000,
-      }
+      },
     );
 
     const state = queryClient.getConnectQueryState({
