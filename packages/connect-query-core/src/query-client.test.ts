@@ -339,7 +339,7 @@ describe("setConnectQueriesData", () => {
     queryClient.setConnectQueriesData(
       {
         schema: sayMethodDescriptor,
-        cardinality: "finite"
+        cardinality: "finite",
       },
       (prev) => {
         if (prev === undefined) {
