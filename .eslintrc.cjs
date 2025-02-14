@@ -52,7 +52,12 @@ module.exports = {
         "@typescript-eslint/strict-boolean-expressions": "error",
         "@typescript-eslint/no-unnecessary-condition": "error",
         "@typescript-eslint/array-type": "off", // we use complex typings, where Array is actually more readable than T[]
-        "@typescript-eslint/switch-exhaustiveness-check": "error",
+        "@typescript-eslint/switch-exhaustiveness-check": [
+          "error",
+          {
+            considerDefaultExhaustiveForUnions: true,
+          },
+        ],
         "@typescript-eslint/prefer-nullish-coalescing": "error",
         "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
         "@typescript-eslint/no-invalid-void-type": "error",
