@@ -138,7 +138,7 @@ export class QueryClient extends TSQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<InvalidateQueryFilters, "queryKey">,
-    options?: InvalidateOptions
+    options?: InvalidateOptions,
   ) {
     return this.invalidateQueries(
       {
@@ -148,7 +148,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: params.cardinality,
         }),
       },
-      options
+      options,
     );
   }
 
@@ -167,7 +167,7 @@ export class QueryClient extends TSQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<RefetchQueryFilters, "queryKey">,
-    options?: RefetchOptions
+    options?: RefetchOptions,
   ) {
     return this.refetchQueries(
       {
@@ -177,7 +177,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: params.cardinality,
         }),
       },
-      options
+      options,
     );
   }
 
@@ -195,7 +195,7 @@ export class QueryClient extends TSQueryClient {
       cardinality: "infinite";
     },
     updater: ConnectInfiniteUpdater<O>,
-    options?: SetDataOptions
+    options?: SetDataOptions,
   ): O;
   public setConnectQueryData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
@@ -205,7 +205,7 @@ export class QueryClient extends TSQueryClient {
       cardinality: "finite";
     },
     updater: ConnectUpdater<O>,
-    options?: SetDataOptions
+    options?: SetDataOptions,
   ): O;
   public setConnectQueryData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
@@ -216,7 +216,7 @@ export class QueryClient extends TSQueryClient {
     },
     updater: ConnectUpdater<O> | ConnectInfiniteUpdater<O>,
 
-    options?: SetDataOptions
+    options?: SetDataOptions,
   ) {
     return this.setQueryData(
       createConnectQueryKey({
@@ -227,13 +227,13 @@ export class QueryClient extends TSQueryClient {
       keyDescriptor.cardinality === "finite"
         ? createProtobufSafeUpdater<O>(
             keyDescriptor.schema,
-            updater as ConnectUpdater<O>
+            updater as ConnectUpdater<O>,
           )
         : createProtobufSafeInfiniteUpdater<O>(
             keyDescriptor.schema,
-            updater as ConnectInfiniteUpdater<O>
+            updater as ConnectInfiniteUpdater<O>,
           ),
-      options
+      options,
     );
   }
 
@@ -289,7 +289,7 @@ export class QueryClient extends TSQueryClient {
     updater: ConnectUpdater<O>,
     options?: SetDataOptions & {
       exact?: boolean;
-    }
+    },
   ): [readonly unknown[], unknown][];
   public setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
@@ -301,7 +301,7 @@ export class QueryClient extends TSQueryClient {
     updater: ConnectInfiniteUpdater<O>,
     options?: SetDataOptions & {
       exact?: boolean;
-    }
+    },
   ): [readonly unknown[], unknown][];
   public setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
@@ -313,7 +313,7 @@ export class QueryClient extends TSQueryClient {
     updater: ConnectUpdater<O> | ConnectInfiniteUpdater<O>,
     options?: SetDataOptions & {
       exact?: boolean;
-    }
+    },
   ) {
     return this.setQueriesData(
       {
@@ -326,13 +326,13 @@ export class QueryClient extends TSQueryClient {
       keyDescriptor.cardinality === "finite"
         ? createProtobufSafeUpdater<O>(
             keyDescriptor.schema,
-            updater as ConnectUpdater<O>
+            updater as ConnectUpdater<O>,
           )
         : createProtobufSafeInfiniteUpdater<O>(
             keyDescriptor.schema,
-            updater as ConnectInfiniteUpdater<O>
+            updater as ConnectInfiniteUpdater<O>,
           ),
-      options
+      options,
     );
   }
 
@@ -353,7 +353,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ) {
     return this.fetchQuery({
       ...createQueryOptions(schema, input, { transport }),
@@ -378,7 +378,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ) {
     return this.fetchInfiniteQuery({
       ...createInfiniteQueryOptions(schema, input, {
@@ -407,7 +407,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ) {
     return this.prefetchQuery({
       ...createQueryOptions(schema, input, { transport }),
@@ -432,7 +432,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ) {
     return this.prefetchInfiniteQuery({
       ...createInfiniteQueryOptions(schema, input, {
@@ -489,7 +489,7 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ) {
     return this.ensureQueryData({
       ...createQueryOptions(schema, input, { transport }),
@@ -515,7 +515,7 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ) {
     return this.ensureInfiniteQueryData({
       ...createInfiniteQueryOptions(schema, input, {
@@ -541,7 +541,7 @@ export class QueryClient extends TSQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">
+    filterOptions?: Omit<QueryFilters, "queryKey">,
   ) {
     return this.getQueriesData({
       ...filterOptions,
@@ -566,7 +566,7 @@ export class QueryClient extends TSQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">
+    filterOptions?: Omit<QueryFilters, "queryKey">,
   ) {
     return this.cancelQueries({
       ...filterOptions,
@@ -591,7 +591,7 @@ export class QueryClient extends TSQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">
+    filterOptions?: Omit<QueryFilters, "queryKey">,
   ) {
     this.removeQueries({
       ...filterOptions,
@@ -618,7 +618,7 @@ export class QueryClient extends TSQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<QueryFilters, "queryKey">,
-    options?: ResetOptions
+    options?: ResetOptions,
   ) {
     return this.resetQueries(
       {
@@ -628,7 +628,7 @@ export class QueryClient extends TSQueryClient {
           cardinality: params.cardinality,
         }),
       },
-      options
+      options,
     );
   }
 }
@@ -637,16 +637,16 @@ type ConnectInfiniteUpdater<O extends DescMessage> =
   | InfiniteData<MessageInitShape<O>>
   | undefined
   | ((
-      prev?: InfiniteData<MessageShape<O>>
+      prev?: InfiniteData<MessageShape<O>>,
     ) => InfiniteData<MessageShape<O>> | undefined);
 
 const createProtobufSafeInfiniteUpdater =
   <O extends DescMessage>(
     schema: Pick<DescMethodUnary<never, O>, "output">,
-    updater: ConnectInfiniteUpdater<O>
+    updater: ConnectInfiniteUpdater<O>,
   ) =>
   (
-    prev?: InfiniteData<MessageShape<O>>
+    prev?: InfiniteData<MessageShape<O>>,
   ): InfiniteData<MessageShape<O>> | undefined => {
     if (typeof updater !== "function") {
       if (updater === undefined) {
@@ -667,13 +667,13 @@ const createProtobufSafeInfiniteUpdater =
     };
   };
 
-  type ConnectUpdater<O extends DescMessage> =
+type ConnectUpdater<O extends DescMessage> =
   | MessageInitShape<O>
   | undefined
   | ((prev?: MessageShape<O>) => MessageInitShape<O> | undefined);
 
 /**
- * This method makes sure that the object returned 
+ * This method makes sure that the object returned
  * is of the message type. If an init shape is returned,
  * we'll run it through create again.
  */
@@ -694,5 +694,3 @@ const createProtobufSafeUpdater =
     }
     return create(schema.output, updater(prev));
   };
-
-

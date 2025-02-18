@@ -78,5 +78,3 @@ export const createProtobufSafeUpdater =
     }
     return updater(prev);
   };
-
-
