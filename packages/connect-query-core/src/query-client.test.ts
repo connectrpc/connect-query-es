@@ -236,7 +236,6 @@ describe("setConnectQueryData", () => {
         }
         expect(prev.sentence).toBe("Hello Pablo");
         return {
-          ...prev,
           sentence: "Hello Stu",
         };
       },
@@ -249,6 +248,8 @@ describe("setConnectQueryData", () => {
 
     expect(newQueryState.dataUpdateCount).toBe(2);
     expect(newQueryState.data?.sentence).toBe("Hello Stu");
+    expect(newQueryState.data?.$typeName).toBe("connectrpc.eliza.v1.SayResponse");
+
   });
 
   it("can update infinite paginated data", async () => {
