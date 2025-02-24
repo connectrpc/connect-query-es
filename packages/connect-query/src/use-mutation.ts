@@ -19,7 +19,7 @@ import type {
   MessageShape,
 } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
-import { callUnaryMethod } from "@connectrpc/connect-query-core";
+import { callUnaryMethod, type SerializableContextValues } from "@connectrpc/connect-query-core";
 import type {
   UseMutationOptions as TSUseMutationOptions,
   UseMutationResult,
@@ -44,6 +44,7 @@ export type UseMutationOptions<
 > & {
   /** The transport to be used for the fetching. */
   transport?: Transport;
+  contextValues?: SerializableContextValues;
 };
 
 /**
@@ -55,14 +56,16 @@ export function useMutation<
   Ctx = unknown,
 >(
   schema: DescMethodUnary<I, O>,
-  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
+  { transport, contextValues, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx> {
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;
   const mutationFn = useCallback(
     async (input: MessageInitShape<I>) =>
-      callUnaryMethod(transportToUse, schema, input),
-    [transportToUse, schema],
+      callUnaryMethod(transportToUse, schema, input, {
+        contextValues,
+      }),
+    [transportToUse, schema, contextValues],
   );
   return tsUseMutation({
     ...queryOptions,

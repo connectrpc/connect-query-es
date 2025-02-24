@@ -21,6 +21,7 @@ import type {
 import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   ConnectQueryKey,
+  SerializableContextValues,
   SkipToken,
 } from "@connectrpc/connect-query-core";
 import { createQueryOptions } from "@connectrpc/connect-query-core";
@@ -54,6 +55,7 @@ export type UseQueryOptions<
 > & {
   /** The transport to be used for the fetching. */
   transport?: Transport;
+  contextValues?: SerializableContextValues;
 };
 
 /**
@@ -66,11 +68,12 @@ export function useQuery<
 >(
   schema: DescMethodUnary<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  { transport, ...queryOptions }: UseQueryOptions<O, SelectOutData> = {},
+  { transport, contextValues, ...queryOptions }: UseQueryOptions<O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
+    contextValues,
   });
   return tsUseQuery({
     ...baseOptions,
@@ -95,6 +98,7 @@ export type UseSuspenseQueryOptions<
 > & {
   /** The transport to be used for the fetching. */
   transport?: Transport;
+  contextValues?: SerializableContextValues;
 };
 
 /**
@@ -109,12 +113,14 @@ export function useSuspenseQuery<
   input?: MessageInitShape<I>,
   {
     transport,
+    contextValues,
     ...queryOptions
   }: UseSuspenseQueryOptions<O, SelectOutData> = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
+    contextValues,
   });
   return tsUseSuspenseQuery({
     ...baseOptions,

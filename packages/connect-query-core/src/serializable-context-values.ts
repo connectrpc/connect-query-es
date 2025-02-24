@@ -12,15 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from "@connectrpc/connect-query-core";
-export { useTransport, TransportProvider } from "./use-transport.js";
-export {
-  useInfiniteQuery,
-  useSuspenseInfiniteQuery,
-} from "./use-infinite-query.js";
-export { useQuery, useSuspenseQuery } from "./use-query.js";
-export type { UseMutationOptions } from "./use-mutation.js";
-export { useMutation } from "./use-mutation.js";
-export type { UseInfiniteQueryOptions } from "./use-infinite-query.js";
-export type { UseQueryOptions } from "./use-query.js";
+import { type ContextValues } from "@connectrpc/connect";
 
+
+export interface SerializableContextValues extends ContextValues {
+    toString(): string;
+}

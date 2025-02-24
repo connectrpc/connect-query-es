@@ -24,6 +24,7 @@ import type { SkipToken } from "@tanstack/query-core";
 
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
+import type { SerializableContextValues } from "./serializable-context-values.js";
 
 /**
  * TanStack Query manages query caching for you based on query keys. `QueryKey`s in TanStack Query are arrays with arbitrary JSON-serializable data - typically handwritten for each endpoint.
@@ -71,6 +72,7 @@ export type ConnectQueryKey = [
      * Whether this is an infinite query, or a regular one.
      */
     cardinality?: "infinite" | "finite" | undefined;
+    contextValues?: string;
   },
 ];
 
@@ -98,6 +100,7 @@ type KeyParamsForMethod<Desc extends DescMethod> = {
    * If omit the field with this name from the key for infinite queries.
    */
   pageParamKey?: keyof MessageInitShape<Desc["input"]>;
+  contextValues?: SerializableContextValues;
 };
 
 type KeyParamsForService<Desc extends DescService> = {
@@ -157,13 +160,15 @@ export function createConnectQueryKey<
   O extends DescMessage,
   Desc extends DescService,
 >(
-  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>,
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>
 ): ConnectQueryKey {
   const props: ConnectQueryKey[1] =
     params.schema.kind == "rpc"
       ? {
           serviceName: params.schema.parent.typeName,
           methodName: params.schema.name,
+          contextValues:
+            "contextValues" in params ? params.contextValues?.toString() : undefined,
         }
       : {
           serviceName: params.schema.typeName,
@@ -181,7 +186,7 @@ export function createConnectQueryKey<
       props.input = createMessageKey(
         params.schema.input,
         params.input,
-        params.pageParamKey,
+        params.pageParamKey
       );
     }
   }

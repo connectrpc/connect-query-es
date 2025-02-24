@@ -27,15 +27,18 @@ import { callUnaryMethod } from "./call-unary-method.js";
 import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { createStructuralSharing } from "./structural-sharing.js";
+import type { SerializableContextValues } from "./serializable-context-values.js";
 
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
   schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I> | undefined,
+  contextValues?: SerializableContextValues,
 ): QueryFunction<MessageShape<O>, ConnectQueryKey> {
   return async (context) => {
     return callUnaryMethod(transport, schema, input, {
       signal: context.signal,
+      contextValues,
     });
   };
 }
@@ -51,8 +54,10 @@ export function createQueryOptions<
   input: MessageInitShape<I> | undefined,
   {
     transport,
+    contextValues,
   }: {
     transport: Transport;
+    contextValues?: SerializableContextValues;
   },
 ): {
   queryKey: ConnectQueryKey;
@@ -67,8 +72,10 @@ export function createQueryOptions<
   input: SkipToken,
   {
     transport,
+    contextValues,
   }: {
     transport: Transport;
+    contextValues?: SerializableContextValues;
   },
 ): {
   queryKey: ConnectQueryKey;
@@ -83,8 +90,10 @@ export function createQueryOptions<
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
+    contextValues,
   }: {
     transport: Transport;
+    contextValues?: SerializableContextValues;
   },
 ): {
   queryKey: ConnectQueryKey;
@@ -99,8 +108,10 @@ export function createQueryOptions<
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
+    contextValues,
   }: {
     transport: Transport;
+    contextValues?: SerializableContextValues;
   },
 ): {
   queryKey: ConnectQueryKey;
@@ -112,12 +123,13 @@ export function createQueryOptions<
     input: input ?? create(schema.input),
     transport,
     cardinality: "finite",
+    contextValues,
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =
     input === skipToken
       ? skipToken
-      : createUnaryQueryFn(transport, schema, input);
+      : createUnaryQueryFn(transport, schema, input, contextValues);
   return {
     queryKey,
     queryFn,

@@ -20,6 +20,7 @@ import type {
 } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
+import type { SerializableContextValues } from "./serializable-context-values.js";
 
 /**
  * Call a unary method given its signature and input.
@@ -34,7 +35,8 @@ export async function callUnaryMethod<
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
-  },
+    contextValues?: SerializableContextValues;
+  }
 ): Promise<MessageShape<O>> {
   const result = await transport.unary(
     schema,
@@ -42,7 +44,7 @@ export async function callUnaryMethod<
     undefined,
     undefined,
     input ?? create(schema.input),
-    undefined,
+    options?.contextValues,
   );
   return result.message;
 }
