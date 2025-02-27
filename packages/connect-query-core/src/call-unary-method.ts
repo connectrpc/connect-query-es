@@ -36,7 +36,7 @@ export async function callUnaryMethod<
   options?: {
     signal?: AbortSignal;
     contextValues?: SerializableContextValues;
-  }
+  },
 ): Promise<MessageShape<O>> {
   const result = await transport.unary(
     schema,

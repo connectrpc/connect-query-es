@@ -68,7 +68,11 @@ export function useQuery<
 >(
   schema: DescMethodUnary<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  { transport, contextValues, ...queryOptions }: UseQueryOptions<O, SelectOutData> = {},
+  {
+    transport,
+    contextValues,
+    ...queryOptions
+  }: UseQueryOptions<O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createQueryOptions(schema, input, {

@@ -19,7 +19,10 @@ import type {
   MessageShape,
 } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
-import { callUnaryMethod, type SerializableContextValues } from "@connectrpc/connect-query-core";
+import {
+  callUnaryMethod,
+  type SerializableContextValues,
+} from "@connectrpc/connect-query-core";
 import type {
   UseMutationOptions as TSUseMutationOptions,
   UseMutationResult,
@@ -56,7 +59,11 @@ export function useMutation<
   Ctx = unknown,
 >(
   schema: DescMethodUnary<I, O>,
-  { transport, contextValues, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
+  {
+    transport,
+    contextValues,
+    ...queryOptions
+  }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, MessageInitShape<I>, Ctx> {
   const transportFromCtx = useTransport();
   const transportToUse = transport ?? transportFromCtx;

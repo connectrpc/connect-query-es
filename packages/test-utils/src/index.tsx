@@ -14,7 +14,7 @@
 
 import type { MessageInitShape } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
-import { createRouterTransport } from "@connectrpc/connect";
+import { createRouterTransport, type Interceptor } from "@connectrpc/connect";
 
 import {
   BigIntService,
@@ -42,20 +42,28 @@ export const sleep = async (timeout: number) =>
 export const mockEliza = (
   override?: MessageInitShape<typeof SayResponseSchema>,
   addDelay = false,
+  options: {
+    interceptors?: Interceptor[];
+  } = {},
 ) =>
-  createRouterTransport(({ service }) => {
-    service(ElizaService, {
-      say: async (input: SayRequest) => {
-        if (addDelay) {
-          await sleep(1000);
-        }
-        return create(
-          SayResponseSchema,
-          override ?? { sentence: `Hello ${input.sentence}` },
-        );
-      },
-    });
-  });
+  createRouterTransport(
+    ({ service }) => {
+      service(ElizaService, {
+        say: async (input: SayRequest) => {
+          if (addDelay) {
+            await sleep(1000);
+          }
+          return create(
+            SayResponseSchema,
+            override ?? { sentence: `Hello ${input.sentence}` },
+          );
+        },
+      });
+    },
+    {
+      transport: options,
+    },
+  );
 
 /**
  * a stateless mock for BigIntService

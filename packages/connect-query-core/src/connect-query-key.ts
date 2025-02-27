@@ -72,6 +72,9 @@ export type ConnectQueryKey = [
      * Whether this is an infinite query, or a regular one.
      */
     cardinality?: "infinite" | "finite" | undefined;
+    /**
+     * The stringified version of contextValues, if present.
+     */
     contextValues?: string;
   },
 ];
@@ -100,6 +103,9 @@ type KeyParamsForMethod<Desc extends DescMethod> = {
    * If omit the field with this name from the key for infinite queries.
    */
   pageParamKey?: keyof MessageInitShape<Desc["input"]>;
+  /**
+   * Any contextValues that need to be passed to the query.
+   */
   contextValues?: SerializableContextValues;
 };
 
@@ -160,19 +166,21 @@ export function createConnectQueryKey<
   O extends DescMessage,
   Desc extends DescService,
 >(
-  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>,
 ): ConnectQueryKey {
   const props: ConnectQueryKey[1] =
     params.schema.kind == "rpc"
       ? {
           serviceName: params.schema.parent.typeName,
           methodName: params.schema.name,
-          contextValues:
-            "contextValues" in params ? params.contextValues?.toString() : undefined,
         }
       : {
           serviceName: params.schema.typeName,
         };
+
+  if ("contextValues" in params && params.contextValues !== undefined) {
+    props.contextValues = params.contextValues.toString();
+  }
   if (params.transport !== undefined) {
     props.transport = createTransportKey(params.transport);
   }
@@ -186,7 +194,7 @@ export function createConnectQueryKey<
       props.input = createMessageKey(
         params.schema.input,
         params.input,
-        params.pageParamKey
+        params.pageParamKey,
       );
     }
   }

@@ -16,15 +16,17 @@ import { create } from "@bufbuild/protobuf";
 import {
   createConnectQueryKey,
   skipToken,
+  type SerializableContextValues,
 } from "@connectrpc/connect-query-core";
 import { renderHook, waitFor } from "@testing-library/react";
 import { mockBigInt, mockEliza } from "test-utils";
 import { BigIntService } from "test-utils/gen/bigint_pb.js";
 import { ElizaService } from "test-utils/gen/eliza_pb.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { wrapper } from "./test/test-wrapper.js";
 import { useQuery, useSuspenseQuery } from "./use-query.js";
+import { createContextKey, createContextValues } from "@connectrpc/connect";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const sayMethodDescriptor = ElizaService.method.say;
@@ -222,6 +224,48 @@ describe("useQuery", () => {
         }),
       ),
     ).toBe(result.current.data);
+  });
+
+  it("context values can be passed", async () => {
+    const contextValueSpy = vi.fn();
+    const contextKey = createContextKey("contextKey", {
+      description: "default",
+    });
+    const baseContextValues = createContextValues().set(
+      contextKey,
+      "new value",
+    );
+    const fakeContextValues: SerializableContextValues = {
+      ...baseContextValues,
+      toString() {
+        return "serialized";
+      },
+    };
+    const elizaWithInterceptors = mockEliza(undefined, false, {
+      interceptors: [
+        (next) => (req) => {
+          contextValueSpy(req.contextValues.get(contextKey));
+          return next(req);
+        },
+      ],
+    });
+    const { result } = renderHook(
+      () => {
+        return useQuery(
+          ElizaService.method.say,
+          {},
+          { contextValues: fakeContextValues },
+        );
+      },
+      wrapper({}, elizaWithInterceptors),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(contextValueSpy).toHaveBeenCalledWith("new value");
+    expect(contextValueSpy).toHaveBeenCalledTimes(1);
   });
 });
 

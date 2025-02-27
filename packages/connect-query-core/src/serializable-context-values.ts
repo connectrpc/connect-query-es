@@ -17,8 +17,8 @@ import { type ContextValues } from "@connectrpc/connect";
 /**
  * A version of ContextValues that can be serialized to a string.
  * This string will be used to detect if the context has changed
- * and the query needs to be refetched.
+ * and the query needs to be invalidated.
  */
 export interface SerializableContextValues extends ContextValues {
-    toString(): string;
+  toString(): string;
 }
