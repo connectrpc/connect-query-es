@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
-import type { Transport } from "@connectrpc/connect";
+import { createContextValues, type Transport } from "@connectrpc/connect";
 import { ElizaService, SayRequestSchema } from "test-utils/gen/eliza_pb.js";
 import { ListRequestSchema, ListService } from "test-utils/gen/list_pb.js";
 import { describe, expect, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { skipToken } from "./index.js";
+import { skipToken, type SerializableContextValues } from "./index.js";
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
 
@@ -132,5 +132,22 @@ describe("createConnectQueryKey", () => {
       },
       cardinality: undefined,
     });
+  });
+
+  it("allows to set contextValues", () => {
+    const baseContextValues = createContextValues();
+    const fakeContextValues: SerializableContextValues = {
+      ...baseContextValues,
+      toString() {
+        return "serialized";
+      },
+    };
+    const key = createConnectQueryKey({
+      schema: ElizaService.method.say,
+      input: skipToken,
+      cardinality: "finite",
+      contextValues: fakeContextValues,
+    });
+    expect(key[1].contextValues).toEqual("serialized");
   });
 });
