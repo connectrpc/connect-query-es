@@ -78,6 +78,7 @@ export function useInfiniteQuery<
     transport,
     pageParamKey,
     getNextPageParam,
+    contextValues,
     ...queryOptions
   }: UseInfiniteQueryOptions<I, O, ParamKey>,
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
@@ -86,6 +87,7 @@ export function useInfiniteQuery<
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
+    contextValues,
   });
   return tsUseInfiniteQuery({
     ...baseOptions,

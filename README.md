@@ -193,6 +193,7 @@ Use this helper to get the default transport that's currently attached to the Re
 > [!TIP]
 >
 > All hooks accept a `transport` in the options. You can use the Transport from the context, or create one dynamically. If you create a Transport dynamically, make sure to memoize it, because it is taken into consideration when building query keys.
+> All hooks also accept `contextValues`, which can be used to pass additional context on each call to the transport and any interceptors.
 
 ### `useQuery`
 
@@ -204,7 +205,11 @@ function useQuery<
 >(
   schema: DescMethodUnary<I, O>,
   input?: SkipToken | MessageInitShape<I>,
-  { transport, ...queryOptions }: UseQueryOptions<I, O, SelectOutData> = {},
+  {
+    transport,
+    contextValues,
+    ...queryOptions
+  }: UseQueryOptions<I, O, SelectOutData> = {},
 ): UseQueryResult<SelectOutData, ConnectError>;
 ```
 
@@ -232,6 +237,7 @@ function useInfiniteQuery<
     transport,
     pageParamKey,
     getNextPageParam,
+    contextValues,
     ...queryOptions
   }: UseInfiniteQueryOptions<I, O, ParamKey>,
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError>;
@@ -250,7 +256,11 @@ Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook
 ```ts
 function useMutation<I extends DescMessage, O extends DescMessage>(
   schema: DescMethodUnary<I, O>,
-  { transport, ...queryOptions }: UseMutationOptions<I, O, Ctx> = {},
+  {
+    transport,
+    contextValues,
+    ...queryOptions
+  }: UseMutationOptions<I, O, Ctx> = {},
 ): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>;
 ```
 
@@ -349,6 +359,7 @@ function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
+    contextValues?: SerializableContextValues;
   },
 ): Promise<O>;
 ```
@@ -395,8 +406,10 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
   input: SkipToken | PartialMessage<I> | undefined,
   {
     transport,
+    contextValues,
   }: {
     transport: Transport;
+    contextValues?: SerializableContextValues;
   },
 ): {
   queryKey: ConnectQueryKey;
@@ -508,6 +521,10 @@ type ConnectQueryKey = [
      * Whether this is an infinite query, or a regular one.
      */
     cardinality?: "infinite" | "finite";
+    /**
+     * The stringified version of contextValues, if present.
+     */
+    contextValues?: string;
   },
 ];
 ```

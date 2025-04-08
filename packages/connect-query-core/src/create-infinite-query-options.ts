@@ -33,6 +33,7 @@ import {
 } from "./connect-query-key.js";
 import { createStructuralSharing } from "./structural-sharing.js";
 import { assert } from "./utils.js";
+import type { SerializableContextValues } from "./serializable-context-values.js";
 
 /**
  * Options specific to connect-query
@@ -49,6 +50,7 @@ export interface ConnectInfiniteQueryOptions<
     MessageInitShape<I>[ParamKey],
     MessageShape<O>
   >;
+  contextValues?: SerializableContextValues;
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params -- we have 4 required arguments
@@ -62,8 +64,10 @@ function createUnaryInfiniteQueryFn<
   input: MessageInitShape<I>,
   {
     pageParamKey,
+    contextValues,
   }: {
     pageParamKey: ParamKey;
+    contextValues?: SerializableContextValues;
   },
 ): QueryFunction<
   MessageShape<O>,
@@ -79,6 +83,7 @@ function createUnaryInfiniteQueryFn<
     };
     return callUnaryMethod(transport, schema, inputCombinedWithPageParam, {
       signal: context.signal,
+      contextValues: contextValues,
     });
   };
 }
@@ -97,6 +102,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    contextValues,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -149,6 +155,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    contextValues,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -180,6 +187,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    contextValues,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -203,6 +211,7 @@ export function createInfiniteQueryOptions<
     schema,
     transport,
     input,
+    contextValues,
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =
@@ -210,6 +219,7 @@ export function createInfiniteQueryOptions<
       ? skipToken
       : createUnaryInfiniteQueryFn(transport, schema, input, {
           pageParamKey,
+          contextValues,
         });
   return {
     getNextPageParam,
