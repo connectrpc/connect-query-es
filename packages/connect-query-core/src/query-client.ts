@@ -122,14 +122,14 @@ type KeyParamsForService<Desc extends DescService> = {
 /**
  * A custom query client that adds some useful methods to access typesafe query data and other shortcuts.
  */
-export class QueryClient extends TSQueryClient {
+export interface ConnectQueryClient {
   /**
    * Invalidate and refetch all queries that match the given schema. This
    * can include all queries for a service (and sub methods), or all queries for a method.
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientinvalidatequeries}
    */
-  public async invalidateConnectQueries<
+  invalidateConnectQueries<
     I extends DescMessage,
     O extends DescMessage,
     Desc extends DescService,
@@ -138,19 +138,8 @@ export class QueryClient extends TSQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<InvalidateQueryFilters, "queryKey">,
-    options?: InvalidateOptions,
-  ) {
-    return this.invalidateQueries(
-      {
-        ...filterOptions,
-        queryKey: createConnectQueryKey({
-          ...params,
-          cardinality: params.cardinality,
-        }),
-      },
-      options,
-    );
-  }
+    options?: InvalidateOptions
+  ): Promise<void>;
 
   /**
    * Refetch all queries that match the given schema. This can include all queries for a service (and sub methods),
@@ -158,7 +147,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientrefetchqueries}
    */
-  public async refetchConnectQueries<
+  refetchConnectQueries<
     I extends DescMessage,
     O extends DescMessage,
     Desc extends DescService,
@@ -167,19 +156,8 @@ export class QueryClient extends TSQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<RefetchQueryFilters, "queryKey">,
-    options?: RefetchOptions,
-  ) {
-    return this.refetchQueries(
-      {
-        ...filterOptions,
-        queryKey: createConnectQueryKey({
-          ...params,
-          cardinality: params.cardinality,
-        }),
-      },
-      options,
-    );
-  }
+    options?: RefetchOptions
+  ): Promise<void>;
 
   /**
    * Set the data for a single query. The query must match exactly the input provided, as well
@@ -187,7 +165,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientsetquerydata}
    */
-  public setConnectQueryData<I extends DescMessage, O extends DescMessage>(
+  setConnectQueryData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
       schema: DescMethodUnary<I, O>;
       input?: MessageInitShape<I>;
@@ -195,9 +173,9 @@ export class QueryClient extends TSQueryClient {
       cardinality: "infinite";
     },
     updater: ConnectInfiniteUpdater<O>,
-    options?: SetDataOptions,
+    options?: SetDataOptions
   ): O;
-  public setConnectQueryData<I extends DescMessage, O extends DescMessage>(
+  setConnectQueryData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
       schema: DescMethodUnary<I, O>;
       input?: MessageInitShape<I>;
@@ -205,9 +183,9 @@ export class QueryClient extends TSQueryClient {
       cardinality: "finite";
     },
     updater: ConnectUpdater<O>,
-    options?: SetDataOptions,
+    options?: SetDataOptions
   ): O;
-  public setConnectQueryData<I extends DescMessage, O extends DescMessage>(
+  setConnectQueryData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
       schema: DescMethodUnary<I, O>;
       input?: MessageInitShape<I>;
@@ -216,26 +194,8 @@ export class QueryClient extends TSQueryClient {
     },
     updater: ConnectUpdater<O> | ConnectInfiniteUpdater<O>,
 
-    options?: SetDataOptions,
-  ) {
-    return this.setQueryData(
-      createConnectQueryKey({
-        ...keyDescriptor,
-        // Since we are matching on the exact input, we match what connect-query does in createQueryOptions
-        input: keyDescriptor.input ?? ({} as MessageInitShape<I>),
-      }),
-      keyDescriptor.cardinality === "finite"
-        ? createProtobufSafeUpdater<O>(
-            keyDescriptor.schema,
-            updater as ConnectUpdater<O>,
-          )
-        : createProtobufSafeInfiniteUpdater<O>(
-            keyDescriptor.schema,
-            updater as ConnectInfiniteUpdater<O>,
-          ),
-      options,
-    );
-  }
+    options?: SetDataOptions
+  ): O;
 
   /**
    * Get the data for a single query. The query must match exactly the input provided, as well
@@ -243,7 +203,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientgetquerydata}
    */
-  public getConnectQueryData<
+  getConnectQueryData<
     I extends DescMessage,
     O extends DescMessage,
   >(keyDescriptor: {
@@ -251,8 +211,8 @@ export class QueryClient extends TSQueryClient {
     input?: MessageInitShape<I>;
     transport: Transport;
     cardinality: "finite";
-  }): MessageShape<O>;
-  public getConnectQueryData<
+  }): MessageShape<O> | undefined;
+  getConnectQueryData<
     I extends DescMessage,
     O extends DescMessage,
   >(keyDescriptor: {
@@ -260,18 +220,7 @@ export class QueryClient extends TSQueryClient {
     input?: MessageInitShape<I>;
     transport: Transport;
     cardinality: "infinite";
-  }): InfiniteData<MessageShape<O>>;
-  public getConnectQueryData<
-    I extends DescMessage,
-    O extends DescMessage,
-  >(keyDescriptor: {
-    schema: DescMethodUnary<I, O>;
-    input?: MessageInitShape<I>;
-    transport: Transport;
-    cardinality: "finite" | "infinite";
-  }): MessageShape<O> | InfiniteData<MessageShape<O>> | undefined {
-    return this.getQueryData(createConnectQueryKey(keyDescriptor));
-  }
+  }): InfiniteData<MessageShape<O>> | undefined;
 
   /**
    * Sets the data for any matching queries for a given method. The input is optional, and anything left
@@ -279,7 +228,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientsetqueriesdata}
    */
-  public setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
+  setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
       schema: DescMethodUnary<I, O>;
       input?: MessageInitShape<I>;
@@ -289,9 +238,9 @@ export class QueryClient extends TSQueryClient {
     updater: ConnectUpdater<O>,
     options?: SetDataOptions & {
       exact?: boolean;
-    },
+    }
   ): [readonly unknown[], unknown][];
-  public setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
+  setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
       schema: DescMethodUnary<I, O>;
       input?: MessageInitShape<I>;
@@ -301,47 +250,15 @@ export class QueryClient extends TSQueryClient {
     updater: ConnectInfiniteUpdater<O>,
     options?: SetDataOptions & {
       exact?: boolean;
-    },
+    }
   ): [readonly unknown[], unknown][];
-  public setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
-    keyDescriptor: {
-      schema: DescMethodUnary<I, O>;
-      input?: MessageInitShape<I>;
-      transport?: Transport;
-      cardinality: "finite" | "infinite";
-    },
-    updater: ConnectUpdater<O> | ConnectInfiniteUpdater<O>,
-    options?: SetDataOptions & {
-      exact?: boolean;
-    },
-  ) {
-    return this.setQueriesData(
-      {
-        queryKey: createConnectQueryKey({
-          ...keyDescriptor,
-          cardinality: keyDescriptor.cardinality,
-        }),
-        exact: options?.exact ?? false,
-      },
-      keyDescriptor.cardinality === "finite"
-        ? createProtobufSafeUpdater<O>(
-            keyDescriptor.schema,
-            updater as ConnectUpdater<O>,
-          )
-        : createProtobufSafeInfiniteUpdater<O>(
-            keyDescriptor.schema,
-            updater as ConnectInfiniteUpdater<O>,
-          ),
-      options,
-    );
-  }
 
   /**
    * Fetch a single query and return the result.
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientfetchquery}
    */
-  public async fetchConnectQuery<
+  fetchConnectQuery<
     I extends DescMessage,
     O extends DescMessage,
     SelectOutData = MessageShape<O>,
@@ -353,20 +270,15 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>,
-  ) {
-    return this.fetchQuery({
-      ...createQueryOptions(schema, input, { transport }),
-      ...queryOptions,
-    });
-  }
+    } & FetchQueryOptions<O, SelectOutData>
+  ): Promise<SelectOutData>;
 
   /**
    * Fetch a single infinite query and return the result.
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientfetchinfinitequery}
    */
-  public async fetchConnectInfiniteQuery<
+  fetchConnectInfiniteQuery<
     I extends DescMessage,
     O extends DescMessage,
     ParamKey extends keyof MessageInitShape<I>,
@@ -378,24 +290,15 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
-  ) {
-    return this.fetchInfiniteQuery({
-      ...createInfiniteQueryOptions(schema, input, {
-        transport,
-        pageParamKey,
-        getNextPageParam,
-      }),
-      ...queryOptions,
-    });
-  }
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+  ): Promise<InfiniteData<MessageShape<O>>>;
 
   /**
    * Prefetch a single query and discard the result.
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientprefetchquery}
    */
-  public async prefetchConnectQuery<
+  prefetchConnectQuery<
     I extends DescMessage,
     O extends DescMessage,
     SelectOutData = MessageShape<O>,
@@ -407,20 +310,15 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>,
-  ) {
-    return this.prefetchQuery({
-      ...createQueryOptions(schema, input, { transport }),
-      ...queryOptions,
-    });
-  }
+    } & FetchQueryOptions<O, SelectOutData>
+  ): Promise<void>;
 
   /**
    * Prefetch a single infinite query and discard the result.
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientprefetchinfinitequery}
    */
-  public async prefetchConnectInfiniteQuery<
+  prefetchConnectInfiniteQuery<
     I extends DescMessage,
     O extends DescMessage,
     ParamKey extends keyof MessageInitShape<I>,
@@ -432,17 +330,8 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
-  ) {
-    return this.prefetchInfiniteQuery({
-      ...createInfiniteQueryOptions(schema, input, {
-        transport,
-        pageParamKey,
-        getNextPageParam,
-      }),
-      ...queryOptions,
-    });
-  }
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+  ): Promise<void>;
 
   /**
    * Get the query state for a single query. The query must match exactly the input provided, as well
@@ -450,26 +339,18 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientgetquerystate}
    */
-  public getConnectQueryState<Desc extends DescMethodUnary>(keyDescriptor: {
+  getConnectQueryState<Desc extends DescMethodUnary>(keyDescriptor: {
     schema: Desc;
     input?: MessageInitShape<Desc["input"]>;
     transport: Transport;
     cardinality: "finite";
-  }): QueryState<MessageShape<Desc["output"]>, ConnectError>;
-  public getConnectQueryState<Desc extends DescMethodUnary>(keyDescriptor: {
+  }): QueryState<MessageShape<Desc["output"]>, ConnectError> | undefined;
+  getConnectQueryState<Desc extends DescMethodUnary>(keyDescriptor: {
     schema: Desc;
     input?: MessageInitShape<Desc["input"]>;
     transport: Transport;
     cardinality: "infinite";
-  }): QueryState<InfiniteData<MessageShape<Desc["output"]>>, ConnectError>;
-  public getConnectQueryState<Desc extends DescMethodUnary>(keyDescriptor: {
-    schema: Desc;
-    input?: MessageInitShape<Desc["input"]>;
-    transport: Transport;
-    cardinality: "finite" | "infinite";
-  }) {
-    return this.getQueryState(createConnectQueryKey(keyDescriptor));
-  }
+  }): QueryState<InfiniteData<MessageShape<Desc["output"]>>, ConnectError> | undefined;
 
   /**
    * Ensure the query data for a single query. The query must match exactly the input provided, as well
@@ -477,7 +358,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientensurequerydata}
    */
-  public async ensureConnectQueryData<
+  ensureConnectQueryData<
     I extends DescMessage,
     O extends DescMessage,
     SelectOutData = MessageShape<O>,
@@ -489,13 +370,8 @@ export class QueryClient extends TSQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>,
-  ) {
-    return this.ensureQueryData({
-      ...createQueryOptions(schema, input, { transport }),
-      ...queryOptions,
-    });
-  }
+    } & FetchQueryOptions<O, SelectOutData>
+  ): Promise<SelectOutData>;
 
   /**
    * Ensure the query data for a single infinite query. The query must match exactly the input provided, as well
@@ -503,7 +379,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientensureinfinitequerydata}
    */
-  public async ensureConnectInfiniteQueryData<
+  ensureConnectInfiniteQueryData<
     I extends DescMessage,
     O extends DescMessage,
     ParamKey extends keyof MessageInitShape<I>,
@@ -515,17 +391,8 @@ export class QueryClient extends TSQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
-  ) {
-    return this.ensureInfiniteQueryData({
-      ...createInfiniteQueryOptions(schema, input, {
-        transport,
-        pageParamKey,
-        getNextPageParam,
-      }),
-      ...queryOptions,
-    });
-  }
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+  ): Promise<InfiniteData<MessageShape<O>>>;
 
   /**
    * Get all data entries that match the given schema. This
@@ -533,7 +400,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientgetqueriesdata}
    */
-  public getConnectQueriesData<
+  getConnectQueriesData<
     I extends DescMessage,
     O extends DescMessage,
     Desc extends DescService,
@@ -541,16 +408,8 @@ export class QueryClient extends TSQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">,
-  ) {
-    return this.getQueriesData({
-      ...filterOptions,
-      queryKey: createConnectQueryKey({
-        ...params,
-        cardinality: params.cardinality,
-      }),
-    });
-  }
+    filterOptions?: Omit<QueryFilters, "queryKey">
+  ): unknown;
 
   /**
    * Cancels any outgoing queries that match the given schema. This
@@ -558,7 +417,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientcancelqueries}
    */
-  public async cancelConnectQueries<
+  cancelConnectQueries<
     I extends DescMessage,
     O extends DescMessage,
     Desc extends DescService,
@@ -566,16 +425,8 @@ export class QueryClient extends TSQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">,
-  ) {
-    return this.cancelQueries({
-      ...filterOptions,
-      queryKey: createConnectQueryKey({
-        ...params,
-        cardinality: params.cardinality,
-      }),
-    });
-  }
+    filterOptions?: Omit<QueryFilters, "queryKey">
+  ): Promise<void>;
 
   /**
    * Removes any queries from the cache that match the given schema. This
@@ -583,7 +434,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientremovequeries}
    */
-  public removeConnectQueries<
+  removeConnectQueries<
     I extends DescMessage,
     O extends DescMessage,
     Desc extends DescService,
@@ -591,17 +442,8 @@ export class QueryClient extends TSQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">,
-  ) {
-    this.removeQueries({
-      ...filterOptions,
-      queryKey: createConnectQueryKey({
-        ...params,
-        cardinality: params.cardinality,
-      }),
-    });
-    return;
-  }
+    filterOptions?: Omit<QueryFilters, "queryKey">
+  ): void;
 
   /**
    * Resets any queries that match the given schema. This
@@ -609,7 +451,7 @@ export class QueryClient extends TSQueryClient {
    *
    * @see {@link https://tanstack.com/query/latest/docs/reference/QueryClient/#queryclientresetqueries}
    */
-  public async resetConnectQueries<
+  resetConnectQueries<
     I extends DescMessage,
     O extends DescMessage,
     Desc extends DescService,
@@ -618,35 +460,272 @@ export class QueryClient extends TSQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<QueryFilters, "queryKey">,
-    options?: ResetOptions,
-  ) {
-    return this.resetQueries(
+    options?: ResetOptions
+  ): Promise<void>;
+}
+
+export function createConnectQueryClient(queryClient: TSQueryClient) {
+  const connectQueryClient: ConnectQueryClient = {
+    async invalidateConnectQueries(
+      params,
+      filterOptions,
+      options
+    ) {
+      return queryClient.invalidateQueries(
+        {
+          ...filterOptions,
+          queryKey: createConnectQueryKey({
+            ...params,
+            cardinality: params.cardinality,
+          }),
+        },
+        options
+      );
+    },
+
+    async refetchConnectQueries(
+      params,
+      filterOptions,
+      options
+    ) {
+      return queryClient.refetchQueries(
+        {
+          ...filterOptions,
+          queryKey: createConnectQueryKey({
+            ...params,
+            cardinality: params.cardinality,
+          }),
+        },
+        options
+      );
+    },
+
+    setConnectQueryData(
+      keyDescriptor,
+      updater,
+      options
+    ) {
+      return queryClient.setQueryData(
+        createConnectQueryKey({
+          ...keyDescriptor,
+          // Since we are matching on the exact input, we match what connect-query does in createQueryOptions
+          input: keyDescriptor.input ?? {}
+        }),
+        keyDescriptor.cardinality === "finite"
+          ? createProtobufSafeUpdater<O>(
+              keyDescriptor.schema,
+              updater as ConnectUpdater<O>
+            )
+          : createProtobufSafeInfiniteUpdater<O>(
+              keyDescriptor.schema,
+              updater as ConnectInfiniteUpdater<O>
+            ),
+        options
+      );
+    },
+
+    getConnectQueryData(keyDescriptor) {
+      return queryClient.getQueryData(createConnectQueryKey(keyDescriptor));
+    },
+
+    setConnectQueriesData(
+      keyDescriptor,
+      updater,
+      options
+    ) {
+      return queryClient.setQueriesData(
+        {
+          queryKey: createConnectQueryKey({
+            ...keyDescriptor,
+            cardinality: keyDescriptor.cardinality,
+          }),
+          exact: options?.exact ?? false,
+        },
+        keyDescriptor.cardinality === "finite"
+          ? createProtobufSafeUpdater(
+              keyDescriptor.schema,
+              updater
+            )
+          : createProtobufSafeInfiniteUpdater(
+              keyDescriptor.schema,
+              updater
+            ),
+        options
+      );
+    },
+
+    fetchConnectQuery(
+      schema,
+      input,
       {
+        transport,
+        ...queryOptions
+      }
+    ) {
+      return queryClient.fetchQuery({
+        ...createQueryOptions(schema, input, { transport }),
+        ...queryOptions,
+      });
+    },
+    fetchConnectInfiniteQuery(
+      schema,
+      input,
+      {
+        transport,
+        getNextPageParam,
+        pageParamKey,
+        ...queryOptions
+      }
+    ) {
+      return queryClient.fetchInfiniteQuery({
+        ...createInfiniteQueryOptions(schema, input, {
+          transport,
+          pageParamKey,
+          getNextPageParam,
+        }),
+        ...queryOptions,
+      });
+    },
+    prefetchConnectQuery(
+      schema,
+      input,
+      {
+        transport,
+        ...queryOptions
+      }
+    ) {
+      return queryClient.prefetchQuery({
+        ...createQueryOptions(schema, input, { transport }),
+        ...queryOptions,
+      });
+    },
+    
+    prefetchConnectInfiniteQuery(
+      schema,
+      input,
+      {
+        transport,
+        getNextPageParam,
+        pageParamKey,
+        ...queryOptions
+      }
+    ) {
+      return queryClient.prefetchInfiniteQuery({
+        ...createInfiniteQueryOptions(schema, input, {
+          transport,
+          pageParamKey,
+          getNextPageParam,
+        }),
+        ...queryOptions,
+      });
+    },
+    getConnectQueryState(keyDescriptor) {
+      return queryClient.getQueryState(createConnectQueryKey(keyDescriptor));
+    },
+    
+    ensureConnectQueryData(
+      schema,
+      input,
+      {
+        transport,
+        ...queryOptions
+      }
+    ) {
+      return queryClient.ensureQueryData({
+        ...createQueryOptions(schema, input, { transport }),
+        ...queryOptions,
+      });
+    },
+    ensureConnectInfiniteQueryData(
+      schema,
+      input,
+      {
+        transport,
+        getNextPageParam,
+        pageParamKey,
+        ...queryOptions
+      }
+    ) {
+      return queryClient.ensureInfiniteQueryData({
+        ...createInfiniteQueryOptions(schema, input, {
+          transport,
+          pageParamKey,
+          getNextPageParam,
+        }),
+        ...queryOptions,
+      });
+    },
+    getConnectQueriesData(
+      params,
+      filterOptions
+    ) {
+      return queryClient.getQueriesData({
         ...filterOptions,
         queryKey: createConnectQueryKey({
           ...params,
           cardinality: params.cardinality,
         }),
-      },
-      options,
-    );
-  }
+      });
+    },
+    cancelConnectQueries(
+      params,
+      filterOptions
+    ) {
+      return queryClient.cancelQueries({
+        ...filterOptions,
+        queryKey: createConnectQueryKey({
+          ...params,
+          cardinality: params.cardinality,
+        }),
+      });
+    },
+    removeConnectQueries(
+      params,
+      filterOptions
+    ) {
+      queryClient.removeQueries({
+        ...filterOptions,
+        queryKey: createConnectQueryKey({
+          ...params,
+          cardinality: params.cardinality,
+        }),
+      });
+      return;
+    },
+    resetConnectQueries(
+      params,
+      filterOptions,
+      options
+    ) {
+      return queryClient.resetQueries(
+        {
+          ...filterOptions,
+          queryKey: createConnectQueryKey({
+            ...params,
+            cardinality: params.cardinality,
+          }),
+        },
+        options
+      );
+    },
+  };
+  return connectQueryClient;
 }
 
 type ConnectInfiniteUpdater<O extends DescMessage> =
   | InfiniteData<MessageInitShape<O>>
   | undefined
   | ((
-      prev?: InfiniteData<MessageShape<O>>,
+      prev?: InfiniteData<MessageShape<O>>
     ) => InfiniteData<MessageShape<O>> | undefined);
 
 const createProtobufSafeInfiniteUpdater =
   <O extends DescMessage>(
     schema: Pick<DescMethodUnary<never, O>, "output">,
-    updater: ConnectInfiniteUpdater<O>,
+    updater: ConnectInfiniteUpdater<O>
   ) =>
   (
-    prev?: InfiniteData<MessageShape<O>>,
+    prev?: InfiniteData<MessageShape<O>>
   ): InfiniteData<MessageShape<O>> | undefined => {
     if (typeof updater !== "function") {
       if (updater === undefined) {
@@ -680,7 +759,7 @@ type ConnectUpdater<O extends DescMessage> =
 const createProtobufSafeUpdater =
   <O extends DescMessage>(
     schema: Pick<DescMethodUnary<never, O>, "output">,
-    updater: ConnectUpdater<O>,
+    updater: ConnectUpdater<O>
   ) =>
   (prev?: MessageShape<O>): MessageShape<O> | undefined => {
     if (typeof updater !== "function") {
