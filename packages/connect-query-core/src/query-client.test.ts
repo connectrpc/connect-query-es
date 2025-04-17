@@ -19,9 +19,10 @@ import type { SayResponseSchema } from "test-utils/gen/eliza_pb.js";
 import { ElizaService } from "test-utils/gen/eliza_pb.js";
 import { ListService } from "test-utils/gen/list_pb.js";
 import { describe, expect, it } from "vitest";
+import { QueryClient } from "@tanstack/query-core";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { QueryClient } from "./query-client.js";
+import { createConnectQueryClient, type ConnectQueryClient } from "./query-client.js";
 
 const sayMethodDescriptor = ElizaService.method.say;
 
@@ -37,9 +38,14 @@ const queryDetails = {
   transport: mockedElizaTransport,
 };
 
+function enhanceQueryClient(queryClient: QueryClient) {
+  Object.assign(queryClient, createConnectQueryClient(queryClient));
+  return queryClient as ConnectQueryClient & QueryClient;
+}
+
 describe("prefetch APIs", () => {
   it("populates a single query cache", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     const currentCacheItems = queryClient.getQueryCache().findAll();
     expect(currentCacheItems).toHaveLength(0);
 
@@ -52,19 +58,19 @@ describe("prefetch APIs", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(item.sentence).toBe("Hello Pablo");
+    expect(item?.sentence).toBe("Hello Pablo");
 
     const queryState = queryClient.getConnectQueryState({
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState.status).toBe("success");
-    expect(queryState.fetchStatus).toBe("idle");
-    expect(queryState.dataUpdateCount).toBe(1);
+    expect(queryState?.status).toBe("success");
+    expect(queryState?.fetchStatus).toBe("idle");
+    expect(queryState?.dataUpdateCount).toBe(1);
   });
 
   it("populates an infinite query cache", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     const currentCacheItems = queryClient.getQueryCache().findAll();
     expect(currentCacheItems).toHaveLength(0);
 
@@ -94,18 +100,18 @@ describe("prefetch APIs", () => {
 
     const nextItems = queryClient.getQueryCache().findAll();
     expect(nextItems).toHaveLength(1);
-    expect(item.pages[0].items).toHaveLength(3);
+    expect(item?.pages[0].items).toHaveLength(3);
 
     const queryState = queryClient.getConnectQueryState(details);
-    expect(queryState.status).toBe("success");
-    expect(queryState.fetchStatus).toBe("idle");
-    expect(queryState.dataUpdateCount).toBe(1);
+    expect(queryState?.status).toBe("success");
+    expect(queryState?.fetchStatus).toBe("idle");
+    expect(queryState?.dataUpdateCount).toBe(1);
   });
 });
 
 describe("invalidateConnectQueries", () => {
   it("invalidates a specific query", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
@@ -116,11 +122,11 @@ describe("invalidateConnectQueries", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState.isInvalidated).toBe(true);
+    expect(queryState?.isInvalidated).toBe(true);
   });
 
   it("invalidate all methods for a given service", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
@@ -135,13 +141,13 @@ describe("invalidateConnectQueries", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState.isInvalidated).toBe(true);
+    expect(queryState?.isInvalidated).toBe(true);
   });
 });
 
 describe("refetchConnectQueries", () => {
   it("refetch a specific query", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
@@ -152,11 +158,11 @@ describe("refetchConnectQueries", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState.dataUpdateCount).toBe(2);
+    expect(queryState?.dataUpdateCount).toBe(2);
   });
 
   it("refetch all methods for a given service", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
@@ -171,13 +177,13 @@ describe("refetchConnectQueries", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState.dataUpdateCount).toBe(2);
+    expect(queryState?.dataUpdateCount).toBe(2);
   });
 });
 
 describe("setConnectQueryData", () => {
   it("updates locally fetched data", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
@@ -188,8 +194,8 @@ describe("setConnectQueryData", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState.dataUpdateCount).toBe(1);
-    expect(queryState.data?.sentence).toBe("Hello Pablo");
+    expect(queryState?.dataUpdateCount).toBe(1);
+    expect(queryState?.data?.sentence).toBe("Hello Pablo");
 
     queryClient.setConnectQueryData(
       {
@@ -206,12 +212,12 @@ describe("setConnectQueryData", () => {
       cardinality: "finite",
     });
 
-    expect(newQueryState.dataUpdateCount).toBe(2);
-    expect(newQueryState.data?.sentence).toBe("Hello Stu");
+    expect(newQueryState?.dataUpdateCount).toBe(2);
+    expect(newQueryState?.data?.sentence).toBe("Hello Stu");
   });
 
   it("updates locally fetched data with a callback", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
@@ -222,8 +228,8 @@ describe("setConnectQueryData", () => {
       ...queryDetails,
       cardinality: "finite",
     });
-    expect(queryState.dataUpdateCount).toBe(1);
-    expect(queryState.data?.sentence).toBe("Hello Pablo");
+    expect(queryState?.dataUpdateCount).toBe(1);
+    expect(queryState?.data?.sentence).toBe("Hello Pablo");
 
     queryClient.setConnectQueryData(
       {
@@ -246,15 +252,15 @@ describe("setConnectQueryData", () => {
       cardinality: "finite",
     });
 
-    expect(newQueryState.dataUpdateCount).toBe(2);
-    expect(newQueryState.data?.sentence).toBe("Hello Stu");
-    expect(newQueryState.data?.$typeName).toBe(
+    expect(newQueryState?.dataUpdateCount).toBe(2);
+    expect(newQueryState?.data?.sentence).toBe("Hello Stu");
+    expect(newQueryState?.data?.$typeName).toBe(
       "connectrpc.eliza.v1.SayResponse",
     );
   });
 
   it("can update infinite paginated data", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectInfiniteQuery(
       ListService.method.list,
       {
@@ -275,8 +281,8 @@ describe("setConnectQueryData", () => {
         page: 0n,
       },
     });
-    expect(queryState.dataUpdateCount).toBe(1);
-    expect(queryState.data?.pages).toHaveLength(1);
+    expect(queryState?.dataUpdateCount).toBe(1);
+    expect(queryState?.data?.pages).toHaveLength(1);
 
     queryClient.setConnectQueryData(
       {
@@ -308,14 +314,14 @@ describe("setConnectQueryData", () => {
       },
     });
 
-    expect(newQueryState.dataUpdateCount).toBe(2);
-    expect(newQueryState.data?.pages).toHaveLength(2);
+    expect(newQueryState?.dataUpdateCount).toBe(2);
+    expect(newQueryState?.data?.pages).toHaveLength(2);
   });
 });
 
 describe("setConnectQueriesData", () => {
   it("update locally fetched data across multiple queries", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.prefetchConnectQuery(
       queryDetails.schema,
       queryDetails.input,
@@ -365,7 +371,7 @@ describe("setConnectQueriesData", () => {
 
 describe("fetchConnectInfiniteQuery", () => {
   it("fetches infinite data", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     const result = await queryClient.fetchConnectInfiniteQuery(
       ListService.method.list,
       {
@@ -390,7 +396,7 @@ describe("fetchConnectInfiniteQuery", () => {
 
 describe("getConnectQueryState", () => {
   it("can get state for infinite queries", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     await queryClient.fetchConnectInfiniteQuery(
       ListService.method.list,
       {
@@ -415,15 +421,15 @@ describe("getConnectQueryState", () => {
       cardinality: "infinite",
     });
 
-    expect(state.status).toBe("success");
-    expect(state.fetchStatus).toBe("idle");
-    expect(state.dataUpdateCount).toBe(1);
+    expect(state?.status).toBe("success");
+    expect(state?.fetchStatus).toBe("idle");
+    expect(state?.dataUpdateCount).toBe(1);
   });
 });
 
 describe("ensure APIs", () => {
   it("ensure data exists for infinite queries", async () => {
-    const queryClient = new QueryClient();
+    const queryClient = enhanceQueryClient(new QueryClient());
     const data = await queryClient.ensureConnectInfiniteQueryData(
       ListService.method.list,
       {
@@ -448,9 +454,9 @@ describe("ensure APIs", () => {
       },
       cardinality: "infinite",
     });
-    expect(state.status).toBe("success");
-    expect(state.fetchStatus).toBe("idle");
-    expect(state.dataUpdateCount).toBe(1);
-    expect(data.pages[0]).toBe(state.data?.pages[0]);
+    expect(state?.status).toBe("success");
+    expect(state?.fetchStatus).toBe("idle");
+    expect(state?.dataUpdateCount).toBe(1);
+    expect(data.pages[0]).toBe(state?.data?.pages[0]);
   });
 });
