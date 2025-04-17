@@ -3,3 +3,5 @@
 node_modules
 /packages/*/dist
 /packages/*/coverage
+*.tsbuildinfo
+.vscode
