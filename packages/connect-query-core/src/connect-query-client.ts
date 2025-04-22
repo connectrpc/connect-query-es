@@ -139,7 +139,7 @@ export interface ConnectQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<InvalidateQueryFilters, "queryKey">,
-    options?: InvalidateOptions
+    options?: InvalidateOptions,
   ): Promise<void>;
 
   /**
@@ -157,7 +157,7 @@ export interface ConnectQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<RefetchQueryFilters, "queryKey">,
-    options?: RefetchOptions
+    options?: RefetchOptions,
   ): Promise<void>;
 
   /**
@@ -174,7 +174,7 @@ export interface ConnectQueryClient {
       cardinality: "infinite";
     },
     updater: ConnectInfiniteUpdater<O>,
-    options?: SetDataOptions
+    options?: SetDataOptions,
   ): O;
   setConnectQueryData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
@@ -184,7 +184,7 @@ export interface ConnectQueryClient {
       cardinality: "finite";
     },
     updater: ConnectUpdater<O>,
-    options?: SetDataOptions
+    options?: SetDataOptions,
   ): O;
 
   /**
@@ -228,7 +228,7 @@ export interface ConnectQueryClient {
     updater: ConnectUpdater<O>,
     options?: SetDataOptions & {
       exact?: boolean;
-    }
+    },
   ): [readonly unknown[], unknown][];
   setConnectQueriesData<I extends DescMessage, O extends DescMessage>(
     keyDescriptor: {
@@ -240,7 +240,7 @@ export interface ConnectQueryClient {
     updater: ConnectInfiniteUpdater<O>,
     options?: SetDataOptions & {
       exact?: boolean;
-    }
+    },
   ): [readonly unknown[], unknown][];
 
   /**
@@ -260,7 +260,7 @@ export interface ConnectQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ): Promise<SelectOutData>;
 
   /**
@@ -280,7 +280,7 @@ export interface ConnectQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ): Promise<InfiniteData<MessageShape<O>>>;
 
   /**
@@ -300,7 +300,7 @@ export interface ConnectQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ): Promise<void>;
 
   /**
@@ -320,7 +320,7 @@ export interface ConnectQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ): Promise<void>;
 
   /**
@@ -362,7 +362,7 @@ export interface ConnectQueryClient {
       ...queryOptions
     }: {
       transport: Transport;
-    } & FetchQueryOptions<O, SelectOutData>
+    } & FetchQueryOptions<O, SelectOutData>,
   ): Promise<SelectOutData>;
 
   /**
@@ -383,7 +383,7 @@ export interface ConnectQueryClient {
       getNextPageParam,
       pageParamKey,
       ...queryOptions
-    }: FetchInfiniteQueryOptions<I, O, ParamKey>
+    }: FetchInfiniteQueryOptions<I, O, ParamKey>,
   ): Promise<InfiniteData<MessageShape<O>>>;
 
   /**
@@ -400,7 +400,7 @@ export interface ConnectQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">
+    filterOptions?: Omit<QueryFilters, "queryKey">,
   ): unknown;
 
   /**
@@ -417,7 +417,7 @@ export interface ConnectQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">
+    filterOptions?: Omit<QueryFilters, "queryKey">,
   ): Promise<void>;
 
   /**
@@ -434,7 +434,7 @@ export interface ConnectQueryClient {
     params:
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
-    filterOptions?: Omit<QueryFilters, "queryKey">
+    filterOptions?: Omit<QueryFilters, "queryKey">,
   ): void;
 
   /**
@@ -452,7 +452,7 @@ export interface ConnectQueryClient {
       | KeyParamsForMethod<DescMethodUnary<I, O>>
       | KeyParamsForService<Desc>,
     filterOptions?: Omit<QueryFilters, "queryKey">,
-    options?: ResetOptions
+    options?: ResetOptions,
   ): Promise<void>;
 }
 
@@ -467,7 +467,7 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
             cardinality: params.cardinality,
           }),
         },
-        options
+        options,
       );
     },
 
@@ -480,7 +480,7 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
             cardinality: params.cardinality,
           }),
         },
-        options
+        options,
       );
     },
 
@@ -492,17 +492,17 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
         cardinality: "finite" | "infinite";
       },
       updater: ConnectUpdater<O> | ConnectInfiniteUpdater<O>,
-      options?: SetDataOptions
+      options?: SetDataOptions,
     ): O | undefined {
       const safeUpdater =
         keyDescriptor.cardinality === "infinite"
           ? createProtobufSafeInfiniteUpdater<O>(
               keyDescriptor.schema,
-              updater as ConnectInfiniteUpdater<O>
+              updater as ConnectInfiniteUpdater<O>,
             )
           : createProtobufSafeUpdater<O>(
               keyDescriptor.schema,
-              updater as ConnectUpdater<O>
+              updater as ConnectUpdater<O>,
             );
       return queryClient.setQueryData(
         createConnectQueryKey({
@@ -510,9 +510,9 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
           // Since we are matching on the exact input, we match what connect-query does in createQueryOptions
           input: keyDescriptor.input ?? ({} as MessageInitShape<I>),
         }),
-        // Need this override to keep avoid issues with NoInfer type messing with type checks
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any --  Need this override to keep avoid issues with NoInfer type messing with type checks
         safeUpdater as any,
-        options
+        options,
       );
     },
 
@@ -530,17 +530,17 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
       updater: ConnectInfiniteUpdater<O> | ConnectUpdater<O>,
       options?: SetDataOptions & {
         exact?: boolean;
-      }
+      },
     ): [readonly unknown[], unknown][] {
       const safeUpdater =
         keyDescriptor.cardinality === "finite"
           ? createProtobufSafeUpdater<O>(
               keyDescriptor.schema,
-              updater as ConnectUpdater<O>
+              updater as ConnectUpdater<O>,
             )
           : createProtobufSafeInfiniteUpdater<O>(
               keyDescriptor.schema,
-              updater as ConnectInfiniteUpdater<O>
+              updater as ConnectInfiniteUpdater<O>,
             );
       return queryClient.setQueriesData(
         {
@@ -551,7 +551,7 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
           exact: options?.exact ?? false,
         },
         safeUpdater,
-        options
+        options,
       );
     },
 
@@ -564,7 +564,7 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
     fetchConnectInfiniteQuery(
       schema,
       input,
-      { transport, getNextPageParam, pageParamKey, ...queryOptions }
+      { transport, getNextPageParam, pageParamKey, ...queryOptions },
     ) {
       return queryClient.fetchInfiniteQuery({
         ...createInfiniteQueryOptions(schema, input, {
@@ -585,7 +585,7 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
     prefetchConnectInfiniteQuery(
       schema,
       input,
-      { transport, getNextPageParam, pageParamKey, ...queryOptions }
+      { transport, getNextPageParam, pageParamKey, ...queryOptions },
     ) {
       return queryClient.prefetchInfiniteQuery({
         ...createInfiniteQueryOptions(schema, input, {
@@ -609,7 +609,7 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
     ensureConnectInfiniteQueryData(
       schema,
       input,
-      { transport, getNextPageParam, pageParamKey, ...queryOptions }
+      { transport, getNextPageParam, pageParamKey, ...queryOptions },
     ) {
       return queryClient.ensureInfiniteQueryData({
         ...createInfiniteQueryOptions(schema, input, {
@@ -657,7 +657,7 @@ export function createConnectQueryClient(queryClient: TSQueryClient) {
             cardinality: params.cardinality,
           }),
         },
-        options
+        options,
       );
     },
   };
@@ -668,16 +668,16 @@ type ConnectInfiniteUpdater<O extends DescMessage> =
   | InfiniteData<MessageInitShape<O>>
   | undefined
   | ((
-      prev?: InfiniteData<MessageShape<O>>
+      prev?: InfiniteData<MessageShape<O>>,
     ) => InfiniteData<MessageShape<O>> | undefined);
 
 const createProtobufSafeInfiniteUpdater =
   <O extends DescMessage>(
     schema: Pick<DescMethodUnary<never, O>, "output">,
-    updater: ConnectInfiniteUpdater<O>
+    updater: ConnectInfiniteUpdater<O>,
   ) =>
   (
-    prev: InfiniteData<MessageShape<O>> | undefined
+    prev: InfiniteData<MessageShape<O>> | undefined,
   ): InfiniteData<MessageShape<O>> | undefined => {
     if (typeof updater !== "function") {
       if (updater === undefined) {
@@ -710,7 +710,7 @@ type ConnectUpdater<O extends DescMessage> =
  */
 const createProtobufSafeUpdater: <O extends DescMessage>(
   schema: Pick<DescMethodUnary<never, O>, "output">,
-  updater: ConnectUpdater<O>
+  updater: ConnectUpdater<O>,
 ) => Updater<MessageShape<O>, MessageShape<O> | undefined> =
   (schema, updater) => (prev) => {
     if (typeof updater !== "function") {

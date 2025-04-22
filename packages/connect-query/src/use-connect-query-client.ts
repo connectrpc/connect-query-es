@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export * from "@connectrpc/connect-query-core";
-export { useTransport, TransportProvider } from "./use-transport.js";
-export {
-  useInfiniteQuery,
-  useSuspenseInfiniteQuery,
-} from "./use-infinite-query.js";
-export { useQuery, useSuspenseQuery } from "./use-query.js";
-export type { UseMutationOptions } from "./use-mutation.js";
-export { useMutation } from "./use-mutation.js";
-export type { UseInfiniteQueryOptions } from "./use-infinite-query.js";
-export type { UseQueryOptions } from "./use-query.js";
-export { useConnectQueryClient } from "./use-connect-query-client.js";
+import { useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { createConnectQueryClient } from "@connectrpc/connect-query-core";
+import type { ConnectQueryClient } from "@connectrpc/connect-query-core";
+
+export function useConnectQueryClient(): ConnectQueryClient {
+    const queryClient = useQueryClient();
+    return useMemo(() => {
+        return createConnectQueryClient(queryClient);
+    }, [queryClient]);
+}

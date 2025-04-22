@@ -22,7 +22,10 @@ import { describe, expect, it } from "vitest";
 import { QueryClient } from "@tanstack/query-core";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
-import { createConnectQueryClient, type ConnectQueryClient } from "./query-client.js";
+import {
+  createConnectQueryClient,
+  type ConnectQueryClient,
+} from "./connect-query-client.js";
 
 const sayMethodDescriptor = ElizaService.method.say;
 

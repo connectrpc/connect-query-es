@@ -23,3 +23,5 @@ export { createQueryOptions } from "./create-query-options.js";
 export { addStaticKeyToTransport } from "./transport-key.js";
 export type { SkipToken } from "@tanstack/query-core";
 export { skipToken } from "@tanstack/query-core";
+export type { ConnectQueryClient } from "./connect-query-client.js";
+export { createConnectQueryClient } from "./connect-query-client.js";
