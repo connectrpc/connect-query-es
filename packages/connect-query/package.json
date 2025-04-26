@@ -27,7 +27,8 @@
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "@connectrpc/connect-query-core": "^2.0.1"
