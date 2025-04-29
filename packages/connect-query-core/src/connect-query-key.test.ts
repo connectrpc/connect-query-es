@@ -14,14 +14,15 @@
 
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-import { ElizaService, SayRequestSchema } from "test-utils/gen/eliza_pb.js";
+import { ElizaService, SayRequestSchema, type SayResponse } from "test-utils/gen/eliza_pb.js";
 import { ListRequestSchema, ListService } from "test-utils/gen/list_pb.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { skipToken } from "./index.js";
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
+import { QueryClient } from "@tanstack/query-core";
 
 describe("createConnectQueryKey", () => {
   const fakeTransport: Transport = {
@@ -133,4 +134,16 @@ describe("createConnectQueryKey", () => {
       cardinality: undefined,
     });
   });
+
+  it("contains type hints to indicate the output type", () => {
+    const sampleQueryClient = new QueryClient();
+    const key = createConnectQueryKey({
+      schema: ElizaService.method.say,
+      input: create(SayRequestSchema, { sentence: "hi" }),
+      cardinality: "finite",
+    });
+    const data = sampleQueryClient.getQueryData(key);
+    
+    expectTypeOf(data).toEqualTypeOf<SayResponse | undefined>();
+  })
 });

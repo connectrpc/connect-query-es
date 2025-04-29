@@ -18,9 +18,10 @@ import type {
   DescMethodUnary,
   DescService,
   MessageInitShape,
+  MessageShape,
 } from "@bufbuild/protobuf";
-import type { Transport } from "@connectrpc/connect";
-import type { SkipToken } from "@tanstack/query-core";
+import type { ConnectError, Transport } from "@connectrpc/connect";
+import type { DataTag, SkipToken } from "@tanstack/query-core";
 
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
@@ -44,7 +45,7 @@ import { createTransportKey } from "./transport-key.js";
  *   }
  * ]
  */
-export type ConnectQueryKey = [
+export type ConnectQueryKey<OutputMessage extends DescMessage> = DataTag<[
   /**
    * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
    */
@@ -72,7 +73,7 @@ export type ConnectQueryKey = [
      */
     cardinality?: "infinite" | "finite" | undefined;
   },
-];
+], MessageShape<OutputMessage>, ConnectError>;
 
 type KeyParamsForMethod<Desc extends DescMethod> = {
   /**
@@ -158,8 +159,9 @@ export function createConnectQueryKey<
   Desc extends DescService,
 >(
   params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>,
-): ConnectQueryKey {
-  const props: ConnectQueryKey[1] =
+): ConnectQueryKey<O>
+ {
+  const props: ConnectQueryKey<O>[1] =
     params.schema.kind == "rpc"
       ? {
           serviceName: params.schema.parent.typeName,
@@ -185,5 +187,5 @@ export function createConnectQueryKey<
       );
     }
   }
-  return ["connect-query", props];
+  return ["connect-query", props] as ConnectQueryKey<O>;
 }
