@@ -21,10 +21,56 @@ import type {
   MessageShape,
 } from "@bufbuild/protobuf";
 import type { ConnectError, Transport } from "@connectrpc/connect";
-import type { DataTag, SkipToken } from "@tanstack/query-core";
+import type { DataTag, InfiniteData, SkipToken } from "@tanstack/query-core";
 
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
+
+type SharedConnectQueryOptions = {
+  /**
+   * A key for a Transport reference, created with createTransportKey().
+   */
+  transport?: string;
+  /**
+   * The name of the service, e.g. connectrpc.eliza.v1.ElizaService
+   */
+  serviceName: string;
+  /**
+   * The name of the method, e.g. Say.
+   */
+  methodName?: string;
+  /**
+   * A key for the request message, created with createMessageKey(),
+   * or "skipped".
+   */
+  input?: Record<string, unknown> | "skipped";
+};
+
+type InfiniteConnectQueryKey<OutputMessage extends DescMessage = DescMessage> =
+  DataTag<
+    [
+      "connect-query",
+      SharedConnectQueryOptions & {
+        /** This data represents a infinite, paged result */
+        cardinality: "infinite";
+      },
+    ],
+    InfiniteData<MessageShape<OutputMessage>>,
+    ConnectError
+  >;
+
+type FiniteConnectQueryKey<OutputMessage extends DescMessage = DescMessage> =
+  DataTag<
+    [
+      "connect-query",
+      SharedConnectQueryOptions & {
+        /** This data represents a finite result */
+        cardinality: "finite";
+      },
+    ],
+    MessageShape<OutputMessage>,
+    ConnectError
+  >;
 
 /**
  * TanStack Query manages query caching for you based on query keys. `QueryKey`s in TanStack Query are arrays with arbitrary JSON-serializable data - typically handwritten for each endpoint.
@@ -46,39 +92,9 @@ import { createTransportKey } from "./transport-key.js";
  * ]
  */
 export type ConnectQueryKey<OutputMessage extends DescMessage = DescMessage> =
-  DataTag<
-    [
-      /**
-       * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
-       */
-      "connect-query",
-      {
-        /**
-         * A key for a Transport reference, created with createTransportKey().
-         */
-        transport?: string;
-        /**
-         * The name of the service, e.g. connectrpc.eliza.v1.ElizaService
-         */
-        serviceName: string;
-        /**
-         * The name of the method, e.g. Say.
-         */
-        methodName?: string;
-        /**
-         * A key for the request message, created with createMessageKey(),
-         * or "skipped".
-         */
-        input?: Record<string, unknown> | "skipped";
-        /**
-         * Whether this is an infinite query, or a regular one.
-         */
-        cardinality?: "infinite" | "finite" | undefined;
-      },
-    ],
-    MessageShape<OutputMessage>,
-    ConnectError
-  >;
+  | InfiniteConnectQueryKey<OutputMessage>
+  | FiniteConnectQueryKey<OutputMessage>
+  | ["connect-query", SharedConnectQueryOptions];
 
 type KeyParamsForMethod<Desc extends DescMethod> = {
   /**
@@ -161,11 +177,45 @@ type KeyParamsForService<Desc extends DescService> = {
 export function createConnectQueryKey<
   I extends DescMessage,
   O extends DescMessage,
+>(
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> & {
+    cardinality: "finite";
+  }
+): FiniteConnectQueryKey<O>;
+export function createConnectQueryKey<
+  I extends DescMessage,
+  O extends DescMessage,
+>(
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> & {
+    cardinality: "infinite";
+  }
+): InfiniteConnectQueryKey<O>;
+export function createConnectQueryKey<
+  I extends DescMessage,
+  O extends DescMessage,
+>(
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> & {
+    cardinality: undefined;
+  }
+): ConnectQueryKey<O>;
+export function createConnectQueryKey<
+  O extends DescMessage,
+  Desc extends DescService,
+>(params: KeyParamsForService<Desc>): ConnectQueryKey<O>;
+export function createConnectQueryKey<
+  I extends DescMessage,
+  O extends DescMessage,
   Desc extends DescService,
 >(
-  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>,
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>
 ): ConnectQueryKey<O> {
-  const props: ConnectQueryKey<O>[1] =
+  const props: {
+    serviceName: string;
+    methodName?: string;
+    transport?: string;
+    cardinality?: "finite" | "infinite";
+    input?: "skipped" | Record<string, unknown>;
+  } =
     params.schema.kind == "rpc"
       ? {
           serviceName: params.schema.parent.typeName,
@@ -187,7 +237,7 @@ export function createConnectQueryKey<
       props.input = createMessageKey(
         params.schema.input,
         params.input,
-        params.pageParamKey,
+        params.pageParamKey
       );
     }
   }
