@@ -18,8 +18,8 @@ import { createConnectQueryClient } from "@connectrpc/connect-query-core";
 import type { ConnectQueryClient } from "@connectrpc/connect-query-core";
 
 export function useConnectQueryClient(): ConnectQueryClient {
-    const queryClient = useQueryClient();
-    return useMemo(() => {
-        return createConnectQueryClient(queryClient);
-    }, [queryClient]);
+  const queryClient = useQueryClient();
+  return useMemo(() => {
+    return createConnectQueryClient(queryClient);
+  }, [queryClient]);
 }
