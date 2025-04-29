@@ -170,6 +170,13 @@ describe("createConnectQueryKey", () => {
       key,
       create(SayResponseSchema, { sentence: "a proper value" }),
     );
+
+    sampleQueryClient.setQueryData(key, (prev) => {
+      expectTypeOf(prev).toEqualTypeOf<SayResponse | undefined>();
+      return create(SayResponseSchema, {
+        sentence: "a proper value",
+      });
+    });
   });
 
   describe("infinite queries", () => {
@@ -205,6 +212,15 @@ describe("createConnectQueryKey", () => {
       sampleQueryClient.setQueryData(key, {
         pageParams: [0],
         pages: [create(SayResponseSchema, { sentence: "a proper value" })],
+      });
+      sampleQueryClient.setQueryData(key, (prev) => {
+        expectTypeOf(prev).toEqualTypeOf<
+          InfiniteData<SayResponse> | undefined
+        >();
+        return {
+          pageParams: [0],
+          pages: [create(SayResponseSchema, { sentence: "a proper value" })],
+        };
       });
     });
   });
