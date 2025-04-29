@@ -45,35 +45,40 @@ import { createTransportKey } from "./transport-key.js";
  *   }
  * ]
  */
-export type ConnectQueryKey<OutputMessage extends DescMessage> = DataTag<[
-  /**
-   * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
-   */
-  "connect-query",
-  {
-    /**
-     * A key for a Transport reference, created with createTransportKey().
-     */
-    transport?: string;
-    /**
-     * The name of the service, e.g. connectrpc.eliza.v1.ElizaService
-     */
-    serviceName: string;
-    /**
-     * The name of the method, e.g. Say.
-     */
-    methodName?: string;
-    /**
-     * A key for the request message, created with createMessageKey(),
-     * or "skipped".
-     */
-    input?: Record<string, unknown> | "skipped";
-    /**
-     * Whether this is an infinite query, or a regular one.
-     */
-    cardinality?: "infinite" | "finite" | undefined;
-  },
-], MessageShape<OutputMessage>, ConnectError>;
+export type ConnectQueryKey<OutputMessage extends DescMessage = DescMessage> =
+  DataTag<
+    [
+      /**
+       * To distinguish Connect query keys from other query keys, they always start with the string "connect-query".
+       */
+      "connect-query",
+      {
+        /**
+         * A key for a Transport reference, created with createTransportKey().
+         */
+        transport?: string;
+        /**
+         * The name of the service, e.g. connectrpc.eliza.v1.ElizaService
+         */
+        serviceName: string;
+        /**
+         * The name of the method, e.g. Say.
+         */
+        methodName?: string;
+        /**
+         * A key for the request message, created with createMessageKey(),
+         * or "skipped".
+         */
+        input?: Record<string, unknown> | "skipped";
+        /**
+         * Whether this is an infinite query, or a regular one.
+         */
+        cardinality?: "infinite" | "finite" | undefined;
+      },
+    ],
+    MessageShape<OutputMessage>,
+    ConnectError
+  >;
 
 type KeyParamsForMethod<Desc extends DescMethod> = {
   /**
@@ -159,8 +164,7 @@ export function createConnectQueryKey<
   Desc extends DescService,
 >(
   params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>,
-): ConnectQueryKey<O>
- {
+): ConnectQueryKey<O> {
   const props: ConnectQueryKey<O>[1] =
     params.schema.kind == "rpc"
       ? {

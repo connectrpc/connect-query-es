@@ -14,7 +14,11 @@
 
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-import { ElizaService, SayRequestSchema, type SayResponse } from "test-utils/gen/eliza_pb.js";
+import {
+  ElizaService,
+  SayRequestSchema,
+  type SayResponse,
+} from "test-utils/gen/eliza_pb.js";
 import { ListRequestSchema, ListService } from "test-utils/gen/list_pb.js";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
@@ -143,7 +147,7 @@ describe("createConnectQueryKey", () => {
       cardinality: "finite",
     });
     const data = sampleQueryClient.getQueryData(key);
-    
+
     expectTypeOf(data).toEqualTypeOf<SayResponse | undefined>();
-  })
+  });
 });
