@@ -180,7 +180,7 @@ export function createConnectQueryKey<
 >(
   params: KeyParamsForMethod<DescMethodUnary<I, O>> & {
     cardinality: "finite";
-  }
+  },
 ): FiniteConnectQueryKey<O>;
 export function createConnectQueryKey<
   I extends DescMessage,
@@ -188,7 +188,7 @@ export function createConnectQueryKey<
 >(
   params: KeyParamsForMethod<DescMethodUnary<I, O>> & {
     cardinality: "infinite";
-  }
+  },
 ): InfiniteConnectQueryKey<O>;
 export function createConnectQueryKey<
   I extends DescMessage,
@@ -196,7 +196,7 @@ export function createConnectQueryKey<
 >(
   params: KeyParamsForMethod<DescMethodUnary<I, O>> & {
     cardinality: undefined;
-  }
+  },
 ): ConnectQueryKey<O>;
 export function createConnectQueryKey<
   O extends DescMessage,
@@ -207,7 +207,7 @@ export function createConnectQueryKey<
   O extends DescMessage,
   Desc extends DescService,
 >(
-  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>
+  params: KeyParamsForMethod<DescMethodUnary<I, O>> | KeyParamsForService<Desc>,
 ): ConnectQueryKey<O> {
   const props: {
     serviceName: string;
@@ -237,7 +237,7 @@ export function createConnectQueryKey<
       props.input = createMessageKey(
         params.schema.input,
         params.input,
-        params.pageParamKey
+        params.pageParamKey,
       );
     }
   }

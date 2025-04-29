@@ -168,7 +168,7 @@ describe("createConnectQueryKey", () => {
     });
     sampleQueryClient.setQueryData(
       key,
-      create(SayResponseSchema, { sentence: "a proper value" })
+      create(SayResponseSchema, { sentence: "a proper value" }),
     );
   });
 
@@ -202,15 +202,10 @@ describe("createConnectQueryKey", () => {
         // @ts-expect-error(2345) $typename is required
         pages: [{ sentence: "a proper value but missing $typename" }],
       });
-      sampleQueryClient.setQueryData(
-        key,
-        {
-          pageParams: [0],
-          pages: [
-            create(SayResponseSchema, { sentence: "a proper value" }),
-          ]
-        }
-      );
+      sampleQueryClient.setQueryData(key, {
+        pageParams: [0],
+        pages: [create(SayResponseSchema, { sentence: "a proper value" })],
+      });
     });
   });
 });
