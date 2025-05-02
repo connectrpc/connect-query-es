@@ -88,7 +88,7 @@ plugins:
 
 ### With the `buf` CLI
 
-To use the [buf CLI](https://docs.buf.build/generate/usage#run-generate) to generate code for all protobuf files within your project, simply run:
+To use the [buf CLI](https://docs.buf.build/generate/usage#generate-code-using-local-plugins) to generate code for all protobuf files within your project, simply run:
 
 ```bash
 npx @bufbuild/buf generate
@@ -217,4 +217,4 @@ This option exists for other plugins but is not applicable to `protoc-gen-connec
 
 ## Example Generated Code
 
-See [`eliza.proto`](../../examples/react/basic/eliza.proto) for example inputs, and look [here](../../examples/react/basic/src/gen) to see the outputs those files generate.
+See [`eliza.proto`](../examples/react/basic/eliza.proto) for example inputs, and look [here](../examples/react/basic/src/gen) to see the outputs those files generate.
