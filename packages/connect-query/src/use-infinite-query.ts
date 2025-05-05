@@ -52,7 +52,7 @@ export type UseInfiniteQueryOptions<
     ConnectError,
     InfiniteData<MessageShape<O>>,
     MessageShape<O>,
-    ConnectQueryKey,
+    ConnectQueryKey<O>,
     MessageInitShape<I>[ParamKey]
   >,
   "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
@@ -106,7 +106,7 @@ export type UseSuspenseInfiniteQueryOptions<
     ConnectError,
     InfiniteData<MessageShape<O>>,
     MessageShape<O>,
-    ConnectQueryKey,
+    ConnectQueryKey<O>,
     MessageInitShape<I>[ParamKey]
   >,
   "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"

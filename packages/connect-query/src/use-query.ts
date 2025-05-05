@@ -48,7 +48,7 @@ export type UseQueryOptions<
     MessageShape<O>,
     ConnectError,
     SelectOutData,
-    ConnectQueryKey
+    ConnectQueryKey<O>
   >,
   "queryFn" | "queryKey"
 > & {
@@ -89,7 +89,7 @@ export type UseSuspenseQueryOptions<
     MessageShape<O>,
     ConnectError,
     SelectOutData,
-    ConnectQueryKey
+    ConnectQueryKey<O>
   >,
   "queryFn" | "queryKey"
 > & {

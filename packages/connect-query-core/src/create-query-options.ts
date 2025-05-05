@@ -32,7 +32,7 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
   schema: DescMethodUnary<I, O>,
   input: MessageInitShape<I> | undefined,
-): QueryFunction<MessageShape<O>, ConnectQueryKey> {
+): QueryFunction<MessageShape<O>, ConnectQueryKey<O>> {
   return async (context) => {
     return callUnaryMethod(transport, schema, input, {
       signal: context.signal,
@@ -55,8 +55,8 @@ export function createQueryOptions<
     transport: Transport;
   },
 ): {
-  queryKey: ConnectQueryKey;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey>;
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>>;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
 };
 export function createQueryOptions<
@@ -71,7 +71,7 @@ export function createQueryOptions<
     transport: Transport;
   },
 ): {
-  queryKey: ConnectQueryKey;
+  queryKey: ConnectQueryKey<O>;
   queryFn: SkipToken;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
 };
@@ -87,8 +87,8 @@ export function createQueryOptions<
     transport: Transport;
   },
 ): {
-  queryKey: ConnectQueryKey;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>> | SkipToken;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
 };
 export function createQueryOptions<
@@ -103,8 +103,8 @@ export function createQueryOptions<
     transport: Transport;
   },
 ): {
-  queryKey: ConnectQueryKey;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey> | SkipToken;
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>> | SkipToken;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
 } {
   const queryKey = createConnectQueryKey({
