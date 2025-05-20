@@ -94,7 +94,12 @@ type FiniteConnectQueryKey<OutputMessage extends DescMessage = DescMessage> =
 export type ConnectQueryKey<OutputMessage extends DescMessage = DescMessage> =
   | InfiniteConnectQueryKey<OutputMessage>
   | FiniteConnectQueryKey<OutputMessage>
-  | ["connect-query", SharedConnectQueryOptions];
+  | [
+      "connect-query",
+      SharedConnectQueryOptions & {
+        cardinality: undefined;
+      },
+    ];
 
 type KeyParamsForMethod<Desc extends DescMethod> = {
   /**

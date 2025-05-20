@@ -117,7 +117,6 @@ describe("createConnectQueryKey", () => {
       schema: ElizaService.method.say,
       cardinality: undefined,
     });
-    // @ts-expect-error(2322) cardinality is type undefined as well as actually undefined
     expect(key[1].cardinality).toBeUndefined();
   });
 
