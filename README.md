@@ -260,19 +260,17 @@ Any additional `options` you pass to `useMutation` will be merged with the optio
 
 ### `createConnectQueryKey`
 
-```ts
-function createConnectQueryKey<Desc extends DescMethod | DescService>(
-  params: KeyParams<Desc>,
-): ConnectQueryKey;
-```
-
-This function is used under the hood of `useQuery` and other hooks to compute a [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) for TanStack Query. You can use it to create (partial) keys yourself to filter queries.
+This function is used under the hood of `useQuery` and other hooks to compute a [`queryKey`](https://tanstack.com/query/v4/docs/react/guides/query-keys) for TanStack Query. You can use it to create keys yourself to filter queries.
 
 `useQuery` creates a query key with the following parameters:
 
 1. The qualified name of the RPC.
 2. The transport being used.
 3. The request message.
+4. The cardinality of the RPC (either "finite" or "infinite").
+5. Adds a DataTag which brands the key with the associated data type of the response.
+
+The DataTag type allows @tanstack/react-query functions to properly infer the type of the data returned by the query. This is useful for things like `QueryClient.setQueryData` and `QueryClient.getQueryData`.
 
 To create the same key manually, you simply provide the same parameters:
 
@@ -355,7 +353,7 @@ function callUnaryMethod<I extends DescMessage, O extends DescMessage>(
 
 This API allows you to directly call the method using the provided transport. Use this if you need to manually call a method outside of the context of a React component, or need to call it where you can't use hooks.
 
-### `createProtobufSafeUpdater`
+### `createProtobufSafeUpdater` (deprecated)
 
 Creates a typesafe updater that can be used to update data in a query cache. Used in combination with a queryClient.
 
@@ -386,6 +384,8 @@ queryClient.setQueryData(
 );
 
 ```
+
+** Note: This API is deprecated and will be removed in a future version. `ConnectQueryKey` now contains type information to make it safer to use `setQueryData` directly. **
 
 ### `createQueryOptions`
 
@@ -599,21 +599,15 @@ Connect-Query does require React, but the core (`createConnectQueryKey` and `cal
 
 ### How do I do Prefetching?
 
-When you might not have access to React context, you can use the `create` series of functions and provide a transport directly. For example:
+When you might not have access to React context, you can use `createQueryOptions` and provide a transport directly. For example:
 
 ```ts
 import { say } from "./gen/eliza-ElizaService_connectquery";
 
 function prefetch() {
-  return queryClient.prefetchQuery({
-    queryKey: createConnectQueryKey({
-      schema: say,
-      transport: myTransport,
-      input: { sentence: "Hello" },
-      cardinality: "finite",
-    }),
-    queryFn: () => callUnaryMethod(myTransport, say, { sentence: "Hello" }),
-  });
+  return queryClient.prefetchQuery(
+    createQueryOptions(say, { sentence: "Hello" }, { transport: myTransport }),
+  );
 }
 ```
 

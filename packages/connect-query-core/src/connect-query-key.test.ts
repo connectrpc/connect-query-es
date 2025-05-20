@@ -14,14 +14,20 @@
 
 import { create } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
-import { ElizaService, SayRequestSchema } from "test-utils/gen/eliza_pb.js";
+import {
+  ElizaService,
+  SayRequestSchema,
+  SayResponseSchema,
+  type SayResponse,
+} from "test-utils/gen/eliza_pb.js";
 import { ListRequestSchema, ListService } from "test-utils/gen/list_pb.js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { skipToken } from "./index.js";
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
+import { type InfiniteData, QueryClient } from "@tanstack/query-core";
 
 describe("createConnectQueryKey", () => {
   const fakeTransport: Transport = {
@@ -125,12 +131,96 @@ describe("createConnectQueryKey", () => {
 
   it("cannot except invalid input", () => {
     createConnectQueryKey({
+      // @ts-expect-error(2322) cannot create a key with invalid input
       schema: ElizaService.method.say,
       input: {
-        // @ts-expect-error(2322) cannot create a key with invalid input
         sentence: 1,
       },
       cardinality: undefined,
+    });
+  });
+
+  it("contains type hints to indicate the output type", () => {
+    const sampleQueryClient = new QueryClient();
+    const key = createConnectQueryKey({
+      schema: ElizaService.method.say,
+      input: create(SayRequestSchema, { sentence: "hi" }),
+      cardinality: "finite",
+    });
+    const data = sampleQueryClient.getQueryData(key);
+
+    expectTypeOf(data).toEqualTypeOf<SayResponse | undefined>();
+  });
+
+  it("supports typesafe data updaters", () => {
+    const sampleQueryClient = new QueryClient();
+    const key = createConnectQueryKey({
+      schema: ElizaService.method.say,
+      input: create(SayRequestSchema, { sentence: "hi" }),
+      cardinality: "finite",
+    });
+    // @ts-expect-error(2345) this is a test to check if the type is correct
+    sampleQueryClient.setQueryData(key, { sentence: 1 });
+    // @ts-expect-error(2345) $typename is required
+    sampleQueryClient.setQueryData(key, {
+      sentence: "a proper value but missing $typename",
+    });
+    sampleQueryClient.setQueryData(
+      key,
+      create(SayResponseSchema, { sentence: "a proper value" }),
+    );
+
+    sampleQueryClient.setQueryData(key, (prev) => {
+      expectTypeOf(prev).toEqualTypeOf<SayResponse | undefined>();
+      return create(SayResponseSchema, {
+        sentence: "a proper value",
+      });
+    });
+  });
+
+  describe("infinite queries", () => {
+    it("contains type hints to indicate the output type", () => {
+      const sampleQueryClient = new QueryClient();
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "infinite",
+      });
+      const data = sampleQueryClient.getQueryData(key);
+
+      expectTypeOf(data).toEqualTypeOf<InfiniteData<SayResponse> | undefined>();
+    });
+
+    it("supports typesafe data updaters", () => {
+      const sampleQueryClient = new QueryClient();
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "infinite",
+      });
+      sampleQueryClient.setQueryData(key, {
+        pages: [
+          // @ts-expect-error(2345) make sure the shape is as expected
+          { sentence: 1 },
+        ],
+      });
+      sampleQueryClient.setQueryData(key, {
+        // @ts-expect-error(2345) $typename is required
+        pages: [{ sentence: "a proper value but missing $typename" }],
+      });
+      sampleQueryClient.setQueryData(key, {
+        pageParams: [0],
+        pages: [create(SayResponseSchema, { sentence: "a proper value" })],
+      });
+      sampleQueryClient.setQueryData(key, (prev) => {
+        expectTypeOf(prev).toEqualTypeOf<
+          InfiniteData<SayResponse> | undefined
+        >();
+        return {
+          pageParams: [0],
+          pages: [create(SayResponseSchema, { sentence: "a proper value" })],
+        };
+      });
     });
   });
 });

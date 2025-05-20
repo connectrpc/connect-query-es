@@ -44,7 +44,7 @@
   "peerDependencies": {
     "@bufbuild/protobuf": "2.x",
     "@connectrpc/connect": "^2.0.1",
-    "@tanstack/query-core": "5.x"
+    "@tanstack/query-core": ">=5.62.0"
   },
   "files": [
     "dist/**"

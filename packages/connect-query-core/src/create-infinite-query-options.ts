@@ -67,7 +67,7 @@ function createUnaryInfiniteQueryFn<
   },
 ): QueryFunction<
   MessageShape<O>,
-  ConnectQueryKey,
+  ConnectQueryKey<O>,
   MessageInitShape<I>[ParamKey]
 > {
   return async (context) => {
@@ -104,10 +104,10 @@ export function createInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectQueryKey;
+  queryKey: ConnectQueryKey<O>;
   queryFn: QueryFunction<
     MessageShape<O>,
-    ConnectQueryKey,
+    ConnectQueryKey<O>,
     MessageInitShape<I>[ParamKey]
   >;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
@@ -131,7 +131,7 @@ export function createInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectQueryKey;
+  queryKey: ConnectQueryKey<O>;
   queryFn: SkipToken;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
   initialPageParam: MessageInitShape<I>[ParamKey];
@@ -156,11 +156,11 @@ export function createInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectQueryKey;
+  queryKey: ConnectQueryKey<O>;
   queryFn:
     | QueryFunction<
         MessageShape<O>,
-        ConnectQueryKey,
+        ConnectQueryKey<O>,
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
@@ -187,11 +187,11 @@ export function createInfiniteQueryOptions<
     O,
     ParamKey
   >["getNextPageParam"];
-  queryKey: ConnectQueryKey;
+  queryKey: ConnectQueryKey<O>;
   queryFn:
     | QueryFunction<
         MessageShape<O>,
-        ConnectQueryKey,
+        ConnectQueryKey<O>,
         MessageInitShape<I>[ParamKey]
       >
     | SkipToken;
