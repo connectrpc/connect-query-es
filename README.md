@@ -606,7 +606,7 @@ import { say } from "./gen/eliza-ElizaService_connectquery";
 
 function prefetch() {
   return queryClient.prefetchQuery(
-    createQueryOptions(say, { sentence: "Hello" }, { transport: myTransport })
+    createQueryOptions(say, { sentence: "Hello" }, { transport: myTransport }),
   );
 }
 ```

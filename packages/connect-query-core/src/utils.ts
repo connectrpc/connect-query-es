@@ -60,7 +60,7 @@ export type ConnectUpdater<O extends DescMessage> =
 
 /**
  * This helper makes sure that the type for the original response message is returned.
- * 
+ *
  * @deprecated the ConnectQueryKey type now links to the return data type so `setQueryData` can be called safely without this helper.
  */
 export const createProtobufSafeUpdater =
