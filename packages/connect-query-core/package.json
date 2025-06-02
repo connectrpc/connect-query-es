@@ -30,7 +30,7 @@
     }
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.17.4",
+    "@arethetypeswrong/cli": "^0.18.1",
     "@bufbuild/buf": "1.53.0",
     "@bufbuild/jest-environment-jsdom": "^0.1.1",
     "@bufbuild/protobuf": "^2.2.5",
