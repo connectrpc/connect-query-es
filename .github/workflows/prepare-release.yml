@@ -1,0 +1,86 @@
+name: Prepare Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 1.2.3)'
+        required: true
+        type: string
+      base_branch:
+        description: 'Base branch for release'
+        required: false
+        default: 'main'
+        type: string
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.base_branch }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Validate semver version
+        run: |
+          if ! echo "${{ inputs.version }}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?(\+[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?$'; then
+            echo "Error: '${{ inputs.version }}' is not a valid semver version"
+            echo "Expected format: MAJOR.MINOR.PATCH (e.g., 1.2.3) or with pre-release/build metadata (e.g., 1.2.3-alpha.1+build.1)"
+            exit 1
+          fi
+          echo "✓ Version '${{ inputs.version }}' is valid semver"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create draft release
+        run: gh release create v${{ inputs.version }} --draft --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release branch
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout -b "release/prep-release-${{ inputs.version }}"
+
+      - name: Set version and run build
+        run: |
+          npm run setversion ${{ inputs.version }}
+
+      - name: Commit version changes
+        run: |
+          git add .
+          git commit -s -m "Release ${{ inputs.version }}"
+          git push --set-upstream origin "release/prep-release-${{ inputs.version }}"
+
+      - name: Get release notes
+        id: release_notes
+        run: |
+          RELEASE_NOTES=$(gh release view v${{ inputs.version }} --json body | jq -r ".body")
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create pull request
+        run: |
+          gh pr create \
+            --title "Release ${{ inputs.version }}" \
+            --body "${{ steps.release_notes.outputs.notes }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
