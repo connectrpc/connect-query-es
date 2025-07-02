@@ -5,8 +5,8 @@ on:
     types: [closed]
     branches:
       - main
-      - 'release/**'
-      - 'hotfix/**'
+      - "release/**"
+      - "hotfix/**"
 
 jobs:
   publish-release:
