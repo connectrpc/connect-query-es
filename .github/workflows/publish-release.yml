@@ -5,6 +5,8 @@ on:
     types: [closed]
     branches:
       - main
+      - 'release/**'
+      - 'hotfix/**'
 
 jobs:
   publish-release:
@@ -24,10 +26,10 @@ jobs:
           VERSION=$(echo "$BRANCH_NAME" | sed 's/release\/prep-release-//')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Checkout main branch
+      - name: Checkout base branch
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.base.ref }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 

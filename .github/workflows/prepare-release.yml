@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       base_branch:
-        description: "Base branch for release"
+        description: "Base branch for release (e.g. release/v1.x, hotfix/v1.2.x)"
         required: false
         default: "main"
         type: string
@@ -81,6 +81,7 @@ jobs:
         run: |
           gh pr create \
             --title "Release ${{ inputs.version }}" \
-            --body "${{ steps.release_notes.outputs.notes }}"
+            --body "${{ steps.release_notes.outputs.notes }}" \
+            --base "${{ inputs.base_branch }}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
