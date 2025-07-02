@@ -15,7 +15,7 @@ jobs:
       contents: write
       pull-requests: write
       issues: write
-    
+
     steps:
       - name: Extract version from branch name
         id: extract_version
@@ -34,9 +34,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: npm install
@@ -71,10 +71,10 @@ jobs:
           RELEASES=$(gh api repos/${{ github.repository }}/releases --jq ".[0:2].[].name")
           LATEST_RELEASE=$(echo "${RELEASES}" | head -1)
           PREV_RELEASE=$(echo "${RELEASES}" | tail -1)
-          
+
           echo "latest=$LATEST_RELEASE" >> $GITHUB_OUTPUT
           echo "previous=$PREV_RELEASE" >> $GITHUB_OUTPUT
-          
+
           RELEASE_URL=$(gh release view v${{ steps.extract_version.outputs.version }} --json url | jq -r ".url")
           echo "release_url=$RELEASE_URL" >> $GITHUB_OUTPUT
         env:
@@ -86,7 +86,7 @@ jobs:
           START=$(gh release view ${{ steps.release_info.outputs.previous }} --json publishedAt | jq -r ".publishedAt")
           END=$(gh release view ${{ steps.release_info.outputs.latest }} --json publishedAt | jq -r ".publishedAt")
           PRS=$(gh pr list --search="merged:$START..$END" --json="number" | jq -r ".[].number")
-          
+
           # For each PR, get the issues it fixes and comment on them
           echo "$PRS" | while IFS= read -r pr; do
             if [[ -z "$pr" ]]; then

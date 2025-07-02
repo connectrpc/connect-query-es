@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (e.g. 1.2.3)'
+        description: "Version to release (e.g. 1.2.3)"
         required: true
         type: string
       base_branch:
-        description: 'Base branch for release'
+        description: "Base branch for release"
         required: false
-        default: 'main'
+        default: "main"
         type: string
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,8 +31,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Validate semver version
         run: |
