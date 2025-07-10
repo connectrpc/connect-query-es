@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { type DescMessage, equals, isMessage } from "@bufbuild/protobuf";
+import { replaceEqualDeep } from "@tanstack/query-core";
 
 /**
  * Returns a simplistic implementation for "structural sharing" for a Protobuf
@@ -29,7 +30,7 @@ export function createStructuralSharing(
 ): (oldData: unknown | undefined, newData: unknown) => unknown {
   return function (oldData, newData) {
     if (!isMessage(oldData) || !isMessage(newData)) {
-      return newData;
+      return replaceEqualDeep(oldData, newData);
     }
     if (!equals(schema, oldData, newData)) {
       return newData;
