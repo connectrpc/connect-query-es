@@ -28,26 +28,26 @@ describe("structural sharing", () => {
     const oldData = create(schema, { sentence: "hi" });
     const newData = create(schema, { sentence: "hi" });
     const result = fn(oldData, newData);
-    expect(result).toStrictEqual(oldData);
+    expect(result).toBe(oldData);
   });
   it("returns new data if not equal to old data", () => {
     const oldData = create(schema, { sentence: "hi" });
     const newData = create(schema, { sentence: "hello" });
     const result = fn(oldData, newData);
-    expect(result).toStrictEqual(newData);
+    expect(result).toBe(newData);
   });
   it("returns new data if old data is undefined", () => {
     const oldData = undefined;
     const newData = create(schema, { sentence: "hello" });
     const result = fn(oldData, newData);
-    expect(result).toStrictEqual(newData);
+    expect(result).toBe(newData);
   });
   it.each([123, null, create(SayRequestSchema, { sentence: "hi" })])(
     "returns new data for unexpected old data $#",
     (oldData) => {
       const newData = create(schema, { sentence: "hi" });
       const result = fn(oldData, newData);
-      expect(result).toStrictEqual(newData);
+      expect(result).toBe(newData);
     },
   );
   it.each([123, null, create(SayRequestSchema, { sentence: "hi" })])(
@@ -55,7 +55,14 @@ describe("structural sharing", () => {
     (newData) => {
       const oldData = create(schema, { sentence: "hi" });
       const result = fn(oldData, newData);
-      expect(result).toStrictEqual(newData);
+      expect(result).toBe(newData);
     },
   );
+
+  it("allows non-message data to be compared properly", () => {
+    const oldData = { count: 2 };
+    const newData = { count: 2 };
+    const result = fn(oldData, newData);
+    expect(result).toBe(oldData);
+  })
 });
