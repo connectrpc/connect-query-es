@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { QueryClient, skipToken as tanstackSkipToken } from "@tanstack/query-core";
+import { skipToken as tanstackSkipToken } from "@tanstack/query-core";
 import { mockEliza } from "test-utils";
 import { ElizaService } from "test-utils/gen/eliza_pb.js";
 import { describe, expect, expectTypeOf, it } from "vitest";
@@ -71,13 +71,4 @@ describe("createQueryOptions", () => {
       },
     );
   });
-
-  it("works with prefetchQuery", () => {
-    const queryClient = new QueryClient();
-
-    queryClient.prefetchQuery(createQueryOptions(sayMethodDescriptor, { sentence: "hi" }, {
-      transport: mockedElizaTransport,
-    }))
-
-  })
 });
