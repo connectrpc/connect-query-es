@@ -64,5 +64,5 @@ describe("structural sharing", () => {
     const newData = { count: 2 };
     const result = fn(oldData, newData);
     expect(result).toBe(oldData);
-  })
+  });
 });
