@@ -59,7 +59,7 @@ describe("structural sharing", () => {
     },
   );
 
-  it("allows non-message data to be compared properly", () => {
+  it("allows returning old data if new data is equal", () => {
     const oldData = { count: 2 };
     const newData = { count: 2 };
     const result = fn(oldData, newData);
