@@ -34,17 +34,8 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "npm"
 
-      - name: Validate semver version
-        run: |
-          if ! echo "${{ inputs.version }}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?(\+[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?$'; then
-            echo "Error: '${{ inputs.version }}' is not a valid semver version"
-            echo "Expected format: MAJOR.MINOR.PATCH (e.g., 1.2.3) or with pre-release/build metadata (e.g., 1.2.3-alpha.1+build.1)"
-            exit 1
-          fi
-          echo "✓ Version '${{ inputs.version }}' is valid semver"
-
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Create draft release
         run: gh release create v${{ inputs.version }} --draft --generate-notes
