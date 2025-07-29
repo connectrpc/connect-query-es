@@ -51,7 +51,6 @@ export type UseInfiniteQueryOptions<
     MessageShape<O>,
     ConnectError,
     InfiniteData<MessageShape<O>>,
-    MessageShape<O>,
     ConnectQueryKey<O>,
     MessageInitShape<I>[ParamKey]
   >,
@@ -105,7 +104,6 @@ export type UseSuspenseInfiniteQueryOptions<
     MessageShape<O>,
     ConnectError,
     InfiniteData<MessageShape<O>>,
-    MessageShape<O>,
     ConnectQueryKey<O>,
     MessageInitShape<I>[ParamKey]
   >,
