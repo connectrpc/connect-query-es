@@ -29,6 +29,10 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`createInfiniteQueryOptions`](#createinfinitequeryoptions)
   - [`addStaticKeyToTransport`](#addstatickeytotransport)
   - [`ConnectQueryKey`](#connectquerykey)
+  - [`QueryOptions`](#queryoptions)
+  - [`QueryOptionsWithSkipToken`](#queryoptionswithskiptoken)
+  - [`InfiniteQueryOptions`](#infinitequeryoptions)
+  - [`InfiniteQueryOptionsWithSkipToken`](#infinitequeryoptionswithskiptoken)
 
 ## Quickstart
 
@@ -530,6 +534,71 @@ TanStack Query manages query caching for you based on query keys. [`QueryKey`s](
 ```
 
 The factory [`createConnectQueryKey`](#createconnectquerykey) makes it easy to create a `ConnectQueryKey`, including partial keys for query filters.
+
+### `QueryOptions`
+
+Return type of `createQueryOptions` assuming SkipToken was not provided.
+
+```ts
+interface QueryOptions<I extends DescMessage, O extends DescMessage> {
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>, MessageShape<I>>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+}
+```
+
+### `QueryOptionsWithSkipToken`
+
+Return type of `createQueryOptions` when SkipToken is provided.
+
+```ts
+interface QueryOptionsWithSkipToken<
+  I extends DescMessage,
+  O extends DescMessage,
+> extends Omit<QueryOptions<I, O>, "queryFn"> {
+  queryFn: SkipToken;
+}
+```
+
+### `InfiniteQueryOptions`
+
+Return type of `createInfiniteQueryOptions` assuming SkipToken was not provided.
+
+```ts
+interface InfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<
+    MessageShape<O>,
+    ConnectQueryKey<O>,
+    MessageInitShape<I>[ParamKey]
+  >;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+  initialPageParam: MessageInitShape<I>[ParamKey];
+}
+```
+
+### `InfiniteQueryOptionsWithSkipToken`
+
+Return type of `createInfiniteQueryOptions` when SkipToken is provided.
+
+```ts
+interface InfiniteQueryOptionsWithSkipToken<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> extends Omit<InfiniteQueryOptions<I, O, ParamKey>, "queryFn"> {
+  queryFn: SkipToken;
+}
+```
 
 ## Testing
 

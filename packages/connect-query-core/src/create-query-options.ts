@@ -28,6 +28,20 @@ import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { createStructuralSharing } from "./structural-sharing.js";
 
+/**
+ * Return type of createQueryOptions
+ */
+export interface QueryOptions<O extends DescMessage> {
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+}
+
+export interface QueryOptionsWithSkipToken<O extends DescMessage>
+  extends Omit<QueryOptions<O>, "queryFn"> {
+  queryFn: SkipToken;
+}
+
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
   schema: DescMethodUnary<I, O>,
@@ -54,11 +68,7 @@ export function createQueryOptions<
   }: {
     transport: Transport;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>>;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-};
+): QueryOptions<O>;
 export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -70,11 +80,7 @@ export function createQueryOptions<
   }: {
     transport: Transport;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-};
+): QueryOptionsWithSkipToken<O>;
 export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -86,11 +92,7 @@ export function createQueryOptions<
   }: {
     transport: Transport;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>> | SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-};
+): QueryOptions<O> | QueryOptionsWithSkipToken<O>;
 export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -102,11 +104,7 @@ export function createQueryOptions<
   }: {
     transport: Transport;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>> | SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-} {
+): QueryOptions<O> | QueryOptionsWithSkipToken<O> {
   const queryKey = createConnectQueryKey({
     schema,
     input: input ?? create(schema.input),
