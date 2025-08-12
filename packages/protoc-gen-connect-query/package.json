@@ -16,7 +16,7 @@
     "protoc-gen-connect-query": "bin/protoc-gen-connect-query"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "scripts": {
     "prebuild": "rm -rf ./dist/*",
