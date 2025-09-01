@@ -34,7 +34,7 @@ jobs:
             diff-check: true
     name: ${{ matrix.task }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
@@ -57,7 +57,7 @@ jobs:
         node-version: [24.x, 22.x, 20.x]
     name: "test on Node.js ${{ matrix.node-version }}"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
