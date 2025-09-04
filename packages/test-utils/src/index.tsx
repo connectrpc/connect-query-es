@@ -14,7 +14,10 @@
 
 import type { MessageInitShape } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
-import { createRouterTransport, type ConnectRouterOptions } from "@connectrpc/connect";
+import {
+  createRouterTransport,
+  type ConnectRouterOptions,
+} from "@connectrpc/connect";
 
 import {
   BigIntService,
@@ -46,21 +49,24 @@ export const mockEliza = (
     router?: ConnectRouterOptions;
   },
 ) =>
-  createRouterTransport(({ service }) => {
-    service(ElizaService, {
-      say: async (input: SayRequest) => {
-        if (addDelay) {
-          await sleep(1000);
-        }
-        return create(
-          SayResponseSchema,
-          override ?? { sentence: `Hello ${input.sentence}` },
-        );
-      },
-    });
-  }, { 
-    router: options?.router,
-  });
+  createRouterTransport(
+    ({ service }) => {
+      service(ElizaService, {
+        say: async (input: SayRequest) => {
+          if (addDelay) {
+            await sleep(1000);
+          }
+          return create(
+            SayResponseSchema,
+            override ?? { sentence: `Hello ${input.sentence}` },
+          );
+        },
+      });
+    },
+    {
+      router: options?.router,
+    },
+  );
 
 /**
  * a stateless mock for BigIntService
@@ -102,27 +108,30 @@ export const mockPaginatedTransport = (
     router?: ConnectRouterOptions;
   },
 ) =>
-  createRouterTransport(({ service }) => {
-    service(ListService, {
-      list: async (request) => {
-        if (addDelay) {
-          await sleep(1000);
-        }
-        if (override !== undefined) {
-          return override;
-        }
-        const base = (request.page - 1n) * 3n;
-        const result = {
-          page: request.page,
-          items: [
-            `${base + 1n} Item`,
-            `${base + 2n} Item`,
-            `${base + 3n} Item`,
-          ],
-        };
-        return result;
-      },
-    });
-  }, {
-    router: options?.router,
-  });
+  createRouterTransport(
+    ({ service }) => {
+      service(ListService, {
+        list: async (request) => {
+          if (addDelay) {
+            await sleep(1000);
+          }
+          if (override !== undefined) {
+            return override;
+          }
+          const base = (request.page - 1n) * 3n;
+          const result = {
+            page: request.page,
+            items: [
+              `${base + 1n} Item`,
+              `${base + 2n} Item`,
+              `${base + 3n} Item`,
+            ],
+          };
+          return result;
+        },
+      });
+    },
+    {
+      router: options?.router,
+    },
+  );

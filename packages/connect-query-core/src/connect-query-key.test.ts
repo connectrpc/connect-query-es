@@ -167,7 +167,7 @@ describe("createConnectQueryKey", () => {
     });
     sampleQueryClient.setQueryData(
       key,
-      create(SayResponseSchema, { sentence: "a proper value" })
+      create(SayResponseSchema, { sentence: "a proper value" }),
     );
 
     sampleQueryClient.setQueryData(key, (prev) => {
@@ -197,9 +197,7 @@ describe("createConnectQueryKey", () => {
         schema: ElizaService.method.say,
         input: create(SayRequestSchema, { sentence: "hi" }),
         cardinality: "finite",
-        headers: [
-          ["x-custom-header", "custom-value"],
-        ],
+        headers: [["x-custom-header", "custom-value"]],
       });
       expect(key[1].headers).toEqual({
         "x-custom-header": "custom-value",

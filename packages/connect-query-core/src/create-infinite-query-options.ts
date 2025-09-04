@@ -209,7 +209,7 @@ export function createInfiniteQueryOptions<
     schema,
     transport,
     input,
-    headers
+    headers,
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =

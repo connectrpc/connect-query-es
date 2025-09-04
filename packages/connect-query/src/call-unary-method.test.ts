@@ -77,17 +77,23 @@ describe("callUnaryMethod", () => {
     const promise = new Promise<void>((res) => {
       resolve = res;
     });
-    const transport = mockEliza({
-      sentence: "Response 1",
-    }, false, {
-      router: {
-        interceptors: [(next) => (req) => {
-          expect(req.header.get("x-custom-header")).toEqual("custom-value");
-          resolve();
-          return next(req);
-        }]
-      }
-    });
+    const transport = mockEliza(
+      {
+        sentence: "Response 1",
+      },
+      false,
+      {
+        router: {
+          interceptors: [
+            (next) => (req) => {
+              expect(req.header.get("x-custom-header")).toEqual("custom-value");
+              resolve();
+              return next(req);
+            },
+          ],
+        },
+      },
+    );
     const input: SayRequest = create(SayRequestSchema, {
       sentence: "query 1",
     });

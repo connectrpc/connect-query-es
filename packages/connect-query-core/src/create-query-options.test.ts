@@ -50,7 +50,7 @@ describe("createQueryOptions", () => {
       cardinality: "finite",
       headers: {
         "x-custom-header": "custom-value",
-      }
+      },
     });
     const opt = createQueryOptions(
       sayMethodDescriptor,

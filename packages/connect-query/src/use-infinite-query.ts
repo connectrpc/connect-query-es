@@ -85,7 +85,6 @@ export function useInfiniteQuery<
     transport: transport ?? transportFromCtx,
     getNextPageParam,
     pageParamKey,
-    
   });
   return tsUseInfiniteQuery({
     ...baseOptions,

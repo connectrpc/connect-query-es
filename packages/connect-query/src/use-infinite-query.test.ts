@@ -402,38 +402,41 @@ describe("useSuspenseInfiniteQuery", () => {
     const promise = new Promise<void>((res) => {
       resolve = res;
     });
-    const transport = mockPaginatedTransport({
-      items: ["Intercepted!"],
-      page: 0n,
-    }, false, {
-      router: {
-        interceptors: [(next) => (req) => {
-          expect(req.header.get("x-custom-header")).toEqual("custom-value");
-          resolve();
-          return next(req);
-        }]
-      }
-    });
-    const { result } = renderHook(
-      () => {
-        return useSuspenseInfiniteQuery(
-          methodDescriptor,
-          {
-            page: 0n,
-          },
-          {
-            getNextPageParam: (lastPage) => lastPage.page + 1n,
-            pageParamKey: "page",
-            transport,
-            headers: {
-              "x-custom-header": "custom-value",
-            },
-          },
-        );
+    const transport = mockPaginatedTransport(
+      {
+        items: ["Intercepted!"],
+        page: 0n,
       },
-      wrapper({}),
+      false,
+      {
+        router: {
+          interceptors: [
+            (next) => (req) => {
+              expect(req.header.get("x-custom-header")).toEqual("custom-value");
+              resolve();
+              return next(req);
+            },
+          ],
+        },
+      },
     );
-    
+    const { result } = renderHook(() => {
+      return useSuspenseInfiniteQuery(
+        methodDescriptor,
+        {
+          page: 0n,
+        },
+        {
+          getNextPageParam: (lastPage) => lastPage.page + 1n,
+          pageParamKey: "page",
+          transport,
+          headers: {
+            "x-custom-header": "custom-value",
+          },
+        },
+      );
+    }, wrapper({}));
+
     await waitFor(() => {
       expect(result.current.isSuccess).toBeTruthy();
     });

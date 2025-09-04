@@ -255,7 +255,11 @@ export function createConnectQueryKey<
       );
     }
   }
-  if (params.schema.kind === "rpc" && "headers" in params && params.headers !== undefined) {
+  if (
+    params.schema.kind === "rpc" &&
+    "headers" in params &&
+    params.headers !== undefined
+  ) {
     props.headers = createHeadersKey(params.headers);
   }
   return ["connect-query", props] as ConnectQueryKey<O>;
@@ -266,7 +270,10 @@ export function createConnectQueryKey<
  */
 function createHeadersKey(headers: HeadersInit): Record<string, string> {
   const result: Record<string, string> = {};
-  const arrayToIterate = Array.isArray(headers) || headers instanceof Headers ? headers : Object.entries(headers);
+  const arrayToIterate =
+    Array.isArray(headers) || headers instanceof Headers
+      ? headers
+      : Object.entries(headers);
   for (const [key, value] of arrayToIterate) {
     result[key] = value;
   }
