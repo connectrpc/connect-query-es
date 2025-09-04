@@ -49,6 +49,7 @@ export interface ConnectInfiniteQueryOptions<
     MessageInitShape<I>[ParamKey],
     MessageShape<O>
   >;
+  headers?: HeadersInit;
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params -- we have 4 required arguments
@@ -79,6 +80,7 @@ function createUnaryInfiniteQueryFn<
     };
     return callUnaryMethod(transport, schema, inputCombinedWithPageParam, {
       signal: context.signal,
+      headers: context.queryKey[1].headers,
     });
   };
 }
@@ -97,6 +99,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -124,6 +127,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -149,6 +153,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -180,6 +185,7 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
 ): {
   getNextPageParam: ConnectInfiniteQueryOptions<
@@ -203,6 +209,7 @@ export function createInfiniteQueryOptions<
     schema,
     transport,
     input,
+    headers
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =

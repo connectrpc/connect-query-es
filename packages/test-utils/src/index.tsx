@@ -14,7 +14,7 @@
 
 import type { MessageInitShape } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
-import { createRouterTransport } from "@connectrpc/connect";
+import { createRouterTransport, type ConnectRouterOptions } from "@connectrpc/connect";
 
 import {
   BigIntService,
@@ -42,6 +42,9 @@ export const sleep = async (timeout: number) =>
 export const mockEliza = (
   override?: MessageInitShape<typeof SayResponseSchema>,
   addDelay = false,
+  options?: {
+    router?: ConnectRouterOptions;
+  },
 ) =>
   createRouterTransport(({ service }) => {
     service(ElizaService, {
@@ -55,6 +58,8 @@ export const mockEliza = (
         );
       },
     });
+  }, { 
+    router: options?.router,
   });
 
 /**
@@ -93,6 +98,9 @@ export const mockStatefulBigIntTransport = (addDelay = false) =>
 export const mockPaginatedTransport = (
   override?: MessageInitShape<typeof ListResponseSchema>,
   addDelay = false,
+  options?: {
+    router?: ConnectRouterOptions;
+  },
 ) =>
   createRouterTransport(({ service }) => {
     service(ListService, {
@@ -115,4 +123,6 @@ export const mockPaginatedTransport = (
         return result;
       },
     });
+  }, {
+    router: options?.router,
   });

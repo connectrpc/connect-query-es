@@ -34,13 +34,14 @@ export async function callUnaryMethod<
   input: MessageInitShape<I> | undefined,
   options?: {
     signal?: AbortSignal;
+    headers?: HeadersInit;
   },
 ): Promise<MessageShape<O>> {
   const result = await transport.unary(
     schema,
     options?.signal,
     undefined,
-    undefined,
+    options?.headers,
     input ?? create(schema.input),
     undefined,
   );

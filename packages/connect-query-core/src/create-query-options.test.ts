@@ -48,12 +48,18 @@ describe("createQueryOptions", () => {
       input: { sentence: "hi" },
       transport: mockedElizaTransport,
       cardinality: "finite",
+      headers: {
+        "x-custom-header": "custom-value",
+      }
     });
     const opt = createQueryOptions(
       sayMethodDescriptor,
       { sentence: "hi" },
       {
         transport: mockedElizaTransport,
+        headers: {
+          "x-custom-header": "custom-value",
+        },
       },
     );
     expect(opt.queryKey).toStrictEqual(want);

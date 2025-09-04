@@ -95,6 +95,7 @@ export type UseSuspenseQueryOptions<
 > & {
   /** The transport to be used for the fetching. */
   transport?: Transport;
+  headers?: HeadersInit;
 };
 
 /**
@@ -109,12 +110,14 @@ export function useSuspenseQuery<
   input?: MessageInitShape<I>,
   {
     transport,
+    headers,
     ...queryOptions
   }: UseSuspenseQueryOptions<O, SelectOutData> = {},
 ): UseSuspenseQueryResult<SelectOutData, ConnectError> {
   const transportFromCtx = useTransport();
   const baseOptions = createQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
+    headers,
   });
   return tsUseSuspenseQuery({
     ...baseOptions,

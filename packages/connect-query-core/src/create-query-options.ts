@@ -36,6 +36,7 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   return async (context) => {
     return callUnaryMethod(transport, schema, input, {
       signal: context.signal,
+      headers: context.queryKey[1].headers,
     });
   };
 }
@@ -51,8 +52,10 @@ export function createQueryOptions<
   input: MessageInitShape<I> | undefined,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
 ): {
   queryKey: ConnectQueryKey<O>;
@@ -67,8 +70,10 @@ export function createQueryOptions<
   input: SkipToken,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
 ): {
   queryKey: ConnectQueryKey<O>;
@@ -83,8 +88,10 @@ export function createQueryOptions<
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
 ): {
   queryKey: ConnectQueryKey<O>;
@@ -99,8 +106,10 @@ export function createQueryOptions<
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
 ): {
   queryKey: ConnectQueryKey<O>;
@@ -112,6 +121,7 @@ export function createQueryOptions<
     input: input ?? create(schema.input),
     transport,
     cardinality: "finite",
+    headers,
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =

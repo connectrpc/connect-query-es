@@ -167,13 +167,55 @@ describe("createConnectQueryKey", () => {
     });
     sampleQueryClient.setQueryData(
       key,
-      create(SayResponseSchema, { sentence: "a proper value" }),
+      create(SayResponseSchema, { sentence: "a proper value" })
     );
 
     sampleQueryClient.setQueryData(key, (prev) => {
       expectTypeOf(prev).toEqualTypeOf<SayResponse | undefined>();
       return create(SayResponseSchema, {
         sentence: "a proper value",
+      });
+    });
+  });
+
+  describe("headers", () => {
+    it("allows headers to be passed as an object", () => {
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: {
+          "x-custom-header": "custom-value",
+        },
+      });
+      expect(key[1].headers).toEqual({
+        "x-custom-header": "custom-value",
+      });
+    });
+    it("allows headers to be passed as a tuple", () => {
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: [
+          ["x-custom-header", "custom-value"],
+        ],
+      });
+      expect(key[1].headers).toEqual({
+        "x-custom-header": "custom-value",
+      });
+    });
+    it("allows headers to be passed as a HeadersInit", () => {
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: new Headers({
+          "x-custom-header": "custom-value",
+        }),
+      });
+      expect(key[1].headers).toEqual({
+        "x-custom-header": "custom-value",
       });
     });
   });
