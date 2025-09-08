@@ -265,4 +265,53 @@ describe("useSuspenseQuery", () => {
 
     expect(result.current.data).toBe(11);
   });
+
+  it("can pass headers through", async () => {
+    let resolve: () => void;
+    const promise = new Promise<void>((res) => {
+      resolve = res;
+    });
+    const transport = mockEliza(
+      {
+        sentence: "Response 1",
+      },
+      false,
+      {
+        router: {
+          interceptors: [
+            (next) => (req) => {
+              expect(req.header.get("x-custom-header")).toEqual("custom-value");
+              resolve();
+              return next(req);
+            },
+          ],
+        },
+      },
+    );
+    const { result } = renderHook(
+      () => {
+        return useSuspenseQuery(
+          sayMethodDescriptor,
+          {
+            sentence: "hello",
+          },
+          {
+            transport,
+            headers: {
+              "x-custom-header": "custom-value",
+            },
+          },
+        );
+      },
+      wrapper({}, mockedElizaTransport),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    await promise;
+
+    expect(result.current.data.sentence).toBe("Response 1");
+  });
 });
