@@ -310,18 +310,18 @@ describe("useInfiniteQuery", () => {
     expect(onSuccessSpy).toHaveBeenCalledTimes(2);
   });
 
-  it("can query paginated data with a different page param", async () => {
+  it("can query paginated data with a non-zero page param", async () => {
     const wrapperOpts = wrapper({}, mockedPaginatedTransport);
     const { result } = renderHook(() => {
       return useInfiniteQuery(
         methodDescriptor,
         {
-          altPage: 2,
+          page: 1n,
           preview: true,
         },
         {
-          getNextPageParam: (lastPage) => lastPage.altPage + 1,
-          pageParamKey: "altPage",
+          getNextPageParam: (lastPage) => lastPage.page + 1n,
+          pageParamKey: "page",
         },
       );
     }, wrapperOpts);
@@ -329,9 +329,9 @@ describe("useInfiniteQuery", () => {
       expect(result.current.isSuccess).toBeTruthy();
     });
     expect(result.current.data?.pages[0].items).toEqual([
-      "-2 Item",
-      "-1 Item",
-      "0 Item",
+      "1 Item",
+      "2 Item",
+      "3 Item",
     ]);
     const manuallyCreatedQueryKey = createConnectQueryKey({
       schema: methodDescriptor,
