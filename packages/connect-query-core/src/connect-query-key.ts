@@ -46,6 +46,7 @@ type SharedConnectQueryOptions = {
   input?: Record<string, unknown> | "skipped";
   /**
    * Headers to be sent with the request.
+   * Note that invalid HTTP header names will raise a TypeError, and that the Set-Cookie header is not supported.
    */
   headers?: Record<string, string>;
 };
@@ -131,6 +132,7 @@ type KeyParamsForMethod<Desc extends DescMethod> = {
   pageParamKey?: keyof MessageInitShape<Desc["input"]>;
   /**
    * Set `headers` in the key.
+   * Note that invalid HTTP header names will raise a TypeError, and that the Set-Cookie header is not supported.
    */
   headers?: HeadersInit;
 };
@@ -267,14 +269,12 @@ export function createConnectQueryKey<
 
 /**
  * Creates a record of headers from a HeadersInit object.
+ *
  */
 function createHeadersKey(headers: HeadersInit): Record<string, string> {
   const result: Record<string, string> = {};
-  const arrayToIterate =
-    Array.isArray(headers) || headers instanceof Headers
-      ? headers
-      : Object.entries(headers);
-  for (const [key, value] of arrayToIterate) {
+
+  for (const [key, value] of new Headers(headers)) {
     result[key] = value;
   }
   return result;

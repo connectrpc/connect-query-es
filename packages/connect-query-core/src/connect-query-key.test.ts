@@ -216,6 +216,37 @@ describe("createConnectQueryKey", () => {
         "x-custom-header": "custom-value",
       });
     });
+    it("normalizes header values", () => {
+      const keyA = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: {
+          foo: "a",
+          Foo: "b",
+        },
+      });
+      const keyB = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: {
+          foo: "a, b",
+        },
+      });
+      const keyC = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: [
+          ["foo", "a"],
+          ["foo", "b"],
+        ],
+      });
+
+      expect(keyA[1].headers).toEqual(keyB[1].headers);
+      expect(keyA[1].headers).toEqual(keyC[1].headers);
+    });
   });
 
   describe("infinite queries", () => {
