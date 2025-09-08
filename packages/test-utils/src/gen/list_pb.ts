@@ -24,7 +24,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file list.proto.
  */
 export const file_list: GenFile = /*@__PURE__*/
-  fileDesc("CgpsaXN0LnByb3RvIiwKC0xpc3RSZXF1ZXN0EgwKBHBhZ2UYASABKAMSDwoHcHJldmlldxgCIAEoCCIrCgxMaXN0UmVzcG9uc2USDAoEcGFnZRgBIAEoAxINCgVpdGVtcxgCIAMoCTIyCgtMaXN0U2VydmljZRIjCgRMaXN0EgwuTGlzdFJlcXVlc3QaDS5MaXN0UmVzcG9uc2ViBnByb3RvMw");
+  fileDesc("CgpsaXN0LnByb3RvIj4KC0xpc3RSZXF1ZXN0EgwKBHBhZ2UYASABKAMSDwoHcHJldmlldxgCIAEoCBIQCghhbHRfcGFnZRgDIAEoBSI9CgxMaXN0UmVzcG9uc2USDAoEcGFnZRgBIAEoAxINCgVpdGVtcxgCIAMoCRIQCghhbHRfcGFnZRgDIAEoBTIyCgtMaXN0U2VydmljZRIjCgRMaXN0EgwuTGlzdFJlcXVlc3QaDS5MaXN0UmVzcG9uc2ViBnByb3RvMw");
 
 /**
  * @generated from message ListRequest
@@ -39,6 +39,11 @@ export type ListRequest = Message<"ListRequest"> & {
    * @generated from field: bool preview = 2;
    */
   preview: boolean;
+
+  /**
+   * @generated from field: int32 alt_page = 3;
+   */
+  altPage: number;
 };
 
 /**
@@ -61,6 +66,11 @@ export type ListResponse = Message<"ListResponse"> & {
    * @generated from field: repeated string items = 2;
    */
   items: string[];
+
+  /**
+   * @generated from field: int32 alt_page = 3;
+   */
+  altPage: number;
 };
 
 /**

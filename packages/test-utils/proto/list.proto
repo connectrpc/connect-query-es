@@ -21,10 +21,12 @@ service ListService {
 message ListRequest {
   int64 page = 1;
   bool preview = 2;
+  int32 alt_page = 3;
 }
 
 message ListResponse {
   int64 page = 1;
   repeated string items = 2;
+  int32 alt_page = 3;
 }
 

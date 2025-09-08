@@ -17,7 +17,11 @@ import { createConnectQueryKey } from "@connectrpc/connect-query-core";
 import { QueryCache, skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { mockPaginatedTransport } from "test-utils";
-import { ListResponseSchema, ListService } from "test-utils/gen/list_pb.js";
+import {
+  ListRequestSchema,
+  ListResponseSchema,
+  ListService,
+} from "test-utils/gen/list_pb.js";
 import { describe, expect, it, vi } from "vitest";
 
 import { wrapper } from "./test/test-wrapper.js";
@@ -299,10 +303,48 @@ describe("useInfiniteQuery", () => {
       queryKey: createConnectQueryKey({
         schema: methodDescriptor,
         cardinality: "infinite",
+        pageParamKey: "page",
       }),
     });
 
     expect(onSuccessSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("can query paginated data with a different page param", async () => {
+    const wrapperOpts = wrapper({}, mockedPaginatedTransport);
+    const { result } = renderHook(() => {
+      return useInfiniteQuery(
+        methodDescriptor,
+        {
+          altPage: 2,
+          preview: true,
+        },
+        {
+          getNextPageParam: (lastPage) => lastPage.altPage + 1,
+          pageParamKey: "altPage",
+        },
+      );
+    }, wrapperOpts);
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+    expect(result.current.data?.pages[0].items).toEqual([
+      "-2 Item",
+      "-1 Item",
+      "0 Item",
+    ]);
+    const manuallyCreatedQueryKey = createConnectQueryKey({
+      schema: methodDescriptor,
+      transport: mockedPaginatedTransport,
+      cardinality: "infinite",
+      pageParamKey: "page",
+      input: create(ListRequestSchema, {
+        preview: true,
+      }),
+    });
+    expect(
+      wrapperOpts.queryClient.getQueryData(manuallyCreatedQueryKey),
+    ).toEqual(result.current.data);
   });
 });
 

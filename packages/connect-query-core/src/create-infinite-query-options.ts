@@ -185,6 +185,7 @@ export function createInfiniteQueryOptions<
     schema,
     transport,
     input,
+    pageParamKey,
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =

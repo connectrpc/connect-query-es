@@ -193,6 +193,7 @@ export function createConnectQueryKey<
 >(
   params: KeyParamsForMethod<DescMethodUnary<I, O>> & {
     cardinality: "infinite";
+    pageParamKey: keyof MessageInitShape<I>;
   },
 ): InfiniteConnectQueryKey<O>;
 export function createConnectQueryKey<
