@@ -183,6 +183,77 @@ describe("createConnectQueryKey", () => {
     });
   });
 
+  describe("headers", () => {
+    it("allows headers to be passed as an object", () => {
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: {
+          "x-custom-header": "custom-value",
+        },
+      });
+      expect(key[1].headers).toEqual({
+        "x-custom-header": "custom-value",
+      });
+    });
+    it("allows headers to be passed as a tuple", () => {
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: [["x-custom-header", "custom-value"]],
+      });
+      expect(key[1].headers).toEqual({
+        "x-custom-header": "custom-value",
+      });
+    });
+    it("allows headers to be passed as a HeadersInit", () => {
+      const key = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: new Headers({
+          "x-custom-header": "custom-value",
+        }),
+      });
+      expect(key[1].headers).toEqual({
+        "x-custom-header": "custom-value",
+      });
+    });
+    it("normalizes header values", () => {
+      const keyA = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: {
+          foo: "a",
+          Foo: "b",
+        },
+      });
+      const keyB = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: {
+          foo: "a, b",
+        },
+      });
+      const keyC = createConnectQueryKey({
+        schema: ElizaService.method.say,
+        input: create(SayRequestSchema, { sentence: "hi" }),
+        cardinality: "finite",
+        headers: [
+          ["foo", "a"],
+          ["foo", "b"],
+        ],
+      });
+
+      expect(keyA[1].headers).toEqual(keyB[1].headers);
+      expect(keyA[1].headers).toEqual(keyC[1].headers);
+    });
+  });
+
   describe("infinite queries", () => {
     it("contains type hints to indicate the output type", () => {
       const sampleQueryClient = new QueryClient();

@@ -14,7 +14,10 @@
 
 import type { MessageInitShape } from "@bufbuild/protobuf";
 import { create } from "@bufbuild/protobuf";
-import { createRouterTransport } from "@connectrpc/connect";
+import {
+  createRouterTransport,
+  type ConnectRouterOptions,
+} from "@connectrpc/connect";
 
 import {
   BigIntService,
@@ -42,20 +45,28 @@ export const sleep = async (timeout: number) =>
 export const mockEliza = (
   override?: MessageInitShape<typeof SayResponseSchema>,
   addDelay = false,
+  options?: {
+    router?: ConnectRouterOptions;
+  },
 ) =>
-  createRouterTransport(({ service }) => {
-    service(ElizaService, {
-      say: async (input: SayRequest) => {
-        if (addDelay) {
-          await sleep(1000);
-        }
-        return create(
-          SayResponseSchema,
-          override ?? { sentence: `Hello ${input.sentence}` },
-        );
-      },
-    });
-  });
+  createRouterTransport(
+    ({ service }) => {
+      service(ElizaService, {
+        say: async (input: SayRequest) => {
+          if (addDelay) {
+            await sleep(1000);
+          }
+          return create(
+            SayResponseSchema,
+            override ?? { sentence: `Hello ${input.sentence}` },
+          );
+        },
+      });
+    },
+    {
+      router: options?.router,
+    },
+  );
 
 /**
  * a stateless mock for BigIntService
@@ -93,26 +104,34 @@ export const mockStatefulBigIntTransport = (addDelay = false) =>
 export const mockPaginatedTransport = (
   override?: MessageInitShape<typeof ListResponseSchema>,
   addDelay = false,
+  options?: {
+    router?: ConnectRouterOptions;
+  },
 ) =>
-  createRouterTransport(({ service }) => {
-    service(ListService, {
-      list: async (request) => {
-        if (addDelay) {
-          await sleep(1000);
-        }
-        if (override !== undefined) {
-          return override;
-        }
-        const base = (request.page - 1n) * 3n;
-        const result = {
-          page: request.page,
-          items: [
-            `${base + 1n} Item`,
-            `${base + 2n} Item`,
-            `${base + 3n} Item`,
-          ],
-        };
-        return result;
-      },
-    });
-  });
+  createRouterTransport(
+    ({ service }) => {
+      service(ListService, {
+        list: async (request) => {
+          if (addDelay) {
+            await sleep(1000);
+          }
+          if (override !== undefined) {
+            return override;
+          }
+          const base = (request.page - 1n) * 3n;
+          const result = {
+            page: request.page,
+            items: [
+              `${base + 1n} Item`,
+              `${base + 2n} Item`,
+              `${base + 3n} Item`,
+            ],
+          };
+          return result;
+        },
+      });
+    },
+    {
+      router: options?.router,
+    },
+  );
