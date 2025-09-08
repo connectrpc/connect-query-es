@@ -303,7 +303,6 @@ describe("useInfiniteQuery", () => {
       queryKey: createConnectQueryKey({
         schema: methodDescriptor,
         cardinality: "infinite",
-        pageParamKey: "page",
       }),
     });
 
