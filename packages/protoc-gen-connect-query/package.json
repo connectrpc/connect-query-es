@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/protoc-gen-connect-query",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Code generator for connect-query",
   "license": "Apache-2.0",
   "sideEffects": false,
@@ -30,7 +30,7 @@
     "@bufbuild/buf": "1.54.0",
     "@bufbuild/protoc-gen-es": "^2.5.1",
     "@connectrpc/connect": "^2.0.2",
-    "@connectrpc/connect-query": "^2.1.1",
+    "@connectrpc/connect-query": "^2.1.2",
     "@tanstack/react-query": "^5.79.0",
     "typescript": "^5.8.3"
   },
