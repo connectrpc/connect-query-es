@@ -20,7 +20,12 @@ import {
   SayResponseSchema,
   type SayResponse,
 } from "test-utils/gen/eliza_pb.js";
-import { ListRequestSchema, ListService } from "test-utils/gen/list_pb.js";
+import {
+  ListRequestSchema,
+  ListResponseSchema,
+  ListService,
+  type ListResponse,
+} from "test-utils/gen/list_pb.js";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
@@ -253,21 +258,25 @@ describe("createConnectQueryKey", () => {
     it("contains type hints to indicate the output type", () => {
       const sampleQueryClient = new QueryClient();
       const key = createConnectQueryKey({
-        schema: ElizaService.method.say,
-        input: create(SayRequestSchema, { sentence: "hi" }),
+        schema: ListService.method.list,
+        input: create(ListRequestSchema, { page: 0n }),
         cardinality: "infinite",
+        pageParamKey: "page",
       });
       const data = sampleQueryClient.getQueryData(key);
 
-      expectTypeOf(data).toEqualTypeOf<InfiniteData<SayResponse> | undefined>();
+      expectTypeOf(data).toEqualTypeOf<
+        InfiniteData<ListResponse> | undefined
+      >();
     });
 
     it("supports typesafe data updaters", () => {
       const sampleQueryClient = new QueryClient();
       const key = createConnectQueryKey({
-        schema: ElizaService.method.say,
-        input: create(SayRequestSchema, { sentence: "hi" }),
+        schema: ListService.method.list,
+        input: create(ListRequestSchema, { page: 0n }),
         cardinality: "infinite",
+        pageParamKey: "page",
       });
       sampleQueryClient.setQueryData(key, {
         pages: [
@@ -281,15 +290,15 @@ describe("createConnectQueryKey", () => {
       });
       sampleQueryClient.setQueryData(key, {
         pageParams: [0],
-        pages: [create(SayResponseSchema, { sentence: "a proper value" })],
+        pages: [create(ListResponseSchema, { items: ["a proper value"] })],
       });
       sampleQueryClient.setQueryData(key, (prev) => {
         expectTypeOf(prev).toEqualTypeOf<
-          InfiniteData<SayResponse> | undefined
+          InfiniteData<ListResponse> | undefined
         >();
         return {
           pageParams: [0],
-          pages: [create(SayResponseSchema, { sentence: "a proper value" })],
+          pages: [create(ListResponseSchema, { items: ["a proper value"] })],
         };
       });
     });

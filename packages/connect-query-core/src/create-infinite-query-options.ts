@@ -191,6 +191,7 @@ export function createInfiniteQueryOptions<
     schema,
     transport,
     input,
+    pageParamKey,
     headers,
   });
   const structuralSharing = createStructuralSharing(schema.output);
