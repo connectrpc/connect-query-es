@@ -8,16 +8,13 @@ on:
       - "release/**"
       - "hotfix/**"
 
-permissions:
-  id-token: write # Required for OIDC
-  contents: read
-
 jobs:
   publish-release:
     runs-on: ubuntu-latest
     # Only run if PR was merged and branch name starts with release/prep-release-
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/prep-release-')
     permissions:
+      id-token: write # Required for OIDC
       contents: write
       pull-requests: write
       issues: write
