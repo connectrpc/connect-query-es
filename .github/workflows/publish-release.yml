@@ -8,6 +8,10 @@ on:
       - "release/**"
       - "hotfix/**"
 
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
 jobs:
   publish-release:
     runs-on: ubuntu-latest
@@ -54,8 +58,6 @@ jobs:
 
       - name: Publish to npm
         run: npm run release
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish GitHub release
         run: |
