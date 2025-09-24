@@ -72,6 +72,12 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract version from branch name
         id: extract_version
         run: |
