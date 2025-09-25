@@ -1,0 +1,105 @@
+name: Publish Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - "release/**"
+      - "hotfix/**"
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    # Only run if PR was merged and branch name starts with release/prep-release-
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/prep-release-')
+    permissions:
+      id-token: write # Required for OIDC
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Extract version from branch name
+        id: extract_version
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          VERSION=$(echo "$BRANCH_NAME" | sed 's/release\/prep-release-//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get updated release notes from PR
+        id: pr_notes
+        run: |
+          RELEASE_NOTES=$(gh pr view ${{ github.event.pull_request.number }} --json body | jq -r ".body")
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        run: npm run release
+
+      - name: Publish GitHub release
+        run: |
+          gh release edit v${{ steps.extract_version.outputs.version }} \
+            --notes "${{ steps.pr_notes.outputs.notes }}" \
+            --draft=false
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  cleanup-canceled-release:
+    runs-on: ubuntu-latest
+    # Only run if PR was closed without merge and branch name starts with release/prep-release-
+    if: github.event.pull_request.merged == false && startsWith(github.event.pull_request.head.ref, 'release/prep-release-')
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract version from branch name
+        id: extract_version
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          VERSION=$(echo "$BRANCH_NAME" | sed 's/release\/prep-release-//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Delete draft release
+        run: |
+          if gh release view v${{ steps.extract_version.outputs.version }} --json isDraft | jq -r ".isDraft" | grep -q "true"; then
+            echo "Deleting draft release v${{ steps.extract_version.outputs.version }}"
+            gh release delete v${{ steps.extract_version.outputs.version }} --yes
+          else
+            echo "Release v${{ steps.extract_version.outputs.version }} is not a draft, skipping deletion"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete release branch
+        continue-on-error: true
+        run: |
+          echo "Deleting release branch ${{ github.event.pull_request.head.ref }}"
+          git push origin --delete ${{ github.event.pull_request.head.ref }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
