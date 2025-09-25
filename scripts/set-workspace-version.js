@@ -20,12 +20,9 @@ import { dirname, join } from "node:path";
 
 // Ensures that a valid semver version is provided
 // See https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-if (
-  process.argv.length !== 3 ||
-  !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/.test(
-    process.argv[2],
-  )
-) {
+const versionRegex =
+  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
+if (process.argv.length !== 3 || !versionRegex.test(process.argv[2])) {
   process.stderr.write(
     [
       `USAGE: ${process.argv[1]} <new-version>`,
@@ -35,6 +32,12 @@ if (
       "If a package depends on another package from the workspace, the",
       "dependency version is updated as well.",
       "",
+      ...(versionRegex.test(process.argv[2])
+        ? []
+        : [
+            "Version provided is not a valid semver version.",
+            "Please provide a version in the format MAJOR.MINOR.PATCH[-PRERELEASE+BUILD].",
+          ]),
     ].join("\n"),
   );
   process.exit(1);
