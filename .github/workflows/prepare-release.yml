@@ -8,7 +8,12 @@ on:
         required: true
         type: string
       base_branch:
-        description: "Base branch for release (e.g. release/v1.x, hotfix/v1.2.x)"
+        description: |
+          Base branch for release (release/v1.x, or main). Specifying
+          a base branch other than main will require that release branch to
+          exist. Select something like release/v1.x to create a release
+          for a hotfix of a major version that is behind the current main
+          branch.
         required: false
         default: "main"
         type: string
@@ -36,16 +41,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Create draft release
-        run: gh release create v${{ inputs.version }} --draft --generate-notes
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create release branch
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout -b "release/prep-release-${{ inputs.version }}"
+
+      - name: Get current workspace version
+        id: workspace_version
+        run: |
+          VERSION=$(npm run getversion --silent)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set version and run build
         run: |
@@ -60,7 +66,15 @@ jobs:
       - name: Get release notes
         id: release_notes
         run: |
-          RELEASE_NOTES=$(gh release view v${{ inputs.version }} --json body | jq -r ".body")
+          RELEASE_NOTES=$(
+            gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/${{ github.repository }}/releases/generate-notes \
+              -f 'tag_name=v${{ inputs.version }}' -f 'target_commitish=${{ inputs.base_branch }}' -f 'previous_tag_name=v${{ steps.workspace_version.outputs.version }}' \
+              --jq ".body" \
+          )
           echo "notes<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT

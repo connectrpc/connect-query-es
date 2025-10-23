@@ -6,7 +6,6 @@ on:
     branches:
       - main
       - "release/**"
-      - "hotfix/**"
 
 jobs:
   publish-release:
@@ -20,13 +19,6 @@ jobs:
       issues: write
 
     steps:
-      - name: Extract version from branch name
-        id: extract_version
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          VERSION=$(echo "$BRANCH_NAME" | sed 's/release\/prep-release-//')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Checkout base branch
         uses: actions/checkout@v4
         with:
@@ -41,6 +33,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Get current workspace version
+        id: workspace_version
+        run: |
+          VERSION=$(npm run getversion --silent)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Get updated release notes from PR
         id: pr_notes
@@ -57,48 +55,9 @@ jobs:
 
       - name: Publish GitHub release
         run: |
-          gh release edit v${{ steps.extract_version.outputs.version }} \
-            --notes "${{ steps.pr_notes.outputs.notes }}" \
-            --draft=false
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  cleanup-canceled-release:
-    runs-on: ubuntu-latest
-    # Only run if PR was closed without merge and branch name starts with release/prep-release-
-    if: github.event.pull_request.merged == false && startsWith(github.event.pull_request.head.ref, 'release/prep-release-')
-    permissions:
-      contents: write
-      pull-requests: write
-
-    steps:
-      - name: Checkout base branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from branch name
-        id: extract_version
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          VERSION=$(echo "$BRANCH_NAME" | sed 's/release\/prep-release-//')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Delete draft release
-        run: |
-          if gh release view v${{ steps.extract_version.outputs.version }} --json isDraft | jq -r ".isDraft" | grep -q "true"; then
-            echo "Deleting draft release v${{ steps.extract_version.outputs.version }}"
-            gh release delete v${{ steps.extract_version.outputs.version }} --yes
-          else
-            echo "Release v${{ steps.extract_version.outputs.version }} is not a draft, skipping deletion"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete release branch
-        continue-on-error: true
-        run: |
-          echo "Deleting release branch ${{ github.event.pull_request.head.ref }}"
-          git push origin --delete ${{ github.event.pull_request.head.ref }}
+          gh release create v${{ steps.workspace_version.outputs.version }} \
+            --title "Release v${{ steps.workspace_version.outputs.version }}" \
+            --notes "${{ steps.pr_notes.outputs.notes }}"
+        # --discussion-category "Announcements" ## Enable if discussions are enabled
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

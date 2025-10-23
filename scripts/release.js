@@ -12,20 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { readdirSync, readFileSync } from "fs";
-import { join } from "path";
-import { existsSync } from "node:fs";
 import { execSync } from "node:child_process";
+import { findWorkspaceVersion } from "./utils.js";
 
 /*
  * Publish connect-query
  *
  * Recommended procedure:
- * 1. Set a new version with `npm run setversion 1.2.3`
- * 2. Commit and push all changes to a PR, wait for approval.
- * 3. Login with `npm login`
- * 4. Publish to npmjs.com with `npm run release`
- * 5. Merge PR and create a release on GitHub
+ * 1. Trigger the prepare-release workflow with the version you want to release.
+ * 2. Reviews release notes in the created PR, wait for approval.
+ * 3. Merge the PR.
  */
 
 const tag = determinePublishTag(findWorkspaceVersion("packages"));
@@ -78,36 +74,4 @@ function determinePublishTag(version) {
   } else {
     throw new Error(`Unable to determine publish tag from version ${version}`);
   }
-}
-
-/**
- * @param {string} packagesDir
- * @returns {string}
- */
-function findWorkspaceVersion(packagesDir) {
-  let version = undefined;
-  for (const entry of readdirSync(packagesDir, { withFileTypes: true })) {
-    if (!entry.isDirectory()) {
-      continue;
-    }
-    const path = join(packagesDir, entry.name, "package.json");
-    if (existsSync(path)) {
-      const pkg = JSON.parse(readFileSync(path, "utf-8"));
-      if (pkg.private === true) {
-        continue;
-      }
-      if (!pkg.version) {
-        throw new Error(`${path} is missing "version"`);
-      }
-      if (version === undefined) {
-        version = pkg.version;
-      } else if (version !== pkg.version) {
-        throw new Error(`${path} has unexpected version ${pkg.version}`);
-      }
-    }
-  }
-  if (version === undefined) {
-    throw new Error(`unable to find workspace version`);
-  }
-  return version;
 }
