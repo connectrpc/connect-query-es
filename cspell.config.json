@@ -40,6 +40,7 @@
     "oneof",
     "typesafe",
     "setversion",
+    "getversion",
     "postsetversion",
     "postgenerate",
     "npmjs"
