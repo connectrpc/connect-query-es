@@ -7,16 +7,6 @@ on:
         description: "Version to release (e.g. 1.2.3)"
         required: true
         type: string
-      base_branch:
-        description: |
-          Base branch for release (release/v1.x, or main). Specifying
-          a base branch other than main will require that release branch to
-          exist. Select something like release/v1.x to create a release
-          for a hotfix of a major version that is behind the current main
-          branch.
-        required: false
-        default: "main"
-        type: string
 
 jobs:
   prepare-release:
@@ -29,7 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.base_branch }}
+          ref: main
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
