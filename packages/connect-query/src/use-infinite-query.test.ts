@@ -17,7 +17,11 @@ import { createConnectQueryKey } from "@connectrpc/connect-query-core";
 import { QueryCache, skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { mockPaginatedTransport } from "test-utils";
-import { ListResponseSchema, ListService } from "test-utils/gen/list_pb.js";
+import {
+  ListRequestSchema,
+  ListResponseSchema,
+  ListService,
+} from "test-utils/gen/list_pb.js";
 import { describe, expect, it, vi } from "vitest";
 
 import { wrapper } from "./test/test-wrapper.js";
@@ -304,6 +308,43 @@ describe("useInfiniteQuery", () => {
 
     expect(onSuccessSpy).toHaveBeenCalledTimes(2);
   });
+
+  it("can query paginated data with a non-zero page param", async () => {
+    const wrapperOpts = wrapper({}, mockedPaginatedTransport);
+    const { result } = renderHook(() => {
+      return useInfiniteQuery(
+        methodDescriptor,
+        {
+          page: 1n,
+          preview: true,
+        },
+        {
+          getNextPageParam: (lastPage) => lastPage.page + 1n,
+          pageParamKey: "page",
+        },
+      );
+    }, wrapperOpts);
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+    expect(result.current.data?.pages[0].items).toEqual([
+      "1 Item",
+      "2 Item",
+      "3 Item",
+    ]);
+    const manuallyCreatedQueryKey = createConnectQueryKey({
+      schema: methodDescriptor,
+      transport: mockedPaginatedTransport,
+      cardinality: "infinite",
+      pageParamKey: "page",
+      input: create(ListRequestSchema, {
+        preview: true,
+      }),
+    });
+    expect(
+      wrapperOpts.queryClient.getQueryData(manuallyCreatedQueryKey),
+    ).toEqual(result.current.data);
+  });
 });
 
 describe("useSuspenseInfiniteQuery", () => {
@@ -395,5 +436,54 @@ describe("useSuspenseInfiniteQuery", () => {
       },
       wrapper({}, mockedPaginatedTransport),
     );
+  });
+
+  it("can pass headers through", async () => {
+    let resolve: () => void;
+    const promise = new Promise<void>((res) => {
+      resolve = res;
+    });
+    const transport = mockPaginatedTransport(
+      {
+        items: ["Intercepted!"],
+        page: 0n,
+      },
+      false,
+      {
+        router: {
+          interceptors: [
+            (next) => (req) => {
+              expect(req.header.get("x-custom-header")).toEqual("custom-value");
+              resolve();
+              return next(req);
+            },
+          ],
+        },
+      },
+    );
+    const { result } = renderHook(() => {
+      return useSuspenseInfiniteQuery(
+        methodDescriptor,
+        {
+          page: 0n,
+        },
+        {
+          getNextPageParam: (lastPage) => lastPage.page + 1n,
+          pageParamKey: "page",
+          transport,
+          headers: {
+            "x-custom-header": "custom-value",
+          },
+        },
+      );
+    }, wrapper({}));
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    await promise;
+
+    expect(result.current.data.pages[0].items).toEqual(["Intercepted!"]);
   });
 });

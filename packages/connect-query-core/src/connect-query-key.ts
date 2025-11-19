@@ -44,6 +44,11 @@ type SharedConnectQueryOptions = {
    * or "skipped".
    */
   input?: Record<string, unknown> | "skipped";
+  /**
+   * Headers to be sent with the request.
+   * Note that invalid HTTP header names will raise a TypeError, and that the Set-Cookie header is not supported.
+   */
+  headers?: Record<string, string>;
 };
 
 type InfiniteConnectQueryKey<OutputMessage extends DescMessage = DescMessage> =
@@ -125,6 +130,11 @@ type KeyParamsForMethod<Desc extends DescMethod> = {
    * If omit the field with this name from the key for infinite queries.
    */
   pageParamKey?: keyof MessageInitShape<Desc["input"]>;
+  /**
+   * Set `headers` in the key.
+   * Note that invalid HTTP header names will raise a TypeError, and that the Set-Cookie header is not supported.
+   */
+  headers?: HeadersInit;
 };
 
 type KeyParamsForService<Desc extends DescService> = {
@@ -220,6 +230,7 @@ export function createConnectQueryKey<
     transport?: string;
     cardinality?: "finite" | "infinite";
     input?: "skipped" | Record<string, unknown>;
+    headers?: Record<string, string>;
   } =
     params.schema.kind == "rpc"
       ? {
@@ -246,5 +257,25 @@ export function createConnectQueryKey<
       );
     }
   }
+  if (
+    params.schema.kind === "rpc" &&
+    "headers" in params &&
+    params.headers !== undefined
+  ) {
+    props.headers = createHeadersKey(params.headers);
+  }
   return ["connect-query", props] as ConnectQueryKey<O>;
+}
+
+/**
+ * Creates a record of headers from a HeadersInit object.
+ *
+ */
+function createHeadersKey(headers: HeadersInit): Record<string, string> {
+  const result: Record<string, string> = {};
+
+  for (const [key, value] of new Headers(headers)) {
+    result[key] = value;
+  }
+  return result;
 }

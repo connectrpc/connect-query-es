@@ -18,8 +18,16 @@ export { createProtobufSafeUpdater } from "./utils.js";
 export type { ConnectUpdater } from "./utils.js";
 export { callUnaryMethod } from "./call-unary-method.js";
 export { createInfiniteQueryOptions } from "./create-infinite-query-options.js";
-export type { ConnectInfiniteQueryOptions } from "./create-infinite-query-options.js";
+export type {
+  ConnectInfiniteQueryOptions,
+  InfiniteQueryOptionsWithSkipToken,
+  InfiniteQueryOptions,
+} from "./create-infinite-query-options.js";
 export { createQueryOptions } from "./create-query-options.js";
+export type {
+  QueryOptions,
+  QueryOptionsWithSkipToken,
+} from "./create-query-options.js";
 export { addStaticKeyToTransport } from "./transport-key.js";
 export type { SkipToken } from "@tanstack/query-core";
 export { skipToken } from "@tanstack/query-core";

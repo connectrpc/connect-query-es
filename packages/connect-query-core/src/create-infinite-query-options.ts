@@ -35,6 +35,40 @@ import { createStructuralSharing } from "./structural-sharing.js";
 import { assert } from "./utils.js";
 
 /**
+ * Return type of createInfiniteQueryOptions assuming SkipToken was not provided.
+ */
+export interface InfiniteQueryOptions<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> {
+  getNextPageParam: ConnectInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey
+  >["getNextPageParam"];
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<
+    MessageShape<O>,
+    ConnectQueryKey<O>,
+    MessageInitShape<I>[ParamKey]
+  >;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+  initialPageParam: MessageInitShape<I>[ParamKey];
+}
+
+/**
+ * Return type of createInfiniteQueryOptions when SkipToken is provided
+ */
+export interface InfiniteQueryOptionsWithSkipToken<
+  I extends DescMessage,
+  O extends DescMessage,
+  ParamKey extends keyof MessageInitShape<I>,
+> extends Omit<InfiniteQueryOptions<I, O, ParamKey>, "queryFn"> {
+  queryFn: SkipToken;
+}
+
+/**
  * Options specific to connect-query
  */
 export interface ConnectInfiniteQueryOptions<
@@ -49,6 +83,7 @@ export interface ConnectInfiniteQueryOptions<
     MessageInitShape<I>[ParamKey],
     MessageShape<O>
   >;
+  headers?: HeadersInit;
 }
 
 // eslint-disable-next-line @typescript-eslint/max-params -- we have 4 required arguments
@@ -79,6 +114,7 @@ function createUnaryInfiniteQueryFn<
     };
     return callUnaryMethod(transport, schema, inputCombinedWithPageParam, {
       signal: context.signal,
+      headers: context.queryKey[1].headers,
     });
   };
 }
@@ -97,22 +133,9 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
-): {
-  getNextPageParam: ConnectInfiniteQueryOptions<
-    I,
-    O,
-    ParamKey
-  >["getNextPageParam"];
-  queryKey: ConnectQueryKey<O>;
-  queryFn: QueryFunction<
-    MessageShape<O>,
-    ConnectQueryKey<O>,
-    MessageInitShape<I>[ParamKey]
-  >;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-  initialPageParam: MessageInitShape<I>[ParamKey];
-};
+): InfiniteQueryOptions<I, O, ParamKey>;
 export function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -124,18 +147,9 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
-): {
-  getNextPageParam: ConnectInfiniteQueryOptions<
-    I,
-    O,
-    ParamKey
-  >["getNextPageParam"];
-  queryKey: ConnectQueryKey<O>;
-  queryFn: SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-  initialPageParam: MessageInitShape<I>[ParamKey];
-};
+): InfiniteQueryOptionsWithSkipToken<I, O, ParamKey>;
 export function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -149,24 +163,11 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
-): {
-  getNextPageParam: ConnectInfiniteQueryOptions<
-    I,
-    O,
-    ParamKey
-  >["getNextPageParam"];
-  queryKey: ConnectQueryKey<O>;
-  queryFn:
-    | QueryFunction<
-        MessageShape<O>,
-        ConnectQueryKey<O>,
-        MessageInitShape<I>[ParamKey]
-      >
-    | SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-  initialPageParam: MessageInitShape<I>[ParamKey];
-};
+):
+  | InfiniteQueryOptions<I, O, ParamKey>
+  | InfiniteQueryOptionsWithSkipToken<I, O, ParamKey>;
 export function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -180,29 +181,18 @@ export function createInfiniteQueryOptions<
     transport,
     getNextPageParam,
     pageParamKey,
+    headers,
   }: ConnectInfiniteQueryOptions<I, O, ParamKey> & { transport: Transport },
-): {
-  getNextPageParam: ConnectInfiniteQueryOptions<
-    I,
-    O,
-    ParamKey
-  >["getNextPageParam"];
-  queryKey: ConnectQueryKey<O>;
-  queryFn:
-    | QueryFunction<
-        MessageShape<O>,
-        ConnectQueryKey<O>,
-        MessageInitShape<I>[ParamKey]
-      >
-    | SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-  initialPageParam: MessageInitShape<I>[ParamKey];
-} {
+):
+  | InfiniteQueryOptions<I, O, ParamKey>
+  | InfiniteQueryOptionsWithSkipToken<I, O, ParamKey> {
   const queryKey = createConnectQueryKey({
     cardinality: "infinite",
     schema,
     transport,
     input,
+    pageParamKey,
+    headers,
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =

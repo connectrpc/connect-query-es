@@ -1,6 +1,6 @@
 {
   "name": "@connectrpc/connect-query-example-basic",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -17,9 +17,9 @@
     "@bufbuild/protobuf": "^2.5.1",
     "@bufbuild/protoc-gen-es": "^2.5.1",
     "@connectrpc/connect": "^2.0.2",
-    "@connectrpc/connect-query": "^2.1.0",
+    "@connectrpc/connect-query": "^2.2.0",
     "@connectrpc/connect-web": "^2.0.2",
-    "@connectrpc/protoc-gen-connect-query": "^2.1.0",
+    "@connectrpc/protoc-gen-connect-query": "^2.2.0",
     "@tanstack/react-query": "^5.79.0",
     "@tanstack/react-query-devtools": "^5.79.0",
     "@testing-library/jest-dom": "^6.6.3",

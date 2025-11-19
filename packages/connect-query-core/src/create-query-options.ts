@@ -28,6 +28,20 @@ import type { ConnectQueryKey } from "./connect-query-key.js";
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { createStructuralSharing } from "./structural-sharing.js";
 
+/**
+ * Return type of createQueryOptions
+ */
+export interface QueryOptions<O extends DescMessage> {
+  queryKey: ConnectQueryKey<O>;
+  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>>;
+  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
+}
+
+export interface QueryOptionsWithSkipToken<O extends DescMessage>
+  extends Omit<QueryOptions<O>, "queryFn"> {
+  queryFn: SkipToken;
+}
+
 function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   transport: Transport,
   schema: DescMethodUnary<I, O>,
@@ -36,6 +50,7 @@ function createUnaryQueryFn<I extends DescMessage, O extends DescMessage>(
   return async (context) => {
     return callUnaryMethod(transport, schema, input, {
       signal: context.signal,
+      headers: context.queryKey[1].headers,
     });
   };
 }
@@ -51,14 +66,12 @@ export function createQueryOptions<
   input: MessageInitShape<I> | undefined,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>>;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-};
+): QueryOptions<O>;
 export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -67,14 +80,12 @@ export function createQueryOptions<
   input: SkipToken,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-};
+): QueryOptionsWithSkipToken<O>;
 export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -83,14 +94,12 @@ export function createQueryOptions<
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>> | SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-};
+): QueryOptions<O> | QueryOptionsWithSkipToken<O>;
 export function createQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
@@ -99,19 +108,18 @@ export function createQueryOptions<
   input: SkipToken | MessageInitShape<I> | undefined,
   {
     transport,
+    headers,
   }: {
     transport: Transport;
+    headers?: HeadersInit;
   },
-): {
-  queryKey: ConnectQueryKey<O>;
-  queryFn: QueryFunction<MessageShape<O>, ConnectQueryKey<O>> | SkipToken;
-  structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-} {
+): QueryOptions<O> | QueryOptionsWithSkipToken<O> {
   const queryKey = createConnectQueryKey({
     schema,
     input: input ?? create(schema.input),
     transport,
     cardinality: "finite",
+    headers,
   });
   const structuralSharing = createStructuralSharing(schema.output);
   const queryFn =
