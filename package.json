@@ -53,5 +53,8 @@
   "engines": {
     "node": ">=20",
     "npm": ">=10.8"
+  },
+  "optionalDependencies": {
+    "source-map": "^0.6.1"
   }
 }
