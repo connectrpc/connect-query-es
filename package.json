@@ -13,6 +13,7 @@
     "all": "turbo run --ui tui build format test lint attw license-header",
     "clean": "git clean -Xdf",
     "setversion": "node scripts/set-workspace-version.js",
+    "getversion": "node scripts/find-workspace-version.js",
     "postsetversion": "npm run all",
     "release": "node scripts/release.js",
     "prerelease": "npm run all",

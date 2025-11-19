@@ -1,0 +1,81 @@
+name: Prepare Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. 1.2.3)"
+        required: true
+        type: string
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create release branch
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git checkout -b "release/prep-release-${{ inputs.version }}"
+
+      - name: Get current workspace version
+        id: workspace_version
+        run: |
+          VERSION=$(npm run getversion --silent)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set version and run build
+        run: |
+          npm run setversion ${{ inputs.version }}
+
+      - name: Commit version changes
+        run: |
+          git add .
+          git commit -s -m "Release ${{ inputs.version }}"
+          git push --set-upstream origin "release/prep-release-${{ inputs.version }}"
+
+      - name: Get release notes
+        id: release_notes
+        run: |
+          RELEASE_NOTES=$(
+            gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/${{ github.repository }}/releases/generate-notes \
+              -f 'tag_name=v${{ inputs.version }}' -f 'target_commitish=${{ inputs.base_branch }}' -f 'previous_tag_name=v${{ steps.workspace_version.outputs.version }}' \
+              --jq ".body" \
+          )
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create pull request
+        run: |
+          gh pr create \
+            --title "Release ${{ inputs.version }}" \
+            --body "${{ steps.release_notes.outputs.notes }}" \
+            --base "${{ inputs.base_branch }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,62 @@
+name: Publish Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+    # Only run if PR was merged and branch name starts with release/prep-release-
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/prep-release-')
+    permissions:
+      id-token: write # Required for OIDC
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get current workspace version
+        id: workspace_version
+        run: |
+          VERSION=$(npm run getversion --silent)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get updated release notes from PR
+        id: pr_notes
+        run: |
+          RELEASE_NOTES=$(gh pr view ${{ github.event.pull_request.number }} --json body | jq -r ".body")
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        run: npm run release
+
+      - name: Publish GitHub release
+        run: |
+          gh release create v${{ steps.workspace_version.outputs.version }} \
+            --title "Release v${{ steps.workspace_version.outputs.version }}" \
+            --notes "${{ steps.pr_notes.outputs.notes }}"
+        # --discussion-category "Announcements" ## Enable if discussions are enabled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
