@@ -91,7 +91,7 @@ describe("createConnectQueryKey", () => {
       transport: fakeTransport,
       schema: ListService.method.nestedList,
       input: create(NestedListRequestSchema, { nested: { page: 0n } }),
-      pageParamKey: ["nested", "page"],
+      pageParamKey: "nested.page",
       cardinality: "infinite",
     });
     expect(key).toStrictEqual([
@@ -111,7 +111,7 @@ describe("createConnectQueryKey", () => {
       MessageInitShape<typeof NestedListRequestSchema>
     >;
     // @ts-expect-error(2322) nested segment must be a valid key
-    const invalidPageParamKey: Key = ["nested", "p@ge"];
+    const invalidPageParamKey: Key = "nested.p@ge";
     expect(invalidPageParamKey).toBeDefined();
   });
 
@@ -123,7 +123,7 @@ describe("createConnectQueryKey", () => {
       items: string[];
     }>;
     // @ts-expect-error(2322) array prototype keys are not valid path segments
-    const invalidArrayPrototypePath: Key = ["items", "pop"];
+    const invalidArrayPrototypePath: Key = "items.pop";
     expect(invalidArrayPrototypePath).toBeDefined();
   });
 

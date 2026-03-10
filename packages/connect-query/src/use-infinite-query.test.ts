@@ -22,7 +22,6 @@ import {
 } from "test-utils";
 import {
   ListRequestSchema,
-  NestedListRequestSchema,
   ListResponseSchema,
   ListService,
 } from "test-utils/gen/list_pb.js";
@@ -365,7 +364,7 @@ describe("useInfiniteQuery", () => {
         },
         {
           getNextPageParam: (lastPage) => (lastPage.nested?.page ?? 0n) + 1n,
-          pageParamKey: ["nested", "page"],
+          pageParamKey: "nested.page",
         },
       );
     }, wrapperOpts);
@@ -375,9 +374,9 @@ describe("useInfiniteQuery", () => {
     });
 
     expect(result.current.data?.pageParams).toEqual([1n]);
-    expect(result.current.data?.pages.map((page) => page.nested?.page)).toEqual([
-      1n,
-    ]);
+    expect(result.current.data?.pages.map((page) => page.nested?.page)).toEqual(
+      [1n],
+    );
 
     await result.current.fetchNextPage();
     await waitFor(() => {
@@ -390,22 +389,21 @@ describe("useInfiniteQuery", () => {
     });
 
     expect(result.current.data?.pageParams).toEqual([1n, 2n, 3n]);
-    expect(result.current.data?.pages.map((page) => page.nested?.page)).toEqual([
-      1n,
-      2n,
-      3n,
-    ]);
+    expect(result.current.data?.pages.map((page) => page.nested?.page)).toEqual(
+      [1n, 2n, 3n],
+    );
 
     const manuallyCreatedQueryKey = createConnectQueryKey({
       schema: nestedMethodDescriptor,
       transport: mockedNestedPaginatedTransport,
       cardinality: "infinite",
-      pageParamKey: ["nested", "page"],
-      input: create(NestedListRequestSchema, {
+      pageParamKey: "nested.page",
+      input: {
         nested: {
+          page: 1n,
           preview: true,
         },
-      }),
+      },
     });
     expect(
       wrapperOpts.queryClient.getQueryData(manuallyCreatedQueryKey),

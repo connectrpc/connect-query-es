@@ -53,7 +53,7 @@ describe("message key", () => {
           stringField: "abc",
         },
       },
-      ["messageField", "int32Field"],
+      "messageField.int32Field",
     );
     expect(key).toStrictEqual({
       messageField: {

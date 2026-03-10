@@ -23,58 +23,44 @@ type CanDescend<T> = T extends readonly unknown[]
     ? true
     : false;
 
-type MessagePageParamPathTuple<
-  T,
-  Depth extends number = 5,
-> = Depth extends 0
+type MessagePageParamPathString<T, Depth extends number = 5> = Depth extends 0
   ? never
   : T extends object
     ? {
         [K in StringKeyOf<T>]: CanDescend<NonNullable<T[K]>> extends true
           ?
-              | readonly [K]
-              | readonly [
-                  K,
-                  ...MessagePageParamPathTuple<
-                    NonNullable<T[K]>,
-                    PrevDepth[Depth]
-                  >,
-                ]
-          : readonly [K];
+              | K
+              | `${K}.${MessagePageParamPathString<
+                  NonNullable<T[K]>,
+                  PrevDepth[Depth]
+                >}`
+          : K;
       }[StringKeyOf<T>]
     : never;
 
 /**
  * A page param key can be a root key,
- * or an array-based key path.
+ * or a dot-separated key path.
  */
-export type MessagePageParamKey<T> =
-  | StringKeyOf<T>
-  | MessagePageParamPathTuple<T>;
+export type MessagePageParamKey<T> = MessagePageParamPathString<T>;
 
-type SegmentsPathValue<T, P extends readonly [string, ...string[]]> =
-  P extends readonly [
-  infer Head extends string,
-  ...infer Tail extends string[],
-]
+type DotPathValue<T, P extends string> = P extends `${infer Head}.${infer Tail}`
   ? Head extends StringKeyOf<T>
-    ? Tail extends readonly [string, ...string[]]
-      ? SegmentsPathValue<NonNullable<T[Head]>, Tail>
-      : T[Head]
+    ? DotPathValue<NonNullable<T[Head]>, Tail>
     : never
-  : never;
+  : P extends StringKeyOf<T>
+    ? T[P]
+    : never;
 
 /**
  * Resolves the value type at a page param key path.
  */
-export type MessagePageParamValue<T, K extends MessagePageParamKey<T>> =
-  K extends readonly [string, ...string[]]
-    ? SegmentsPathValue<T, K>
-    : K extends StringKeyOf<T>
-      ? T[K]
-      : never;
+export type MessagePageParamValue<
+  T,
+  K extends MessagePageParamKey<T>,
+> = K extends string ? DotPathValue<T, K> : never;
 
-type RootKey<K> = K extends readonly [infer Head extends string, ...string[]]
+type RootKey<K> = K extends `${infer Head}.${string}`
   ? Head
   : K extends StringKeyOf<Record<string, unknown>>
     ? K
@@ -83,13 +69,13 @@ type RootKey<K> = K extends readonly [infer Head extends string, ...string[]]
 /**
  * Requires the root object key for a page param path.
  */
-export type MessageInitWithPageParam<T, K extends MessagePageParamKey<T>> =
-  T & Required<Pick<T, Extract<RootKey<K>, StringKeyOf<T>>>>;
+export type MessageInitWithPageParam<T, K extends MessagePageParamKey<T>> = T &
+  Required<Pick<T, Extract<RootKey<K>, StringKeyOf<T>>>>;
 
 export function pageParamPathSegments(
   pageParamKey: MessagePageParamKey<Record<string, unknown>>,
 ): string[] {
-  return typeof pageParamKey === "string" ? [pageParamKey] : [...pageParamKey];
+  return pageParamKey.split(".");
 }
 
 export function getValueAtPath(
@@ -99,7 +85,11 @@ export function getValueAtPath(
   const path = pageParamPathSegments(pageParamKey);
   let current: unknown = value;
   for (const segment of path) {
-    if (typeof current !== "object" || current === null || !(segment in current)) {
+    if (
+      typeof current !== "object" ||
+      current === null ||
+      !(segment in current)
+    ) {
       return undefined;
     }
     current = (current as Record<string, unknown>)[segment];

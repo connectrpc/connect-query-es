@@ -46,7 +46,7 @@ describe("createInfiniteQueryOptions", () => {
       {
         transport: mockedElizaTransport,
         getNextPageParam: (lastPage) => (lastPage.nested?.page ?? 0n) + 1n,
-        pageParamKey: ["nested", "page"],
+        pageParamKey: "nested.page",
       },
     );
     expect(opt.initialPageParam).toBe(initialPage);

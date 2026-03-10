@@ -73,9 +73,7 @@ export function useInfiniteQuery<
   const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input:
-    | SkipToken
-    | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
+  input: SkipToken | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     pageParamKey,
