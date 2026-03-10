@@ -22,6 +22,11 @@ import type {
 import { reflect } from "@bufbuild/protobuf/reflect";
 import { base64Encode } from "@bufbuild/protobuf/wire";
 
+import {
+  pageParamPathSegments,
+  type MessagePageParamKey,
+} from "./page-param-key.js";
+
 /**
  * For any given message, create an object that is suitable for a Query Key in
  * TanStack Query:
@@ -37,17 +42,19 @@ import { base64Encode } from "@bufbuild/protobuf/wire";
  */
 export function createMessageKey<
   Desc extends DescMessage,
-  PageParamKey extends keyof MessageInitShape<Desc>,
+  PageParamKey extends MessagePageParamKey<MessageInitShape<Desc>>,
 >(
   schema: Desc,
   value: MessageInitShape<Desc>,
   pageParamKey?: PageParamKey,
 ): Record<string, unknown> {
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define -- circular reference
-  return messageKey(
-    reflect(schema, create(schema, value)),
-    pageParamKey?.toString(),
-  );
+  const pageParamPath =
+    pageParamKey === undefined
+      ? undefined
+      : pageParamPathSegments(
+          pageParamKey as MessagePageParamKey<Record<string, unknown>>,
+        );
+  return messageKey(reflect(schema, create(schema, value)), pageParamPath);
 }
 
 function scalarKey(value: unknown): unknown {
@@ -99,14 +106,16 @@ function mapKey(map: ReflectMap): Record<string, unknown> {
 
 function messageKey(
   message: ReflectMessage,
-  pageParamKey?: string,
+  pageParamPath?: string[],
 ): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const f of message.sortedFields) {
     if (!message.isSet(f)) {
       continue;
     }
-    if (f.localName === pageParamKey) {
+    const includesPageParam =
+      pageParamPath !== undefined && f.localName === pageParamPath[0];
+    if (includesPageParam && pageParamPath.length === 1) {
       continue;
     }
     switch (f.fieldKind) {
@@ -123,7 +132,10 @@ function messageKey(
         result[f.localName] = mapKey(message.get(f));
         break;
       case "message":
-        result[f.localName] = messageKey(message.get(f));
+        result[f.localName] = messageKey(
+          message.get(f),
+          includesPageParam ? pageParamPath.slice(1) : undefined,
+        );
         break;
     }
   }

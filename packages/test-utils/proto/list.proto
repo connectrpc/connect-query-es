@@ -16,6 +16,7 @@ syntax = "proto3";
 
 service ListService {
   rpc List(ListRequest) returns (ListResponse);
+  rpc NestedList(NestedListRequest) returns (NestedListResponse);
 }
 
 message ListRequest {
@@ -28,3 +29,18 @@ message ListResponse {
   repeated string items = 2;
 }
 
+message NestedListRequest {
+  message Nested {
+    int64 page = 1;
+    bool preview = 2;
+  }
+  Nested nested = 1;
+}
+
+message NestedListResponse {
+  message Nested {
+    int64 page = 1;
+  }
+  Nested nested = 1;
+  repeated string items = 2;
+}

@@ -29,7 +29,11 @@ import {
   type SayRequest,
   SayResponseSchema,
 } from "./gen/eliza_pb.js";
-import { type ListResponseSchema, ListService } from "./gen/list_pb.js";
+import {
+  type ListResponseSchema,
+  ListService,
+  type NestedListResponseSchema,
+} from "./gen/list_pb.js";
 
 /**
  * A test-only helper to increase time (necessary for testing react-query)
@@ -128,6 +132,46 @@ export const mockPaginatedTransport = (
             ],
           };
           return result;
+        },
+      });
+    },
+    {
+      router: options?.router,
+    },
+  );
+
+/**
+ * a mock for nested paginated list queries
+ */
+export const mockNestedPaginatedTransport = (
+  override?: MessageInitShape<typeof NestedListResponseSchema>,
+  addDelay = false,
+  options?: {
+    router?: ConnectRouterOptions;
+  },
+) =>
+  createRouterTransport(
+    ({ service }) => {
+      service(ListService, {
+        nestedList: async (request) => {
+          if (addDelay) {
+            await sleep(1000);
+          }
+          if (override !== undefined) {
+            return override;
+          }
+          const page = request.nested?.page ?? 0n;
+          const base = (page - 1n) * 3n;
+          return {
+            nested: {
+              page,
+            },
+            items: [
+              `${base + 1n} Item`,
+              `${base + 2n} Item`,
+              `${base + 3n} Item`,
+            ],
+          };
         },
       });
     },

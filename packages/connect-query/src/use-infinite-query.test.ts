@@ -16,9 +16,13 @@ import { create } from "@bufbuild/protobuf";
 import { createConnectQueryKey } from "@connectrpc/connect-query-core";
 import { QueryCache, skipToken } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
-import { mockPaginatedTransport } from "test-utils";
+import {
+  mockNestedPaginatedTransport,
+  mockPaginatedTransport,
+} from "test-utils";
 import {
   ListRequestSchema,
+  NestedListRequestSchema,
   ListResponseSchema,
   ListService,
 } from "test-utils/gen/list_pb.js";
@@ -33,8 +37,10 @@ import { useQuery } from "./use-query.js";
 
 // TODO: maybe create a helper to take a service and method and generate this.
 const methodDescriptor = ListService.method.list;
+const nestedMethodDescriptor = ListService.method.nestedList;
 
 const mockedPaginatedTransport = mockPaginatedTransport();
+const mockedNestedPaginatedTransport = mockNestedPaginatedTransport();
 
 describe("useInfiniteQuery", () => {
   it("can query paginated data", async () => {
@@ -339,6 +345,66 @@ describe("useInfiniteQuery", () => {
       pageParamKey: "page",
       input: create(ListRequestSchema, {
         preview: true,
+      }),
+    });
+    expect(
+      wrapperOpts.queryClient.getQueryData(manuallyCreatedQueryKey),
+    ).toEqual(result.current.data);
+  });
+
+  it("builds nested page input for successive pages", async () => {
+    const wrapperOpts = wrapper({}, mockedNestedPaginatedTransport);
+    const { result } = renderHook(() => {
+      return useInfiniteQuery(
+        nestedMethodDescriptor,
+        {
+          nested: {
+            page: 1n,
+            preview: true,
+          },
+        },
+        {
+          getNextPageParam: (lastPage) => (lastPage.nested?.page ?? 0n) + 1n,
+          pageParamKey: ["nested", "page"],
+        },
+      );
+    }, wrapperOpts);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+
+    expect(result.current.data?.pageParams).toEqual([1n]);
+    expect(result.current.data?.pages.map((page) => page.nested?.page)).toEqual([
+      1n,
+    ]);
+
+    await result.current.fetchNextPage();
+    await waitFor(() => {
+      expect(result.current.isFetching).toBeFalsy();
+    });
+
+    await result.current.fetchNextPage();
+    await waitFor(() => {
+      expect(result.current.isFetching).toBeFalsy();
+    });
+
+    expect(result.current.data?.pageParams).toEqual([1n, 2n, 3n]);
+    expect(result.current.data?.pages.map((page) => page.nested?.page)).toEqual([
+      1n,
+      2n,
+      3n,
+    ]);
+
+    const manuallyCreatedQueryKey = createConnectQueryKey({
+      schema: nestedMethodDescriptor,
+      transport: mockedNestedPaginatedTransport,
+      cardinality: "infinite",
+      pageParamKey: ["nested", "page"],
+      input: create(NestedListRequestSchema, {
+        nested: {
+          preview: true,
+        },
       }),
     });
     expect(

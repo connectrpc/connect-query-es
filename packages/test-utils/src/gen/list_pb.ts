@@ -24,7 +24,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file list.proto.
  */
 export const file_list: GenFile = /*@__PURE__*/
-  fileDesc("CgpsaXN0LnByb3RvIiwKC0xpc3RSZXF1ZXN0EgwKBHBhZ2UYASABKAMSDwoHcHJldmlldxgCIAEoCCIrCgxMaXN0UmVzcG9uc2USDAoEcGFnZRgBIAEoAxINCgVpdGVtcxgCIAMoCTIyCgtMaXN0U2VydmljZRIjCgRMaXN0EgwuTGlzdFJlcXVlc3QaDS5MaXN0UmVzcG9uc2ViBnByb3RvMw");
+  fileDesc("CgpsaXN0LnByb3RvIiwKC0xpc3RSZXF1ZXN0EgwKBHBhZ2UYASABKAMSDwoHcHJldmlldxgCIAEoCCIrCgxMaXN0UmVzcG9uc2USDAoEcGFnZRgBIAEoAxINCgVpdGVtcxgCIAMoCSJnChFOZXN0ZWRMaXN0UmVxdWVzdBIpCgZuZXN0ZWQYASABKAsyGS5OZXN0ZWRMaXN0UmVxdWVzdC5OZXN0ZWQaJwoGTmVzdGVkEgwKBHBhZ2UYASABKAMSDwoHcHJldmlldxgCIAEoCCJnChJOZXN0ZWRMaXN0UmVzcG9uc2USKgoGbmVzdGVkGAEgASgLMhouTmVzdGVkTGlzdFJlc3BvbnNlLk5lc3RlZBINCgVpdGVtcxgCIAMoCRoWCgZOZXN0ZWQSDAoEcGFnZRgBIAEoAzJpCgtMaXN0U2VydmljZRIjCgRMaXN0EgwuTGlzdFJlcXVlc3QaDS5MaXN0UmVzcG9uc2USNQoKTmVzdGVkTGlzdBISLk5lc3RlZExpc3RSZXF1ZXN0GhMuTmVzdGVkTGlzdFJlc3BvbnNlYgZwcm90bzM");
 
 /**
  * @generated from message ListRequest
@@ -71,6 +71,84 @@ export const ListResponseSchema: GenMessage<ListResponse> = /*@__PURE__*/
   messageDesc(file_list, 1);
 
 /**
+ * @generated from message NestedListRequest
+ */
+export type NestedListRequest = Message<"NestedListRequest"> & {
+  /**
+   * @generated from field: NestedListRequest.Nested nested = 1;
+   */
+  nested?: NestedListRequest_Nested;
+};
+
+/**
+ * Describes the message NestedListRequest.
+ * Use `create(NestedListRequestSchema)` to create a new message.
+ */
+export const NestedListRequestSchema: GenMessage<NestedListRequest> = /*@__PURE__*/
+  messageDesc(file_list, 2);
+
+/**
+ * @generated from message NestedListRequest.Nested
+ */
+export type NestedListRequest_Nested = Message<"NestedListRequest.Nested"> & {
+  /**
+   * @generated from field: int64 page = 1;
+   */
+  page: bigint;
+
+  /**
+   * @generated from field: bool preview = 2;
+   */
+  preview: boolean;
+};
+
+/**
+ * Describes the message NestedListRequest.Nested.
+ * Use `create(NestedListRequest_NestedSchema)` to create a new message.
+ */
+export const NestedListRequest_NestedSchema: GenMessage<NestedListRequest_Nested> = /*@__PURE__*/
+  messageDesc(file_list, 2, 0);
+
+/**
+ * @generated from message NestedListResponse
+ */
+export type NestedListResponse = Message<"NestedListResponse"> & {
+  /**
+   * @generated from field: NestedListResponse.Nested nested = 1;
+   */
+  nested?: NestedListResponse_Nested;
+
+  /**
+   * @generated from field: repeated string items = 2;
+   */
+  items: string[];
+};
+
+/**
+ * Describes the message NestedListResponse.
+ * Use `create(NestedListResponseSchema)` to create a new message.
+ */
+export const NestedListResponseSchema: GenMessage<NestedListResponse> = /*@__PURE__*/
+  messageDesc(file_list, 3);
+
+/**
+ * @generated from message NestedListResponse.Nested
+ */
+export type NestedListResponse_Nested = Message<"NestedListResponse.Nested"> & {
+  /**
+   * @generated from field: int64 page = 1;
+   */
+  page: bigint;
+};
+
+/**
+ * Describes the message NestedListResponse.Nested.
+ * Use `create(NestedListResponse_NestedSchema)` to create a new message.
+ */
+export const NestedListResponse_NestedSchema: GenMessage<NestedListResponse_Nested> = /*@__PURE__*/
+  messageDesc(file_list, 3, 0);
+
+/**
  * @generated from service ListService
  */
 export const ListService: GenService<{
@@ -81,6 +159,14 @@ export const ListService: GenService<{
     methodKind: "unary";
     input: typeof ListRequestSchema;
     output: typeof ListResponseSchema;
+  },
+  /**
+   * @generated from rpc ListService.NestedList
+   */
+  nestedList: {
+    methodKind: "unary";
+    input: typeof NestedListRequestSchema;
+    output: typeof NestedListResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_list, 0);
