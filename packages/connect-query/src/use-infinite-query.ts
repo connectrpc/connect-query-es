@@ -49,11 +49,13 @@ export type UseInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
   ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
+  SelectOutData = MessageShape<O>,
+  SelectOutPageParam = unknown,
 > = Omit<
   TanStackUseInfiniteQueryOptions<
     MessageShape<O>,
     ConnectError,
-    InfiniteData<MessageShape<O>>,
+    InfiniteData<SelectOutData, SelectOutPageParam>,
     ConnectQueryKey<O>,
     MessagePageParamValue<MessageInitShape<I>, ParamKey>
   >,
@@ -71,6 +73,8 @@ export function useInfiniteQuery<
   I extends DescMessage,
   O extends DescMessage,
   const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
+  SelectOutData = MessageShape<O>,
+  SelectOutPageParam = unknown,
 >(
   schema: DescMethodUnary<I, O>,
   input: SkipToken | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
@@ -79,8 +83,11 @@ export function useInfiniteQuery<
     pageParamKey,
     getNextPageParam,
     ...queryOptions
-  }: UseInfiniteQueryOptions<I, O, ParamKey>,
-): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
+  }: UseInfiniteQueryOptions<I, O, ParamKey, SelectOutData, SelectOutPageParam>,
+): UseInfiniteQueryResult<
+  InfiniteData<SelectOutData, SelectOutPageParam>,
+  ConnectError
+> {
   const transportFromCtx = useTransport();
   const baseOptions = createInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
@@ -100,11 +107,13 @@ export type UseSuspenseInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
   ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
+  SelectOutData = MessageShape<O>,
+  SelectOutPageParam = unknown,
 > = Omit<
   TanStackUseSuspenseInfiniteQueryOptions<
     MessageShape<O>,
     ConnectError,
-    InfiniteData<MessageShape<O>>,
+    InfiniteData<SelectOutData, SelectOutPageParam>,
     ConnectQueryKey<O>,
     MessagePageParamValue<MessageInitShape<I>, ParamKey>
   >,
@@ -122,6 +131,8 @@ export function useSuspenseInfiniteQuery<
   I extends DescMessage,
   O extends DescMessage,
   const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
+  SelectOutData = MessageShape<O>,
+  SelectOutPageParam = unknown,
 >(
   schema: DescMethodUnary<I, O>,
   input: MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
@@ -131,8 +142,17 @@ export function useSuspenseInfiniteQuery<
     getNextPageParam,
     headers,
     ...queryOptions
-  }: UseSuspenseInfiniteQueryOptions<I, O, ParamKey>,
-): UseSuspenseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError> {
+  }: UseSuspenseInfiniteQueryOptions<
+    I,
+    O,
+    ParamKey,
+    SelectOutData,
+    SelectOutPageParam
+  >,
+): UseSuspenseInfiniteQueryResult<
+  InfiniteData<SelectOutData, SelectOutPageParam>,
+  ConnectError
+> {
   const transportFromCtx = useTransport();
   const baseOptions = createInfiniteQueryOptions(schema, input, {
     transport: transport ?? transportFromCtx,
