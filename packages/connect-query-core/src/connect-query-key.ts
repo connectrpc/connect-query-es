@@ -24,6 +24,7 @@ import type { ConnectError, Transport } from "@connectrpc/connect";
 import type { DataTag, InfiniteData, SkipToken } from "@tanstack/query-core";
 
 import { createMessageKey } from "./message-key.js";
+import type { MessagePageParamKey } from "./page-param-key.js";
 import { createTransportKey } from "./transport-key.js";
 
 type SharedConnectQueryOptions = {
@@ -129,7 +130,7 @@ type KeyParamsForMethod<Desc extends DescMethod> = {
   /**
    * If omit the field with this name from the key for infinite queries.
    */
-  pageParamKey?: keyof MessageInitShape<Desc["input"]>;
+  pageParamKey?: MessagePageParamKey<MessageInitShape<Desc["input"]>>;
   /**
    * Set `headers` in the key.
    * Note that invalid HTTP header names will raise a TypeError, and that the Set-Cookie header is not supported.

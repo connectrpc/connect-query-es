@@ -226,12 +226,10 @@ Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack 
 function useInfiniteQuery<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input:
-    | SkipToken
-    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
+  input: SkipToken | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     pageParamKey,
@@ -243,7 +241,7 @@ function useInfiniteQuery<
 
 The `useInfiniteQuery` is a wrapper around TanStack Query's [`useInfiniteQuery`](https://tanstack.com/query/v5/docs/react/reference/useInfiniteQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
 
-There are some required options for `useInfiniteQuery`, primarily `pageParamKey` and `getNextPageParam`. These are required because Connect-Query doesn't know how to paginate your data. You must provide a mapping from the output of the previous page and getting the next page. All other options passed to `useInfiniteQuery` will be merged with the options that Connect-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
+There are some required options for `useInfiniteQuery`, primarily `pageParamKey` and `getNextPageParam`. These are required because Connect-Query doesn't know how to paginate your data. You must provide a mapping from the output of the previous page and getting the next page. `pageParamKey` supports root keys as strings (`"page"`) and nested keys as dot-separated strings (`"query.page"`). All other options passed to `useInfiniteQuery` will be merged with the options that Connect-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
 
 ### `useSuspenseInfiniteQuery`
 
@@ -434,12 +432,10 @@ const MyComponent = () => {
 function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input:
-    | SkipToken
-    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
+  input: SkipToken | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     getNextPageParam,

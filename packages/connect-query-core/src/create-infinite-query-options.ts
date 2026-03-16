@@ -31,6 +31,13 @@ import {
   type ConnectQueryKey,
   createConnectQueryKey,
 } from "./connect-query-key.js";
+import {
+  getValueAtPath,
+  type MessageInitWithPageParam,
+  type MessagePageParamKey,
+  type MessagePageParamValue,
+  setValueAtPath,
+} from "./page-param-key.js";
 import { createStructuralSharing } from "./structural-sharing.js";
 import { assert } from "./utils.js";
 
@@ -40,7 +47,7 @@ import { assert } from "./utils.js";
 export interface InfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 > {
   getNextPageParam: ConnectInfiniteQueryOptions<
     I,
@@ -51,10 +58,10 @@ export interface InfiniteQueryOptions<
   queryFn: QueryFunction<
     MessageShape<O>,
     ConnectQueryKey<O>,
-    MessageInitShape<I>[ParamKey]
+    MessagePageParamValue<MessageInitShape<I>, ParamKey>
   >;
   structuralSharing: (oldData: unknown, newData: unknown) => unknown;
-  initialPageParam: MessageInitShape<I>[ParamKey];
+  initialPageParam: MessagePageParamValue<MessageInitShape<I>, ParamKey>;
 }
 
 /**
@@ -63,7 +70,7 @@ export interface InfiniteQueryOptions<
 export interface InfiniteQueryOptionsWithSkipToken<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 > extends Omit<InfiniteQueryOptions<I, O, ParamKey>, "queryFn"> {
   queryFn: SkipToken;
 }
@@ -74,13 +81,13 @@ export interface InfiniteQueryOptionsWithSkipToken<
 export interface ConnectInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 > {
   /** Defines which part of the input should be considered the page param */
   pageParamKey: ParamKey;
   /** Determines the next page. */
   getNextPageParam: GetNextPageParamFunction<
-    MessageInitShape<I>[ParamKey],
+    MessagePageParamValue<MessageInitShape<I>, ParamKey>,
     MessageShape<O>
   >;
   headers?: HeadersInit;
@@ -90,7 +97,7 @@ export interface ConnectInfiniteQueryOptions<
 function createUnaryInfiniteQueryFn<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   transport: Transport,
   schema: DescMethodUnary<I, O>,
@@ -103,15 +110,16 @@ function createUnaryInfiniteQueryFn<
 ): QueryFunction<
   MessageShape<O>,
   ConnectQueryKey<O>,
-  MessageInitShape<I>[ParamKey]
+  MessagePageParamValue<MessageInitShape<I>, ParamKey>
 > {
   return async (context) => {
     assert("pageParam" in context, "pageParam must be part of context");
 
-    const inputCombinedWithPageParam = {
-      ...input,
-      [pageParamKey]: context.pageParam,
-    };
+    const inputCombinedWithPageParam = setValueAtPath(
+      input,
+      pageParamKey as MessagePageParamKey<Record<string, unknown>>,
+      context.pageParam,
+    ) as MessageInitShape<I>;
     return callUnaryMethod(transport, schema, inputCombinedWithPageParam, {
       signal: context.signal,
       headers: context.queryKey[1].headers,
@@ -125,10 +133,10 @@ function createUnaryInfiniteQueryFn<
 export function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input: MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>,
+  input: MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     getNextPageParam,
@@ -139,7 +147,7 @@ export function createInfiniteQueryOptions<
 export function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
   input: SkipToken,
@@ -153,12 +161,10 @@ export function createInfiniteQueryOptions<
 export function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input:
-    | SkipToken
-    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
+  input: SkipToken | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     getNextPageParam,
@@ -171,12 +177,10 @@ export function createInfiniteQueryOptions<
 export function createInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input:
-    | SkipToken
-    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
+  input: SkipToken | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     getNextPageParam,
@@ -205,8 +209,11 @@ export function createInfiniteQueryOptions<
     getNextPageParam,
     initialPageParam:
       input === skipToken
-        ? (undefined as MessageInitShape<I>[ParamKey])
-        : (input[pageParamKey] as MessageInitShape<I>[ParamKey]),
+        ? (undefined as MessagePageParamValue<MessageInitShape<I>, ParamKey>)
+        : (getValueAtPath(
+            input,
+            pageParamKey as MessagePageParamKey<Record<string, unknown>>,
+          ) as MessagePageParamValue<MessageInitShape<I>, ParamKey>),
     queryKey,
     queryFn,
     structuralSharing,
