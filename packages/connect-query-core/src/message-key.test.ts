@@ -43,6 +43,24 @@ describe("message key", () => {
       stringField: "abc",
     });
   });
+
+  it("omits nested pageParamKey", () => {
+    const key = createMessageKey(
+      Proto3MessageSchema,
+      {
+        messageField: {
+          int32Field: 1,
+          stringField: "abc",
+        },
+      },
+      "messageField.int32Field",
+    );
+    expect(key).toStrictEqual({
+      messageField: {
+        stringField: "abc",
+      },
+    });
+  });
   it("converts as expected", () => {
     const key = createMessageKey(Proto3MessageSchema, {
       int64Field: 123n,

@@ -19,6 +19,7 @@ import { describe, expect, expectTypeOf, it } from "vitest";
 import { createInfiniteQueryOptions, skipToken } from "./index.js";
 
 const listMethod = ListService.method.list;
+const nestedListMethod = ListService.method.nestedList;
 
 const mockedElizaTransport = mockEliza();
 
@@ -31,5 +32,25 @@ describe("createInfiniteQueryOptions", () => {
     });
     expect(opt.queryFn).toBe(skipToken);
     expectTypeOf(opt.queryFn).toEqualTypeOf(skipToken);
+  });
+
+  it("allows nested pageParamKey as key path array", () => {
+    const initialPage = 10n;
+    const opt = createInfiniteQueryOptions(
+      nestedListMethod,
+      {
+        nested: {
+          page: initialPage,
+        },
+      },
+      {
+        transport: mockedElizaTransport,
+        getNextPageParam: (lastPage) => (lastPage.nested?.page ?? 0n) + 1n,
+        pageParamKey: "nested.page",
+      },
+    );
+    expect(opt.initialPageParam).toBe(initialPage);
+    expect(opt.queryKey[1].input).toStrictEqual({ nested: {} });
+    expectTypeOf(opt.initialPageParam).toEqualTypeOf<bigint | undefined>();
   });
 });

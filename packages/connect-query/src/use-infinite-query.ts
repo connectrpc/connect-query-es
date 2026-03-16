@@ -22,6 +22,9 @@ import type { ConnectError, Transport } from "@connectrpc/connect";
 import type {
   ConnectInfiniteQueryOptions,
   ConnectQueryKey,
+  MessageInitWithPageParam,
+  MessagePageParamKey,
+  MessagePageParamValue,
 } from "@connectrpc/connect-query-core";
 import { createInfiniteQueryOptions } from "@connectrpc/connect-query-core";
 import type {
@@ -45,14 +48,14 @@ import { useTransport } from "./use-transport.js";
 export type UseInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 > = Omit<
   TanStackUseInfiniteQueryOptions<
     MessageShape<O>,
     ConnectError,
     InfiniteData<MessageShape<O>>,
     ConnectQueryKey<O>,
-    MessageInitShape<I>[ParamKey]
+    MessagePageParamValue<MessageInitShape<I>, ParamKey>
   >,
   "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
 > &
@@ -67,12 +70,10 @@ export type UseInfiniteQueryOptions<
 export function useInfiniteQuery<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input:
-    | SkipToken
-    | (MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>),
+  input: SkipToken | MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     pageParamKey,
@@ -98,14 +99,14 @@ export function useInfiniteQuery<
 export type UseSuspenseInfiniteQueryOptions<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 > = Omit<
   TanStackUseSuspenseInfiniteQueryOptions<
     MessageShape<O>,
     ConnectError,
     InfiniteData<MessageShape<O>>,
     ConnectQueryKey<O>,
-    MessageInitShape<I>[ParamKey]
+    MessagePageParamValue<MessageInitShape<I>, ParamKey>
   >,
   "getNextPageParam" | "initialPageParam" | "queryFn" | "queryKey"
 > &
@@ -120,10 +121,10 @@ export type UseSuspenseInfiniteQueryOptions<
 export function useSuspenseInfiniteQuery<
   I extends DescMessage,
   O extends DescMessage,
-  ParamKey extends keyof MessageInitShape<I>,
+  const ParamKey extends MessagePageParamKey<MessageInitShape<I>>,
 >(
   schema: DescMethodUnary<I, O>,
-  input: MessageInitShape<I> & Required<Pick<MessageInitShape<I>, ParamKey>>,
+  input: MessageInitWithPageParam<MessageInitShape<I>, ParamKey>,
   {
     transport,
     pageParamKey,

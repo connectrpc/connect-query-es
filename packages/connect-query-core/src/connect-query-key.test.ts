@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import { create } from "@bufbuild/protobuf";
+import type { MessageInitShape } from "@bufbuild/protobuf";
 import type { Transport } from "@connectrpc/connect";
 import {
   ElizaService,
@@ -21,6 +22,7 @@ import {
   type SayResponse,
 } from "test-utils/gen/eliza_pb.js";
 import {
+  NestedListRequestSchema,
   ListRequestSchema,
   ListResponseSchema,
   ListService,
@@ -30,6 +32,7 @@ import { describe, expect, expectTypeOf, it } from "vitest";
 
 import { createConnectQueryKey } from "./connect-query-key.js";
 import { skipToken } from "./index.js";
+import type { MessagePageParamKey } from "./index.js";
 import { createMessageKey } from "./message-key.js";
 import { createTransportKey } from "./transport-key.js";
 import { type InfiniteData, QueryClient } from "@tanstack/query-core";
@@ -81,6 +84,57 @@ describe("createConnectQueryKey", () => {
         input: createMessageKey(ListRequestSchema, {}),
       },
     ]);
+  });
+
+  it("creates a full infinite key with nested pageParamKey", () => {
+    const key = createConnectQueryKey({
+      transport: fakeTransport,
+      schema: ListService.method.nestedList,
+      input: create(NestedListRequestSchema, { nested: { page: 0n } }),
+      pageParamKey: "nested.page",
+      cardinality: "infinite",
+    });
+    expect(key).toStrictEqual([
+      "connect-query",
+      {
+        transport: createTransportKey(fakeTransport),
+        serviceName: "ListService",
+        methodName: "NestedList",
+        cardinality: "infinite",
+        input: createMessageKey(NestedListRequestSchema, { nested: {} }),
+      },
+    ]);
+  });
+
+  it("rejects an invalid nested pageParamKey segment", () => {
+    type Key = MessagePageParamKey<
+      MessageInitShape<typeof NestedListRequestSchema>
+    >;
+    // @ts-expect-error(2322) nested segment must be a valid key
+    const invalidPageParamKey: Key = "nested.p@ge";
+    expect(invalidPageParamKey).toBeDefined();
+  });
+
+  it("rejects array prototype key paths", () => {
+    type Key = MessagePageParamKey<{
+      nested: {
+        page: bigint;
+      };
+      items: string[];
+    }>;
+    // @ts-expect-error(2322) array prototype keys are not valid path segments
+    const invalidArrayPrototypePath: Key = "items.pop";
+    expect(invalidArrayPrototypePath).toBeDefined();
+  });
+
+  it("rejects protobuf internal keys", () => {
+    type Key = MessagePageParamKey<MessageInitShape<typeof SayRequestSchema>>;
+    // @ts-expect-error(2322) protobuf internal key is not supported
+    const invalidTypeNameKey: Key = "$typeName";
+    // @ts-expect-error(2322) protobuf internal key is not supported
+    const invalidUnknownKey: Key = "$unknown";
+    expect(invalidTypeNameKey).toBeDefined();
+    expect(invalidUnknownKey).toBeDefined();
   });
 
   it("allows input: undefined", () => {

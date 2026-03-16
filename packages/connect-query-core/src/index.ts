@@ -23,6 +23,11 @@ export type {
   InfiniteQueryOptionsWithSkipToken,
   InfiniteQueryOptions,
 } from "./create-infinite-query-options.js";
+export type {
+  MessageInitWithPageParam,
+  MessagePageParamKey,
+  MessagePageParamValue,
+} from "./page-param-key.js";
 export { createQueryOptions } from "./create-query-options.js";
 export type {
   QueryOptions,
