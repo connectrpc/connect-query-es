@@ -62,7 +62,7 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               /repos/${{ github.repository }}/releases/generate-notes \
-              -f 'tag_name=v${{ inputs.version }}' -f 'target_commitish=${{ inputs.base_branch }}' -f 'previous_tag_name=v${{ steps.workspace_version.outputs.version }}' \
+              -f 'tag_name=v${{ inputs.version }}' -f 'target_commitish=main' -f 'previous_tag_name=v${{ steps.workspace_version.outputs.version }}' \
               --jq ".body" \
           )
           echo "notes<<EOF" >> $GITHUB_OUTPUT
@@ -76,6 +76,6 @@ jobs:
           gh pr create \
             --title "Release ${{ inputs.version }}" \
             --body "${{ steps.release_notes.outputs.notes }}" \
-            --base "${{ inputs.base_branch }}"
+            --base "main"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
