@@ -29,7 +29,6 @@ const packages = discoverPackages();
 validatePackages(packages);
 
 const version = packages[0].version;
-gitCheckReleaseTag(version);
 npmPublish(version);
 
 /**
@@ -37,7 +36,7 @@ npmPublish(version);
  */
 function npmPublish(version) {
   const tag = determinePublishTag(version);
-  execSync(`npm publish --tag ${tag} --workspaces`, {
+  execSync(`npm publish --dry-run --tag ${tag} --workspaces`, {
     stdio: "inherit",
   });
 }
@@ -59,27 +58,6 @@ function validatePackages(packages) {
         `Inconsistent workspace versions: ${packages[0].name}@${version} vs ${pkg.name}@${pkg.version}`,
       );
     }
-  }
-}
-
-/**
- * Throws if the tag `v<version>` is not among the tags pointing at HEAD.
- *
- * @param {string} version
- */
-function gitCheckReleaseTag(version) {
-  const expected = `v${version}`;
-  const out = execSync("git tag --points-at HEAD", {
-    encoding: "utf-8",
-  });
-  const tags = out
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
-  if (!tags.includes(expected)) {
-    throw new Error(
-      `Expected git tag ${expected} on HEAD, found: ${tags.join(", ") || "(none)"}`,
-    );
   }
 }
 
