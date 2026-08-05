@@ -3,8 +3,6 @@
 ## Prerequisites
 
 - See the setup and tools required in CONTRIBUTING.md
-- A granular access token for npmjs.com with read and write permissions, scoped
-  to the `connectrpc` organization.
 - Make sure that the repository is in a good state, without PRs close to merge
   that would ideally be part of the release.
 
@@ -12,13 +10,18 @@
 
 1. Choose a new version (e.g. 1.2.3), making sure to follow semver. Note that all
    packages in this repository use the same version number.
-2. Trigger the prepare-release workflow that will create a release PR.
+2. Run `npm run setversion 1.2.3` and open a PR with the changes.
 
-- Note: If releasing for a hotfix of a major version that is behind the current main branch, make sure to create an appropriate branch (e.g. release/v1.x) before running the workflow with the branch name set as the base_branch.
+- Note: If releasing for a hotfix of a major version that is behind the current
+  main branch, base the PR on an appropriate branch (e.g. release/v1.x).
 
-3. Edit the PR description with release notes. See the section below for details.
+3. Use the release notes as the PR description. See the section below for details.
 4. Make sure CI passed on your PR and ask a maintainer for review.
 5. After approval, merge your PR.
+6. Create a GitHub release for the new version, with a tag `v1.2.3` on the merge
+   commit, using the same release notes.
+7. The tag triggers the publish workflow, which publishes to npm. Monitor the run
+   and make sure it succeeds.
 
 ## Release notes
 
