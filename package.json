@@ -15,8 +15,6 @@
     "setversion": "node scripts/set-workspace-version.js",
     "getversion": "node scripts/find-workspace-version.js",
     "postsetversion": "npm run all",
-    "release": "node scripts/release.js",
-    "prerelease": "npm run all",
     "format": "prettier --write --ignore-unknown '.' '!packages' '!.turbo' '!node_modules'",
     "license-header": "license-header --ignore 'packages/**'",
     "lint": "eslint --max-warnings 0 . --ignore-pattern 'packages/**' && npm run check:spelling",

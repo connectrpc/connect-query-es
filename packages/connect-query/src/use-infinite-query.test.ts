@@ -164,6 +164,46 @@ describe("useInfiniteQuery", () => {
     expect(result.current.data?.pages[0].page).toEqual(-1n);
   });
 
+  it("can be used along with the select", async () => {
+    const { result } = renderHook(
+      () => {
+        return useInfiniteQuery(
+          methodDescriptor,
+          {
+            page: 0n,
+          },
+          {
+            select: ({ pages, pageParams }) => ({
+              pages: pages.map((p) => p.items.join(",")),
+              pageParams: pageParams.map((p) => p?.toString()),
+            }),
+            getNextPageParam: (lastPage) => lastPage.page + 1n,
+            pageParamKey: "page",
+          },
+        );
+      },
+      wrapper({}, mockedPaginatedTransport),
+    );
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBeTruthy();
+    });
+    expect(result.current.data).toEqual({
+      pageParams: ["0"],
+      pages: ["-2 Item,-1 Item,0 Item"],
+    });
+
+    await result.current.fetchNextPage();
+
+    await waitFor(() => {
+      expect(result.current.isFetching).toBeFalsy();
+    });
+    expect(result.current.data).toEqual({
+      pageParams: ["0", "1"],
+      pages: ["-2 Item,-1 Item,0 Item", "1 Item,2 Item,3 Item"],
+    });
+  });
+
   it("page param doesn't persist to the query cache", async () => {
     const { queryClient, ...remainingWrapper } = wrapper(
       {},
