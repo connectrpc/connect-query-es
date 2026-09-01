@@ -13,12 +13,12 @@
     "format": "prettier --write . '!src/gen'"
   },
   "dependencies": {
-    "@bufbuild/buf": "1.54.0",
-    "@bufbuild/protobuf": "^2.5.1",
-    "@bufbuild/protoc-gen-es": "^2.5.1",
-    "@connectrpc/connect": "^2.0.2",
+    "@bufbuild/buf": "1.72.0",
+    "@bufbuild/protobuf": "^2.14.0",
+    "@bufbuild/protoc-gen-es": "^2.14.0",
+    "@connectrpc/connect": "^2.1.2",
     "@connectrpc/connect-query": "^2.3.1",
-    "@connectrpc/connect-web": "^2.0.2",
+    "@connectrpc/connect-web": "^2.1.2",
     "@connectrpc/protoc-gen-connect-query": "^2.3.1",
     "@tanstack/react-query": "^5.79.0",
     "@tanstack/react-query-devtools": "^5.79.0",
