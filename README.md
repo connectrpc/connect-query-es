@@ -19,6 +19,7 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`useTransport`](#usetransport)
   - [`useQuery`](#usequery)
   - [`useSuspenseQuery`](#usesuspensequery)
+  - [`useQueries`](#usequeries)
   - [`useSuspenseQueries`](#usesuspensequeries)
   - [`useInfiniteQuery`](#useinfinitequery)
   - [`useSuspenseInfiniteQuery`](#usesuspenseinfinitequery)
@@ -220,6 +221,31 @@ Any additional `options` you pass to `useQuery` will be merged with the options 
 ### `useSuspenseQuery`
 
 Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/react/reference/useSuspenseQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
+
+### `useQueries`
+
+Runs multiple RPC queries in parallel using TanStack Query's `useQueries`. Each query returns its own loading, error, and success state. Its `data` is typed for the method and can be undefined until data is available.
+
+```ts
+import { skipToken, useQueries } from "@connectrpc/connect-query";
+import { say } from "./gen/eliza-ElizaService_connectquery";
+
+const [first, second] = useQueries({
+  queries: [
+    { schema: say, input: { sentence: "Hello" } },
+    {
+      schema: say,
+      input: sentence ? { sentence } : skipToken,
+      select: (response) => response.sentence,
+    },
+  ],
+});
+// first.data is SayResponse | undefined; second.data is string | undefined.
+```
+
+Each query accepts `schema`, optional `input`, and query options such as `enabled`, `select`, `initialData`, and `placeholderData`. Transport defaults to the `TransportProvider` context and can be overridden with `transport` per query. Request headers can be provided with `headers`. Placeholder callbacks receive no previous query data.
+
+An optional `combine` function receives the typed results and determines the hook's return value, just as with `useSuspenseQueries` below.
 
 ### `useSuspenseQueries`
 
