@@ -469,23 +469,24 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
 };
 ```
 
-A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flag. This is useful when interacting with `useQueries` API or queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flag. This is useful when interacting with QueryClient methods such as [query](https://tanstack.com/query/latest/docs/framework/react/reference/classes/QueryClient#query).
 
-An example of how to use this function with `useQueries`:
+For example, use `queryClient.query` to fetch and cache a response, reusing cached data while it is fresh:
 
 ```ts
-import { useQueries } from "@tanstack/react-query";
-import { createQueryOptions, useTransport } from "@connectrpc/connect-query";
+import { QueryClient } from "@tanstack/react-query";
+import { createConnectTransport } from "@connectrpc/connect-web";
+import { createQueryOptions } from "@connectrpc/connect-query";
 import { example } from "your-generated-code/example-ExampleService_connectquery";
 
-const MyComponent = () => {
-  const transport = useTransport();
-  const [query1, query2] = useQueries([
-    createQueryOptions(example, { sentence: "First query" }, { transport }),
-    createQueryOptions(example, { sentence: "Second query" }, { transport }),
-  ]);
-  ...
-};
+const queryClient = new QueryClient();
+const transport = createConnectTransport({
+  baseUrl: "https://example.com",
+});
+
+const response = await queryClient.query(
+  createQueryOptions(example, { sentence: "Hello" }, { transport }),
+);
 ```
 
 ### `createInfiniteQueryOptions`
@@ -522,7 +523,7 @@ function createInfiniteQueryOptions<
 };
 ```
 
-A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some QueryClient methods such as [query](https://tanstack.com/query/latest/docs/framework/react/reference/classes/QueryClient#query).
 
 ### `addStaticKeyToTransport`
 
