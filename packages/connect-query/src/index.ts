@@ -23,3 +23,5 @@ export type { UseMutationOptions } from "./use-mutation.js";
 export { useMutation } from "./use-mutation.js";
 export type { UseInfiniteQueryOptions } from "./use-infinite-query.js";
 export type { UseQueryOptions } from "./use-query.js";
+export { useSuspenseQueries } from "./use-suspense-queries.js";
+export type { SuspenseQueryOptions } from "./use-suspense-queries.js";

@@ -19,6 +19,7 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`useTransport`](#usetransport)
   - [`useQuery`](#usequery)
   - [`useSuspenseQuery`](#usesuspensequery)
+  - [`useSuspenseQueries`](#usesuspensequeries)
   - [`useInfiniteQuery`](#useinfinitequery)
   - [`useSuspenseInfiniteQuery`](#usesuspenseinfinitequery)
   - [`useMutation`](#usemutation)
@@ -219,6 +220,41 @@ Any additional `options` you pass to `useQuery` will be merged with the options 
 ### `useSuspenseQuery`
 
 Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/react/reference/useSuspenseQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
+
+### `useSuspenseQueries`
+
+Runs multiple RPC queries in parallel using TanStack Query's `useSuspenseQueries`. The component suspends until all queries have data, and each result's `data` is defined and typed for its method. Use this when a component needs several independent queries without fetching them sequentially through separate `useSuspenseQuery` calls.
+
+```ts
+import { useSuspenseQueries } from "@connectrpc/connect-query";
+import { say } from "./gen/eliza-ElizaService_connectquery";
+
+const [first, second] = useSuspenseQueries({
+  queries: [
+    { schema: say, input: { sentence: "Hello" } },
+    {
+      schema: say,
+      input: { sentence: "Goodbye" },
+      select: (response) => response.sentence,
+    },
+  ],
+});
+// first.data is SayResponse; second.data is string.
+```
+
+Each query accepts `schema`, optional `input`, and the options supported by `useSuspenseQuery`, including `select`, `headers`, and `transport`. Transport defaults to the `TransportProvider` context. As with `useSuspenseQuery`, `skipToken`, `enabled`, and `placeholderData` are not supported.
+
+An optional `combine` function receives the typed results and determines the hook's return value:
+
+```ts
+const sentences = useSuspenseQueries({
+  queries: [
+    { schema: say, input: { sentence: "Hello" } },
+    { schema: say, input: { sentence: "Goodbye" } },
+  ],
+  combine: (results) => results.map((result) => result.data.sentence),
+});
+```
 
 ### `useInfiniteQuery`
 
