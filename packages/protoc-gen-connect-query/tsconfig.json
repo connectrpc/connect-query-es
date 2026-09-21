@@ -7,10 +7,6 @@
     // We import the plugin's version number from package.json
     "resolveJsonModule": true,
     // This package is CommonJS
-    "verbatimModuleSyntax": false,
-    "module": "CommonJS",
-    "moduleResolution": "Node10",
-    // moduleResolution=Node10 is deprecated in TypeScript 6.0.
-    "ignoreDeprecations": "6.0"
+    "verbatimModuleSyntax": false
   }
 }
