@@ -3,10 +3,11 @@
     "target": "ES2020",
     "lib": [
       "ES2017",
+      // BigInt is used for 64-bit integer fields
+      "ES2020.BigInt",
       // DOM for the fetch and streams API
       "DOM"
     ],
-    "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,

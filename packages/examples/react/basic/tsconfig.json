@@ -2,7 +2,6 @@
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false,
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -10,6 +9,8 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "moduleResolution": "Node",
+    // moduleResolution=Node is deprecated in TypeScript 6.0.
+    "ignoreDeprecations": "6.0",
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,

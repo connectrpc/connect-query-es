@@ -29,9 +29,9 @@
   "devDependencies": {
     "@bufbuild/license-header": "^0.0.4",
     "@types/node": "^22.15.29",
-    "@typescript-eslint/eslint-plugin": "8.33.0",
-    "@typescript-eslint/parser": "8.33.0",
-    "@typescript-eslint/utils": "8.33.0",
+    "@typescript-eslint/eslint-plugin": "8.70.0",
+    "@typescript-eslint/parser": "8.70.0",
+    "@typescript-eslint/utils": "8.70.0",
     "@vitest/ui": "^3.2.4",
     "cspell": "9.0.2",
     "eslint": "8.57.0",
@@ -45,7 +45,7 @@
     "eslint-plugin-vitest": "0.5.4",
     "prettier": "3.5.3",
     "turbo": "^2.5.4",
-    "typescript": "5.8.3",
+    "typescript": "6.0.3",
     "vitest": "^3.2.4"
   },
   "engineStrict": true,
