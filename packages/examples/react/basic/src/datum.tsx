@@ -22,7 +22,7 @@ import {
   margin,
   padding,
   white,
-} from "./css";
+} from "./css.js";
 
 interface DatumProps {
   datum: string;

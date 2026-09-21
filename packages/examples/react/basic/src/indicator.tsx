@@ -14,7 +14,7 @@
 
 import type { FC, ReactNode } from "react";
 
-import { border, borderRadius, boxShadow, margin } from "./css";
+import { border, borderRadius, boxShadow, margin } from "./css.js";
 
 /**
  * a single Indicator

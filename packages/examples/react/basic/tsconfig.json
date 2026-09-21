@@ -7,10 +7,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    // moduleResolution=Node is deprecated in TypeScript 6.0.
-    "ignoreDeprecations": "6.0",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
