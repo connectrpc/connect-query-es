@@ -14,7 +14,7 @@
 
 import type { FC, PropsWithChildren } from "react";
 
-import { margin } from "./css.js";
+import { margin } from "./css";
 
 /**
  * The wrapper for the whole page

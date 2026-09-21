@@ -18,8 +18,8 @@ import { createRouterTransport } from "@connectrpc/connect";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import * as methods from "./gen/eliza-ElizaService_connectquery.js";
-import Main from "./main.js";
+import * as methods from "./gen/eliza-ElizaService_connectquery";
+import Main from "./main";
 
 describe("Application", () => {
   it("should show success status and response data", async () => {

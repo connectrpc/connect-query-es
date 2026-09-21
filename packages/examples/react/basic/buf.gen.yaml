@@ -10,9 +10,7 @@ plugins:
     out: src/gen
     opt:
       - target=ts
-      - import_extension=js
   - local: protoc-gen-connect-query
     out: src/gen
     opt:
       - target=ts
-      - import_extension=js
