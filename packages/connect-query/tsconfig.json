@@ -5,5 +5,9 @@
     "src/test/**.tsx",
     "vite.config.ts"
   ],
-  "extends": "./tsconfig.build.json"
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    // This config also covers files outside src, such as vite.config.ts
+    "rootDir": "."
+  }
 }

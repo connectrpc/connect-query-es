@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prebuild": "rm -rf ./dist/*",
-    "build": "tsc --project tsconfig.json --module commonjs --verbatimModuleSyntax false --moduleResolution node10 --outDir ./dist/cjs",
+    "build": "tsc --project tsconfig.json --outDir ./dist/cjs",
     "format": "prettier --write --ignore-unknown '.' '!dist'",
     "license-header": "license-header",
     "lint": "eslint --max-warnings 0 ."
@@ -32,7 +32,7 @@
     "@connectrpc/connect": "^2.0.2",
     "@connectrpc/connect-query": "^2.3.1",
     "@tanstack/react-query": "^5.79.0",
-    "typescript": "^5.8.3"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.5.1",

@@ -117,7 +117,7 @@ function createUnaryInfiniteQueryFn<
 
     const inputCombinedWithPageParam = setValueAtPath(
       input,
-      pageParamKey as MessagePageParamKey<Record<string, unknown>>,
+      pageParamKey,
       context.pageParam,
     ) as MessageInitShape<I>;
     return callUnaryMethod(transport, schema, inputCombinedWithPageParam, {
@@ -210,10 +210,10 @@ export function createInfiniteQueryOptions<
     initialPageParam:
       input === skipToken
         ? (undefined as MessagePageParamValue<MessageInitShape<I>, ParamKey>)
-        : (getValueAtPath(
-            input,
-            pageParamKey as MessagePageParamKey<Record<string, unknown>>,
-          ) as MessagePageParamValue<MessageInitShape<I>, ParamKey>),
+        : (getValueAtPath(input, pageParamKey) as MessagePageParamValue<
+            MessageInitShape<I>,
+            ParamKey
+          >),
     queryKey,
     queryFn,
     structuralSharing,
