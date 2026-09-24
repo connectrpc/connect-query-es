@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "allowJs": false,
-    "allowSyntheticDefaultImports": true,
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -11,6 +10,7 @@
     "moduleResolution": "Bundler",
     "noEmit": true,
     "resolveJsonModule": true,
+    "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
