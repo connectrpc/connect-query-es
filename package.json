@@ -13,7 +13,6 @@
     "all": "turbo run --ui tui build format test lint attw license-header",
     "clean": "git clean -Xdf",
     "setversion": "node scripts/set-workspace-version.js",
-    "getversion": "node scripts/find-workspace-version.js",
     "postsetversion": "npm run all",
     "format": "prettier --write --ignore-unknown '.' '!packages' '!.turbo' '!node_modules'",
     "license-header": "license-header --ignore 'packages/**'",
@@ -44,7 +43,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-vitest": "0.5.4",
     "prettier": "3.5.3",
-    "turbo": "^2.5.4",
+    "turbo": "^2.9.14",
     "typescript": "6.0.3",
     "vitest": "^3.2.4"
   },
