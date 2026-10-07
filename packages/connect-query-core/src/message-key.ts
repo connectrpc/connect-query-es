@@ -51,9 +51,7 @@ export function createMessageKey<
   const pageParamPath =
     pageParamKey === undefined
       ? undefined
-      : pageParamPathSegments(
-          pageParamKey as MessagePageParamKey<Record<string, unknown>>,
-        );
+      : pageParamPathSegments(pageParamKey);
   return messageKey(reflect(schema, create(schema, value)), pageParamPath);
 }
 

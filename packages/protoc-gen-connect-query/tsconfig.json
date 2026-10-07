@@ -2,11 +2,11 @@
   "files": ["src/protoc-gen-connect-query-plugin.ts"],
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    // This config also covers files outside src, such as package.json
+    "rootDir": ".",
     // We import the plugin's version number from package.json
     "resolveJsonModule": true,
     // This package is CommonJS
-    "verbatimModuleSyntax": false,
-    "module": "CommonJS",
-    "moduleResolution": "Node10"
+    "verbatimModuleSyntax": false
   }
 }
