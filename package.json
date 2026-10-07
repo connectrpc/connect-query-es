@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "root",
+  "name": "connect-query-es",
   "type": "module",
   "workspaces": [
     "packages/connect-query-core",
