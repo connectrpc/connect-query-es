@@ -19,6 +19,8 @@ Connect-Query is an wrapper around [TanStack Query](https://tanstack.com/query) 
   - [`useTransport`](#usetransport)
   - [`useQuery`](#usequery)
   - [`useSuspenseQuery`](#usesuspensequery)
+  - [`useQueries`](#usequeries)
+  - [`useSuspenseQueries`](#usesuspensequeries)
   - [`useInfiniteQuery`](#useinfinitequery)
   - [`useSuspenseInfiniteQuery`](#usesuspenseinfinitequery)
   - [`useMutation`](#usemutation)
@@ -220,6 +222,66 @@ Any additional `options` you pass to `useQuery` will be merged with the options 
 
 Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/react/reference/useSuspenseQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
 
+### `useQueries`
+
+Runs multiple RPC queries in parallel using TanStack Query's `useQueries`. Each query returns its own loading, error, and success state. Its `data` is typed for the method and can be undefined until data is available.
+
+```ts
+import { skipToken, useQueries } from "@connectrpc/connect-query";
+import { say } from "./gen/eliza-ElizaService_connectquery";
+
+const [first, second] = useQueries({
+  queries: [
+    { schema: say, input: { sentence: "Hello" } },
+    {
+      schema: say,
+      input: sentence ? { sentence } : skipToken,
+      select: (response) => response.sentence,
+    },
+  ],
+});
+// first.data is SayResponse | undefined; second.data is string | undefined.
+```
+
+Each query accepts `schema`, optional `input`, and query options such as `enabled`, `select`, `initialData`, and `placeholderData`. Transport defaults to the `TransportProvider` context and can be overridden with `transport` per query. Request headers can be provided with `headers`. Placeholder callbacks receive no previous query data.
+
+An optional `combine` function receives the typed results and determines the hook's return value, just as with `useSuspenseQueries` below.
+
+### `useSuspenseQueries`
+
+Runs multiple RPC queries in parallel using TanStack Query's `useSuspenseQueries`. The component suspends until all queries have data, and each result's `data` is defined and typed for its method. Use this when a component needs several independent queries without fetching them sequentially through separate `useSuspenseQuery` calls.
+
+```ts
+import { useSuspenseQueries } from "@connectrpc/connect-query";
+import { say } from "./gen/eliza-ElizaService_connectquery";
+
+const [first, second] = useSuspenseQueries({
+  queries: [
+    { schema: say, input: { sentence: "Hello" } },
+    {
+      schema: say,
+      input: { sentence: "Goodbye" },
+      select: (response) => response.sentence,
+    },
+  ],
+});
+// first.data is SayResponse; second.data is string.
+```
+
+Each query accepts `schema`, optional `input`, and the options supported by `useSuspenseQuery`, including `select`, `headers`, and `transport`. Transport defaults to the `TransportProvider` context. As with `useSuspenseQuery`, `skipToken`, `enabled`, and `placeholderData` are not supported.
+
+An optional `combine` function receives the typed results and determines the hook's return value:
+
+```ts
+const sentences = useSuspenseQueries({
+  queries: [
+    { schema: say, input: { sentence: "Hello" } },
+    { schema: say, input: { sentence: "Goodbye" } },
+  ],
+  combine: (results) => results.map((result) => result.data.sentence),
+});
+```
+
 ### `useInfiniteQuery`
 
 ```ts
@@ -407,23 +469,24 @@ function createQueryOptions<I extends DescMessage, O extends DescMessage>(
 };
 ```
 
-A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flag. This is useful when interacting with `useQueries` API or queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+A functional version of the options that can be passed to the `useQuery` hook from `@tanstack/react-query`. When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flag. This is useful when interacting with QueryClient methods such as [query](https://tanstack.com/query/latest/docs/framework/react/reference/classes/QueryClient#query).
 
-An example of how to use this function with `useQueries`:
+For example, use `queryClient.query` to fetch and cache a response, reusing cached data while it is fresh:
 
 ```ts
-import { useQueries } from "@tanstack/react-query";
-import { createQueryOptions, useTransport } from "@connectrpc/connect-query";
+import { QueryClient } from "@tanstack/react-query";
+import { createConnectTransport } from "@connectrpc/connect-web";
+import { createQueryOptions } from "@connectrpc/connect-query";
 import { example } from "your-generated-code/example-ExampleService_connectquery";
 
-const MyComponent = () => {
-  const transport = useTransport();
-  const [query1, query2] = useQueries([
-    createQueryOptions(example, { sentence: "First query" }, { transport }),
-    createQueryOptions(example, { sentence: "Second query" }, { transport }),
-  ]);
-  ...
-};
+const queryClient = new QueryClient();
+const transport = createConnectTransport({
+  baseUrl: "https://example.com",
+});
+
+const response = await queryClient.query(
+  createQueryOptions(example, { sentence: "Hello" }, { transport }),
+);
 ```
 
 ### `createInfiniteQueryOptions`
@@ -460,7 +523,7 @@ function createInfiniteQueryOptions<
 };
 ```
 
-A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some queryClient methods (like [ensureQueryData](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata), etc).
+A functional version of the options that can be passed to the `useInfiniteQuery` hook from `@tanstack/react-query`.When called, it will return the appropriate `queryKey`, `queryFn`, and `structuralSharing` flags, as well as a few other parameters required for `useInfiniteQuery`. This is useful when interacting with some QueryClient methods such as [query](https://tanstack.com/query/latest/docs/framework/react/reference/classes/QueryClient#query).
 
 ### `addStaticKeyToTransport`
 
