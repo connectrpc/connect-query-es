@@ -212,13 +212,13 @@ function useQuery<
 ): UseQueryResult<SelectOutData, ConnectError>;
 ```
 
-The `useQuery` hook is the primary way to make a unary request. It's a wrapper around TanStack Query's [`useQuery`](https://tanstack.com/query/v5/docs/react/reference/useQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
+The `useQuery` hook is the primary way to make a unary request. It's a wrapper around TanStack Query's [`useQuery`](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
 
 Any additional `options` you pass to `useQuery` will be merged with the options that Connect-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
 
 ### `useSuspenseQuery`
 
-Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/react/reference/useSuspenseQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
+Identical to useQuery but mapping to the `useSuspenseQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/framework/react/reference/useSuspenseQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
 
 ### `useInfiniteQuery`
 
@@ -239,13 +239,13 @@ function useInfiniteQuery<
 ): UseInfiniteQueryResult<InfiniteData<MessageShape<O>>, ConnectError>;
 ```
 
-The `useInfiniteQuery` is a wrapper around TanStack Query's [`useInfiniteQuery`](https://tanstack.com/query/v5/docs/react/reference/useInfiniteQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
+The `useInfiniteQuery` is a wrapper around TanStack Query's [`useInfiniteQuery`](https://tanstack.com/query/v5/docs/framework/react/reference/useInfiniteQuery) hook, but it's preconfigured with the correct `queryKey` and `queryFn` for the given method.
 
 There are some required options for `useInfiniteQuery`, primarily `pageParamKey` and `getNextPageParam`. These are required because Connect-Query doesn't know how to paginate your data. You must provide a mapping from the output of the previous page and getting the next page. `pageParamKey` supports root keys as strings (`"page"`) and nested keys as dot-separated strings (`"query.page"`). All other options passed to `useInfiniteQuery` will be merged with the options that Connect-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
 
 ### `useSuspenseInfiniteQuery`
 
-Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/react/reference/useSuspenseInfiniteQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
+Identical to useInfiniteQuery but mapping to the `useSuspenseInfiniteQuery` hook from [TanStack Query](https://tanstack.com/query/v5/docs/framework/react/reference/useSuspenseInfiniteQuery). This includes the benefits of narrowing the resulting data type (data will never be undefined).
 
 ### `useMutation`
 
@@ -256,7 +256,7 @@ function useMutation<I extends DescMessage, O extends DescMessage>(
 ): UseMutationResult<MessageShape<O>, ConnectError, PartialMessage<I>>;
 ```
 
-The `useMutation` is a wrapper around TanStack Query's [`useMutation`](https://tanstack.com/query/v5/docs/react/reference/useMutation) hook, but it's preconfigured with the correct `mutationFn` for the given method.
+The `useMutation` is a wrapper around TanStack Query's [`useMutation`](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation) hook, but it's preconfigured with the correct `mutationFn` for the given method.
 
 Any additional `options` you pass to `useMutation` will be merged with the options that Connect-Query provides to @tanstack/react-query. This means that you can pass any additional options that TanStack Query supports.
 
